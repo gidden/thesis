@@ -1,0 +1,30 @@
+This is my general idea for an outline of a prelim. Feel free to change/suggest changes at your convenience.
+
+This is my general idea for an outline of a prelim. Feel free to change/suggest changes at your convenience.
+
+Chapter 1 - Motivation for an Agent-Based Fuel Cycle Simulator
+ 	1.1 Current status (VISION, DANESS, etc.) of Fuel Cycle Simulators
+	1.2 Supply Chain Modeling (SCM) Literature Review
+	1.3 Agent Based SCM Literature Review
+	1.4 Unique Considerations (Regions, Institutions, etc.) of the Nuclear Fuel Cycle
+
+Chapter 2 - Modeling the Once-Through Fuel Cycle
+	2.1 Definition of the OTFC
+	2.2 OTFC Facilities in Cyclus
+	2.3 Scenario Definition Language for the OTFC
+	2.4 Material Routing Problem Structure for the OTFC
+	2.5 Example Scenario of the OTFC
+
+Chapter 3 - Modeling the Fuel Cycle with Recycling
+	3.1 Definition of the FCwR
+	3.2 FCwR Facilities in Cyclus
+	3.3 Scenario Definition Language for the FCwR
+	3.4 Material Routing Problem Structure for the FCwR
+	3.5 Example Scenario of the FCwR
+
+Chapter 4 - Modeling an International Fuel Bank
+	4.1 Literature Review on Fuel Banks
+	4.2 Description of Regional/Institutional Policies
+	4.3 Application of Regional/Institutional Policies in the Cyclus Framework
+	4.4 Problem Definition
+	4.5 Parameter Space & Analysis Methodology
