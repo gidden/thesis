@@ -1,0 +1,69 @@
+In formulating the Generic Fuel Cycle Transportation Problem (GFCTP), note that
+the ``players'' in the set of commodity ``markets'' are the individual
+facilities involved in the simulation, i.e., the reactors, fabrication
+facilities, repositories, etc. In strict mathematical programming parlance, the
+GFCTP can be described as a Mixed-Integer, Multicommodity Transportation Problem
+with Side Constraints. Accordingly are a number of departures from the classical
+Multicommodity Transportation Problem that was described in \S\ref{sec:MTP}.
+
+To begin, the multicommodity aspect of the problem is not manifest on arc
+capacities. Instead, facility demand constraints incorporate a set of
+satisfactory commodities. For example, a reactor may be able to accept UOX or
+MOX fuel, but has a demand for total fuel. Additionally, supplier facilities may
+have a set of constraints on their ability to supply a given commodity and they
+may not be able to directly express those constraints with the unit of the
+commodity market, i.e., kilograms. Take for example an enrichment facility. Such
+a facility has nominally two constraints: SWU capacity and natural uranium
+capacity. The former constraint is temporal, i.e., it is a processing
+constraint. The latter constraint is an inventory constraint. However, both are
+necessary to fully define the problem. Furthermore, let us note that the output
+of this facility is kilograms of enriched uranium. Accordingly, the above
+capacities must be translated into this output. Finally, realism is introduced
+through integer variables. For a number of facilities, especially reactors, it
+may not be realistic for a given fuel order to be split amongst a variety of
+suppliers. The realm of integer programming techniques allow us to introduced
+binary variables to enforce this reality constraint.
+
+The GFCTP formulation is as follows:
+
+%%% 
+\begin{subequations}\label{eqs:GFCTP}
+  \begin{align}
+    %%
+    \min_{z} \:\: & 
+    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}(h) x_{i,j}(h) 
+    & \label{eq:GFCTP_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j \in J}\beta_{i,k}(h,q_{j}) x_{i,j}(h) \leq S_{i,k}(h) 
+    & 
+    \forall \: i \in I, \: \forall \: k \in K_{i}(h) \label{eq:GFCTP_sup} \\
+    %%
+    &
+    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}(h) \geq d_{j}(H_{j}) 
+    & 
+    \forall \: j \in J_{o} \label{eq:GFCTP_dem_o} \\
+    %%
+    &
+    \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j} x_{i,j}(h) \geq d_{j}(H_{j}) 
+    &
+    \forall \: j \in J_{e} \label{eq:GFCTP_dem_e} \\
+    %%
+    &
+    \sum_{i \in I} y_{i,j} = 1
+    &
+    \forall \: j \in J_{e} \label{eq:GFCTP_sumy} \\
+    %%
+    &
+    x_{i,j} \geq 0
+    &
+    \forall \: x \in X \label{eq:GFCTP_x} \\
+    %%
+    &
+    y_{i,j} \in \{0,1\}
+    &
+    \forall \:* y \in Y \label{eq:GFCTP_y}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
