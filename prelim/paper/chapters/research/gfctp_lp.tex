@@ -4,7 +4,7 @@ describes a multi-commodity setting in which demand can be met by multiple
 commodities. Consumers denote a cost preference over the possible commodities
 they consume and a demand for the set of commodities that must be met. Suppliers
 denote one or more production capacities for a given commodity which serve as
-the set of supply capacities analgous to the normal MTP
+the set of supply capacities analogous to the normal MTP
 (see \S\ref{sec:MTP}). The GFCTP-LP formulation is as follows:
 
 %%% 
@@ -51,7 +51,7 @@ $J$         & all consumers  \\
 $X$         & the feasible set of flows between producers and consumers  \\
 $K_{i}(h)$  & the set of constraining capacities for 
             producer $i$ of commodity $h$  \\
-$H_{j}$     & the set of satifying commodities for consumer $j$  \\
+$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 \end{tabularx}
 \caption{Sets Appearing in the GFCTP-LP Formulation}
@@ -77,7 +77,7 @@ $\beta_{i,k}(q_{j}(h))$  & a capacity translation function for capacity
 $s_{i,k}$                & a supply capacity of producer $i$ corresponding to 
                          capacity constraint $k$ \\
 $d_{j}(H_{j})$           & the total demand of consumer $j$ over the set of 
-                         satisfying commidities $H_{j}$ \\
+                         satisfying commodities $H_{j}$ \\
 \hline
 \end{tabularx}
 \caption{Variables Appearing in the GFCTP-LP Formulation}
@@ -89,14 +89,14 @@ This formulation deviates from the normal MTP formulation via the expansion of
 capacity constraints (Equation \ref{eq:GFCTP-LP_sup}) and the inclusion of a
 constraint allowing multiple commodities that are able to meet the demand of a
 producer (Equation \ref{eq:GFCTP-LP_dem}). The former constraint maintains the
-multicommodity nature of the formulation. This leads to an important insight: if
+multi-commodity nature of the formulation. This leads to an important insight: if
 Equation \ref{eqs:1demand} holds,
 
 \begin{equation}\label{eqs:1demand}
   \left|{H_{j}}\right| = 1 \: \forall \: j \in J
 \end{equation}
 
-then the GFCTP-LP can be transformed into a separable multicommodity
+then the GFCTP-LP can be transformed into a separable multi-commodity
 transportation problem as shown in \cite{bertsekas_network_1998}. If the problem
 is separable, then the Transportation Problem Simplex Method shown in
 \S\ref{sec:trans-simplex} can be applied to a series of smaller subproblems,
@@ -111,7 +111,7 @@ then the GFCTP-LP is in fact the a normal Transportation Problem, because the
 quality translation function ($\beta_{i,k}(q_{j}(h))$) translates to a constant
 at solution time.
 
-\paragraph{Capacity Translation Function and Constraint Example}~\\
+\paragraph{Capacity Translation Function and Constraints Example}~\\
 
 The notion of a capacity translation function is something that I have
 introduced out of necessity due to the complexity of the GFCTP. Accordingly, an
@@ -133,30 +133,48 @@ values for $K_{i}(h)$ for this facility:
 Let us now consider that there is a set of requests for enriched uranium that
 this facility can possibly meet. Such requests have, in general, two parameters:
 $P_{j}$, the total product quantity (in kilograms), and $\varepsilon_{j}$, the
-product enrichment (in w/o U-235). To maintain the notation that has previously
-been used in \S\ref{sec:prev-enrich}, I will denote $\varepsilon_{j}$ as
-$x_{p,j}$ for the remainder of this section. Note that we have provided the
-following definition:
+product enrichment (in w/o U-235). Although it would be consistent to use the
+notation that has previously been used in \S\ref{sec:prev-enrich}, I will denote
+the product weight fraction as $\varepsilon_{j}$ rather than $x_{p,j}$ to reduce
+confusion with the similar notation of commodity flow, $x_{i,j}$. In any case,
+notice that we have provided the following definition:
 
 \begin{equation}\label{eqs:enr-q-swu}
-  q_{j}(\mbox{Enriched Uranium}) \equiv x_{p,j}
+  q_{j}(\mbox{Enriched Uranium}) \equiv \varepsilon_{j}
 \end{equation}
 
 These values are set during a prior phase of the overall matching algorithm, and
 can therefore be considered constants. Further, let us note that, in general, an
-enrichment facility's operation, or rather its capacity thereof, is goverened by
+enrichment facility's operation, or rather its capacity thereof, is governed by
 two parameters: $x_{f,enr}$, the fraction of U-235 in its feed material, and
 $x_{t,enr}$, the fraction of U-235 in its tails material. Let us assume both of
 these are constants of the facility. Utilizing the equations presented in
-\S\ref{sec:prev-enrich}, we can denote the functional forms of this facility's
-two capacity constraints.
+\S\ref{sec:prev-enrich}, we can denote the functional forms of the arguments of 
+this facility's two capacity constraints.
 
-\begin{align}\label{eqs:enr-swu-constr}
+\begin{align}
+\label{eqs:enr-prod-beta}
+\beta_{enr,NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - x_{t,enr}}
+                                      {x_{f,enr} - x_{t,enr}} \\
 \begin{split}
-\beta_{enr,SWU}(x_{p,j}) & = V(x_{p,j}) \\
-& + \frac{x_{p,j} - x_{t,enr}}{x_{f,enr} - x_{t,enr}} V(x_{t,enr}) \\
-& - \frac{ x_{p,j} - x_{f,enr} } { x_{f,enr} - x_{t,enr} } V(x_{f,enr})
+\label{eqs:enr-swu-beta}
+\beta_{enr,SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
+                         & + \frac{\varepsilon_{j} - x_{t,enr}}
+                                  {x_{f,enr} - x_{t,enr}} V(x_{t,enr}) \\
+                         & - \frac{\varepsilon_{j} - x_{f,enr}}
+                                  {x_{f,enr} - x_{t,enr}} V(x_{f,enr})
 \end{split}
 \end{align}
 
-Where $V(x)$ is the value function of Equation \ref{eqs:enr-value}.
+Where $V(x)$ is the value function described in Equation \ref{eqs:enr-value}.
+Finally, we can form the set of constraint equations for the enrichment
+facility by combining Equations \ref{eq:GFCTP-LP_sup}, \ref{eqs:enr-q-swu}, 
+\ref{eqs:enr-prod-beta}, and \ref{eqs:enr-swu-beta}.
+
+\begin{align}
+\label{eqs:enr-prod-constr}
+\sum_{j \in J}\beta_{enr,NU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{Enriched Uranium})  & \leq s_{enr,NU} \\
+\label{eqs:enr-swu-constr}
+\sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{Enriched Uranium}) & \leq s_{enr,SWU}
+\end{align}
+
