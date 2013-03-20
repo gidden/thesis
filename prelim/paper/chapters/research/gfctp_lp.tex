@@ -90,9 +90,73 @@ capacity constraints (Equation \ref{eq:GFCTP-LP_sup}) and the inclusion of a
 constraint allowing multiple commodities that are able to meet the demand of a
 producer (Equation \ref{eq:GFCTP-LP_dem}). The former constraint maintains the
 multicommodity nature of the formulation. This leads to an important insight: if
-$\left|{H_{j}}\right| = 1 \forall j \in J$, then the GFCTP-LP can be transformed
-into a separable multicommodity transportation problem as shown in
-\cite{bertsekas_network_1998}. If the problem is separable, then the
-Transportation Problem Simplex Method shown in \S\ref{sec:trans-simplex} can be
-applied to a series of smaller subproblems, reducing overall complexity.
+Equation \ref{eqs:1demand} holds,
 
+\begin{equation}\label{eqs:1demand}
+  \left|{H_{j}}\right| = 1 \: \forall \: j \in J
+\end{equation}
+
+then the GFCTP-LP can be transformed into a separable multicommodity
+transportation problem as shown in \cite{bertsekas_network_1998}. If the problem
+is separable, then the Transportation Problem Simplex Method shown in
+\S\ref{sec:trans-simplex} can be applied to a series of smaller subproblems,
+reducing overall complexity. Furthermore, if Equations \ref{eqs:1demand} and
+\ref{eqs:1constraint} both hold,
+
+\begin{equation}\label{eqs:1constraint}
+  \left|{K_{i}(h)}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H
+\end{equation}
+
+then the GFCTP-LP is in fact the a normal Transportation Problem, because the
+quality translation function ($\beta_{i,k}(q_{j}(h))$) translates to a constant
+at solution time.
+
+\paragraph{Capacity Translation Function and Constraint Example}~\\
+
+The notion of a capacity translation function is something that I have
+introduced out of necessity due to the complexity of the GFCTP. Accordingly, an
+example will help clarify its purpose. I'll use this time to also to provide an
+example of a producer with multiple capacity constraints for a given commodity.
+
+Take, for example, an enrichment facility. Such a facility produces the
+commodity ``Enriched Uranium''. This facility has two constraints on its
+operation for any given time period: the amount of Separative Work Units (SWU)
+that it can process and the total uranium feed it has on hand. Note that neither
+of these capacities are measure directly in the units of the commodity it
+produces, i.e., kilograms of enriched uranium. We can now state the set the
+values for $K_{i}(h)$ for this facility:
+
+\begin{equation}\label{eqs:enr-constr-commods}
+  K_{enr}(\mbox{Enriched Uranium}) = \{ \mbox{SWU}, \mbox{Natural Uranium} \}
+\end{equation}
+
+Let us now consider that there is a set of requests for enriched uranium that
+this facility can possibly meet. Such requests have, in general, two parameters:
+$P_{j}$, the total product quantity (in kilograms), and $\varepsilon_{j}$, the
+product enrichment (in w/o U-235). To maintain the notation that has previously
+been used in \S\ref{sec:prev-enrich}, I will denote $\varepsilon_{j}$ as
+$x_{p,j}$ for the remainder of this section. Note that we have provided the
+following definition:
+
+\begin{equation}\label{eqs:enr-q-swu}
+  q_{j}(\mbox{Enriched Uranium}) \equiv x_{p,j}
+\end{equation}
+
+These values are set during a prior phase of the overall matching algorithm, and
+can therefore be considered constants. Further, let us note that, in general, an
+enrichment facility's operation, or rather its capacity thereof, is goverened by
+two parameters: $x_{f,enr}$, the fraction of U-235 in its feed material, and
+$x_{t,enr}$, the fraction of U-235 in its tails material. Let us assume both of
+these are constants of the facility. Utilizing the equations presented in
+\S\ref{sec:prev-enrich}, we can denote the functional forms of this facility's
+two capacity constraints.
+
+\begin{align}\label{eqs:enr-swu-constr}
+\begin{split}
+\beta_{enr,SWU}(x_{p,j}) & = V(x_{p,j}) \\
+& + \frac{x_{p,j} - x_{t,enr}}{x_{f,enr} - x_{t,enr}} V(x_{t,enr}) \\
+& - \frac{ x_{p,j} - x_{f,enr} } { x_{f,enr} - x_{t,enr} } V(x_{f,enr})
+\end{split}
+\end{align}
+
+Where $V(x)$ is the value function of Equation \ref{eqs:enr-value}.
