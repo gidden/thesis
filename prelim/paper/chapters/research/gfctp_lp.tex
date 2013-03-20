@@ -1,0 +1,98 @@
+
+The Generic Fuel Cycle Transportation Problem with Side Constraints (GFCTP-LP)
+describes a multi-commodity setting in which demand can be met by multiple
+commodities. Consumers denote a cost preference over the possible commodities
+they consume and a demand for the set of commodities that must be met. Suppliers
+denote one or more production capacities for a given commodity which serve as
+the set of supply capacities analgous to the normal MTP
+(see \S\ref{sec:MTP}). The GFCTP-LP formulation is as follows:
+
+%%% 
+\begin{subequations}\label{eqs:GFCTP-LP}
+  \begin{align}
+    %%
+    \min_{z} \:\: & 
+    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}(h) x_{i,j}(h) 
+    & \label{eq:GFCTP-LP_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j \in J}\beta_{i,k}(q_{j}(h)) x_{i,j}(h) \leq s_{i,k} 
+    &
+    \: \forall \: k \in K_{i}(h),  
+    \forall \: i \in I, \forall \: h \in H \label{eq:GFCTP-LP_sup} \\
+    %%
+    &
+    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}(h) \geq d_{j}(H_{j}) 
+    & 
+    \forall \: j \in J \label{eq:GFCTP-LP_dem} \\
+    %%
+    &
+    x_{i,j} \geq 0
+    &
+    \forall \: x \in X \label{eq:GFCTP-LP_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+The sets and variables involved are described in Tables \ref{tbl:GFCTP-LP-sets}
+and \ref{tbl:GFCTP-LP-vars}.
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\hline
+Set         & Description \\
+\hline
+$H$         & all commodities  \\
+$I$         & all producers  \\
+$J$         & all consumers  \\
+$X$         & the feasible set of flows between producers and consumers  \\
+$K_{i}(h)$  & the set of constraining capacities for 
+            producer $i$ of commodity $h$  \\
+$H_{j}$     & the set of satifying commodities for consumer $j$  \\
+\hline
+\end{tabularx}
+\caption{Sets Appearing in the GFCTP-LP Formulation}
+\label{tbl:GFCTP-LP-sets}
+\end{table}
+%%% 
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\hline
+Variable    & Description \\
+\hline
+$c_{i,j}(h)$             & the unit cost of commodity $h$ 
+                         for producer $i$ and consumer $j$  \\
+$x_{i,j}(h)$             & a decision variable, the flow of commodity $h$ 
+                         for producer $i$ and consumer $j$  \\
+$q_{j}(h)$               & the requested quality of commodity $h$ 
+                         by consumer $j$  \\
+$\beta_{i,k}(q_{j}(h))$  & a capacity translation function for capacity 
+                         constraint $k$ of producer $i$ given $q_{j}(h)$ \\
+$s_{i,k}$                & a supply capacity of producer $i$ corresponding to 
+                         capacity constraint $k$ \\
+$d_{j}(H_{j})$           & the total demand of consumer $j$ over the set of 
+                         satisfying commidities $H_{j}$ \\
+\hline
+\end{tabularx}
+\caption{Variables Appearing in the GFCTP-LP Formulation}
+\label{tbl:GFCTP-LP-vars}
+\end{table}
+%%% 
+
+This formulation deviates from the normal MTP formulation via the expansion of
+capacity constraints (Equation \ref{eq:GFCTP-LP_sup}) and the inclusion of a
+constraint allowing multiple commodities that are able to meet the demand of a
+producer (Equation \ref{eq:GFCTP-LP_dem}). The former constraint maintains the
+multicommodity nature of the formulation. This leads to an important insight: if
+$\left|{H_{j}}\right| = 1 \forall j \in J$, then the GFCTP-LP can be transformed
+into a separable multicommodity transportation problem as shown in
+\cite{bertsekas_network_1998}. If the problem is separable, then the
+Transportation Problem Simplex Method shown in \S\ref{sec:trans-simplex} can be
+applied to a series of smaller subproblems, reducing overall complexity.
+

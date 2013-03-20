@@ -3,8 +3,8 @@ the ``players'' in the set of commodity ``markets'' are the individual
 facilities involved in the simulation, i.e., the reactors, fabrication
 facilities, repositories, etc. In strict mathematical programming parlance, the
 GFCTP can be described as a Mixed-Integer, Multicommodity Transportation Problem
-with Side Constraints. Accordingly are a number of departures from the classical
-Multicommodity Transportation Problem that was described in \S\ref{sec:MTP}.
+(MTP) with Side Constraints. Accordingly are a number of departures from the
+classical MTP that was described in \S\ref{sec:MTP}.
 
 To begin, the multicommodity aspect of the problem is not manifest on arc
 capacities. Instead, facility demand constraints incorporate a set of
@@ -24,46 +24,23 @@ may not be realistic for a given fuel order to be split amongst a variety of
 suppliers. The realm of integer programming techniques allow us to introduced
 binary variables to enforce this reality constraint.
 
-The GFCTP formulation is as follows:
+It should be noted that the addition of integer variables changes both the
+complexity of the formulation and the complexity of the solution technique. Such
+a change requires a Mixed Integer-Linear Program (MILP) formulation and solution
+via the branch-and-bound method (see \S\ref{sec:bnb}) which solves NP-Hard
+combinatorial optimization problems whereas the Linear Program (LP) version
+requires the transportation simplex method (see \S\ref{sec:trans-simplex})
+which is solvable in polynomial time.  Accordingly, I describe the full
+formulation in two parts below: \S\ref{sec:GFCTP-LP} describes the linear
+program formulation with side constraints which I will denote GFCTP-LP
+and \S\ref{sec:GFCTP-E} describes the MILP formulation with side constraints
+which I will denote GFCTP-E (E stands for ``exclusive'', i.e., integer variables
+denote an exclusive selection of consumers and/or producers).
 
-%%% 
-\begin{subequations}\label{eqs:GFCTP}
-  \begin{align}
-    %%
-    \min_{z} \:\: & 
-    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}(h) x_{i,j}(h) 
-    & \label{eq:GFCTP_obj} \\
-    %%
-    \text{s.t.} \:\: &
-    \sum_{j \in J}\beta_{i,k}(h,q_{j}) x_{i,j}(h) \leq S_{i,k}(h) 
-    & 
-    \forall \: i \in I, \: \forall \: k \in K_{i}(h) \label{eq:GFCTP_sup} \\
-    %%
-    &
-    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}(h) \geq d_{j}(H_{j}) 
-    & 
-    \forall \: j \in J_{o} \label{eq:GFCTP_dem_o} \\
-    %%
-    &
-    \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j} x_{i,j}(h) \geq d_{j}(H_{j}) 
-    &
-    \forall \: j \in J_{e} \label{eq:GFCTP_dem_e} \\
-    %%
-    &
-    \sum_{i \in I} y_{i,j} = 1
-    &
-    \forall \: j \in J_{e} \label{eq:GFCTP_sumy} \\
-    %%
-    &
-    x_{i,j} \geq 0
-    &
-    \forall \: x \in X \label{eq:GFCTP_x} \\
-    %%
-    &
-    y_{i,j} \in \{0,1\}
-    &
-    \forall \:* y \in Y \label{eq:GFCTP_y}
-    %%
-  \end{align}
-\end{subequations}
-%%% 
+\subsubsection{Linear Program with Side Constraints Formulation}\label{sec:GFCTP-LP}
+
+\input{./chapters/research/gfctp_lp}
+
+\subsubsection{Mixed Integer-Linear Program with Side and Exclusivity Constraints Formulation}\label{sec:GFCTP-E}
+
+%\input{./chapters/research/gfctp_e}
