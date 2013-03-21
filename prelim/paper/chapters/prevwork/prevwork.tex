@@ -13,6 +13,24 @@ Ceci n'est pas un review of work to date.
   V(x) = (1 - 2x) \ln \left( \frac{1-x}{x} \right)
 \end{equation}
 
+\begin{equation}\label{eqs:enr-feed}
+  F = P \frac{x_{p} - x_{t}}{x_{f} - x_{t}}
+\end{equation}
+
+\begin{equation}\label{eqs:enr-tails}
+  T = P \frac{x_{p} - x_{f}}{x_{f} - x_{t}}
+\end{equation}
+
+\begin{equation}\label{eqs:enr-swu}
+  SWU = P V(x_{p}) + T V(x_{t}) - F V(x_{f})
+\end{equation}
+
+\begin{equation}\label{eqs:enr-swu-p}
+  SWU = P \left( V(x_{p}) + \frac{x_{p} - x_{f}}{x_{f} - x_{t}} V(x_{t}) 
+        - \frac{x_{p} - x_{t}}{x_{f} - x_{t}} V(x_{f}) \right)
+\end{equation}
+
+
 
 \subsection{Supply/Demand Tools}
 \subsection{\Cyclopts}

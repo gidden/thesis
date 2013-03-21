@@ -4,8 +4,8 @@ describes a multi-commodity setting in which demand can be met by multiple
 commodities. Consumers denote a cost preference over the possible commodities
 they consume and a demand for the set of commodities that must be met. Suppliers
 denote one or more production capacities for a given commodity which serve as
-the set of supply capacities analogous to the normal MTP
-(see \S\ref{sec:MTP}). The GFCTP-LP formulation is as follows:
+the set of supply capacities analogous to the normal MCTP
+(see \S\ref{sec:MCTP}). The GFCTP-LP formulation is as follows:
 
 %%% 
 \begin{subequations}\label{eqs:GFCTP-LP}
@@ -13,30 +13,34 @@ the set of supply capacities analogous to the normal MTP
     %%
     \min_{z} \:\: & 
     z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}(h) x_{i,j}(h) 
-    & \label{eq:GFCTP-LP_obj} \\
+    & \label{eqs:GFCTP-LP_obj} \\
     %%
     \text{s.t.} \:\: &
     \sum_{j \in J}\beta_{i,k}(q_{j}(h)) x_{i,j}(h) \leq s_{i,k} 
     &
     \: \forall \: k \in K_{i}(h),  
-    \forall \: i \in I, \forall \: h \in H \label{eq:GFCTP-LP_sup} \\
+    \forall \: i \in I, \forall \: h \in H \label{eqs:GFCTP-LP_sup} \\
     %%
     &
     \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}(h) \geq d_{j}(H_{j}) 
     & 
-    \forall \: j \in J \label{eq:GFCTP-LP_dem} \\
+    \forall \: j \in J \label{eqs:GFCTP-LP_dem} \\
     %%
     &
     x_{i,j} \geq 0
     &
-    \forall \: x \in X \label{eq:GFCTP-LP_x}
+    \forall \: x \in X \label{eqs:GFCTP-LP_x}
     %%
   \end{align}
 \end{subequations}
 %%% 
 
 The sets and variables involved are described in Tables \ref{tbl:GFCTP-LP-sets}
-and \ref{tbl:GFCTP-LP-vars}.
+and \ref{tbl:GFCTP-LP-vars}. Note that $H_{j}$ is a subset of the commodities:
+
+\begin{equation}
+  H_{j} \subseteq H \: \forall \: j \in J
+\end{equation}
 
 %%% 
 \begin{table} [h!]
@@ -83,12 +87,12 @@ $d_{j}(H_{j})$           & the total demand of consumer $j$ over the set of
 \caption{Variables Appearing in the GFCTP-LP Formulation}
 \label{tbl:GFCTP-LP-vars}
 \end{table}
-%%% 
+%%%
 
-This formulation deviates from the normal MTP formulation via the expansion of
-capacity constraints (Equation \ref{eq:GFCTP-LP_sup}) and the inclusion of a
+This formulation deviates from the normal MCTP formulation via the expansion of
+capacity constraints (Equation \ref{eqs:GFCTP-LP_sup}) and the inclusion of a
 constraint allowing multiple commodities that are able to meet the demand of a
-producer (Equation \ref{eq:GFCTP-LP_dem}). The former constraint maintains the
+producer (Equation \ref{eqs:GFCTP-LP_dem}). The former constraint maintains the
 multi-commodity nature of the formulation. This leads to an important insight: if
 Equation \ref{eqs:1demand} holds,
 
@@ -121,13 +125,14 @@ example of a producer with multiple capacity constraints for a given commodity.
 Take, for example, an enrichment facility. Such a facility produces the
 commodity ``Enriched Uranium''. This facility has two constraints on its
 operation for any given time period: the amount of Separative Work Units (SWU)
-that it can process and the total uranium feed it has on hand. Note that neither
-of these capacities are measure directly in the units of the commodity it
-produces, i.e., kilograms of enriched uranium. We can now state the set the
-values for $K_{i}(h)$ for this facility:
+that it can process, $s_{enr,SWU}$ and the total natural uranium (NU) feed it
+has on hand, $s_{enr,NU}$. Note that neither of these capacities are measure
+directly in the units of the commodity it produces, i.e., kilograms of enriched
+uranium (EU). We can now state the set the values for $K_{i}(h)$ for this
+facility:
 
 \begin{equation}\label{eqs:enr-constr-commods}
-  K_{enr}(\mbox{Enriched Uranium}) = \{ \mbox{SWU}, \mbox{Natural Uranium} \}
+  K_{enr}(\mbox{EU}) = \{ \mbox{SWU}, \mbox{NU} \}
 \end{equation}
 
 Let us now consider that there is a set of requests for enriched uranium that
@@ -140,7 +145,7 @@ confusion with the similar notation of commodity flow, $x_{i,j}$. In any case,
 notice that we have provided the following definition:
 
 \begin{equation}\label{eqs:enr-q-swu}
-  q_{j}(\mbox{Enriched Uranium}) \equiv \varepsilon_{j}
+  q_{j}(\mbox{EU}) \equiv \varepsilon_{j}
 \end{equation}
 
 These values are set during a prior phase of the overall matching algorithm, and
@@ -166,15 +171,51 @@ this facility's two capacity constraints.
 \end{split}
 \end{align}
 
-Where $V(x)$ is the value function described in Equation \ref{eqs:enr-value}.
-Finally, we can form the set of constraint equations for the enrichment
-facility by combining Equations \ref{eq:GFCTP-LP_sup}, \ref{eqs:enr-q-swu}, 
+where $V(x)$ is the value function described in Equation
+\ref{eqs:enr-value}. These constraints correspond to the per-unit requirements
+for enriched uranium of natural uranium feed shown in Equation
+\ref{eqs:enr-feed} and SWU shown in Equation \ref{eqs:enr-swu-p}. Finally, we
+can form the set of constraint equations for the enrichment facility by
+combining Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 \ref{eqs:enr-prod-beta}, and \ref{eqs:enr-swu-beta}.
 
 \begin{align}
 \label{eqs:enr-prod-constr}
-\sum_{j \in J}\beta_{enr,NU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{Enriched Uranium})  & \leq s_{enr,NU} \\
+\sum_{j \in J}\beta_{enr,NU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{EU})  & \leq s_{enr,NU} \\
 \label{eqs:enr-swu-constr}
-\sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{Enriched Uranium}) & \leq s_{enr,SWU}
+\sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{EU}) & \leq s_{enr,SWU}
 \end{align}
 
+\paragraph{Satisfying Commodity Set Example}~\\
+
+The other departure the GFCTP-LP takes from the normal MCTP formulation is the
+location of its multicommodity dependence. As presented in \S\ref{sec:MCTP}, the
+MCTP formulation includes a multicommodity arc capacity constraint, Equation
+\ref{eqs:MCTP_cap}. There is no direct analog in the GFCTP, i.e., transportation
+arcs are assumed separate for separate commodities. There is still a notion of
+multicommodity dependence, however, via Equation \ref{eqs:GFCTP-LP_dem}. This
+constraint models a situation in which different commodities can satisfy a
+consumer's demand.
+
+Let us again use the enrichment facility example, expanding on the previous
+discussion. Note that an enrichment facility takes feed uranium and then
+enriches its U-235 content. This feed uranium can come from different sources
+which have different feed enrichments. The most likely case in practice of
+multiple sources of feed uranium for such a facility involves the recycling of
+uranium where an enrichment facility can use either natural uranium (NU) or
+recycled uranium (RU), which has a higher weight percent of U-235 than does
+natural uranium. We can now state the set the values for $H_{j}$ for this
+facility:
+
+\begin{equation}\label{eqs:enr-dem-commods}
+  H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
+\end{equation}
+
+Of course, the facility must define some preference function over the set of
+satisfying commodities. In this example, recycled uranium is more valuable
+because of its higher U-235 content, which translates into a (relatively large)
+SWU reduction in order to meet identical enrichment requests. This preference
+ordering is encapsulated in the cost function in Equation
+\ref{eqs:GFCTP-LP_obj}. The nature of the cost function in the \Cyclus
+simulation environment is nontrivial and explained further in
+\S\ref{sec:cost-function}.
