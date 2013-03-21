@@ -12,17 +12,17 @@ the set of supply capacities analogous to the normal MCTP
   \begin{align}
     %%
     \min_{z} \:\: & 
-    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}(h) x_{i,j}(h) 
+    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}^{h} x_{i,j}^{h} 
     & \label{eqs:GFCTP-LP_obj} \\
     %%
     \text{s.t.} \:\: &
-    \sum_{j \in J}\beta_{i,k}(q_{j}(h)) x_{i,j}(h) \leq s_{i,k} 
+    \sum_{j \in J}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h} \leq s_{i,k} 
     &
-    \: \forall \: k \in K_{i}(h),  
+    \: \forall \: k \in K_{i}^{h},  
     \forall \: i \in I, \forall \: h \in H \label{eqs:GFCTP-LP_sup} \\
     %%
     &
-    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}(h) \geq d_{j}(H_{j}) 
+    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j}) 
     & 
     \forall \: j \in J \label{eqs:GFCTP-LP_dem} \\
     %%
@@ -53,7 +53,7 @@ $H$         & all commodities  \\
 $I$         & all producers  \\
 $J$         & all consumers  \\
 $X$         & the feasible set of flows between producers and consumers  \\
-$K_{i}(h)$  & the set of constraining capacities for 
+$K_{i}^{h}$  & the set of constraining capacities for 
             producer $i$ of commodity $h$  \\
 $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
@@ -70,14 +70,14 @@ $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 Variable    & Description \\
 \hline
-$c_{i,j}(h)$             & the unit cost of commodity $h$ 
+$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
                          for producer $i$ and consumer $j$  \\
-$x_{i,j}(h)$             & a decision variable, the flow of commodity $h$ 
+$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
                          for producer $i$ and consumer $j$  \\
-$q_{j}(h)$               & the requested quality of commodity $h$ 
+$q_{j}^{h}$               & the requested quality of commodity $h$ 
                          by consumer $j$  \\
-$\beta_{i,k}(q_{j}(h))$  & a capacity translation function for capacity 
-                         constraint $k$ of producer $i$ given $q_{j}(h)$ \\
+$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
+                         constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
 $s_{i,k}$                & a supply capacity of producer $i$ corresponding to 
                          capacity constraint $k$ \\
 $d_{j}(H_{j})$           & the total demand of consumer $j$ over the set of 
@@ -108,11 +108,11 @@ reducing overall complexity. Furthermore, if Equations \ref{eqs:1demand} and
 \ref{eqs:1constraint} both hold,
 
 \begin{equation}\label{eqs:1constraint}
-  \left|{K_{i}(h)}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H
+  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H
 \end{equation}
 
 then the GFCTP-LP is in fact the a normal Transportation Problem, because the
-quality translation function ($\beta_{i,k}(q_{j}(h))$) translates to a constant
+quality translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant
 at solution time.
 
 \paragraph{Capacity Translation Function and Constraints Example}~\\
@@ -128,11 +128,11 @@ operation for any given time period: the amount of Separative Work Units (SWU)
 that it can process, $s_{enr,SWU}$ and the total natural uranium (NU) feed it
 has on hand, $s_{enr,NU}$. Note that neither of these capacities are measure
 directly in the units of the commodity it produces, i.e., kilograms of enriched
-uranium (EU). We can now state the set the values for $K_{i}(h)$ for this
+uranium (EU). We can now state the set the values for $K_{i}^{h}$ for this
 facility:
 
 \begin{equation}\label{eqs:enr-constr-commods}
-  K_{enr}(\mbox{EU}) = \{ \mbox{SWU}, \mbox{NU} \}
+  K_{enr}^{EU} = \{ \mbox{SWU}, \mbox{NU} \}
 \end{equation}
 
 Let us now consider that there is a set of requests for enriched uranium that
@@ -145,7 +145,7 @@ confusion with the similar notation of commodity flow, $x_{i,j}$. In any case,
 notice that we have provided the following definition:
 
 \begin{equation}\label{eqs:enr-q-swu}
-  q_{j}(\mbox{EU}) \equiv \varepsilon_{j}
+  q_{j}^{EU} \equiv \varepsilon_{j}
 \end{equation}
 
 These values are set during a prior phase of the overall matching algorithm, and
@@ -181,9 +181,9 @@ combining Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 
 \begin{align}
 \label{eqs:enr-prod-constr}
-\sum_{j \in J}\beta_{enr,NU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{EU})  & \leq s_{enr,NU} \\
+\sum_{j \in J}\beta_{enr,NU}(\varepsilon_{j}) \: x_{enr,j}^{EU}  & \leq s_{enr,NU} \\
 \label{eqs:enr-swu-constr}
-\sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}(\mbox{EU}) & \leq s_{enr,SWU}
+\sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}^{EU} & \leq s_{enr,SWU}
 \end{align}
 
 \paragraph{Satisfying Commodity Set Example}~\\
