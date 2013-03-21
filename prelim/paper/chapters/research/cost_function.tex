@@ -1,0 +1,29 @@
+In any network flow problem, of which transportation problems are a subset, the
+cost of transporting commodities is what drives the solution. In other words,
+costs are trying to be minimized, and it is the global minimization which
+defines an optimal solution. Accordingly, an accurate cost function is
+neccessary to determine an accurate solution. Because the \Cyclus simulation
+environment is still a nascent technology, accurate pricing metrics, and what
+such metrics even are in terms of a centuries-long fuel cycle simulation, are
+not immediately available. Accordingly, the cost function is currently a measure
+of simulation entity preference, rather than a concrete representation of cost.
+
+The notion of preference extends the work of Kyle Oliver's affininty metric
+\cite{oliver_geniusv2:_2009}. The preference metric is generally consumer
+centric, i.e., consumers have a preference over the possible commodities that
+could meet their demand. For example, a reactor may be able to use UOX or MOX
+fuel, but may prefer to use MOX fuel. Herein lies the projection of real-world
+cost into the simulation. Additionally, the managers of a given facility, which
+in the \Cyclus simulation environment include its Institution and Region, also
+exert an influence over its preference. An obvious example is the notion of
+affinities given in \cite{oliver_geniusv2:_2009}. In Oliver's work, an affinity
+or preference existed between facilities in ``similar'' institutions in order to
+drive the trading between institutions as a simple model of international
+relations. I expand upon this notion to cover a facility's other managers and
+the commodities themselves. Additionally, a preference can be delineated between
+the proposed qualities of the same commodity from different vendors. Finally,
+the notion of a preference is a positive one, and we require a notion of cost to
+solve the minimum-cost formulation of the multicommodity transportation problem
+with side constraints. Therefore we must have a translation function.
+
+
