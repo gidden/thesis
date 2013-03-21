@@ -73,6 +73,7 @@
 
 %% Custom commands added by Matt Gidden
 \newcommand{\Cyclopts}{\textsc{Cyclopts} }
+\setcounter{tocdepth}{2}
 
 %% Get rid of ugly borders around PDF hyperlinks (e.g. for cross-references, bib entries, or URLs)
 \hypersetup{pdfborder = 0 0 0}
@@ -106,7 +107,8 @@
 \usepackage{tgpagella}%
 }{}
 
-\usepackage[LY1]{eulervm}
+%% overrides the default Latex math font with AMS Euler
+%\usepackage[LY1]{eulervm} 
 
 \ifpdf
 \usepackage[pdftex]{graphicx}
