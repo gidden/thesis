@@ -1,44 +1,77 @@
+The previous linear program (LP) formulation of the Generic Fuel Cycle
+Transportation Problem fully describes many of the types of transactions that
+arise at any given time step. However, it importantly glosses over the critical
+case of reactor fuel orders, which comprise a large amount of material orders
+within the simulation context. Specifically, it allows reactor fuel orders to be
+met by more than one supplier with an arbitrary amount of the order met by each
+supplier. Put another way, the LP formulation does not contain the discrete
+material information required to model the transaction of fuel assemblies. Such
+detail is not necessary in every simulation, but we wish to allow this advanced
+modeling for those that do need it. In order to provide this capability of
+quantizing orders, binary decision variables must be introduced and integer
+programming techniques must be utilized to solve the resulting mixed
+integer-linear program. I present the updated formulation below. The key
+difference is the inclusion binary variables $y_{i,j}^{h}$, which are 1 if
+producer $i$ trades commodity $h$ with consumer $j$ and constants
+$\tilde{x}_{j}^{h}$, which denote the quantity of a quantized order. Further a
+new set is introduced, $J_{e}$, the set of consumers who require quantized, or
+exclusive, orders. The original set of consumers, those who allow partial
+orders, I denote $J_{p}$. These two sets constitute the set of all consumers.
 
-The GFCTP-E formulation is as follows:
+\begin{equation}\label{eqs:consumer-union}
+  J = J_{p} \cup J_{e}
+\end{equation}
 
-%%% 
+The Generic Fuel Cycle Transportation Problem with Exclusive Orders (GFCTP-E)
+formulation follows:
+
 \begin{subequations}\label{eqs:GFCTP-E}
   \begin{align}
     %%
-    \min_{z} \:\: & 
-    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}(h) x_{i,j}(h) 
-    & \label{eq:GRCTP-E_obj} \\
-    %%
-    \text{s.t.} \:\: &
-    \sum_{j \in J}\beta_{i,k}(h,q_{j}) x_{i,j}(h) \leq S_{i,k}(h) 
+    \label{eq:GRCTP-E_obj}
+    \min_{z} \:\: 
     & 
-    \forall \: i \in I, \: \forall \: k \in K_{i}(h) \label{eq:GRCTP-E_sup} \\
+    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{p}}c_{i,j}^{h} x_{i,j}^{h} 
+    + \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{e}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{j}^{h}
+    && \\
     %%
+    \label{eq:GRCTP-E_sup}
+    \text{s.t.} \:\: 
     &
-    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}(h) \geq d_{j}(H_{j}) 
+    \sum_{j \in J_{p}}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h}
+    + \sum_{j \in J_{e}}\beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{j}^{h} \leq s_{i,k}^{h} 
+    &&
+    \forall \: i \in I, \: \forall \: k \in K_{i}^{h}, \forall \: {h \in H} \\
+    %%
+    \label{eq:GRCTP-E_dem_p}
+    &
+    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j}) 
     & 
-    \forall \: j \in J_{o} \label{eq:GRCTP-E_dem} \\
+    \forall \: j \in J_{o} &\\
     %%
+    \label{eq:GRCTP-E_dem_e}
     &
-    \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j} x_{i,j}(h) \geq d_{j}(H_{j}) 
+    \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j}^{h} \tilde{x}_{j}^{h} \geq d_{j}(H_{j}) 
     &
-    \forall \: j \in J_{e} \label{eq:GRCTP-E_dem_e} \\
+    \forall \: j \in J_{e}  &\\
     %%
+    \label{eq:GRCTP-E_sumy}
     &
-    \sum_{i \in I} y_{i,j} = 1
+    \sum_{h \in H}\sum_{i \in I} y_{i,j}^{h} = 1
     &
-    \forall \: j \in J_{e} \label{eq:GRCTP-E_sumy} \\
+    \forall \: j \in J_{e}  &\\
     %%
+    \label{eq:GRCTP-E_x}
     &
-    x_{i,j} \geq 0
+    x_{i,j}^{h} \geq 0
     &
-    \forall \: x \in X \label{eq:GRCTP-E_x} \\
+    \forall \: x \in X  &\\
     %%
+    \label{eq:GRCTP-E_y}
     &
-    y_{i,j} \in \{0,1\}
+    y_{i,j}^{h} \in \{0,1\}
     &
-    \forall \: y \in Y \label{eq:GRCTP-E_y}
+    \forall \: y \in Y &
     %%
   \end{align}
 \end{subequations}
-%%% 
