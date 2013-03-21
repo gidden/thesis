@@ -75,3 +75,80 @@ formulation follows:
     %%
   \end{align}
 \end{subequations}
+
+The sets and variables involved are described in Tables \ref{tbl:GFCTP-E-sets}
+and \ref{tbl:GFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
+
+\begin{equation}
+  H_{j} \subseteq H \: \forall \: j \in J_{p}, \forall \: j \in J_{e}
+\end{equation}
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\hline
+Set         & Description \\
+\hline
+$H$         & all commodities  \\
+$I$         & all producers  \\
+$J_{p}$     & all consumers who accept parital orders  \\
+$J_{e}$     & all consumers who accept only exclusive orders  \\
+$X$         & the feasible set of flows between producers and consumers  \\
+$Y$         & the feasible set of exclusive flows between 
+            producers and consumers  \\
+$K_{i}^{h}$ & the set of constraining capacities for 
+            producer $i$ of commodity $h$  \\
+$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
+\hline
+\end{tabularx}
+\caption{Sets Appearing in the GFCTP-E Formulation}
+\label{tbl:GFCTP-E-sets}
+\end{table}
+%%% 
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\hline
+Variable    & Description \\
+\hline
+$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
+                          for producer $i$ and consumer $j$  \\
+$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
+                          for producer $i$ and consumer $j$  \\
+$q_{j}^{h}$               & the requested quality of commodity $h$ 
+                          by consumer $j$  \\
+$y_{i,j}^{h}$             & a binary decision variable that is equal to 1 if 
+                          there is flow from producer $i$ to consumer $j$ of 
+                          commodity $h$ \\
+$\tilde{x}_{j}^{h}$       & the amount of commodity $h$ requested by 
+                          consumer $j$ \\
+$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
+                          constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
+$s_{i,k}^{h}$             & a supply capacity of producer $i$ corresponding to 
+                          capacity constraint $k$ of commodity $h$ \\
+$d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of 
+                          satisfying commodities $H_{j}$ \\
+\hline
+\end{tabularx}
+\caption{Variables Appearing in the GFCTP-E Formulation}
+\label{tbl:GFCTP-E-vars}
+\end{table}
+%%%
+
+The examples of the various constraints from the previous section also apply
+here. The only difference is the notion of the binary variables, $y_{i,j}^{h}$s,
+which denote a sort of on/off switch as to whether a consumer's entire requested
+amount of material is met by a supplier or not.
+
+It should be noted that this advanced formulation brings in signifigant
+complexity to the resolution method at every time step. As with other mixed
+integer-linear programs, the GFCTP-E is NP-Complete and must be solved using the
+Branch-and-Bound technique described in \S\ref{sec:bnb}. However, simple
+heuristics exist. The most common of them is to solve a relaxed version of the
+problem in the form of a linear program, and to round values to form an integer
+solution. The exploration of additional heuristics will be performed based on
+the outcome of the implementation and analysis of this formulation in
+the \Cyclus simulation environment.
