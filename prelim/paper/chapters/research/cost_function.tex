@@ -15,15 +15,39 @@ could meet their demand. For example, a reactor may be able to use UOX or MOX
 fuel, but may prefer to use MOX fuel. Herein lies the projection of real-world
 cost into the simulation. Additionally, the managers of a given facility, which
 in the \Cyclus simulation environment include its Institution and Region, also
-exert an influence over its preference. An obvious example is the notion of
+exert an influence over its preference. An obvious example is the concept of
 affinities given in \cite{oliver_geniusv2:_2009}. In Oliver's work, an affinity
 or preference existed between facilities in ``similar'' institutions in order to
 drive the trading between institutions as a simple model of international
-relations. I expand upon this notion to cover a facility's other managers and
+relations. I expand upon this idea to cover a facility's other managers and
 the commodities themselves. Additionally, a preference can be delineated between
 the proposed qualities of the same commodity from different vendors. Finally,
 the notion of a preference is a positive one, and we require a notion of cost to
 solve the minimum-cost formulation of the multicommodity transportation problem
 with side constraints. Therefore we must have a translation function.
 
+Formally, we define a preference function, which is a cardinal preference
+ordering over a consumer's satisfying commodity set.
 
+\begin{equation}
+\alpha_{i,j}(h) \: \forall i \in I \: \forall h \in H_{j} 
+\end{equation}
+
+This ordering is a function both of the consumer, $j$, and producer, $i$. The
+dependence on producer encapsulates the relationship effects due to managerial
+preferences. We then define a cost translation function, $f$, that operates on
+the commodity preference function to produce an appropriate cost.
+
+\begin{equation}
+f : \alpha_{i,j}(h) \to c_{i,j}^{h}
+\end{equation}
+
+A naive implementation, and perhaps all that is necessary for a
+proof-of-principle, is to define f as an inversion operator.
+
+\begin{equation}
+f(x) = \frac{1}{x}
+\end{equation}
+
+The necessity for complexity of this translation function is not immediately
+obvious and an analysis will be performed to understand its impact.
