@@ -29,7 +29,7 @@
 \newcounter {lotpage}
 \newcounter {listofheading}
 
-\newcommand\@thesistitlemedskip{0.25in}
+\newcommand\@thesistitlemedskip{0.2in}
 \newcommand\@thesistitlebigskip{0.6in}
 \newcommand{\degree}[1]{\gdef\@degree{#1}}
 \newcommand{\project}{\gdef\@doctype{A masters project report}}
@@ -54,7 +54,7 @@
   Michael L. Corradini, Professor, Nuclear Engineering and Engineering Physics\\
   Vicki M. Bier, Professor, Nuclear Engineering and Engineering Physics\\
   James R. Luedtke, Professor, Industrial and Systems Engineering\\
-  Erich A. Schneider, Professor, Nuclear Engineering, UT - Austin\\
+  Erich A. Schneider, Professor, Nuclear Engineering, University of Texas at Austin\\
   %<+Name+>, <+Title+>, <+Department+>\\
   } 
 
@@ -69,7 +69,7 @@
     \def\thanks##1{\typeout{Warning: `thanks' deleted from thesis titlepage.}}
     \let\footnotesize\small \let\footnoterule\relax \setcounter{page}{1}
     \begin{center}
-      {\textbf{\expandafter\uppercase\expandafter{\@title}}} \\[\@thesistitlebigskip]
+      {\textbf{\expandafter\expandafter{\@title}}} \\[\@thesistitlebigskip]
        by \\[\@thesistitlemedskip]
       \@author \\[\@thesistitlebigskip]
       \@doctype\ submitted in partial fulfillment of \\
