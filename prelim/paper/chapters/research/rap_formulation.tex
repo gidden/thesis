@@ -1,6 +1,20 @@
-I will state \textit{a priori} the RAP linear program and then describe the
-meaning of each constraint and the objective function. The formulation is as
-follows.
+The goal of this formuation is to match a set of fuel requests as closely as
+possible, where proximity in this sense is defined by the $L^{1}$ norm of the
+distance between a mixture attribute and a target attribute. In the following
+linear program, the mixture attribute is the dot product of a matrix and a
+vector. The matrix is that of all isotopic masses in barrels, $M$, where an
+entry, $M_{b,i}$, is the mass of isotope $i$ in barrel $b$. The vector is the
+decision variables for a given recipe, $\vec{x_{r}}$, where an entry, $x_{b,r}$,
+is the fraction of barrel $b$ being assigned to fuel request $r$. The target
+attribute is the target fuel request composition, $\vec{t_{r}}$. where an entry,
+$t_{i,r}$, is the mass of isotope $i$ in fuel request $r$.
+
+The minimization objective in and of itself is not necessarily interesting. In
+order to enforce physical realities and domain-level knowledge, additional
+constraints are added that the result must comply with. These include total
+mass, isotopic masses, and neutronics constraints. I present the full
+formulation below in Equation \ref{eqs:rap} and explain more fully its
+derivation and interpretation in the following paragraphs.
 
 %%% 
 \begin{subequations}\label{eqs:rap}
@@ -39,10 +53,62 @@ follows.
 \end{subequations}
 %%% 
 
+Let me begin the discussion of the RAP formulation by noting that the
+$\vec{y_{r}}$ variables occur twice, once as an assignment in
+Equation \ref{eqs:rap_iso} and again in Equation \ref{eqs:rap_obj}, the
+objective function. The $\vec{y_{r}}$ variables are column vectors that
+represent the different between the isotopic composition of a proposed mixed
+solution for a target fuel request, $r$, and the target fuel request itself. The
+goal of this formulation is to minimize that difference. However, a strict
+difference minimization is not directly suitable. Because separations plants can
+separate materials only on elemental scales, not on isotopic scales, and because
+fuel recipes are isotopic-specific, there will inevitively be isotopes present
+in the barrels that are not requested in the recipe. This is described formally
+in Equation \ref{eqs:barrel-req-iso}.
+
+\begin{equation}
+\label{eqs:barrel-req-iso}
+I_{B} \supseteq I_{r} \: \forall r \in R
+\end{equation}
+
+Additionally, the isotopes that are most important from a nuclear engineering
+domain knowledge point of view are known to of relatively low concentration in
+the final fuel recipe (e.g., U-235 is only 3-5 w/o of LWR fuel). Accordingly,
+some kind of weighting function is required to determine the relative importance
+among isotopes in the resulting solution. I adopt Oliver's definition of this
+weight from \cite{oliver_geniusv2:_2009}, which normalizes the importance of
+isotopes in the final mixture.
+
+\begin{equation}
+c_{i,r} = 
+\begin{cases}
+ \frac{1}{m_{i,r}} & \text{if } i \in I_{r} \\
+ \frac{1}{m_{r}}   & \text{if } i \not\in I_{r}
+\end{cases}
+\end{equation}
+
+Note that the dot product of the vectors $\vec{y_{r}}$ and $\vec{c_{r}}^{\top}$
+results in a scalar, and we wish to minimize the aggregate sum of scalars for
+all fuel requests.
+
+Moving on to the physical constraints, let us cover the simpler
+Equation \ref{eqs:rap_mass} first. This constraint states that the mass of a
+feasible matching solution, i.e. $\sum_{b \in B} m_{b} x_{b,r}$, must be within
+some range of the mass of the given fuel request, $m_{r}$. This range is defined
+by some small value, $\epsilon_{m}$. It is important to realize that the
+$\epsilon$ vaules appearing in these constraints critically affect the
+feasibility space. Whereas the objective function seeks to minimize the
+difference between a mixture attribute and target attribute, the $\epsilon$
+values define a maximum allowable difference. Accordingly, the define the bounds
+of the feasible solution space. It entirely possible that during the course of a
+simulation, an instance of the RAP will not have a feasible solution. In such a
+scenario, the various $\epsilon$ values will have to be incrementally increased,
+or relaxed, until feasibility is attained.
+
 Finally, let me discuss Equations \ref{eqs:rap_conserv} and \ref{eqs:rap_x}.
 Equation \ref{eqs:rap_conserv} simply states that the sum of all barrel
 fractions for any given barrel must be less than one. This is simply a check on
 reality -- you can't take more things from a container than exist in the
-container in the first place. Equation \ref{rap_x} simply defines the notion of
+container in the first place. Equation \ref{eqs:rap_x} simply defines the notion of
 a fraction, saying that all barrel fractions must lie in the range of 0 and 1,
 inclusive.
