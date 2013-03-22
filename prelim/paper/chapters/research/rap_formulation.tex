@@ -105,6 +105,138 @@ simulation, an instance of the RAP will not have a feasible solution. In such a
 scenario, the various $\epsilon$ values will have to be incrementally increased,
 or relaxed, until feasibility is attained.
 
+The neutronics constraint, Equation \ref{eqs:rap_eta}, is more complicated and
+deserves its own derivation. First, note its purpose. It is a constraint on the
+neutronics parameter $\eta$, i.e., the number of neutrons produced per fission
+per absorption in the fuel. It is a material-specific value, which is to say
+that it is a function only of material properties of the fuel, rather than the
+reactor geometry or the material properties of the fuel or the moderator, as are
+most other neutronics-related parameters, e.g. the effective multiplication
+factor, $k_{eff}$. This parameter is ideal for an initial attempt at this
+formulation because it requires only the minimal information associated with
+material requests in \Cyclus, i.e., a quantity and an isotopic profile. The
+equation for $\eta$ of a homogenous medium is as follows.
+
+\begin{equation}
+\label{eqs:eta_macro}
+\eta = \frac{\sum_{i \in I} \nu^{i} \Sigma_{f}^{i}}
+            {\sum_{i \in I} \Sigma_{a}^{i}}
+\end{equation}
+
+In Equation \ref{eqs:eta_macro}, $I$ is the set of isotopes in the material,
+$\nu^{i}$ is the average neutrons produced per fisison of isotope $i$,
+$\Sigma_{f}^{i}$ is the macroscopic cross section for fission of isotope $i$,
+and $\Sigma_{a}^{i}$ is the macroscopic cross section for absorption of isotope
+$i$. The ratio of the two cross sections produces the probability that a neutron
+causes fission given that is absorbed by isotope $i$. For our purposes, because
+we do not know how much of each material will contribute to a final mixture, it
+is more ideal to work with microscopic cross sections and number densities of an
+isotope $i$, $N^{i}$, as shown in Equation \ref{eqs:eta_micro}.
+
+\begin{equation}
+\label{eqs:eta_micro}
+\eta = \frac{\sum_{i \in I} \nu^{i} \sigma_{f}^{i} N^{i}}
+            {\sum_{i \in I} \sigma_{a}^{i} N^{i}}
+\end{equation}
+
+In order to discuss this in terms of barrel fractions, we must include them as
+multiples of the number densities. 
+
+\begin{equation}
+\label{eqs:eta_fractions_nonlin}
+\eta_{B} = \frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b}}
+                {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b}}
+\end{equation}
+
+In Equation \ref{eqs:eta_fractions_nonlin}, $I_{B}$ denotes the set of all
+isotopes in barrels, $N_{b}^{i}$ denotes the number density of isotope $i$ in
+barrel $b$, and $\eta_{B}$ is the reproduction factor resulting from the
+specific values of barrel fractions $x_{b}$. If we were to leave the definition
+of $\eta_{B}$ in this form, we could formulate the constraint in
+Equation \ref{eqs:rap_eta} in the same way as is done in
+Equation \ref{eqs:rap_mass}.
+
+\begin{equation}
+\label{eqs:eta_nonlin}
+\epsilon_{\eta} \geq \left| 
+\frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b}}
+     {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b}} 
+- \eta_{r} \right|
+\: \forall \: r \in R
+\end{equation}
+
+$\eta_{r}$ in Equation \ref{eqs:eta_nonlin} is defined in the normal way.
+
+\begin{equation}
+\label{eqs:eta_r}
+\eta_{r} = \frac{\sum_{i \in I_{r}} \nu^{i} \Sigma_{f}^{i}}
+                {\sum_{i \in I_{r}} \Sigma_{a}^{i}}
+\end{equation}
+
+Furthermore, $\eta_{r}$ is presumed to be predefined and is a constant with
+respect to the RAP. Equation \ref{eqs:eta_nonlin} presents a problem; it
+introduces a ratio of decision variables, which is a nonlinearity. In general,
+nonlinear programs are much more difficult to solve than linear programs and
+require much more exotic techniques. Some algebra can relieve this issue,
+however. We begin by massaging Equation \ref{eqs:eta_nonlin}, reformulating it
+into Equation \ref{eqs:eta_fractions_nonlin}.
+
+\begin{equation}
+\label{eqs:eta_fractions_lin}
+\eta_{B} = \frac{\sum_{b \in B} x_{b} \sum_{i \in I_{b}} \nu^{i} \sigma_{f}^{i} N_{b}^{i}}
+                {\sum_{b \in B} x_{b} \sum_{i \in I_{b}} \sigma_{a}^{i} N_{b}^{i}}
+\end{equation}
+
+Note that out of Equation \ref{eqs:eta_fractions_nonlin} fall two parameters
+that are defined for each barrel, which I denote $\eta_{b}^{+}$ and
+$\eta_{b}^{-}$.
+
+\begin{equation}
+\label{eqs:eta_+}
+\eta_{b}^{+} \equiv \sum_{i \in I_{b}} \nu^{i} \sigma_{f}^{i} N_{b}^{i}
+\end{equation}
+
+\begin{equation}
+\label{eqs:eta_-}
+\eta_{b}^{-} \equiv \sum_{i \in I_{b}} \sigma_{a}^{i} N_{b}^{i}
+\end{equation}
+
+Equations \ref{eqs:eta_+} and \ref{eqs:eta_-} allow us to write
+Equation \ref{eqs:eta_fractions_lin} more simply.
+
+\begin{equation}
+\label{eqs:eta_simple}
+\eta_{B} = \frac{\sum_{b \in B} \eta_{b}^{+} x_{b}}
+                {\sum_{b \in B} \eta_{b}^{-} x_{b}}
+\end{equation}
+
+We can then rewrite Equation \ref{eqs:eta_nonlin} using
+Equation \ref{eqs:eta_simple}.
+
+\begin{equation}
+\label{eqs:eta_nonlin_simple}
+\epsilon_{\eta} \geq \left| 
+\frac{\sum_{b \in B} \eta_{b}^{+} x_{b}}
+     {\sum_{b \in B} \eta_{b}^{-} x_{b}}
+- \eta_{r} \right|
+\: \forall \: r \in R
+\end{equation}
+
+Finally, we can multiply Equation \ref{eqs:eta_nonlin_simple} through by the
+denominator of Equation \ref{eqs:eta_simple} to arrive at the form of the
+constraint in \ref{eqs:rap_eta}.
+
+\begin{equation}
+\label{eqs:eta_linear}
+\epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b} \geq
+\left| \sum_{b \in B} \eta_{b}^{+} x_{b}
+- \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b} \right|
+\: \forall \: r \in R
+\end{equation}
+
+The constraint in Equation \ref{eqs:eta_linear} has been linearized, and the
+polynomial-time Simplex Method can again be applied as the solution mechanism. 
+
 Finally, let me discuss Equations \ref{eqs:rap_conserv} and \ref{eqs:rap_x}.
 Equation \ref{eqs:rap_conserv} simply states that the sum of all barrel
 fractions for any given barrel must be less than one. This is simply a check on
