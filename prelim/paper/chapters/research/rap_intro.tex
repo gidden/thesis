@@ -9,11 +9,11 @@ to an N-request formulation.
 The Recipe Approximation Problem (RAP) seeks to model a separations facility
 matching reactor fuel orders. The basic assumptions of the problem are the
 following: there are a set of barrels of separated material, $B$, and a set of
-fuel requests, $R$, that specify an isotopic vector, $I_{r}$, and quantity,
-$q_{r}$, that fully describe a desired fuel order. The goal of the solution
-methodology is to determine a matrix of extraction fractions $X$, where each
-entry, $x_{b,r}$ denotes the fraction of barrel $b$ being used to match fuel
-request $r$. The problem is shown graphically in Figure \ref{fig:rap},
+fuel requests, $R$, that specify an target isotopic vector, $\vec{t_{r}}$, and
+quantity, $q_{r}$, that fully describe a desired fuel order. The goal of the
+solution methodology is to determine a matrix of extraction fractions $X$, where
+each entry, $x_{b,r}$ denotes the fraction of barrel $b$ being used to match
+fuel request $r$. The problem is shown graphically in Figure \ref{fig:rap},
 displaying the set of barrels, $B$, the set of fuel requests, $R$, and the set
 of extraction fractions, $X$.
 
@@ -33,4 +33,3 @@ the RAP, expanding upon the work in \cite{oliver_geniusv2:_2009}. I then
 describe how additional constraints can be added to the formulation given
 additional information. Finally, I describe a more abstract version that adds a
 notion of agency to the problem formulation.
-

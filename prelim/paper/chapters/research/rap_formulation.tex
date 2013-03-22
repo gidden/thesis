@@ -1,0 +1,48 @@
+I will state \textit{a priori} the RAP linear program and then describe the
+meaning of each constraint and the objective function. The formulation is as
+follows.
+
+%%% 
+\begin{subequations}\label{eqs:rap}
+  \begin{align}
+    %%
+    \min_{z} \:\: & 
+    z = \sum_{r \in R} \vec{c_{r}}^{\top} \cdot \vec{y_{r}}
+    & \label{eqs:rap_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \vec{y_{r}} = \left| M \cdot \vec{x_{r}}  - \vec{t_{r}} \right|
+    &
+    \: \forall \: r \in R \label{eqs:rap_iso} \\
+    %%
+    &
+    \epsilon_{m} \geq \left| \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right|
+    & 
+    \forall \: r \in R \label{eqs:rap_mass} \\
+    %%
+    &
+    \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq 
+    \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r} - 
+           \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
+    & 
+    \forall \: r \in R \label{eqs:rap_eta} \\
+    &
+    \sum_{r \in R} x_{b,r} \leq 1
+    & 
+    \forall \: b \in B \label{eqs:rap_conserv} \\
+    &
+    x_{b,r} \in \left[ 0, 1 \right]
+    & 
+    \forall \: b \in B, \forall \: r \in R  \label{eqs:rap_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+Finally, let me discuss Equations \ref{eqs:rap_conserv} and \ref{eqs:rap_x}.
+Equation \ref{eqs:rap_conserv} simply states that the sum of all barrel
+fractions for any given barrel must be less than one. This is simply a check on
+reality -- you can't take more things from a container than exist in the
+container in the first place. Equation \ref{rap_x} simply defines the notion of
+a fraction, saying that all barrel fractions must lie in the range of 0 and 1,
+inclusive.
