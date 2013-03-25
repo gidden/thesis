@@ -1,0 +1,80 @@
+A viable critique of the proposal of the formulation of the RAP is that it does
+not capture reactor-specific inftyormation in its application of a neutronics
+parameter approximation. This initial formulation uses the neutron production
+factor ($\eta$) primarily because of precidence and because of the nature of the
+\Cyclus simulation engine. As it is currently designed, the \Cyclus engine
+treats facilities as black boxes, which is to say that it only concerned with
+material flowing into and out of those boxes for which there may or may not be
+an isotopic profile accompanying an amount of requested material. This loose
+coupling is by design, the \Cyclus development team wishes to maintain the
+ease-of-use of connecting new simulation entities at run time, as was described
+in the dynamic loading segment of \S\ref{sec:prev-dynamic}. Accordingly,
+decisions to include facility-specific inftyormation, e.g. reactor assembly
+characteristics, must be made with forethought and knowlege as to their
+usefulness for inclusion and straining the minimal-connections model. However,
+as future work progresses, such a need may arise.
+
+One possible extension of the RAP formulation that includes reactor inftyormation
+(albeit minimally) would be a use of a $k_{\infty}$ constraint either in
+conjunction with or instead of the $\eta$ constraint. If used in conjunction
+with the $\eta$ constraint, the new formulation would effectively add loss
+inftyormation due to the presence of moderator parameters, creating a tighter
+feasible solution space than would exist with simply using a $k_{\infty}$
+constraint in isolation. 
+
+The definition of $k_{\infty}$ is as follows.
+
+\begin{equation}\label{eqs:kinf_macro}
+k_{\infty} = \frac{\sum_{i \in I_{F}} \nu^{i} \Sigma_{f}^{i}}
+                  {\Sigma_{a}^{M} + \sum_{i \in I_{F}} \Sigma_{a}^{i}}
+\end{equation}
+
+The notation is almost the same as Equation \ref{eqs:eta_macro}, except that the
+difference between fuel and moderator cross sections are denoted by $F$ and $M$
+superscripts respectively. For the remainder of this section, though, I will
+drop the $F$ superscript because it can be assumed that the isotopes under
+consideration for this problem are those of the fuel. The moderator-based
+neutron losses are also accounted for in the denominator of the expression. It
+should be noted again that this expression assumes a homogenization of fuel and
+moderator material, i.e., they are considered ``smeared''. The corresponding
+constraint would take the following form, again, similary to Equation
+\ref{eqs:eta_nonlin}.
+
+\begin{equation}
+\label{eqs:kinf_nonlin}
+\epsilon_{k_{\infty}} \geq \left| 
+\frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}}
+     {\Sigma_{a,r}^{M} + \sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}} 
+- k_{\infty,r} \right|
+\: \forall \: r \in R
+\end{equation}
+
+$k_{\infty,r}$ in Equation \ref{eqs:kinf_nonlin} is defined in the normal way.
+
+\begin{equation}
+\label{eqs:kinf_r}
+k_{\infty,r} = \frac{\sum_{i \in I_{r}} \nu^{i} \Sigma_{f}^{i}}
+                    {\Sigma_{a,r}^{M} + \sum_{i \in I_{r}} \Sigma_{a}^{i}}
+\end{equation}
+
+Applying similar operations to Equation \ref{eqs:kinf_nonlin} as were applied to
+Equation \ref{eqs:eta_nonlin} result in a similarly linearlized constraint.
+
+\begin{equation}
+\label{eqs:kinf_linear}
+\epsilon_{k_{\infty}} \left( \Sigma_{a,r}^{M} + \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right)
+\geq
+\left| \sum_{b \in B} \eta_{b}^{+} x_{b,r}
+- k_{\infty,r}  \left( \Sigma_{a,r}^{M} + \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right) \right|
+\: \forall \: r \in R
+\end{equation}
+
+As can be seen, increasing the information in given to the problem formulation
+increases the complexity of the formulation. Further, to perserve the linear
+nature of the formulation, any additional parameters that we wish to provide a
+constraint for must be able to be decomposed into, at worst, a ratio of linear
+combinations of barrel-specific parameters and barrel fractions. Should this
+formulation prove too simplistic in practice, one way forward would be to move
+into the nonlinear realm of approximation formulations. This would open up a
+much more robust set of parameters that we could constrain and would also allow
+usage of tighter norms, such as the $L_2$ norm, than the $L_1$ norm.

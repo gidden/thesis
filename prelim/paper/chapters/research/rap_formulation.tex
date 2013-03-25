@@ -159,8 +159,8 @@ Equation \ref{eqs:rap_mass}.
 \begin{equation}
 \label{eqs:eta_nonlin}
 \epsilon_{\eta} \geq \left| 
-\frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b}}
-     {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b}} 
+\frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}}
+     {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}} 
 - \eta_{r} \right|
 \: \forall \: r \in R
 \end{equation}
@@ -216,8 +216,8 @@ Equation \ref{eqs:eta_simple}.
 \begin{equation}
 \label{eqs:eta_nonlin_simple}
 \epsilon_{\eta} \geq \left| 
-\frac{\sum_{b \in B} \eta_{b}^{+} x_{b}}
-     {\sum_{b \in B} \eta_{b}^{-} x_{b}}
+\frac{\sum_{b \in B} \eta_{b}^{+} x_{b_r}}
+     {\sum_{b \in B} \eta_{b}^{-} x_{b_r}}
 - \eta_{r} \right|
 \: \forall \: r \in R
 \end{equation}
@@ -228,9 +228,9 @@ constraint in \ref{eqs:rap_eta}.
 
 \begin{equation}
 \label{eqs:eta_linear}
-\epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b} \geq
-\left| \sum_{b \in B} \eta_{b}^{+} x_{b}
-- \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b} \right|
+\epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq
+\left| \sum_{b \in B} \eta_{b}^{+} x_{b,r}
+- \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
 \: \forall \: r \in R
 \end{equation}
 
