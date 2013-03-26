@@ -1,0 +1,98 @@
+In the previous sections, we have assumed a fundamental truth in our formulation
+of the RAP: reactors requesting nuclear fuel know exactly what isotopes they
+want and in what quantities they want them. This notion has merit in general; in
+real life, the companies that manage reactors and their fuel do, in fact, know
+the exact specifications of fuel they want. However, this knowledge comes from
+two sources: the availability of the fuel they can purchase at some cost and a
+thorough analysis of the effect of various fuels to their reactor flux profiles
+and thus their ability to reach high levels of burnup, or fuel
+utilization. Furthermore, simulators to date that allow for isotopic-level
+dependence of input and output fuel have relied almost solely on the notion of
+recipes, hence it made sense when the original RAP formulation was conceived to
+have the objective function minimize the $L_1$ norm of the isotopic
+vector. Additionally, this is a viable first step that has yet to be shown in
+any sort of proof-of-principle, as this work proposes to do.
+
+The original goal of developing such a separations/fuel fabrication facility
+that interacts in a fuel cycle simulation is to provide a semblance of realism
+with respect to the global inventory of separated material for reactors that
+want fuel made out of such material. Critically, this semblance of realism is
+\textit{automated} along the similar lines of Scopatz's work for
+reactors~\cite{scopatz_essential_2011} and Huff's work for
+repositories~\cite{huff_integrated_2013}. Accordingly, the notion that reactors
+must know \textit{a priori} the exact fuel recipe they require at any given time
+step is, at best, a large approximation. Something that is perhaps closer to
+reality is to allow reactors to determine its most important parameter, whether
+or not it is in fact an exact fuel recipe. For example, it is a viable
+possibility that a reactor would take any reprocessed fuel type that fits
+certain parameters, such as a beginning-of-cycle reactivity and a maximum void
+coefficient of reacitvity. The former parameter is a measure of fuel
+utilization, i.e., how long fuel can stay in a reactor before becoming a net
+neutron poison, and the latter is a measure of reactor criticality
+safety. Accordingly, such a recipe order would effectively connote a notion of
+requiring a minimum fuel utilization while maintaining certain safety
+parameters, both of which are functions of the resulting isotopics of the given
+solution, but neither of which demand specific levels of isotopics.
+
+The RAP formulation can be extended to allow such a level of abstraction with
+respect to its objective function and constraints. Let me note beforehand that
+this proposed change, while introducing increased agency into the simulation
+(allowing reactors greater autonomy over decision-making processes), it
+increases connectivity between specific types of facilities, the proposed
+separations facility and reactors in this case. Again, \Cyclus has been designed
+to minimize these facility-specific connections, so adding them must be done
+with sufficient knowlege as to their usefulness. In any case, the point of this
+section is to simply show the extension required to the RAP in order to achieve
+this aim mathematically.
+
+Let us assume that we have at our disposal the three parameters used in Equation
+\ref{eqs:rap}, namely the $L_1$ norm of the isotopic vector, the total mass, and
+$\eta$, the neutron production factor. Further, let us assume that there are
+three sets of reactors ordering fuel, corresponding to each parameter. I will
+denote them as $R_I$, $R_m$, and $R_\eta$ respectively. The RAP can then be
+adapted to a slightly different formulation. Let us call this new problem the
+Reactor Order Approximation Problem (ROAP).
+
+%%% 
+\begin{subequations}\label{eqs:roap}
+  \begin{align}
+    %%
+    \min_{z} \:\: & 
+    z = \sum_{r \in R_I} \vec{c_{r}}^{\top} \cdot \vec{y_{I,r}}
+    + \sum_{r \in R_m} y_{m,r} + \sum_{r \in R_\eta} y_{\eta,r}
+    & \label{eqs:roap_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \vec{y_{I,r}} = \left| M \cdot \vec{x_{r}}  - \vec{t_{r}} \right|
+    &
+    \: \forall \: r \in R_I \label{eqs:roap_iso_y} \\
+    %%
+    &
+    y_{m,r} = \left| \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right| 
+    &
+    \: \forall \: r \in R_I \label{eqs:roap_mass_y} \\
+    %%
+    &
+    \epsilon_{m} \geq \left| \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right|
+    & 
+    \forall \: r \in R \label{eqs:roap_mass} \\
+    %%
+    &
+    \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq 
+    \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r} - 
+           \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
+    & 
+    \forall \: r \in R \label{eqs:roap_eta} \\
+    &
+    \sum_{r \in R} x_{b,r} \leq 1
+    & 
+    \forall \: b \in B \label{eqs:roap_conserv} \\
+    &
+    x_{b,r} \in \left[ 0, 1 \right]
+    & 
+    \forall \: b \in B, \forall \: r \in R  \label{eqs:roap_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
