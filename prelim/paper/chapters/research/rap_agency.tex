@@ -26,7 +26,7 @@ reality is to allow reactors to determine its most important parameter, whether
 or not it is in fact an exact fuel recipe. For example, it is a viable
 possibility that a reactor would take any reprocessed fuel type that fits
 certain parameters, such as a beginning-of-cycle reactivity and a maximum void
-coefficient of reacitvity. The former parameter is a measure of fuel
+coefficient of reactivity. The former parameter is a measure of fuel
 utilization, i.e., how long fuel can stay in a reactor before becoming a net
 neutron poison, and the latter is a measure of reactor criticality
 safety. Accordingly, such a recipe order would effectively connote a notion of
@@ -41,7 +41,7 @@ this proposed change, while introducing increased agency into the simulation
 increases connectivity between specific types of facilities, the proposed
 separations facility and reactors in this case. Again, \Cyclus has been designed
 to minimize these facility-specific connections, so adding them must be done
-with sufficient knowlege as to their usefulness. In any case, the point of this
+with sufficient knowledge as to their usefulness. In any case, the point of this
 section is to simply show the extension required to the RAP in order to achieve
 this aim mathematically.
 
@@ -53,7 +53,7 @@ denote them as $R_I$, $R_m$, and $R_\eta$ respectively.
 
 It is important to reiterate the nature of the approximation problem before
 continuing, because we are modifying it from its original purpose. As described
-in \S\ref{sec:approx}, the apprixmation problem is concerned with finding an
+in \S\ref{sec:approx}, the approximation problem is concerned with finding an
 approximate solution vector, $\vec{x}$, that gets ``close'' to a correct
 solution to the matrix equation, i.e., 
 
@@ -61,8 +61,8 @@ solution to the matrix equation, i.e.,
   \mathbf{A} \vec{x} \approx \vec{b}.
 \end{equation*}
 
-The RAP then applies a weighting coefficient in the objective funciton due to
-domain knowlege of the problem, whereas the unit vector, $\vec{e}$, is used in
+The RAP then applies a weighting coefficient in the objective function due to
+domain knowledge of the problem, whereas the unit vector, $\vec{e}$, is used in
 the original approximation formulation. The use of the $L_1$ norm is appropriate
 in the original RAP case because the mass of isotopes is being approximated,
 which is an extrinsic quantity specific to each isotope in the set of
@@ -97,7 +97,7 @@ We want the difference between each parameter to be approximately zero, i.e.,
 Accordingly, we can denote their differences as $y_{m}$ and $y_{\eta}$ and use
 these values in our minimal objective function. Take special note that we want
 to minimize each $y$, i.e., get them as close to zero as possible. This allows
-us to again linearize the neturonics function.
+us to again linearize the neutronics function.
 
 \begin{equation}\label{eqs:mass_obj}
 y_{m} = \left|  \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right|
@@ -113,8 +113,8 @@ adapted to a slightly different formulation. Let us call this new problem the
 Reactor Order Approximation Problem (ROAP). Note that it has effectively
 sectioned the original RAP into three separate request spaces, applying an
 objective function and constraints specific to each. Each request space is
-connected by the overarching set of barrels, i.e., the material must be picked
-from all barrels simultaneously.
+connected by the overarching set of barrels, i.e., material must be picked from
+all barrels simultaneously.
 
 %%% 
 \begin{subequations}\label{eqs:roap}
@@ -148,16 +148,21 @@ from all barrels simultaneously.
     %%
     &
     \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq 
-    \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r} - 
-           \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
+    & \nonumber \\ 
     & 
+    \:\:\:\:\:\:\:\:\:\:\:  % u-g-l-y you ain't got no alibi, you can't format =(
+    \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r} - 
+    \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
+    &
     \forall \: r \in R_{I}, \: \forall \: r \in R_{m} \label{eqs:roap_eta} \\
+    %%
     &
     \sum_{r \in R_{I}} x_{b,r} +
     \sum_{r \in R_{m}} x_{b,r} + 
     \sum_{r \in R_{\eta}} x_{b,r} \leq 1
     & 
     \forall \: b \in B \label{eqs:roap_conserv} \\
+    %%
     &
     x_{b,r} \in \left[ 0, 1 \right]
     & 
@@ -168,3 +173,8 @@ from all barrels simultaneously.
 \end{subequations}
 %%% 
 
+where $R$ is simply the superset of the partitioned requests
+
+\begin{equation*}
+  R = R_{I} \cup R_{m} \cup R_{\eta}.
+\end{equation*}
