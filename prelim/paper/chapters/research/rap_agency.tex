@@ -49,9 +49,72 @@ Let us assume that we have at our disposal the three parameters used in Equation
 \ref{eqs:rap}, namely the $L_1$ norm of the isotopic vector, the total mass, and
 $\eta$, the neutron production factor. Further, let us assume that there are
 three sets of reactors ordering fuel, corresponding to each parameter. I will
-denote them as $R_I$, $R_m$, and $R_\eta$ respectively. The RAP can then be
+denote them as $R_I$, $R_m$, and $R_\eta$ respectively. 
+
+It is important to reiterate the nature of the approximation problem before
+continuing, because we are modifying it from its original purpose. As described
+in \S\ref{sec:approx}, the apprixmation problem is concerned with finding an
+approximate solution vector, $\vec{x}$, that gets ``close'' to a correct
+solution to the matrix equation, i.e., 
+
+\begin{equation*}
+  \mathbf{A} \vec{x} \approx \vec{b}.
+\end{equation*}
+
+The RAP then applies a weighting coefficient in the objective funciton due to
+domain knowlege of the problem, whereas the unit vector, $\vec{e}$, is used in
+the original approximation formulation. The use of the $L_1$ norm is appropriate
+in the original RAP case because the mass of isotopes is being approximated,
+which is an extrinsic quantity specific to each isotope in the set of
+isotopes. Accordingly, such a powerful technique is not required if one is
+approximating an aggregate quantity such as overall mass or the neutron
+production factor. The simplified equation for mass approximation is
+
+\begin{equation*}
+  \sum_{b \in B} m_{b} x_{b,r} \approx m_{r},
+\end{equation*}
+
+and the simplified equation for neutron production factor approximation is
+
+\begin{equation*}
+\frac{\sum_{b \in B} \eta_{b}^{+} x_{b,r}}
+     {\sum_{b \in B} \eta_{b}^{-} x_{b,r}} 
+\approx \eta_{r}.
+\end{equation*}
+
+We want the difference between each parameter to be approximately zero, i.e.,
+
+\begin{equation*}
+  \sum_{b \in B} m_{b} x_{b,r} - m_{r} \approx 0, \mbox{and}
+\end{equation*}
+
+\begin{equation*}
+\frac{\sum_{b \in B} \eta_{b}^{+} x_{b,r}}
+     {\sum_{b \in B} \eta_{b}^{-} x_{b,r}} 
+- \eta_{r} \approx 0.
+\end{equation*}
+
+Accordingly, we can denote their differences as $y_{m}$ and $y_{\eta}$ and use
+these values in our minimal objective function. Take special note that we want
+to minimize each $y$, i.e., get them as close to zero as possible. This allows
+us to again linearize the neturonics function.
+
+\begin{equation}\label{eqs:mass_obj}
+y_{m} = \left|  \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right|
+\end{equation}
+
+\begin{equation}\label{eqs:eta_obj}
+y_{\eta} = \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r}
+- \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
+\end{equation}
+
+With the additions to the objective function in hand, the RAP can then be
 adapted to a slightly different formulation. Let us call this new problem the
-Reactor Order Approximation Problem (ROAP).
+Reactor Order Approximation Problem (ROAP). Note that it has effectively
+sectioned the original RAP into three separate request spaces, applying an
+objective function and constraints specific to each. Each request space is
+connected by the overarching set of barrels, i.e., the material must be picked
+from all barrels simultaneously.
 
 %%% 
 \begin{subequations}\label{eqs:roap}
@@ -70,27 +133,36 @@ Reactor Order Approximation Problem (ROAP).
     &
     y_{m,r} = \left| \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right| 
     &
-    \: \forall \: r \in R_I \label{eqs:roap_mass_y} \\
+    \: \forall \: r \in R_m \label{eqs:roap_mass_y} \\
+    %%
+    &
+    y_{\eta} = \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r}
+    - \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
+    &
+    \: \forall \: r \in R_\eta \label{eqs:roap_eta_y} \\
     %%
     &
     \epsilon_{m} \geq \left| \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right|
     & 
-    \forall \: r \in R \label{eqs:roap_mass} \\
+    \forall \: r \in R_m, \: \forall \: r \in R_{\eta} \label{eqs:roap_mass} \\
     %%
     &
     \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq 
     \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r} - 
            \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
     & 
-    \forall \: r \in R \label{eqs:roap_eta} \\
+    \forall \: r \in R_{I}, \: \forall \: r \in R_{m} \label{eqs:roap_eta} \\
     &
-    \sum_{r \in R} x_{b,r} \leq 1
+    \sum_{r \in R_{I}} x_{b,r} +
+    \sum_{r \in R_{m}} x_{b,r} + 
+    \sum_{r \in R_{\eta}} x_{b,r} \leq 1
     & 
     \forall \: b \in B \label{eqs:roap_conserv} \\
     &
     x_{b,r} \in \left[ 0, 1 \right]
     & 
-    \forall \: b \in B, \forall \: r \in R  \label{eqs:roap_x}
+    \forall \: b \in B, 
+    \forall \: r \in R  \label{eqs:roap_x}
     %%
   \end{align}
 \end{subequations}
