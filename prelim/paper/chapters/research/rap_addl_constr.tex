@@ -1,7 +1,7 @@
 A viable critique of the proposal of the formulation of the RAP is that it does
-not capture reactor-specific inftyormation in its application of a neutronics
+not capture reactor-specific information in its application of a neutronics
 parameter approximation. This initial formulation uses the neutron production
-factor ($\eta$) primarily because of precidence and because of the nature of the
+factor ($\eta$) primarily because of precedence and because of the nature of the
 \Cyclus simulation engine. As it is currently designed, the \Cyclus engine
 treats facilities as black boxes, which is to say that it only concerned with
 material flowing into and out of those boxes for which there may or may not be
@@ -9,16 +9,16 @@ an isotopic profile accompanying an amount of requested material. This loose
 coupling is by design, the \Cyclus development team wishes to maintain the
 ease-of-use of connecting new simulation entities at run time, as was described
 in the dynamic loading segment of \S\ref{sec:prev-dynamic}. Accordingly,
-decisions to include facility-specific inftyormation, e.g. reactor assembly
-characteristics, must be made with forethought and knowlege as to their
+decisions to include facility-specific information, e.g. reactor assembly
+characteristics, must be made with forethought and knowledge as to their
 usefulness for inclusion and straining the minimal-connections model. However,
 as future work progresses, such a need may arise.
 
-One possible extension of the RAP formulation that includes reactor inftyormation
+One possible extension of the RAP formulation that includes reactor information
 (albeit minimally) would be a use of a $k_{\infty}$ constraint either in
 conjunction with or instead of the $\eta$ constraint. If used in conjunction
 with the $\eta$ constraint, the new formulation would effectively add loss
-inftyormation due to the presence of moderator parameters, creating a tighter
+information due to the presence of moderator parameters, creating a tighter
 feasible solution space than would exist with simply using a $k_{\infty}$
 constraint in isolation. 
 
@@ -37,7 +37,7 @@ consideration for this problem are those of the fuel. The moderator-based
 neutron losses are also accounted for in the denominator of the expression. It
 should be noted again that this expression assumes a homogenization of fuel and
 moderator material, i.e., they are considered ``smeared''. The corresponding
-constraint would take the following form, again, similary to Equation
+constraint would take the following form, again, similarly to Equation
 \ref{eqs:eta_nonlin}.
 
 \begin{equation}
@@ -58,7 +58,7 @@ k_{\infty,r} = \frac{\sum_{i \in I_{r}} \nu^{i} \Sigma_{f}^{i}}
 \end{equation}
 
 Applying similar operations to Equation \ref{eqs:kinf_nonlin} as were applied to
-Equation \ref{eqs:eta_nonlin} result in a similarly linearlized constraint.
+Equation \ref{eqs:eta_nonlin} result in a similarly linearized constraint.
 
 \begin{equation}
 \label{eqs:kinf_linear}
@@ -70,11 +70,14 @@ Equation \ref{eqs:eta_nonlin} result in a similarly linearlized constraint.
 \end{equation}
 
 As can be seen, increasing the information in given to the problem formulation
-increases the complexity of the formulation. Further, to perserve the linear
+increases the complexity of the formulation. Further, to preserve the linear
 nature of the formulation, any additional parameters that we wish to provide a
 constraint for must be able to be decomposed into, at worst, a ratio of linear
 combinations of barrel-specific parameters and barrel fractions. Should this
 formulation prove too simplistic in practice, one way forward would be to move
 into the nonlinear realm of approximation formulations. This would open up a
 much more robust set of parameters that we could constrain and would also allow
-usage of tighter norms, such as the $L_2$ norm, than the $L_1$ norm.
+usage of tighter norms than the $L_1$ norm, e.g. the $L_2$ norm. However,
+solution techniques for nonlinear programs are significantly more complicated
+and computationally time consuming than for linear programs. Indeed, they
+constitute an entirely new field of study.
