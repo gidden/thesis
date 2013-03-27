@@ -1,10 +1,14 @@
 manuscript = prelim
-references = refs
+references = refs simulators
 latexopt   = -halt-on-error -file-line-error
+
+for file in $(references); do \
+   ref_handles = $(ref_handles) $(file).bib \
+done
 
 all: all-via-pdf
 
-all-via-pdf: $(manuscript).tex $(references).bib
+all-via-pdf: $(manuscript).tex $(ref_handles)
 	pdflatex $(latexopt) $<
 	bibtex $(manuscript).aux
 	pdflatex $(latexopt) $<
