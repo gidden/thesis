@@ -1,5 +1,5 @@
 manuscript = prelim
-references = refs simulators
+references = refs simulators benchmarks cosi
 latexopt   = -halt-on-error -file-line-error
 
 for file in $(references); do \
