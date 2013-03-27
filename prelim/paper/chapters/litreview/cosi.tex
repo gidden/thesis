@@ -4,4 +4,36 @@ language. Accordingly, it can be classified as an object oriented simulator. The
 stated goal of COSI is to model the amount and isotopics of material at each
 stage in the fuel cycle, explicitly modeling reactor parks and their supporting
 facilities (i.e., enrichment, separations, and fuel fabrication) in order to
-study transition scenarios at a high level of isotopic and physical fidelity \cite{}.
+study transition scenarios at a high level of isotopic and physical
+fidelity. Its origins date to 1991, and it has been updated with relative
+frequency since 2005 \cite{boucher_cosi_2005,boucher_cosi:_2006,meyer_new_2009,
+coquelet-pascal_validation_2011}.
+
+The main user input for a COSI simulation is period to be simulated and the
+commissioning and decommissioning date for each type of reactor in the
+simulation. It does not deploy reactors based on any sort of algorithmic
+model. Users are also allowed to choose the processing order of spent fuel
+(e.g. first in/first out, as a function of burnup, as a function of Pu-241
+content, etc.).
+
+In general, reactors are assumed to be fueled with material whose makeup
+corresponds to an equilibrium cycle. The way that fuel isotopics are determined
+are different for different classes of reactors. In all cases, however, the user
+parameters for determining the eventual isotopics are constant for each class of
+reactor\cite{coquelet-pascal_validation_2011}. The method by which fuel
+isotopics are determined is universally called an ``Equivalence Model'' by the
+COSI team. The term refers to an ``equivalent fraction'' of fissile isotopes in
+fabricated fuel comprised of fissile and fertile isotopes given a target fertile
+fraction and available isotopics of separated fuel. 
+
+For LWR reactors, this model is simply a predetermined U-235 enrichment for UOX
+fuel or a fixed plutonium content for MOX
+fuel \cite{coquelet-pascal_validation_2011}. It is not clear what part of the
+plutonium content is fixed (either the total quantity or the quantity of a
+specific isotope in the vector).
+
+
+
+The actual isotopic makeup of fuel will vary based on the available
+separated uranium and transuranics.
+
