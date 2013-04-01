@@ -17,39 +17,41 @@ model. Additional user input includes the processing order of spent fuel
 content, etc.), and the equivalent fissile enrichment for each fuel type of a
 given reactor, a process explained in detail below.
 
-In general, reactors are assumed to be fueled with material whose isotopic
-makeup corresponds to an equilibrium cycle. For each type of reactor, a single
-fuel type is assumed to be used. COSI uses a family of methods for determining
-input fuel isotopics, the aggregate name of which is the ``Equivalence
-Model''. The term refers to an ``equivalent fraction'' of fissile isotopes in
-fabricated fuel comprised of fissile and fertile isotopes. In the simplest case,
-i.e., for uranium oxide (UOX) fuel for use in thermal reactors, the model is
-simply a predefined enrichment.  Similarly, for mixed plutonium-uranium oxide
-(MOX) fuel for use in thermal reactors, the equivalence model is simply a
-predefined plutonium content. It is not clear, however, if the plutonium content
-is in total mass or mass of a specific plutonium isotope \cite{meyer_new_2009,
-coquelet-pascal_validation_2011}. Further, I assume that a similar equivalence
-model is used for any other thermal reactor fuel, e.g. thorium-based
-fuels. 
+Reactors are assumed to be fueled with material whose isotopic makeup
+corresponds to an equilibrium cycle. For each type of reactor, a single fuel
+type is assumed to be used. COSI uses a family of methods for determining input
+fuel isotopics, the aggregate name of which is the ``Equivalence Model''. The
+term refers to an ``equivalent fraction'' of fissile isotopes in fabricated fuel
+comprised of fissile and fertile isotopes. In the simplest case, i.e., for
+uranium oxide (UOX) fuel for use in thermal reactors, the model is simply a
+predefined enrichment.  Similarly, for mixed plutonium-uranium oxide (MOX) fuel
+for use in thermal reactors, the equivalence model is simply a predefined
+plutonium content. It is not clear, however, if the plutonium content is in
+total mass or mass of a specific plutonium isotope \cite{meyer_new_2009,
+  coquelet-pascal_validation_2011}. Further, I assume that a similar equivalence
+model is used for any other thermal reactor fuel, e.g. thorium-based fuels.
 
-Specifically, this set of models requires a class fertile of material
-(e.g. depleted uranium, recycled uranium, natural uranium) and a class of
-fissile material (e.g. plutonium, transuranics), and a predefined ratio of the
-two. It is unclear how many degrees of freedom a user has in defining these
-parameters for each reactor. In any case, UOX is a special case of the
-equivalence model, because it has no restrictions on its fabrication, i.e., COSI
-does not allow natural uranium availability to be a constraining parameter in a
+For each type of reactor, this set of models requires a class fertile of
+material (e.g. depleted uranium, recycled uranium, natural uranium) and a class
+of fissile material (e.g. plutonium, transuranics), and a predefined ratio of
+the two. It is unclear how many degrees of freedom a user has in defining these
+parameters for each reactor. Enriched UOX is a special case of the equivalence
+model, because it has no restrictions on its fabrication, i.e., COSI does not
+allow natural uranium availability to be a constraining parameter in a
+simulation. In all other cases, the fissile material must come from recycled
+fuel, and is therefore restricted based upon material availability in the
 simulation.
 
-In order to determine the input isotopics for fast reactors, COSI uses an old
-technique developed by Baker and Ross \cite{baker_comparison_1963}. In fact,
-this is where the original notion of an ``equivalence method'' originates. The
-core premise of this method is that a fast reactor at equilibrium is ideally
-loaded with Pu-239 and U-238. Accordingly, deviations from this ideal
-composition must be accounted for. Baker and Ross describe an equilibrium
-analysis in which ``for a system initially just critical, the reactivity is
-maintained zero'', which is ``justified by perturbation theory''. They describe
-this condition mathematically as
+Thermal reactors and fast reactors are treated differently in COSI. As discussed
+previously, thermal reactors simply define a fissile enrichment and assemble the
+material accordingly. In order to determine the input isotopics for fast
+reactors, COSI uses an old technique developed by Baker and Ross
+\cite{baker_comparison_1963}. In fact, this is where the original notion of an
+``equivalence method'' originates. The core premise of this method is that a
+fast reactor is ideally loaded with Pu-239 and U-238, and deviations from this
+ideal composition must be accounted for. Baker and Ross describe an equilibrium
+analysis in which the reactivity is maintained zero, given an system initially
+just critical and
 
 \begin{equation*}
 \sum_{i \in I} \left( \nu_{i} \sigma_{f,i} - \sigma_{a,i} \right) N_i = c,
@@ -59,36 +61,37 @@ where $c$ is a constant, and for a given isotope $i$ in the set of heavy fuel
 elemental isotopes, $I$, $N_i$ is its average number density, $\nu_{i}$ is the
 average number of neutrons resulting from its fission, $\sigma_{f,i}$ is its
 microscopic fission cross section, and $\sigma_{a,i}$ is its microscopic
-absorption cross section. For convenience, let us define the collection of
-isotopic parameters as
+absorption cross section. For convenience, let us (as Baker and Ross do) define
+the collection of intrinsic isotopic parameters as
 
 \begin{equation*}
 x_i = \nu_{i} \sigma_{f,i} - \sigma_{a,i}.
 \end{equation*}
 
-Baker and Ross then note that one can approximate the critical mass of plutonium
-required for a given mixture of plutonium isotopes using an isotopic worth,
-$w_i$, that is a function of its deviation from pure plutonium-239,
+The authors then note that one can approximate the critical mass of plutonium
+required for a given mixture of plutonium and uranium isotopes using an isotopic
+worth, $w_i$, that is a function of its deviation from pure plutonium-239,
 
 \begin{equation*}
 w_i = \frac{x_i - x_{^{238}U}}
            {x_{^{239}Pu} - x_{^{238}U}}.
 \end{equation*}
 
-Then, for any combination that makes a core critical, the following holds
+Then, for any combination of isotopes that makes a core critical, 
 
 \begin{equation*}
 \sum_{i \in I} m_i w_i = c,
 \end{equation*}
 
-where $m_i$ is the mass of isotope $i$.
+will hold, where $m_i$ is the mass of isotope $i$. Herein lies the notion of
+``equivalent Pu-239'', which is defined for an isotope $i$ as $m_i w_i$.
 
 The COSI team adapts this approximation method for its use in order to determine
-the fuel composition of fast reactors. Given an ideal plutonium-239 enrichment,
-$E_0$, and for each isotope in a set of fertile and fissile isotopes, $I_{Fe}$
-and $I_{Fi}$, respectively, the isotopic neutronic weights, $w_i$, and available
-isotopic weight fractions, $\xi_i$, one can compute an equivalent fissile
-isotope enrichment, $E$.
+the fuel composition of fast reactors. The formulation requires an ideal
+plutonium-239 enrichment, $E_0$, and a set of fertile and fissile isotopes,
+$I_{Fe}$ and $I_{Fi}$, respectively. one can compute an equivalent fissile
+isotope enrichment, $E$, using the isotopic neutronic weights, $w_i$, and
+available isotopic weight fractions, $\xi_i$.
 
 \begin{equation*}
 E = \frac{E_0 - \sum_{i \in I_{Fe}} \xi_i w_i}
@@ -97,14 +100,24 @@ E = \frac{E_0 - \sum_{i \in I_{Fe}} \xi_i w_i}
 
 This perturbed fissile enrichment is then used to determine the amount of
 material to take from available fissile stockpiles and the amount of material to
-take from available fertile stockpiles, i.e., $1 - E_0$.
+take from available fertile stockpiles, i.e., $1 - E$.
 
 It is important to note that the resulting isotopics for either thermal or fast
 reactor fuel is a function of the user-defined reprocessing order. The
 equivalence model simply determines the quantity of fertile and fissile material
 to extract from the available stockpiles. Granted, the equivalence models
 are \textit{informed} by the isotopics of those stockpiles, but they are
-considered constants in the calculation. Further, the level of fidelity of
-modeling of the separations and fabrications facilities are not explicitly
-stated. In the COSI literature, the authors refer to batches of material, but
-never define explicitly what a batch is. 
+considered constants in the calculation. 
+
+It is not clear how COSI uses in modeling the separations and fabrication
+process with respect to batch processing sizes; batches of material are referred
+to in the COSI literature, but are not defined. Separations facilities
+explicitly model waste streams, thus efficiency parameters must be defined. The
+facility throughput capacities fall into one of three categories: fictitious,
+limited fictitious, and real. ``Fictitious'' plants simply reprocess as much
+fuel as is needed by the simulation, given that the quantity of requested
+material exists. ``Limited fictitious'' plants incorporate a limit on maximum
+mass flow at any given time. ``Real'' plants reprocess user-specified quantities
+of fuel. This distinction is only mentioned in \cite{guerin_benchmark_2009}, and
+does not explain further the difference between real and limited fictitious
+plants.
