@@ -9,34 +9,37 @@ fidelity. Its origins date to 1991, and it has been updated with relative
 frequency since 2005 \cite{boucher_cosi_2005,boucher_cosi:_2006,meyer_new_2009,
 coquelet-pascal_validation_2011}.
 
-The main user input for a COSI simulation is period to be simulated and the
+The main user input for a COSI simulation is the period to be simulated and the
 commissioning and decommissioning date for each type of reactor in the
 simulation. It does not deploy reactors based on any sort of algorithmic
-model. Users are also allowed to choose the processing order of spent fuel
+model. Additional user input includes the processing order of spent fuel
 (e.g. first in/first out, as a function of burnup, as a function of Pu-241
-content, etc.).
+content, etc.), and the equivalent fissile enrichment for each fuel type of a
+given reactor, a process explained in detail below.
 
-In general, reactors are assumed to be fueled with material whose makeup
-corresponds to an equilibrium cycle. For each type of reactor, a single fuel
-type is assumed to be used. COSI usese a family of methods for determining input
-fuel isotopics, the aggregate name of which is an ``Equivalence Model''. The
-term refers to an ``equivalent fraction'' of fissile isotopes in fabricated fuel
-comprised of fissile and fertile isotopes given a target fertile fraction and
-available isotopics of separated fuel. In the simplest case, i.e., for enriched
-uranium oxide (UOX) fuel, the model is simply a predefined enrichment.
-Similarly, for mixed plutonium-uranium oxide (MOX) fuel for use in thermal
-reactors, the equivalence model is simply a predefined plutonium content. It is
-not clear, however, if the plutonium content is in total mass or mass of a
-specific plutonium isotope \cite{meyer_new_2009,
+In general, reactors are assumed to be fueled with material whose isotopic
+makeup corresponds to an equilibrium cycle. For each type of reactor, a single
+fuel type is assumed to be used. COSI uses a family of methods for determining
+input fuel isotopics, the aggregate name of which is the ``Equivalence
+Model''. The term refers to an ``equivalent fraction'' of fissile isotopes in
+fabricated fuel comprised of fissile and fertile isotopes. In the simplest case,
+i.e., for uranium oxide (UOX) fuel for use in thermal reactors, the model is
+simply a predefined enrichment.  Similarly, for mixed plutonium-uranium oxide
+(MOX) fuel for use in thermal reactors, the equivalence model is simply a
+predefined plutonium content. It is not clear, however, if the plutonium content
+is in total mass or mass of a specific plutonium isotope \cite{meyer_new_2009,
 coquelet-pascal_validation_2011}. Further, I assume that a similar equivalence
-model is used for any other thermal reactor fuel. Specifically, this set of
-models requires a class fertile of material (e.g. depleted uranium, recycled
-uranium, natural uranium) and a class of fissile material (e.g. plutonium,
-transuranics), and a predefined ratio of the two. It is unclear how many degrees
-of freedom a user has in defining these parameters for each reactor. In any
-case, UOX is a special case of the equivalence model, because it has no
-restrictions on its fabrication, i.e., COSI does not allow natural uranium
-availability to be a constraining parameter in a simulation.
+model is used for any other thermal reactor fuel, e.g. thorium-based
+fuels. 
+
+Specifically, this set of models requires a class fertile of material
+(e.g. depleted uranium, recycled uranium, natural uranium) and a class of
+fissile material (e.g. plutonium, transuranics), and a predefined ratio of the
+two. It is unclear how many degrees of freedom a user has in defining these
+parameters for each reactor. In any case, UOX is a special case of the
+equivalence model, because it has no restrictions on its fabrication, i.e., COSI
+does not allow natural uranium availability to be a constraining parameter in a
+simulation.
 
 In order to determine the input isotopics for fast reactors, COSI uses an old
 technique developed by Baker and Ross \cite{baker_comparison_1963}. In fact,
