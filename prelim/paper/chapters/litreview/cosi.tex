@@ -123,7 +123,32 @@ does not explain further the difference between real and limited fictitious
 plants.
 
 The real power of COSI, and also the source of some criticsm, lies in its
-ability to model fuel residence in reactors. For each reactor type, a specific
-core geometry, an input isotopic composition (taken from the process described
-above), a target burnup, and an irradiation time are used as input for their
-depletion calculation.
+ability to model fuel residence in reactors. In order to perform the reactor
+depletion calculations, COSI utilizes the CESAR code \ref{vidal_cesar:_2006}
+which solves the coupled ordinary differential equations governing nuclide
+populations due to irradiation and decay over time, similar to the ORIGEN
+library used in the United States \cite{bell_origen_1973}. CESAR estimates the
+effect of fluence using one-group cross sections. Accordingly, libraries of
+cross section data must be prepared prior to a given scenario based on the
+reactor and fuel types used in the scenario. In order to do so, transport
+calculations are performed using APOLLO \cite{santamarina_2009_apollo2} for
+thermal reactors or ERANOS for fast reactors \cite{ruggieri_2006_eranos}. Both
+require input of core geometries and multi-group cross section data. It is not
+clear in the COSI literature how fuel isotopics are chosen for these reference
+cases for fast reactors, but thermal reactors use an initial U-235 enrichment or
+plutonium content (again, the isotopics of this content are not
+stated) \cite{guerin_benchmark_2009}.
+
+The output of the two transport codes are cross sections of nuclides and fluence
+values in n-group energy bins and some number of burnup bins. The APOGENE code
+then translates these n-group values (where n is normally 33) into a
+single-group value. The cross sections are then smoothed as a function of burnup
+using Lagrangian polynomial interpolation. The resulting single-group cross
+section and fluence libraries as a function of burnup are then stored in an
+encrypted database for use in the COSI
+simulation \cite{atabekjana_2012_analysis}. These cross sections are then found
+via table lookup during a simulation using the core geometry. CESAR is then run
+to determine the output isotopics of a given input fuel batch using these cross
+sections given the input parameters of the initial fuel isotopic composition,
+using the equivalence method described above, the total burnup, and total
+irradiation time \cite{coquelet-pascal_validation_2011}. 
