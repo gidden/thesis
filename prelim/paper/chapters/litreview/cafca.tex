@@ -112,6 +112,107 @@ $O_r(t)$         & the fulfilled order delay of the fleet of $r$ at time $t$ \\
 \end{table}
 %%% 
 
+As an example of the matematics and methodology behind the structure-policy
+diagrams, let us review Busquim e Silva's formulation of the Actinide Burner
+Reactor (ABR)\cite{busquim_e_silva_system_2008}. The input for the system is the
+amount of separated fuel-usable TRU available for ABRs coming from reprocessing
+plants,
+
+\begin{equation*}
+ TRU^{Fuel}_{ABR}(t) = p^{TRU}_{ABR}(t) \sum_{s \in S} TRU^{Fuel}_s(t),
+\end{equation*}
+
+where $S$ is the set of separations technologies, e.g. fast and thermal
+separations plants, and $p^{TRU}_{ABR}(t)$ is the user-defined percentage of TRU
+to be used for ABRs at time $t$. The percentage is modeled as a 0 or some
+constant depending on whether or not the simulation time is past a user-defined
+ABR technology inception time. 
+
+The forcasted ABR fleet is based upon the available stock of TRU for ABRs,
+$S_{ABR}(t)$, represented as
+
+\begin{equation*}
+ \frac{d}{dt}S_{ABR}(t) = R_{in}^{ABR}(t) - R_{out}^{ABR}(t), S_{ABR,0} = S_{ABR}(t=0),
+\end{equation*}
+
+where the the rate of change of the ABR fuel stock is equal to the difference
+between the inflow rate, $R_{in}^{ABR}(t)$, and outflow, or utilization rate,
+$R_{out}^{ABR}(t)$. The inflow rate is simply amount of available TRU minus some
+user-defined fabrication losses, $L_{ABR}$,
+
+\begin{equation*}
+ R_{in}^{ABR}(t) = \left( 1 - L_{ABR} \right) TRU^{Fuel}_{ABR}(t).
+\end{equation*}
+
+The utilization rate is a function of the available fuel and desired utilization
+rate, $R^{ABR}_{DU}$, which is defined later,
+
+\begin{equation*}
+ R_{out}^{ABR}(t) = min \left( \frac{S_{ABR}(t)}{\Delta t}, R^{ABR}_{DU}\right),
+\end{equation*}
+
+where $\Delta t$ is the time step of the simulation, again normally 1.5
+months. The forcasted fleet is then represented as
+
+\begin{equation*}
+ F_{Est}^{ABR}(t) = \alpha_{ABR} S_{ABR}(t),
+\end{equation*}
+
+where $\alpha_{ABR}$ is a constant based on the user-defined core mass of ABRs,
+the ABR lifetime, and a ``depletion time'', which is a user-defined time horizon
+estimate for the time required to deplete the total inventory of ABR
+fuel \cite{busquim_e_silva_system_2008}.
+
+From the forcasted fleet calcuation and the number of commercially operating
+ABRs, the adjustment for the ABR fleet can be calculated,
+
+\begin{equation*}
+ ADJ_{ABR}(t) = {F_{Est}^{ABR}(t) - F_{ABR}(t)}{\tau_{ABR}}.
+\end{equation*}
+
+This value defines the constrouction order rate,
+
+\begin{equation*}
+ R_{CO}^{ABR}(t) = max \left( 0, ADJ_{ABR}(t) \right),
+\end{equation*}
+
+which then informs the fractional number of ABRs ordered at time, $t$, 
+
+\begin{equation*}
+ R^{ABR}_{Frac}(t) = R_{CO}^{ABR}(t) - \frac{I_{ABR}(t)}{\Delta t}, S^{ABR}_{Frac,0} = S^{ABR}_{Frac}(t=0).
+\end{equation*}
+
+Note that the fraction number of ABR orders incorporates the integer number of
+ABRs ready to start commercial operation,
+
+\begin{equation*}
+ I_{ABR}(t) = \lceil R^{ABR}_{Frac}(t) \rceil.
+\end{equation*}
+
+Similarly, the equation for the number of ABRs currently under commercial
+operation are functions of $I_{ABR}(t)$,
+
+\begin{equation*}
+ \frac{d}{dt} F_{ABR}(t) = \frac{I_{ABR}(t)}{\Delta t} - \frac{I_{ABR}(t-\tau_{l,ABR})}{\Delta t}, F_{ABR,0} = F_{ABR}(t=0),
+\end{equation*}
+
+where $\tau_{l,ABR}$ is the lifetime of the ABR reactors. The number of ABRs
+starting commercial operation per year can also be determined from this value,
+
+\begin{equation*}
+ \frac{d}{dt} F_N^{ABR}(t) = \frac{I_{ABR}(t - O_{ABR}(t))}{\Delta t}, F^{ABR}_{N,0} = F^{ABR}_{N}(t=0).
+\end{equation*}
+
+We can then characterize the desired utilization rate, $R^{ABR}_{DU}$, as
+
+\begin{equation*}
+ R^{ABR}_{DU} = \bar{M_{ABR}} F_{ABR}(t) + M_{ABR,c} F_N^{ABR}(t),
+\end{equation*}
+
+where $\bar{M_{ABR}}$ is the equilibrium mass of an ABR (the reload mass), and
+$M_{ABR,c}$ is the core mass for an ABR. This completes the series of equations
+to define the fuel-constrained deployment of ABRs.
+
 Finally, let me note that there are similar rates defined for supporting
 facilities, i.e. reprocessing facilities for each class of reactor. They are
 similar to the above formulation, but have as input the amount of used fuel to
