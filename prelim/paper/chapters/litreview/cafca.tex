@@ -32,7 +32,7 @@ reactors and determining material flows. The forcing function for the
 simulation, is the availability of recycled fuel. In other words, as one of
 CAFCA's basic simulation assumptions, the inventory of used light water reactor
 (LWR) fuel is minimized. Thus the number of reactors using this recycled fuel is
-maximized agaisnt this constraint, according to the user-defined fuel technology
+maximized against this constraint, according to the user-defined fuel technology
 preference fractions. 
 
 As previously stated, CAFCA-SD determines the evolution of system states using
@@ -60,7 +60,7 @@ modeling individual facilities, it models rate changes of fleets of facilities
 and monitors the status of those fleets (i.e., how many should currently be in
 operation). This methodology is perhaps not intuitively obvious, so let me
 briefly follow a similar overview of such a process as provided in CAFCA's
-original methodolgy report \cite{busquim_e_silva_system_2008}. First, though, a
+original methodology report \cite{busquim_e_silva_system_2008}. First, though, a
 note on their notation; CAFCA's methodology denotes many system variables as a
 function of time for each class (fleet) of reactors, which are described in
 Table \ref{tbl:cafca-rxtr-vars}.
@@ -100,10 +100,10 @@ $R^r_{CO}(t)$    & the construction order rate for the fleet of $r$ at time $t$ 
 $R^r_{FO}(t)$    & the fulfilled order rate for the fleet of $r$ at time $t$  \\
 $R^r_{FO}(t)$    & the fulfilled order rate for the fleet of $r$ at time $t$  \\
 $R^r_{Frac}(t)$  & the fractional order rate for the fleet of $r$ at time $t$  \\
-$R^r_{CR}(t)$    & the contruction rate for the fleet of $r$ at time $t$  \\
+$R^r_{CR}(t)$    & the construction rate for the fleet of $r$ at time $t$  \\
 $R^r_{DR}(t)$    & the decommissioning rate for the fleet of $r$ at time $t$  \\
 $I_r(t)$         & the integer number of reactors ready to start commercial operation for the fleet of $r$ at time $t$  \\
-$F^r_N(t)$       & the rate of reactors $r$ starting commerical operation at time $t$ \\
+$F^r_N(t)$       & the rate of reactors $r$ starting commercial operation at time $t$ \\
 $O_r(t)$         & the fulfilled order delay of the fleet of $r$ at time $t$ \\
 \hline
 \end{tabularx}
@@ -112,7 +112,7 @@ $O_r(t)$         & the fulfilled order delay of the fleet of $r$ at time $t$ \\
 \end{table}
 %%% 
 
-As an example of the matematics and methodology behind the structure-policy
+As an example of the mathematics and methodology behind the structure-policy
 diagrams, let us review Busquim e Silva's formulation of the Actinide Burner
 Reactor (ABR)\cite{busquim_e_silva_system_2008}. The input for the system is the
 amount of separated fuel-usable TRU available for ABRs coming from reprocessing
@@ -163,14 +163,14 @@ the ABR lifetime, and a ``depletion time'', which is a user-defined time horizon
 estimate for the time required to deplete the total inventory of ABR
 fuel \cite{busquim_e_silva_system_2008}.
 
-From the forcasted fleet calcuation and the number of commercially operating
+From the forcasted fleet calculation and the number of commercially operating
 ABRs, the adjustment for the ABR fleet can be calculated,
 
 \begin{equation*}
  ADJ_{ABR}(t) = {F_{Est}^{ABR}(t) - F_{ABR}(t)}{\tau_{ABR}}.
 \end{equation*}
 
-This value defines the constrouction order rate,
+This value defines the construction order rate,
 
 \begin{equation*}
  R_{CO}^{ABR}(t) = max \left( 0, ADJ_{ABR}(t) \right),
@@ -220,7 +220,7 @@ be reprocessed and output the required number of facilities. A full treatment of
 their reactor, reprocessing, and material state and rate formulations is
 provided in \cite{busquim_e_silva_system_2008}.
 
-CAFCA makes a number of assumptions regarding material isotopic consituencies
+CAFCA makes a number of assumptions regarding material isotopic constituencies
 and reactor fuel loading. First of all, each class of reactors is assumed to be
 loaded with equilibrium-cycle fresh fuel. This implies that all reactors of a
 given class of reactors take as input a given makeup of fresh fuel and provide
