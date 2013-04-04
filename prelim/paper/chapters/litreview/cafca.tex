@@ -249,3 +249,34 @@ either depleted or recycled uranium \cite{guerin_impact_2009}. Such an
 assumption allows CAFCA to still compute larger aggregate metrics such as
 uranium utilization. Additionally, the lumped material assumption is perhaps one
 reason why the CAFCA team sees minimal impact from isotopic decay.
+
+I will end this section on a note of the requirements to extend CAFCA to allow
+additional reactor/fuel types. Busquim e Silva outlined their original
+methodology \cite{busquim_e_silva_system_2008} and Guerin outlines an extension
+to that methodology\cite{guerin_impact_2009} in order to incorporate MOX-fueled
+LWRs. Consistent with the previous work, an additional user-defined parameter is
+introduced, $P^{Pu}$, representing the ratio of reprocessed spent fuel processed
+by plutonium-uranium extraction (PUREX) plants. The MOX technology
+structure-policy diagram uses this value to determine the amount of plutonium
+available for MOX fuel fabrication each year. Reactors that use MOX must be
+broken down into categories based what percentage of their cores use MOX. Guerin
+presents a case with three classes of LWRS, those that don't use MOX (named
+All-UO2 LWRs), those that have 30\% of their core fueled by MOX (named
+LWRs-MOX2), and those that have 100\% of their core fueled by MOX (named
+LWRs-MOX3). The non-MOX using reactor fleet must be included because they
+produce fuel that is reprocessed for use in MOX-fueled reactors. The actual fuel
+that is provided to each class of reactor is separate. In other words, MOX fuel
+that is set aside for MOX2 LWRs can only be used in MOX2 LWRs and \textit{vice
+versa} for MOX3 LWRs. Furthermore, there is an (arbitrary) priority ordering
+amongst the two classes, i.e., MOX2 LWRs are fueled before MOX3
+LWRs. Mathematically, this is represented as
+
+\begin{equation*}
+PU_{MOX3}(t) = PU_{MOX}(t) - PU_{MOX2}(t).
+\end{equation*}
+
+Finally, the structure-policy diagram for thermal reprocessing plants must be
+altered to include the spent MOX fuel as input. The key insight here is that the
+CAFCA core simulation methods must be altered in order to incorporate new fuel
+and reactor types. For example, if a 50\% MOX-fueled reactor is to be modeled,
+variables internal to the CAFCA simulation engine must be added and/or altered. 
