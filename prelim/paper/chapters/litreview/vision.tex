@@ -13,3 +13,145 @@ if'' scenarios) \cite{jacobson_verifiable_2010} and to investigate upset
 scenarios, e.g. a loss of a fuel fabrication facility, and corresponding
 mitigation strategies \cite{schweitzer_improved_2008}.
 
+VISION, like CAFCA, uses a system dynamics methodology to model the nuclear fuel
+cycle. Accordingly, there is a notion of stocks of materials, reactors,
+supporting facilities, etc., and flows of materials between those
+facilities. Also similar to CAFCA, VISION uses a lookahead function to assess
+the future state of the simulation in order to make decisions at some
+time. Accordingly, reactors are only built if there will be adequate fuel
+available for them. The main user input to a VISION calculation is the required
+electricity demand to be met by nuclear power. Users also specify a preference
+of reactors to meet this power demand (e.g. 80\% fast reactor, 20\% LWR);
+however due to the symbiotic nature of the input fuel dependence of fast
+reactors on LWRs and the basic VISION assumption that all reactors will be
+fueled for their entire lifespan, the user-preferred distribution may not always
+be met. Users also must define all input and output material characteristics for
+reactors as well as other facility-level parameters (power level, capacity
+factor, etc.). Time steps in VISION are 3 months long, breaking a year into four
+time steps.
+
+VISION maintains records for 81 different isotopes. The planning algorithm for
+recycled reactor fuel, however, concentrates on a small subset of isotopes
+termed ``control isotopes''. The control isotopes for any given simulation are
+user-defined input, and choices include individual plutonium isotopes, all
+plutonium isotopes, and all transuranic isotopes. Interestingly, VISION also
+allows material in any storage buffer to decay if it has resided there for
+longer than a year. It is not clear how the changing of fuel isotopics affects
+the lookahead calculation. All material-based output metrics operate on these
+isotopes. For example, proliferation resistence is measured by the amount of
+plutonium isotopes or transuranics at any point in the fuel cycle
+\cite{yacout_vision_2006}.
+
+Importantly, VISION has no transmutation engine to determine output fuel
+isotopics. Instead, a lookup table is used, scanning pre-calculated isotopic
+vectors and interpolating based on fuel type and ``key input parameters''
+\cite{jacobson_verifiable_2010}. In general, input fuel recipes are defined and
+then output fuel recipes are determined based on burnup for LWR UOX fuel and
+conversion ratio for fast reactor fuel. Accordingly, input fuel recipes must be
+known \textit{a priori} and physics calculations must be run to populate the
+database to be interpolated agaisnt. Again, it is not clear how isotopic decay
+is involved in determining perturbations to the input fuel recipes, if it is at
+all.
+
+Schweitzer provides a look at the facility ordering methodology in his master's
+thesis \cite{schweitzer_improved_2008}. Understanding this methodology is
+important to understanding how VISION works, so I will present a short review
+below. There are a few important assumptions worked into the methodology. The
+first is that the only limiting factor on reactor fuel supply is used LWR fuel,
+i.e., there is no limiting factor on fresh UOX. Secondly, it is assumed that
+reactors have a known fuel usage over their lifetime and that this usage is
+divided into fuel of different integral pass numbers. Put another way, fast
+reactors begin with some fuel isotopic makeup and each successive refueling is
+comprised of a different isotopic makeup, up to some limit. In Schweitzer's
+work, and more generally in the VISION literature, this limit is five
+passes. This is VISION's way of modeling an approach to an equilibrium reactor
+core isotopic makeup. The pathway for reactor fuel is hard-coded into the
+methodology via its prediction calculation. 
+
+%%% getting kind of stuck here, I'm just going to write down the equations and revise
+
+Fast reactors are ordered based on one of two constraining parameters. The first
+is the user-defined preferred distribution, and the second is fast reactor fuel
+availability. Given some lookahead parameter, $\Delta t$, the number of fast
+reactors that will be ordered at the lookahead time, $t + \Delta t$, is
+
+\begin{equation*}
+N_{FBR}\left(t+\Delta t\right) = min \left( N_{FBR,E}\left(t+\Delta t\right),N_{FBR,SF}\left(t+\Delta t\right)\right),
+\end{equation*}
+
+where the user-defined parameter is based on the user-provided distribution
+percentage $p_{FBR}$, the rated power for that type of reactor, $P_{FBR}$, and
+an energy ``gap'', i.e., the amount of energy required in the simulation as
+defined by the user less the current amount of energy in the simulation at the
+lookahead time,
+
+\begin{equation*}
+N_{FBR,E}\left(t+\Delta t\right) = 
+                        \lceil \frac{p_{FBR} \Delta E (t + \Delta t)}
+                                    {P_{FBR}} \rceil .
+\end{equation*}
+
+The number of fast reactors that can be built based fuel availability is a
+function of the amount of available spent fuel, $SF(t)$, and the amount
+of material required to fuel a reactor for its lifetime,
+
+\begin{equation*}
+N_{FBR,SF}\left(t+\Delta t\right) = 
+                        \lceil \frac{SF(t)}
+                                    {F^{LWR_SF}_{Total}} \rceil .
+\end{equation*}
+
+The above equation allows some insight into the inner workings of VISION. First
+of all, it keeps a running tally of available spent fuel for a given reactor
+type, $SF(t)$ above. This is an aggregate parameter for the fleet of
+reactors. Secondly, a lifetime's worth of fuel is effectively set aside whenever
+a reactor is introduced in the simulation, as can be insinuated by the fact that
+the spent fuel is assessed at time $t$ rather than $t + \Delta t$. This means
+that a fast reactor can only enter the simulation at the lookahead time if there
+is enough fuel for it at the present time. Furthermore, there is in fact a
+notion of mortgaged spent fuel in VISION, i.e., spent fuel set aside for future
+reactors, and unmortgaged spent fuel in VISION, i.e., spent fuel produced but
+not yet mortgaged,
+
+\begin{equation*}
+SF(t) = SF_u(t) - SF_m(t),
+\end{equation*}
+
+where the mortgaged spent fuel is, of course, a function of the number of
+reactors to be built in the future and how much spent fuel they use,
+
+\begin{equation*}
+SF_m(t) = SF_m(t - \Delta t_sim) + N_{FBR}(t + \Delta t) F^{LWR_SF}_{Total},
+\end{equation*}
+
+with $\Delta t_sim$ denoting the simulation time step.
+
+The amount of fuel required for a fast reactor's lifetime is based on VISION's
+assumption of fuel behavior of ``passing through'' the reactor multiple
+times. For each ``pass'', $p$, the amount of fuel reloaded, $FL^p_{FBR}$, into
+the core may be different both at loading and unloading. The amount of total
+required fuel is defined as
+
+\begin{equation*}
+\begin{aligned}
+F^{LWR_SF}_{Total} & = N_{b,FBR} FL^1_{FBR} + \Delta t_p FL^1_{FBR} w^1_{FBR} \\
+                   & + \sum_{p=2}^{5} \Delta t_T (FL^p_{FBR,in} w^p_{FBR,in} - FL^{p-1}_{FBR,out} w^{p-1}_{FBR,out}) \\
+                   & + (\Delta t_{FBR,l} - 4 \Delta t_T - \Delta t_p) (FL^5_{FBR,in} w^5_{FBR,in} - FL^{5}_{FBR,out} w^{5}_{FBR,out}),
+\end{aligned}
+\end{equation*}
+
+where $N_{b,FBR}$ is the number of fuel batches, each $w^p$ is the weight
+percent of the control isotope(s) in the spent fuel, $\Delta t_p$ is the
+pipeline time required for fuel exiting the reactor to be put back in it
+(storage, separation and fabrication time), $\Delta t_T$ is the same but also
+include the time in the reactor (the total cycle time), and $\Delta t_{FBR,l}$
+is the reactor's lifetime. Note that all of these parameters are defined
+implicitly or explicitly by user input. Furthermore, note that this amount has
+units of \textit{mass of the control isotope(s)}, implying that VISION works on
+mass balances of those isotopes. Finally, note that VISION treats all recycled
+LWR spent fuel as an aggregate mass, whether it is UOX, MOX, or inert matrix
+fuel (IMF).
+
+It is entirely possible that the fast reactor builds will be limited by the
+available fuel. In such cases, VISION still guarantees that the ``power gap''
+will be closed.
