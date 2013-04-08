@@ -1,0 +1,143 @@
+There are many other fuel cycle simulators that have been developed to
+date. Many different countries will take on the effort for their personal needs,
+such as Japan and Russia. Others are developed by international organizations
+like the IAEA. However, all of them, including those outlined in previous
+sections, are have code bases that are closed source, i.e., they are private
+projects. Accordingly we must rely on their respectively produced literature for
+insight into their modeling practice. The previous sections benefited from a
+reasonably large literature base (with respect to the norms of the fuel cycle
+simulation community). This section overviews other fuel cycle simulators that
+are important in the world context because of their user base, but have few
+available sources from which to glean developer-level information about their
+simulation structure for either proprietary purposes or other reasons. VISTA is
+a fuel cycle simulation code developed by the IAEA and distributed to member
+states. However, for benchmarking exercises more recently, the IAEA has used
+the Russian code DESAE. DESAE is designed with a focus on regional material
+flows, making it relatively unique in the fuel cycle simulation community and of
+interest to the IAEA. DANESS is a fuel cycle simulation code originally
+developed at Argonne National Laboratory, but its ownership has transferred to a
+Belgian group, LISTO bvba. It is currently used by many European member states,
+including Belgium and Italy.
+
+VISTA is designed to estimate the front end and back end material requirements
+for a given fuel cycle. It is not clear what language or platform VISTA is
+developed in. Input parameters include the total nuclear energy to be met, the
+types of reactors and share of electricity for each, the equilibrium fuel
+composition for each type of reactor, and the average discharge burnup for each
+type of reactor. Output parameters include the required amount of natural
+uranium and enrichment services as well as the nuclide inventory of spent fuel
+developed over the course of the simulation. For each type of reactor modeled in
+the simulation, there is a fuel pairing with which it is fueled, as well as a
+corresponding burnup.
+
+VISTA models the nuclide inventory at a ``low level'', i.e., it keeps track of
+individual isotopic quantities. The isotopic composition of spent fuel is
+determined by its depletion module, Calculation of Actinide Inventory
+(CAIN). Similar to the United State's depletion code, ORIGEN
+\cite{bell_origen_1973}, CAIN solves Bateman's Equation for a point assembly for
+a number of burnup steps as required by the target burnup and initial fuel
+composition. The solver is, however, limited by the input provided to it by
+VISTA. For instance, the VISTA team cites the assumptions used for a MOX
+calculation in \cite{iaea_nuclear_2007}. First, the plutonium vector for a
+MOX-based fuel is assumed to be directly taken from it's UOX variant as a
+function of burnup. In other words, the MOX plutonium vector for $45 \frac{GW
+  d}{tHM}$ MOX fuel is the result of discharged $45 \frac{GW d}{tHM}$ UOX
+fuel. Furthermore, this plutonium vector is assumed to be constant across
+generations or ``passes'' of MOX fuel. This implies that MOX fuel sourced from
+recycled MOX is isotopically identical to MOX fuel sourced from recycled UOX.
+
+The actual simulation engine methodology, which uses a time step of one year, is
+somewhat outlined in Appendix II of \cite{iaea_nuclear_2007}. Again, the
+simulation tracks quantities of isotopes as well as quantities of their
+elemental aggregate. Facility fleet connections are hard-coded (i.e., known at
+the beginning of the simulation), and balance equations are applied at each time
+step to determine the quantity of material flowing between facility fleets. The
+equations presented in \cite{iaea_nuclear_2007} assume reactors are built
+regardless of fuel availability. It appears as if each reactor type has two fuel
+types with which it can be fueled. If there is not enough fuel availability for
+advanced reactors using recycled fuel (type 2), they are considered to be fueled
+with their other fuel type. Such an observation is not explicitly stated by the
+VISTA team, but implied by their series of balance equations. Further, it is
+unclear how the simulation handles isotopic mismatches. As was described above,
+constant plutonium vectors are assumed for fresh fuel, and isotopic-specific
+values are determined for used fuel by CAINS. However, some strategy must be
+used to match the used fuel isotopics to new fresh fuel isotopics, which are
+defined. Such a strategy is not described in the VISTA literature, but some sort
+of check (either at the elemental or isotopic level) must be made, because an
+alternative fuel type is used "[i]f there is enough reprocessed material in the
+stockpile" \cite{iaea_nuclear_2007}. Finally, although again not explicitly
+stated, the set of supply-demand equations are solved for each timestep using
+values from the previous time step and the additional reactor requirements for
+the current time step. It does not appear that core reloads are explicitly
+modeled, and instead reactor requirements are modeled on simply a per-year
+basis.
+
+The Dynamic of Energy System - Atomic Energy (DESAE) code is developed by the
+Russian government as a basis for benchmark calculations called for by the
+IAEA's International Project on Innovative Nuclear Reactors and Fuel Cycles
+(INPRO) \cite{_international_2009,andrianova_desae_2008}. DESAE is another
+example of a macro-model of the nuclear fuel cycle, concentrating on
+infrastructure requirements as well as material balances. Although not very
+descriptive with respect to simulation methodology, one can learn a little of
+DESAE's simulation model from their published literature
+\cite{andrianova_desae_2008}. Reactors are modeled in order to meet a specified
+energy production level, and different types of reactors can be modeled; 20
+different reactor types are currently allowed in a given scenario. Assuming
+DESAE models different ``types'' of reactors as other simulators do, a different
+reactor ``type'' is created if any parameter changes (e.g. a $50 \frac{GW
+  d}{tHM}$ UOX-fueled LWR is different from a $60 \frac{GW d}{tHM}$ UOX-fueled
+LWR). Characteristic parameters of a given reactor fleet are allowed to change
+over time, however. Material pathways are explicitly modeled, with flows going
+directly between facilities based on their isotopic content (e.g., plutonium
+isotopes from recycling go to fuel fabrication). It is not clear how
+isotopic-specific information affects the course of a simulation, nor is it
+clear what strategy is taken to model the required advanced fuel to separated
+fuel supply gap.
+
+Additional information discussing DESAE's internal modeling methods are
+described in the IAEA's INPRO fuel cycle scenario synopsis document
+\cite{iaea_nuclear_2010}.  DESAE models the fuel cycle on both the regional and
+global level, and its is possible (and indeed likely, according to
+\cite{iaea_nuclear_2010}) that the supply-demand regional and global
+requirements will be inconsistent, with the region-specific calculation
+overestimating the resource requirements. Exactly what resources are being
+overestimate is not discussed, and the topic is only breached in a broad
+sense. The inter-regional transportation calculation is discussed in slight
+detail, however. 
+
+The supply and demand for any given resource is defined by region, where $c_i$
+is the consumption (or demand) in a region, $i$, $p_i$ is the production of that
+resource in the region. Further, a transport matrix, $T$, is defined, where an
+element $t_{i,j}$, defines the fraction of the resource produced in region $i$
+that is sent to region $j$. The following matrix equation can then be solved,
+
+\begin{equation*}
+\vec{C} = T \cdot \vec{P}.
+\end{equation*}
+
+The solution is constrained by total production capacity, i.e., 
+
+\begin{equation*}
+\sum_{j \in N} t_{i,j} = 1,
+\end{equation*}
+
+where $N$ is the set of regions in the simulation. The production and supply
+vectors, $P$ and $C$, are provided as input to the calculation. Accordingly,
+they must be consistent, i.e.,
+
+\begin{equation*}
+\sum_{i \in N} c_i - d_i = 0,
+\end{equation*}
+
+however, it is not stated how such a constraint is enforced \textit{a
+  priori}. The unknown variables in this calculation are the transportation
+coefficients. An initial value must be provided (``by an expert'') for the
+transportation matrix, $T_0$. The solution mechanism then iteratively set to
+minimize the aggregate $L_2$ norm of the transportation-matrix elements:
+
+\begin{equation*}
+min \sum_{i \in N} \sum_{j \in N} \left( t_{i,j} - t_{i,j}^0 \right)^2,
+\end{equation*}
+
+The actual solution algorithm is not described in either
+\cite{iaea_nuclear_2010} or \cite{andrianova_desae_2008}.
