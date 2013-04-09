@@ -141,3 +141,54 @@ min \sum_{i \in N} \sum_{j \in N} \left( t_{i,j} - t_{i,j}^0 \right)^2,
 
 The actual solution algorithm is not described in either
 \cite{iaea_nuclear_2010} or \cite{andrianova_desae_2008}.
+
+The Dynamic Analysis of Nuclear Energy System Strategies (DANESS) code was
+originally developed at ANL, and its development has subsequently been moved to
+Belgium's LISTO bvba, who provides commercial fuel-cycle modeling
+services. Accordingly, its simulation methodology is only lightly treated in the
+available literature, but information can be gathered from updates provided by
+the development team \cite{van_den_durpel_daness_2009} and benchmarking
+exercises in which the code participates \cite{guerin_benchmark_2009}. 
+
+DANESS is a system dynamics application written in the system dynamics code
+iThink \cite{richmond_ithink_2004}. It is broken into a variety of ``models''
+which house the simulation's decision making methods and track the state of
+various entities in the simulation. 
+
+DANESS makes reactor deployment decisions using user-defined deployment
+profiles, a minimum-cost deployment algorithm, or some combination thereof. The
+user can define either a specific deployment plan or a nuclear power demand with
+a set of reactor-type fractions to determine which reactors meet that
+demand. The minimum-cost deployment algorithm compares the cost of different
+reactor types and other non-nuclear energy sources to determine which technology
+to deploy. The DANESS literature also states that separated material
+availability can affect the deployment decisions, but does not provide an
+explanation \cite{van_den_durpel_daness_2009}. The facilities are modeled
+explicitly, whith individual facilities being tracked. As with other simulators,
+reactors are paired with a specific fuel type, and DANESS can model at most 10
+types of reactors. Supporting facilities are deployed according to a lookahead
+function that predicts future demand for their services. An explicit repository
+model is also provided, which applies thermal-loading capacity limitations for
+both Yucca Mountain and a generic clay repository. 
+
+The full set of cost factors is not explicitly stated in the DANESS literature,
+but a few are discussed. Interestingly, DANESS incorporates a cost model for
+disposing of waste in the repository model which informs the deployment
+algorithm, e.g. making thermal reactors slightly more expensive due to higher
+spent fuel volumes. Given that fuel costs are relatively small for thermal
+reactors (at least currently), it is not clear what affect these considerations
+have in the deployment algorithm.
+
+DANESS uses a table lookup system to determine the isotopics of spent fuel based
+on burnup for thermal reactors and conversion ratio for fast reactors. Isotopics
+are modeled (mostly) explicitly. DANESS tracks 68 different isotopes and two
+aggregate isotopic groups, comprised of short and long-lived fission
+products. The full list of isotopes tracked is provided
+in \cite{van_den_durpel_daness_2009}.
+
+DANESS has recently become capable of a multi-region fuel cycle simulation.
+Beginning with version 4.2, DANESS can model regions separately (as nominally
+separate DANESS simulations) and model regional interaction as exogenous input
+to supply or demand. The DANESS literature does not describe either the
+methodology or implementation of such a interaction structure, only stating that
+it has the capability \cite{van_den_durpel_daness_2009}.
