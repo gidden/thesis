@@ -1,0 +1,99 @@
+The effort to benchmark fuel cycle simulation codes has occured (relatively)
+recently, and there have been a number of different benchmarking exercises
+attempted by governmental and international agencies to date. The most notable
+of these are the International Atomic Energy Agency (IAEA) International Project
+on Nuclear Reactors and Fuel Cycle's (INPRO) benchmark
+exercise \cite{_international_2009}, the Massachusettes Institute of
+-Technology's benchmark exercise \cite{guerin_benchmark_2009}, the Nuclear Waste
+Technology Review Board's (NWTRB) benchmark
+exercise \cite{abkowitz_workshop_2011,_nuclear_2011} and the Organization for
+Economic Cooperation and Development's (OECD) benchmark
+exercise \cite{boucher_benchmark_2012}.
+
+Each of the benchmarking efforts used a different set of codes by which to
+compare agaisnt one another. The codes used in each is described in
+Table \ref{tab:benchmark-codes}.
+
+\begin{table} [h!]
+\centering
+\begin{tabular} {|c|c|} 
+\hline
+Benchmark & Codes Used \\
+\hline
+IAEA - INPRO & COSI, DESAE, FAMILY, TAPS, VISTA, VISION \\
+MIT          & CAFCA, COSI, DANESS, VISION \\
+NWTRB        & AREVA, CAFCA, NUWASTE, VISION \\
+OECD         & COSI, EVOLCODE, DESAE, FAMILY, VISION \\
+\hline
+\end{tabular}
+\caption{The Set of Codes Compared in Each Benchmarking Effort}
+\label{tab:benchmark-codes}
+\end{table}
+
+Each benchmarking effort investigated a different set of scenarios. The actual
+scenarios investigate depends heavily on the interest of the organizing
+institution. For example, the NWTRB is a congressionally mandated review board,
+thus their scenario suite focused on options for the U.S. fleet of nuclear
+reactors. The INPRO benchmarks called for scenarios with low, moderate, and high
+nuclear power capacity growth. For each growth scenario, three different
+deployment scenarios were modeled: PWRs and HWRs; PWRs, HWRs, and advanced PWRs;
+and PWRs, HWRs, advanced PWRs, and fast reactors. The actual specifications for
+reactor power level, fuel isotopic composition, and any other simulation
+parameters (outside of the power level and types of reactors to be used) were
+provided in a reference database \cite{_international_2009}. The MIT benchmark
+incorporated the growth of nuclear power demand in three categories: 0 \% per
+year, 1.5 \% per year, and 3 \% per year, all of which are rates of exponential
+demand growth. The deployment schemes include: LWRs fueled with UOX
+transitioning to fast reactors with conversion rates of 0.5, LWRs with UOX and
+(eventually) MOX transitioning to fast reactors with conversion rates of 0.5,
+and LWRs fueled with UOX transitioning to fast reactors with conversion rates of
+1.0. The transition period began at year 2040 in each scenario. This set of
+specifications is tailored to be easily met by the host institution's simulation
+code, CAFCA (see \cite{guerin_benchmark_2009} and \S\ref{sec:cafca}). The NWTRB
+benchmark breaks scenarios down into
+``phases'' \cite{abkowitz_scenario_2011}. The first phase is a starting point,
+representing spent fuel currently in the system. The second phase models a
+constant power level held at the 2009 level (100.3 GWe), with new plants coming
+online to keep that power level constant when older reactors retire. The third
+phase models a scenario in which a repository opens in year 2040 and includes a
+constraint on the age of fuel that can enter the repository. The fourth phase
+models a suite of scenarios in which a reprocessing facility enters operation at
+year 2040. The family of scenarios varies the separations capacity from 1500 to
+3000 t/yr and varies the allowable fuel age from 5 to 50 years. The fifth phase
+models scenarios that incorporate both reprocessing and a repository. The OECD
+benchmark assumes a constant installed power for each scenario with reactor
+deployments varying across scenarios. The first scenario assumes an open cycle,
+i.e., power is only met by PWRs using UOX fuel. The second scenario assumes that
+some percentage of the PWRs can use MOX fuel. The third scenario assumes that
+for a finite period of time, MOX is used by some LWRs, and after 80 years, all
+retired LWRs are replaced by fast reactors.
+
+
+discuss how the scenarios were described, citing boucher as the best
+
+It must be noted that the fuel cycle simulation community does not benefit from
+benchmarking exercises in the same way that the nuclear physics community
+benefits from them. For example, the Monte Carlo N-Particle (MCNP) code
+community has a number of criticality safety benchmarks \cite{wagner_mcnp:_1992}
+which have been verified by years of experiment and experience. Put another way,
+for certain MCNP problems, there is a \textit{verifiably correct answer}. The
+community can then build up from those basic principles to understand how
+``believable'' their solutions are for larger, more complex problems. This is,
+in fact, the reason why benchmarks exist. Fuel cycle simulation does not
+necessarily have these characteristics. For instance, there is a fundamental
+difference between simulations that model continuous material flow versus those
+that model distcrete material transfers. Accordingly there is no ``right
+answer'' for even most simple simulations. Instead, there must be a community
+consensus, which leads to benchmarking exercises that incorporate some subset of
+the simulators in the community. In general, these exercises compare large,
+aggregate metrics in order to limit differences caused by fundamental
+differences in modeling approaches. For example, benchmarks may compare the
+total aggregate flow of used fuel coming out of reactors. However, one can't
+really come to a consensus answer regarding the isotopics of this spent fuel due
+to the wide variety of simulator treatment of depletion and decay (ranging from
+no use of such methods to full integration of depletion codes).
+
+In his conclusions of the MIT benchmarking exercise, Guerin states that
+``operation of a fuel cycle model is as much art as science''
+\cite{guerin_benchmark_2009}. Understanding just how much of FCS is art and how
+much is science is critical to providing reliable results. 
