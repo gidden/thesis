@@ -1,9 +1,9 @@
-The effort to benchmark fuel cycle simulation codes has occured (relatively)
+The effort to benchmark fuel cycle simulation codes has occurred (relatively)
 recently, and there have been a number of different benchmarking exercises
 attempted by governmental and international agencies to date. The most notable
 of these are the International Atomic Energy Agency (IAEA) International Project
 on Nuclear Reactors and Fuel Cycle's (INPRO) benchmark
-exercise \cite{_international_2009}, the Massachusettes Institute of
+exercise \cite{_international_2009}, the Massachusetts Institute of
 -Technology's benchmark exercise \cite{guerin_benchmark_2009}, the Nuclear Waste
 Technology Review Board's (NWTRB) benchmark
 exercise \cite{abkowitz_workshop_2011,_nuclear_2011} and the Organization for
@@ -11,14 +11,14 @@ Economic Cooperation and Development's (OECD) benchmark
 exercise \cite{boucher_benchmark_2012}.
 
 Each of the benchmarking efforts used a different set of codes by which to
-compare agaisnt one another. The codes used in each is described in
+compare against one another. The codes used in each is described in
 Table \ref{tab:benchmark-codes}.
 
 \begin{table} [h!]
 \centering
 \begin{tabular} {|c|c|} 
 \hline
-Benchmark & Codes Used \\
+Benchmark    & Codes Used \\
 \hline
 IAEA - INPRO & COSI, DESAE, FAMILY, TAPS, VISTA, VISION \\
 MIT          & CAFCA, COSI, DANESS, VISION \\
@@ -68,8 +68,38 @@ some percentage of the PWRs can use MOX fuel. The third scenario assumes that
 for a finite period of time, MOX is used by some LWRs, and after 80 years, all
 retired LWRs are replaced by fast reactors.
 
-
-discuss how the scenarios were described, citing boucher as the best
+How the scenarios for these benchmarks are actually described, i.e., how their
+input parameters are related to the various simulation teams, vary for each
+exercise. At one end of the spectrum is the INPRO benchmark. Investigation of
+the benchmark sepecification document \cite{_international_2009} shows minimal
+information regarding reactor growth rates. All details regarding reactor
+parameters, supporting facility parameters, and fuel isotopic information were
+discussed ``off line'' and is housed in a database not available to the
+public. The NWTRB benchmarking effort suffers a similar lack of
+information. They provide some publicly accessible information regarding their
+benchmark specification \cite{abkowitz_scenario_2011}, but do not provide enough
+information to independently run the benchmark. This is further evidenced by the
+participants, who acknowledge that the process starts with ``general specs''
+which often ``reflect the peculiarities of one of the models involved'' and are
+then processed over many iterative cycles \cite{piet_vision_2011}, leading to an
+often incomplete specification whose final published record may not reflect the
+final agreed-upon parameters. The MIT benchmark provides more information than
+the previous two, including parameters related to reactor and supporting
+facilities as well as limited information regarding fuel characteristics, such
+as burnup. It is, however, not complete with respect to isotopic information
+(which they state is due to ``data availability''
+\cite{guerin_benchmark_2009}). Further, it suffers from the problem stated
+above: it is a specification designed for CAFCA, the host simulator. I should
+note here that such statement is not necessarily a criticism, simply an
+observation; this is how the current fuel cycle simulation benchmark
+works. Current work is being performed to attempt to tackle such obstacle (see
+\S\ref{sec:prev-benchmark}). Finally, the OECD benchmark is the most well
+defined. In fact, an entire document was dedicated to its specification a full
+four years prior to the release of the benchmarking results
+\cite{boucher_specification_2008}. The benchmark includes isotopic details of
+all input and output fuels, information about both reactor and support
+facilities, and information regarding the facility deployment. It is also one of
+the simpler suite of benchmarks among the group.
 
 It must be noted that the fuel cycle simulation community does not benefit from
 benchmarking exercises in the same way that the nuclear physics community
@@ -82,7 +112,7 @@ community can then build up from those basic principles to understand how
 in fact, the reason why benchmarks exist. Fuel cycle simulation does not
 necessarily have these characteristics. For instance, there is a fundamental
 difference between simulations that model continuous material flow versus those
-that model distcrete material transfers. Accordingly there is no ``right
+that model discrete material transfers. Accordingly there is no ``right
 answer'' for even most simple simulations. Instead, there must be a community
 consensus, which leads to benchmarking exercises that incorporate some subset of
 the simulators in the community. In general, these exercises compare large,
@@ -95,5 +125,7 @@ no use of such methods to full integration of depletion codes).
 
 In his conclusions of the MIT benchmarking exercise, Guerin states that
 ``operation of a fuel cycle model is as much art as science''
-\cite{guerin_benchmark_2009}. Understanding just how much of FCS is art and how
-much is science is critical to providing reliable results. 
+\cite{guerin_benchmark_2009}. This statement shows the fledging state of the
+overall community even after years of practice. Understanding just how much of
+fuel cycle simulation is art and how much is science is critical to providing
+reliable results.
