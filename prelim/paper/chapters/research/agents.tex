@@ -53,36 +53,40 @@ section describes how that market resoluation interface is informed by the
 agents. Basic agent simulation intereaction, such as entering and leaving the
 simulation are also described.
 
-\subsection{Supply/Demand Resolution Mechanism}
+\subsection{Supply/Demand Parameters}
 
 The resolution of supply and demand at any given time step is the result of the
 mathmatical program techniques described in \S\ref{sec:gfctp}; however, there
 are simulation-engine details that must be described in order to set up that
 problem. The proposed resolution mechanism occurs in nominally three steps. The
 agent interactions include consumers and producers of a set of commodities and
-progresses is steps or ``phases''.
+progresses is steps or ``phases''. The terminology of this ``phase space'' is
+taken from previous supply chain agent-based modeling
+work \cite{julka_agent-based_2002}.
 
 The first phase allows consumers of commodities to denote both the quantity of a
-commodity they need to consume as well as the target isotopics, or quality. This
-action is considered a ``posting'' of demand to the market exchange. Consumers
-are allowed to ``overpost'', i.e., request more quantity than they can actually
-consume as long as a corrseponding capacity constraint accompanies this
-posting. Further, consumers are allowed to post demand for multiple commodities
-that may serve to meet the same combine capacity. For example, consider an LWR
-that can be filled with MOX or UOX. It can post a demand for both, but must
-define a preference over the set of possible commodities it can consume. Another
-example is that of an advanced fuel fabrication facility, i.e., one that
-fabricates fuel partially from separated material that has already passed
-through a reactor. Such a facility can choose to fill the remaining space in a
-certain assembly with various types of fertile material, including depleted
-uranium from enrichment or reprocessed uranium from separations. Accordingly, it
-could demand both commodities as long as it provides a corresponding constraint
-with respect to total consumption. At the end of the posting phase, the market
-exchange will have a set of consumption portfolio for each consumer. Each
-consumption portfolio may be constituted by multiple consumption requests, and
-each may have a detailed isotopic quality defined; however, there must be a
-cardinal preference over the requests in the portfolio and an overall capacity
-for the portfolio. 
+commodity they need to consume as well as the target isotopics, or
+quality. Because the action of posting is technically telling possible providers
+what type of product or service is required by a facility, this phase is termed
+the ``Request for Bids Phase''. This action is considered a ``posting'' of
+demand to the market exchange. Consumers are allowed to ``overpost'', i.e.,
+request more quantity than they can actually consume as long as a corrseponding
+capacity constraint accompanies this posting. Further, consumers are allowed to
+post demand for multiple commodities that may serve to meet the same combine
+capacity. For example, consider an LWR that can be filled with MOX or UOX. It
+can post a demand for both, but must define a preference over the set of
+possible commodities it can consume. Another example is that of an advanced fuel
+fabrication facility, i.e., one that fabricates fuel partially from separated
+material that has already passed through a reactor. Such a facility can choose
+to fill the remaining space in a certain assembly with various types of fertile
+material, including depleted uranium from enrichment or reprocessed uranium from
+separations. Accordingly, it could demand both commodities as long as it
+provides a corresponding constraint with respect to total consumption. At the
+end of the posting phase, the market exchange will have a set of consumption
+portfolio for each consumer. Each consumption portfolio may be constituted by
+multiple consumption requests, and each may have a detailed isotopic quality
+defined; however, there must be a cardinal preference over the requests in the
+portfolio and an overall capacity for the portfolio.
 
 The second phase allows suppliers to ``respond'' to the set of consumption
 portfolios. Each portfolio is comprised of requests for some set of
@@ -94,46 +98,111 @@ offer the null set of isotopics as their profile, effectively providing no
 information. A supplier may have its production be constrained by more than one
 parameter. For example, a processing facility may have both a throughput
 constraint (i.e., it can only process material at a certain rate) and an
-inventory constraint (i.e., it can only hold some total material). The
-formulation provided in \S\ref{sec:gfctp} allows for multiple of such
-constraints as long as they are linear functions of the demanded commodity
-quantity. The phase
+inventory constraint (i.e., it can only hold some total material). Further, the
+facility could have a constraint on the quality of material to be processed,
+e.g., it may be able to handle a maximum radiotoxicity for any given time step
+which is a function of both the quantity of material is processes but also the
+isotopic content of that material. The formulation provided in \S\ref{sec:gfctp}
+allows for multiple of such constraints as long as they are linear functions of
+the demanded commodity quantity. This phase is termed the ``Response to Request
+for Bids Phase'', and at its completion the possible connections between supplier and
+producer facilities, i.e., the arcs in the graph of it transportation problem,
+have been established with specific capacity constraints defined both by the
+quantity of commodities that will traverse the arcs but also by the quality.
 
-The second step allows supplier entities to respond to the board of posted
-demands. In general, this step is simple: suppliers know which commodities they
-produce and at what maximum capacity they produce them. Accordingly, responses
-can be posted to each consumer requesting a resource in their production
-category. In the current formulation, capacity restrictions must be linear
-functions of the demand, but may depend on specific qualities of the demand
-(e.g. uranium enrichment and SWUs), because these are static at solution time
-and can thus be evaluated and modeled as a constant. Furthermore, a producer can
-provide more than one such capacity restriction. For example, an enriched
-uranium provider could have capacities related to both SWU and natural uranium
-reserves. This posting is termed a "response for requests for bids" and
-effectively defines the possible arcs between consumers and producers. It should
-be noted that consumers can request different commodities to meet the same
-demand, i.e., this is a multi-commodity problem.
-
-The third step is for consumers and their managers to assign a preference score
-to each bid. In our system, managers are institutions and regions, where each is
-allowed to affect the overal preference through modifiers. The facilities
-themselves set the base preference score, which can be simply a funciton of the
-commodity or, in a more advanced way, a funciton of both the commodity and
-quality thereof. For example, a facility can say apriori that it prefers wood
-over coal, but a region can inform the preference that no coal is allowed. It is
-at this step that timeliness can be assessed, i.e., a facility can give a
-preference of 0 to a response that will arrive too late. It is also at this
-stage that consumers can group bid responses. For example, a facility could say
-that it will accept only an order of wood or only an order of coal. Furthermore,
-it can denote that it will only accept whole orders, i.e. all of its order must
-come from a single supplier. This models the reality of the fuel cycle, but
-transforms the problem from a linear program (LP) to a mixed integer/linear
-program (MILP). Finally, a cost translation mapping is applied to the set of
-preferences in order to assume the form of a minimum cost problem. Both
-formulations are described in \S\ref{sec:gfctp}.
+The third phase of setting the exchange market parameters involves setting
+preference values for each supplier-consumer arc, thus this phase is termed the
+``Preference Assignment Phase''. These values will eventually be converted to
+costs in order to solve variant of the multi-commodity transportation problem,
+in which the inversion technique itself is a simulation design decision. In any
+case, this phase begins with the consumers. Each consumer has already assigned
+preferences as a function of commodity amongst requests in its portfolio. The
+consumer is now allowed to inform the solver as to preferences amongst the
+responses to each request in each portfolio. These delineations will nominally
+be made as a function of the quality of the material in the big response. For
+example, a reactor may request MOX and UOX. It may get two responses to its
+request for MOX, each with different isotopic profiles of the MOX that can be
+provided. It can then assign preference values over this set of potential MOX
+providers. Another prime example is in the case of repositories. A repository
+may have a defined preference of material to accpet based upon its heat load or
+radiotoxicity, both of which are functions of the quality, or isotopics, of a
+material. In certain simulators, limits on fuel entering a repository are
+imposed based upon the amount of time that has elapsed since the fuel has exited
+a reactor. It is in this phase that the \Cyclus engine would allow such
+capability. The time constraint is, in actuality, a constraint on heat load or
+radiotoxicity (one must let enough of the fission products decay). A repository
+could analyze possible input fuel isotopics and set the arc preference of any
+that violate a given rule to 0, effectively eliminating that arc. Once
+facilities have completed their preference assignments, their managers are able
+to permute them based on intitutional or regional factors, explained below.
 
 \subsection{Facilities}
 
+Facilities in \Cyclus are abstracted to either consumers or suppliers of
+commodities, and some may be both. Supplier agents are provided agency by being
+able to communicate to the market-resolution mechanism a variety of production
+capacity constraints in phase two of the solution setup. Consumer agents are
+provided agency by being able to assign preferences among possible suppliers
+based on the supplier's quality of product. Because this agency is encapsulated
+for each agent, it is possible to define strategies that can be attached or
+detatched to the agents at runtime. Such strategies are an example of the
+Strategy design pattern \cite{vlissides_design_1995}.
+
 \subsection{Institutions}
 
+Institutions in \Cyclus manage a set of facilities. They are tasked with the
+actual instantiation of specific facilities, e.g. it is the institutions job to
+manage which facilities are commissioned and decommissioned at the appropriate
+times. The goal of including a notion of institutions is to allow an increased
+level of detail when investigating regional-specific scenarios. For example,
+there exist multi-national enterprises, such as AREVA, that operate fuel cycle
+facilities in a variety of countries, or regions. Furthermore, there are
+international governmental organizations, such as the IAEA, which operate fuel
+cycle facilities that service other facilities in a variety of regions. A fuel
+bank is an example of such a facility. Accordingly, institutions in \Cyclus are
+able to augment the preferences of supplier-consumer pairs that have been
+established in order to simulate a mutual preference to trade material within an
+institution. Of course, situations arise in real life where an institution has
+the capability to service its own facilities, but choose to use an outside
+provider because of either cost or time constraints. Such a situation is allowed
+in this framework as well. It is not clear how such a relationship should be
+instantiated and to what degree institutions should be allowed to affect their
+managed facilities' preferences. This issue lies squarely in the realm of
+simulation design decisions, part of the ``art'' of simulation. Accordingly,
+through the course of research, the possible design space will be analyzed in
+order to determine best practices for this type of design.
+
 \subsection{Regions}
+
+Regions in \Cyclus are concerned with meeting certain requirements, e.g. power
+capacity, fuel cycle service capacity, etc. The notion of which facilities will
+meet this capacity is abstracted away from the region into the set of
+institutions that operate in that region. In other words, in the case of nuclear
+power capacity, a region knows that it needs additional reactors to be built,
+but leaves the building of those reactors to the institutions that operate in
+the region. However, given information regarding the possible reactors that can
+be built, the region can order which reactors should be built by which
+institutions. Again, the idea here is to abstract the management of facilities
+away from the decision of which facilities to build. It is important to note
+here that this abstraction allows for different deployment algorithms to be
+tested and exchanged in the \Cyclus framework without necessitating changes to
+the simulation engine, as is the case with other simulators described
+in \S\ref{sec:simulators} and is consistent with the types of simulation design
+decisions described in \S\ref{sec:simulators-overview}. Regions are further
+provided agency by their ability to affect preferences between supplier-consumer
+facility pairs in the third phase of the market resolution algorithm. The
+ability to perturb arc preferences between a given supplier and a given consumer
+allows fuel cycle simulation developers to model relatively complex interactions
+at a regional level. Examples of such interactions include the notion of
+tariffs, i.e., a region may prefer that facilities that can trade within its
+borders to so. Further, one could model the affect of sanctions, i.e., a region
+may not allow trade between facilities within its borders and another specified
+region. Finally, constraints can be applied on the quality of material that may
+occur in a transaction. For example, a region could scan the set of possible
+material leaving its borders via supplier transactions. It could then affect the
+preference of transactions that violate some principle, such as ``no MOX can
+leave my boundaries''. These principles can even exist on a spectrum, e.g. ``no
+MOX with a certain content can leave my boundaries'', or be region-specific,
+e.g. ``no MOX can leave my boundaries that will go to some specified
+region''. Again, these policies are prime examples of strategies that can be
+implemented via the Strategy pattern.
