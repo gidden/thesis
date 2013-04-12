@@ -59,15 +59,57 @@ The resolution of supply and demand at any given time step is the result of the
 mathmatical program techniques described in \S\ref{sec:gfctp}; however, there
 are simulation-engine details that must be described in order to set up that
 problem. The proposed resolution mechanism occurs in nominally three steps. The
-agent interactions include consumers and producers of a set of commodities.
+agent interactions include consumers and producers of a set of commodities and
+progresses is steps or ``phases''.
 
-The first step is for consumers to "post" their consumption needs, i.e. their
-"demand". Consumers are allowed to "over post", i.e., request more than they
-actually need if a corresponding constraint accompanies that request. For
-example, a facility could request fuel as either fire or coal, but must denote
-that it will take only one of the two. While their preference between the two
-competing sources is known at this time, that state is queried in the third
-step. This posting is termed a "request for bid".
+The first phase allows consumers of commodities to denote both the quantity of a
+commodity they need to consume as well as the target isotopics, or quality. This
+action is considered a ``posting'' of demand to the market exchange. Consumers
+are allowed to ``overpost'', i.e., request more quantity than they can actually
+consume as long as a corrseponding capacity constraint accompanies this
+posting. Further, consumers are allowed to post demand for multiple commodities
+that may serve to meet the same combine capacity. For example, consider an LWR
+that can be filled with MOX or UOX. It can post a demand for both, but must
+define a preference over the set of possible commodities it can consume. Another
+example is that of an advanced fuel fabrication facility, i.e., one that
+fabricates fuel partially from separated material that has already passed
+through a reactor. Such a facility can choose to fill the remaining space in a
+certain assembly with various types of fertile material, including depleted
+uranium from enrichment or reprocessed uranium from separations. Accordingly, it
+could demand both commodities as long as it provides a corresponding constraint
+with respect to total consumption. At the end of the posting phase, the market
+exchange will have a set of consumption portfolio for each consumer. Each
+consumption portfolio may be constituted by multiple consumption requests, and
+each may have a detailed isotopic quality defined; however, there must be a
+cardinal preference over the requests in the portfolio and an overall capacity
+for the portfolio. 
+
+%% Finally, the portfoloios themselves must be labeled as either
+%% a belonging to service provider or service consumer. This is an important
+%% distinction in the fuel cycle because of the notion of recycling. Take, for
+%% instance, a repository. Such a facility ``consumes'' waste products, however it
+%% can be also thought of as providing a commodity, e.g. ``storage space''. The
+%% important distinction here is that the entity ``providing'' the fuel does not
+%% necessarily care which repository it goes to; however, the repository may have
+%% some preference over which fuel it accepts (based on heatload or radiotoxicity,
+%% for example). This distinction manifests itself in the setting of the preference
+%% function (see \S\ref{sec:cost-function}), which, in this case, would be managed
+%% by the repository. Additional details are described below.
+
+The second phase allows suppliers to ``respond'' to the set of consumption
+portfolios. Each portfolio is comprised of requests for some set of
+commodities. Accordingly, for each request, suppliers of that commodity denote
+production capacities and an isotopic profile of the commodity they can
+provide. This isotopic profile is part of a heuristic mechanism to assign more
+fine-grained preferences among suppliers and consumers. Suppliers are allowed to
+offer the null set of isotopics as their profile, effectively providing no
+information. A supplier may have its production be constrained by more than one
+parameter. For example, a processing facility may have both a throughput
+constraint (i.e., it can only process material at a certain rate) and an
+inventory constraint (i.e., it can only hold some total material). The
+formulation provided in \S\ref{sec:gfctp} allows for multiple of such
+constraints as long as they are linear functions of the demanded commodity
+quantity. The phase
 
 The second step allows supplier entities to respond to the board of posted
 demands. In general, this step is simple: suppliers know which commodities they
@@ -103,5 +145,7 @@ preferences in order to assume the form of a minimum cost problem. Both
 formulations are described in \S\ref{sec:gfctp}.
 
 \subsection{Facilities}
+
 \subsection{Institutions}
+
 \subsection{Regions}
