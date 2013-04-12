@@ -186,11 +186,16 @@ macro specification of TRU or plutonium is queried.
 
 The facilities are modeled explicitly, i.e., individual facilities are tracked
 according to the DANESS literature. As with other simulators, reactors are
-paired with a specific fuel type, and DANESS can model at most 10 types of
-reactors. Supporting facilities are deployed according to a lookahead function
-that predicts future demand for their services. An explicit repository model is
-also provided, which applies thermal-loading capacity limitations for both Yucca
-Mountain (which has a tuff geology) and a generic clay repository.
+paired with a specific fuel type; however, this reactor-fuel pairing can evolve
+with time \cite{durpel_daness_2003}. In previous versions, DANESS could model 20
+different types, or classes, of reactors \cite{van_den_durpel_daness_2009}; it
+is currently only able to model 10 types \cite{durpel_daness_2003}. It is
+unclear if this is one of the limitations that caused AFCI to choose DYMOND over
+DANESS, as reported by Schwitzer \cite{schweitzer_improved_2008}. Supporting
+facilities are deployed according to a lookahead function that predicts future
+demand for their services. An explicit repository model is also provided, which
+applies thermal-loading capacity limitations for both Yucca Mountain (which has
+a tuff geology) and a generic clay repository.
 
 The full set of cost factors involved in the minimum cost deployment algorithm
 is not explicitly stated in the DANESS literature, but a few are
