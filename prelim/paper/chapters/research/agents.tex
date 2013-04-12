@@ -1,9 +1,9 @@
 This sections describes the simulation interaction between agents. Of the
 research directions presented in this chapter, it is definitely the most
-maleable. Deciding how a simulation is structured from an interactions
+malleable. Deciding how a simulation is structured from an interactions
 standpoint is a delicate balance of known necessity and perceived future
 needs. There are basic decisions to make: do you want a system with discrete
-material transfers or continous material flows? Discrete transfers more closely
+material transfers or continuous material flows? Discrete transfers more closely
 match reality and may provide insights in that regard, however the require more
 of their modeling apparatus due to messaging needs and other structures. More
 complex decisions include how one wants to determine connections between
@@ -13,16 +13,16 @@ affected by any other entities? Guerin's comment in \S\ref{sec:intro-benchmarks}
 stems from this ``freedom''. These simulation-engine decisions comprise the
 art-related portion of fuel cycle simulation. The goal is to make these
 decisions in as informed a way as possible from our domain-level knowledge with
-respect to our known and perceieved requirements. In general, we try to minimize
+respect to our known and perceived requirements. In general, we try to minimize
 the sheer number of choices we make in this regard, instead relying on well
 known and well documented practices of computer scientists and systems
 engineers.
 
 \Cyclus has an additional goal in that we wish our core simulation
-infrastructure to be as flexible as possible. Given a few basic tennets of agent
+infrastructure to be as flexible as possible. Given a few basic tenets of agent
 interaction, other developers should be able to create a new agent to ``plug
 in'' to the simulation. Accordingly, we must define a minimal set of behaviors
-to sufficiently inform the simulation infructure to run the simulation. This
+to sufficiently inform the simulation infrastructure to run the simulation. This
 freedom allows us to run the simulation program and attach agents at run time,
 effectively separating the simulation engine's functionality from the agents in
 the simulation. From an ecosystem point of view, being an open source code and
@@ -43,20 +43,20 @@ specifying the internals. Such a community paradigm is shown in Figure
 
 This open-source ecosystem further provides incentive to develop the agent-based
 simulation architecture. Other developers can concentrate their efforts on
-individual agent interaction, effectively ecapsulating developer requirements
+individual agent interaction, effectively encapsulating developer requirements
 for learning and interacting with the various simulation systems. Having decided
 upon agent-based interactions, one must determine a way to govern these
 interactions. We want to minimize agent dependency due to our above discussion,
 so using preference-based network flow formulations provide us with a viable
 solution technique that provides a consistent interface. The remainder of this
-section describes how that market resoluation interface is informed by the
-agents. Basic agent simulation intereaction, such as entering and leaving the
+section describes how that market resolution interface is informed by the
+agents. Basic agent simulation interaction, such as entering and leaving the
 simulation are also described.
 
 \subsection{Supply/Demand Parameters}
 
 The resolution of supply and demand at any given time step is the result of the
-mathmatical program techniques described in \S\ref{sec:gfctp}; however, there
+mathematical program techniques described in \S\ref{sec:gfctp}; however, there
 are simulation-engine details that must be described in order to set up that
 problem. The proposed resolution mechanism occurs in nominally three steps. The
 agent interactions include consumers and producers of a set of commodities and
@@ -69,8 +69,8 @@ commodity they need to consume as well as the target isotopics, or
 quality. Because the action of posting is technically telling possible providers
 what type of product or service is required by a facility, this phase is termed
 the ``Request for Bids Phase''. This action is considered a ``posting'' of
-demand to the market exchange. Consumers are allowed to ``overpost'', i.e.,
-request more quantity than they can actually consume as long as a corrseponding
+demand to the market exchange. Consumers are allowed to ``over-post'', i.e.,
+request more quantity than they can actually consume as long as a corresponding
 capacity constraint accompanies this posting. Further, consumers are allowed to
 post demand for multiple commodities that may serve to meet the same combine
 capacity. For example, consider an LWR that can be filled with MOX or UOX. It
@@ -124,7 +124,7 @@ example, a reactor may request MOX and UOX. It may get two responses to its
 request for MOX, each with different isotopic profiles of the MOX that can be
 provided. It can then assign preference values over this set of potential MOX
 providers. Another prime example is in the case of repositories. A repository
-may have a defined preference of material to accpet based upon its heat load or
+may have a defined preference of material to accept based upon its heat load or
 radiotoxicity, both of which are functions of the quality, or isotopics, of a
 material. In certain simulators, limits on fuel entering a repository are
 imposed based upon the amount of time that has elapsed since the fuel has exited
@@ -134,7 +134,7 @@ radiotoxicity (one must let enough of the fission products decay). A repository
 could analyze possible input fuel isotopics and set the arc preference of any
 that violate a given rule to 0, effectively eliminating that arc. Once
 facilities have completed their preference assignments, their managers are able
-to permute them based on intitutional or regional factors, explained below.
+to permute them based on institutional or regional factors, explained below.
 
 \subsection{Facilities}
 
@@ -145,7 +145,7 @@ capacity constraints in phase two of the solution setup. Consumer agents are
 provided agency by being able to assign preferences among possible suppliers
 based on the supplier's quality of product. Because this agency is encapsulated
 for each agent, it is possible to define strategies that can be attached or
-detatched to the agents at runtime. Such strategies are an example of the
+detached to the agents at run-time. Such strategies are an example of the
 Strategy design pattern \cite{vlissides_design_1995}.
 
 \subsection{Institutions}
