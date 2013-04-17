@@ -20,12 +20,13 @@ Chapter 2 - Literature Review
         2.1.2 CAFCA
         2.1.3 DANESS
 	2.1.4 COSI
-    2.2 Approximation Linear Program
-    	2.2.1 The Simplex Method
-    2.3 Multicommodity Transportation Model
-    	2.3.1 The Transportation Simplex Algorithm
-    2.4 Integer Programming
-    	2.4.1 The Branch and Bound Algorithm
+    2.2 Linear Programming
+        2.2.1 The Simplex Method
+	2.2.2 The Network Simplex Method
+    2.3 The Linear Approximation Model
+    2.4 The Multicommodity Transportation Model
+    2.5 Integer Programming
+    	2.5.1 The Branch and Bound Algorithm
 
 Chapter 3 - Previous Work
     3.1 Cyclus to Date
