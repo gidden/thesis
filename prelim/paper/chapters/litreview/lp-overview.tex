@@ -1,14 +1,14 @@
 Linear programming is a sophisticated technique to explore large, constrained
 option spaces to find optimal solutions to systems of equations given some
 objective. The seminal paper on linear programming techniques was provided by
-Kantorovich in 1940 \cite{kantorovich_new_1940}; however, this occured during
+Kantorovich in 1940 \cite{kantorovich_new_1940}; however, this occurred during
 World War II, and was thus kept secret. An efficient solution technique (called
 the Simplex Method and described further in \S\ref{sec:simplex}) was provided by
 Dantzig in 1947 and published in 1951 \cite{dantzig_maximization_1951},
 effectively opening the field.
 
-Linear programs have a relatively simple general construction. There are a set of
-decision variables, $x$, a cost vector, $c$, a constraint matrix, $M$, and a
+Linear programs have a relatively simple general construction. There are a set
+of decision variables, $x$, a cost vector, $c$, a constraint matrix, $M$, and a
 right-hand-side threshold vector, $b$. The standard form for linear programs is
 as follows:
 
@@ -125,11 +125,11 @@ red.
   \end{center}
 \end{figure}
 
-The standard form of a linear program shown in Eqn. \ref{eqs:std-form} is an
+The standard form of a linear program shown in Equation \ref{eqs:std-form} is an
 example of a \textit{primal} linear program. A distinction is made between
 a \textit{primal} linear program and its \text{dual}, of which there is a unique
-counterpart. The standard form of the dual of Eqn. \ref{eqs:std-form} is given
-in Eqn. \ref{eqs:dual-form}.
+counterpart. The standard form of the dual of Equation \ref{eqs:std-form} is
+given in Equation \ref{eqs:dual-form}.
 
 %%% 
 \begin{subequations}\label{eqs:dual-form}
@@ -156,12 +156,13 @@ switched: if a primal form has a minimization objective, its dual has a
 maximization objective. The constraint matrix is now $M$ x $N$-dimensional (it
 is in fact the original constraint matrix transposed). There is a new series of
 decision variables that form the corresponding solution space, i.e., the
-positive vector $u$, as shown in Eqn. \ref{eqs:dual-form_obj}. These variables
-are related to the original right-hand side of the constraint formulation, the
-vector $b$. The costs of the original problem, $c$, now form the right-hand side
-of the dual's constraint formulation, Eqn. \ref{eqs:dual-form_sup}.
+positive vector $u$, as shown in Equation \ref{eqs:dual-form_obj}. These
+variables are related to the original right-hand side of the constraint
+formulation, the vector $b$. The costs of the original problem, $c$, now form
+the right-hand side of the dual's constraint formulation,
+Equation \ref{eqs:dual-form_sup}.
 
-The concept of duality is critical in the field of mathematic programming
+The concept of duality is critical in the field of mathematical programming
 because it provides well-defined optimality characteristics of a given
 program. These are achieved via the \textit{Strong Duality Theorem}
 and \textit{Weak Duality Theorem}, shown below as stated

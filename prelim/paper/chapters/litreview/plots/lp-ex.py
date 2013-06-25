@@ -42,7 +42,7 @@ def get_basic_plot(xlow, xhigh, ylow, yhigh, dx, xbound):
     ax.set_ylabel(r'$x_2$')
     return ax, fig, x, y1, y2
 
-def feasible_plt(fname):
+def feasible_plt(fname, title=r'A Feasible Solution Space'):
     xlow, xhigh, ylow, yhigh = 0, 5, 0, 5
     dx = 0.01
     xbound = 4
@@ -65,9 +65,9 @@ def feasible_plt(fname):
     
     verts = ( (0,0), (i1[0],i1[1]), (i2[0],i2[1]), (i3[0],i3[1]), (xbound,0) )
     patch = pch.Polygon(verts, closed=True, facecolor='y', alpha=0.5)
-    
+#    print verts
     ax.add_patch(patch)
-    ax.set_title(r'A Feasible Solution Space')
+    ax.set_title(title)
     #plt.show()
     plt.savefig(fname)
 
@@ -106,3 +106,4 @@ def infeasible_plt(fname):
 if __name__=="__main__":
     feasible_plt("feasible.png")
     infeasible_plt("infeasible.png")
+    feasible_plt("geometric.png", title=r'LP Geometric View')
