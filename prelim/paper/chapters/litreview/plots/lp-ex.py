@@ -42,7 +42,7 @@ def get_basic_plot(xlow, xhigh, ylow, yhigh, dx, xbound):
     ax.set_ylabel(r'$x_2$')
     return ax, fig, x, y1, y2
 
-def feasible_plt(fname, title=r'A Feasible Solution Space'):
+def feasible_plt(fname, save=True, show=False, **kwargs):
     xlow, xhigh, ylow, yhigh = 0, 5, 0, 5
     dx = 0.01
     xbound = 4
@@ -67,9 +67,12 @@ def feasible_plt(fname, title=r'A Feasible Solution Space'):
     patch = pch.Polygon(verts, closed=True, facecolor='y', alpha=0.5)
 #    print verts
     ax.add_patch(patch)
-    ax.set_title(title)
-    #plt.show()
-    plt.savefig(fname)
+    if 'title' in kwargs:
+        ax.set_title(kwargs.get('title'))
+    if show:
+        plt.show()
+    if save:
+        plt.savefig(fname)
 
 def infeasible_plt(fname):
     xlow, xhigh, ylow, yhigh = 0, 5, 0, 5
@@ -99,11 +102,15 @@ def infeasible_plt(fname):
     patch = pch.Polygon(verts, closed=True, facecolor='r', alpha=0.5)
     
     ax.add_patch(patch)
-    ax.set_title(r'A Infeasible Linear Program')
-    #plt.show()
-    plt.savefig(fname)
+    if 'title' in kwargs:
+        ax.set_title(kwargs.get('title'))
+    if show:
+        plt.show()
+    if save:
+        plt.savefig(fname)
 
 if __name__=="__main__":
-    feasible_plt("feasible.png")
-    infeasible_plt("infeasible.png")
+    feasible_plt("feasible.png", title=r'A Feasible Solution Space')
+    infeasible_plt("infeasible.png", title=r'A Infeasible Linear Program')
     feasible_plt("geometric.png", title=r'LP Geometric View')
+    
