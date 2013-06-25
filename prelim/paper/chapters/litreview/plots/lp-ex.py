@@ -42,7 +42,7 @@ def get_basic_plot(xlow, xhigh, ylow, yhigh, dx, xbound):
     ax.set_ylabel(r'$x_2$')
     return ax, fig, x, y1, y2
 
-def feasible_plt(fname, save=True, show=False, **kwargs):
+def feasible_plt(save=True, show=False, **kwargs):
     xlow, xhigh, ylow, yhigh = 0, 5, 0, 5
     dx = 0.01
     xbound = 4
@@ -72,9 +72,9 @@ def feasible_plt(fname, save=True, show=False, **kwargs):
     if show:
         plt.show()
     if save:
-        plt.savefig(fname)
+        plt.savefig(kwargs.get('fname'))
 
-def infeasible_plt(fname):
+def infeasible_plt(save=True, show=False, **kwargs):
     xlow, xhigh, ylow, yhigh = 0, 5, 0, 5
     dx = 0.01
     xbound = 4
@@ -107,10 +107,37 @@ def infeasible_plt(fname):
     if show:
         plt.show()
     if save:
-        plt.savefig(fname)
+        plt.savefig(kwargs.get('fname'))
+
+def plot_rotated(save=True, show=False, **kwargs):
+    xlow, xhigh, ylow, yhigh = 0, 5, 0, 5
+    dx = 0.01
+    ybound = 4
+    x = np.arange(xlow, xhigh, dx)
+    y1 = [-.5*i+4.5 for i in x]
+    y2 = [i-1 for i in x]
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.axhline(y=ybound, xmin=xlow, xmax=xhigh, color='g')
+    ax.plot(x, y1, color='b')
+    ax.plot(x, y2, color='r')
+    ax.axis([xlow, xhigh, ylow, yhigh])
+    ax.set_xlabel(r'$x_2$')
+    ax.set_ylabel(r'$x_1$')
+    
+    verts = ( (0,0), (0,4), (1,4), (11./3., 8./3.), (1,0) )
+    patch = pch.Polygon(verts, closed=True, facecolor='y', alpha=0.5)
+    ax.add_patch(patch)
+    if 'title' in kwargs:
+        ax.set_title(kwargs.get('title'))
+    if show:
+        plt.show()
+    if save:
+        plt.savefig(kwargs.get('fname'))
 
 if __name__=="__main__":
-    feasible_plt("feasible.png", title=r'A Feasible Solution Space')
-    infeasible_plt("infeasible.png", title=r'A Infeasible Linear Program')
-    feasible_plt("geometric.png", title=r'LP Geometric View')
-    
+    feasible_plt(fname="feasible.png", title=r'A Feasible Solution Space')
+    infeasible_plt(fname="infeasible.png", title=r'A Infeasible Linear Program')
+    feasible_plt(fname="geometric.png", title=r'LP Geometric View')
+    #feasible_plt(save=False, show=True)
+    plot_rotated(fname="rotated.png", title=r'Rotated LP after Jordan Exchange')

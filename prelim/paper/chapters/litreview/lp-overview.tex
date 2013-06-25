@@ -32,6 +32,10 @@ as follows:
 \end{subequations}
 %%% 
 
+Although Equation \ref{eqs:std-form} is the standard form for LPs, any LP not in
+the standard form can be transformed into the standard form by a number of
+transformations, which are described in most LP texts.
+
 The $N$ x $M$ dimensional constraint matrix defines an $M$-dimensional option
 space (i.e., the number of columns is assumed equal to the number of decision
 variables). Any set of values for the vector of decision variables, $x$, that
@@ -49,7 +53,7 @@ a \textit{feasible region}. Take for example the following formulation:
 \begin{subequations}\label{eqs:feas}
   \begin{align}
     %%
-    \min \:\: & 
+    \max \:\: & 
     3 x_1 + 2 x_2
     & \label{eqs:feas_obj} \\
     %%
@@ -90,7 +94,7 @@ constraint. Take for instance, an increased boundary constraint for $x_1$.
 \begin{subequations}\label{eqs:infeas}
   \begin{align}
     %%
-    \min \:\: & 
+    \max \:\: & 
     3 x_1 + 2 x_2
     & \label{eqs:infeas_obj} \\
     %%
