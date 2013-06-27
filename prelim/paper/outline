@@ -21,10 +21,9 @@ Chapter 2 - Literature Review
         2.1.3 DANESS
 	2.1.4 COSI
     2.2 Linear Programming
-        2.2.1 Transportation Problem
-        2.2.2 Multicommodity Transportation Problem
+        2.2.1 Simplex Method
+        2.2.2 Transportation Problems
         2.2.3 Approximation Problem
-        2.2.4 Simplex Method
     2.3 Integer Programming
     	2.3.1 The Branch and Bound Algorithm
 

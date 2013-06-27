@@ -1,0 +1,210 @@
+\subsubsection{Overview}
+There are many canonical problems described in the linear programming
+literature. A subset of these are classified as network flow programs, which are
+ideal for modeling the flows between entities that comprise a model's
+formulation. In computational science's parlance, entities make up a set of
+nodes in a graph, and the possible connections between those entities make up
+the arcs of a graph. Accordingly, if flow can occur between some node $i$ and
+some other node $j$, then it flows along arc $(i, j)$. In general there is a set
+of nodes $N$ and a set of arcs $A$. Decision variables in network flow problems
+determine the optimal flow between nodes and across arcs.
+
+%% include picture
+
+The actual formulation for a network flow problem as a linear program is, of
+course, dependent on the problem being modeled. Take for example a maximum flow
+problem. The objective of such a problem is to maximize the flow in a system,
+i.e.,
+
+\begin{equation}
+\max \sum_{(i, j) \in A} x_{i,j}.
+\end{equation}
+
+The constraint matrix in such problems is denoted a \textit{node-arc incidence}
+matrix. For a directed graph, an arc leaving node $i$ and entering arc $j$
+indicates a value of 1 for element $a_{i,j}$ and a value of -1 for element
+$a_{j,i}$. If an arc between two nodes does not exist, then a value of 0 is
+assigned for the two corresponding coefficients. In general network flow
+problems, there is also a notion of \textit{divergence}. Divergence is the total
+amount of flow exiting or entering a node, and is modeled by the $b$ vector in
+the matrix formulation of network flow problems. As is perhaps obvious, if $b_i
+> 0$ for some node, $i$, then more flow exits the node than enters it and it is
+termed a \textit{source node}. If $b_i < 0$, then more flow enters the node than
+flows in, thus it is termed a \textit{sink node}. Finally, if $b_i = 0$, then
+all material that flows into the node flows out as well, and it is termed a
+\textit{transshipment node}. Finally, arcs can have their flow bounded, where a
+lower bound for arc $(i, j)$ is given as $l_{i,j}$ and an upper bound is denoted
+$u_{i,j}$.
+
+One can now construct the LP formulation for a max-flow network flow problem.
+
+%%% 
+\begin{subequations}\label{eqs:max-flow}
+  \begin{align}
+    %%
+    \max_{x} \:\: & 
+    \sum_{(i, j) \in A} x_{i,j}
+    & \label{eqs:max-flow_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j:(i,j) \in A} x_{i,j} - \sum_{i:(i,j) \in A} x_{i,j} = b_i
+    & \forall i \in N \label{eqs:max-flow_sup} \\
+    %%
+    &
+    l_{i,j} \leq x_{i,j} \leq u_{i,j}
+    & \forall (i, j) \in A \label{eqs:max-flow_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+\subsubsection{Transportation Problems}
+Transportation problems are a subset of the network flow problems and can
+therefore be modeled using linear programming. Transportation problems model the
+flow of a commodity between source nodes and sink nodes, i.e. there are no
+transshipment nodes in the general transportation problem. Critically, this
+simplifications allows for the nodes in the transportation problem to be
+categorized into two explicit groups, sources and sinks. In other words, source
+nodes and sink nodes comprise two distinct subsets, $N_1, N_2$, the union of
+which comprises all nodes in the transportation graph, $N$. These properties can
+be described in set notation.
+
+\begin{equation}
+  N_1 \subset N
+\end{equation}
+
+\begin{equation}
+ N_2 \subset N
+\end{equation}
+
+\begin{equation}
+  N_1 \cup N_2 = N
+\end{equation}
+
+From the node-arc graph point of view, this strict subset division allows for
+the transportation problem to be modeled as a \textit{bipartite} graph.
+
+%% include picture
+
+The transportation problem is a general platform on which one can model more
+general problems. Previously, a maximum-flow problem was described, but the
+transportation problem lends itself more generally to the minimum-cost network
+problems. In such a formulation, each arc has an associated \textit{unit cost}
+associated with the cost of transporting a unit of a commodity along it,
+$c_{i,j}$. Additionally, instead of the notion of divergence, supplier and
+consumer nodes have an associated supply, $s_i$, or demand, $d_i$, which provide
+a notion of \textit{node capacity} rather than arc capacity.
+
+Accordingly, the minimum-cost transportation problem can be formulated as a
+linear program in the following manner.
+
+%%% 
+\begin{subequations}\label{eqs:xport}
+  \begin{align}
+    %%
+    \min_{x_{i,j}} \:\: & 
+    \sum_{(i, j) \in A \subset N_1 \times N_2} c_{i,j} x_{i,j}
+    & \label{eqs:xport_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j \in N_2} x_{i,j} \leq s_i
+    & \forall i \in N_1  \\
+    %%
+    &
+    \sum_{i \in N_1} x_{i,j} \geq d_i
+    & \forall j \in N_2  \\
+    %%
+    &
+    x_{i,j} \geq 0
+    & \forall i \in N_1, \: \forall j \in N_2 \label{eqs:xport_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+As is noted in most every text on the Transportation Problem Linear Program
+formulation, an intuitive constraint on the problem to guarantee a feasible
+solution is that the total demand in the system must be no greater than the
+total supply in the system.
+
+\begin{equation}
+  \sum_{j \in N_2} d_j \leq \sum_{i \in N_1} s_i
+\end{equation}
+
+Feasibility in this sense can be guaranteed, however, by adding an artificial
+supply node. Such a node can have infinite supply capacity but at (effectively)
+infinite cost. The problem can then be solved, and any flow leaving the
+artificial node in the optimal solution can be dealt with accordingly, e.g. it
+can be ignored.
+
+\subsubsection{Multi-Commodity Transportation Problems}
+The previously-described transportation problem can more precisely be named the
+single-commodity transportation problem. It deals with the flow from sources to
+sinks of a single commodity. A more complex model includes more than one
+commodity.
+
+Variables and constants in the multi-commodity formulation are generally analogs
+of their counterparts in the single-commodity problem. There is a unit cost for
+commodity $h$ to traverse arc $(i,j)$ denoted as $c_{i,j}^{h}$. A supplier of
+commodity $h$ has a certain supply capacity $s_i^h$ which cannot be surpassed
+and demanders of commodity $h$ have a certain demand level which must be met,
+$d_i^h$.
+
+%% include picture
+
+In the simplest extension from the single-commodity to multi-commodity
+transportation problem, arc constraints for all commodities are combined, i.e.,
+for a given arc $(i, j)$, there is a single capacity $u_{i,j}$. A classic
+interpretation of this enhanced complexity deals with data networks. Multiple
+classifications of data exist, but they all must traverse the same network
+infrastructure. Accordingly, the infrastructure can only accommodate a certain
+level of total flow among all communication types.
+
+This coupling of commodities via arc capacities changes the structure of the
+node-arc incidence matrix. Arc capacity constraints no longer have a single
+entry. Instead, many flows contribute to the capacity constraint, requiring
+different methods to solve the problem. Of course, the Simplex Method can still
+solve the linear program, however other potential reductions in time and
+complexity that are available to the single-commodity flow problem are not
+available to the multi-commodity flow problem due to this coupling.
+
+The formulation of the multi-commodity flow problem is shown in Equation
+\ref{eqs:MCTP}. Note the commodity coupling in Equation \ref{eqs:MCTP_cap}.
+
+%%% 
+\begin{subequations}\label{eqs:MCTP}
+  \begin{align}
+    %%
+    \min_{x_{i,j}^{h}} \:\: & 
+    \sum_{i \in I}\sum_{j \in J}\sum_{h \in H} c_{i,j}^{h} x_{i,j}^{h}
+    & \label{eqs:MCTP_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j \in J} x_{i,j}^{h} \leq s_{i}^{h}
+    &
+    \forall \: i \in I, \forall \: h \in H \label{eqs:MCTP_sup} \\
+    %%
+    &
+    \sum_{i \in I} x_{i,j}^{h} \geq d_{j}^{h}
+    & 
+    \forall \: j \in J, \forall \: h \in H \label{eqs:MCTP_dem} \\
+    %%
+    &
+    \sum_{h \in H} x_{i,j}^{h} \leq u_{i,j}
+    & 
+    \forall \: j \in J \label{eqs:MCTP_cap} \\
+    %%
+    &
+    x_{i,j}^{k} \geq 0
+    &
+    \forall \: i \in I, \forall \: j \in J, \forall \: h \in H \label{eqs:MCTP_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+A number of important reductions are possible for the multi-commodity
+transportation problem. The most important of all is when there is no arc that
+shares multiple commodities. In such a case, the single multi-commodity problem
+can be broken into $m$ different single-commodity transportation problems where
+$m$ is the cardinality of the set of commodities, $H$.

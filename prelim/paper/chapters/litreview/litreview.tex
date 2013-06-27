@@ -21,45 +21,10 @@
 \subsection{The Simplex Algorithm}\label{sec:simplex}
 \input{./chapters/litreview/simplex}
 
-\subsection{The Transportation Problem}\label{sec:xportation}
+\subsection{Network Flow Problems}\label{sec:xportation}
 \input{./chapters/litreview/xportation}
 
-\subsection{The Multicommodity Transport Problem}\label{sec:MCTP}
-\input{./chapters/litreview/mc-xportation}
-
-%%% 
-\begin{subequations}\label{eqs:MCTP}
-  \begin{align}
-    %%
-    \min_{z} \:\: & 
-    z = \sum_{i \in I}\sum_{j \in J}\sum_{h \in H} c_{i,j}^{h} x_{i,j}^{h}
-    & \label{eqs:MCTP_obj} \\
-    %%
-    \text{s.t.} \:\: &
-    \sum_{j \in J} x_{i,j}^{h} = a_{i}^{k}
-    &
-    \forall \: i \in I, \forall \: h \in H \label{eqs:MCTP_sup} \\
-    %%
-    &
-    \sum_{i \in I} x_{i,j}^{h} = b_{j}^{k}
-    & 
-    \forall \: j \in J, \forall \: h \in H \label{eqs:MCTP_dem} \\
-    %%
-    &
-    \sum_{h \in H} x_{i,j}^{h} \leq u_{i,j}
-    & 
-    \forall \: j \in J \label{eqs:MCTP_cap} \\
-    %%
-    &
-    x_{i,j}^{k} \geq 0
-    &
-    \forall \: i \in I, \forall \: j \in J, \forall \: h \in H \label{eqs:MCTP_x}
-    %%
-  \end{align}
-\end{subequations}
-%%% 
-
-\subsection{The Linear Approximation Model}\label{sec:approx}
+\subsection{Linear Approximation Problems}\label{sec:approx}
 \input{./chapters/litreview/lin-approx}
 
 \section{Integer Programming}\label{sec:ip}
