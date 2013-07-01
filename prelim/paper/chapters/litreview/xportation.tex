@@ -6,10 +6,19 @@ formulation. In computational science's parlance, entities make up a set of
 nodes in a graph, and the possible connections between those entities make up
 the arcs of a graph. Accordingly, if flow can occur between some node $i$ and
 some other node $j$, then it flows along arc $(i, j)$. In general there is a set
-of nodes $N$ and a set of arcs $A$. Decision variables in network flow problems
-determine the optimal flow between nodes and across arcs.
+of nodes $N$ and a set of arcs $A$, as shown in Figure
+\ref{fig:node-arcs}. Decision variables in network flow problems determine the
+optimal flow between nodes and across arcs.
 
-%% include picture
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=\linewidth]{./chapters/litreview/node-arcs.png}
+  \caption{An example node-arc network configuration. Arrows denote possible
+    flow directions. Arc notation examples are provided for arcs (1,4) and
+    (4,6).}
+  \label{fig:node-arcs}
+  \end{center}
+\end{figure}
 
 The actual formulation for a network flow problem as a linear program is, of
 course, dependent on the problem being modeled. Take for example a maximum flow
@@ -84,7 +93,15 @@ be described in set notation.
 From the node-arc graph point of view, this strict subset division allows for
 the transportation problem to be modeled as a \textit{bipartite} graph.
 
-%% include picture
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=\linewidth]{./chapters/litreview/node-arcs-bipartite.png}
+  \caption{An example node-arc transportation network configuration. Arrows
+    denote possible flow directions. Note that all nodes either belog to the set
+    of sources (left) or set of sinks (right).}
+  \label{fig:node-arcs-bipartite}
+  \end{center}
+\end{figure}
 
 The transportation problem is a general platform on which one can model more
 general problems. Previously, a maximum-flow problem was described, but the
@@ -149,8 +166,6 @@ commodity $h$ to traverse arc $(i,j)$ denoted as $c_{i,j}^{h}$. A supplier of
 commodity $h$ has a certain supply capacity $s_i^h$ which cannot be surpassed
 and demanders of commodity $h$ have a certain demand level which must be met,
 $d_i^h$.
-
-%% include picture
 
 In the simplest extension from the single-commodity to multi-commodity
 transportation problem, arc constraints for all commodities are combined, i.e.,
