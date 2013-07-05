@@ -1,0 +1,120 @@
+Another application of linear programming involves approximating solutions to
+linear systems of equations in the form of Equation \ref{eqs:lin-sys}.
+
+\begin{equation}\label{eqs:lin-sys}
+A x = b
+\end{equation}
+
+$A$ is an $m x n$-dimensional constraint matrix that can
+be \textit{overdetermined}, i.e., include more constraints than decision
+variables. Given some approximation of the solution, $\tilde{x}$, one can define
+the residual, $r$, associated with that approximation.
+
+\begin{equation}\label{eqs:lin-sys}
+A \tilde{x} - b = r
+\end{equation}
+
+One can then formulate an optimization problem that seeks to minimize the
+$\ell_p$-norm of the residual vector, $r$. The literature treats three types of
+norms, $\ell_1$, $\ell_2$, and $\ell_\infty$, where each can be defined as
+follows.
+
+\begin{equation}
+\ell_1 (r) = \| r \|_1 = \sum_{i = 1}^{m} | r_i |
+\end{equation}
+
+\begin{equation}
+\ell_2 (r) = \| r \|_2 = \sqrt{ \sum_{i = 1}^{m} | r_i |^2 }
+\end{equation}
+
+\begin{equation}
+\ell_\infty (r) = \| r \|_\infty = \max_{i} | r_i |
+\end{equation}
+
+The linear programming formulation takes as its minimizing function the
+residual, for which individual $x_i$ values form the decision
+variables. Accordingly, each $\ell_p$ norm formulation is slightly
+different. 
+
+The $\ell_\infty$ norm utilizes a maximum-violation variable $\epsilon$, as shown
+in Equation \ref{eqs:l-inf}.
+
+%%% 
+\begin{subequations}\label{eqs:l-inf}
+  \begin{align}
+    %%
+    \min \:\: & 
+    \epsilon  \\
+    %%
+    \text{s.t.} \:\: &
+    - \epsilon \leq A_i x - b_i
+    & \forall i \\
+    %%
+    &
+    \epsilon \geq A_i x - b_i
+    & \forall i \\
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+The $\ell_1$ norm uses a summation over all violations, as shown in
+Equation \ref{eqs:l-1}, by using a proxy vector, $y$.
+
+%%% 
+\begin{subequations}\label{eqs:l-1}
+  \begin{align}
+    %%
+    \min \:\: & 
+    \sum_i y
+    & \\
+    %%
+    \text{s.t.} \:\: &
+    - y_i \leq A_i x - b_i
+    & \forall i \\
+    %%
+    &
+    y_i \geq A_i x - b_i
+    & \forall i \\
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+The core difference between the two formulations is of course the norm used. The
+$\ell_1$ norm in this case stores more information about the total violation,
+whereas the $\ell_\infty$ norm is concerned with only the largest violating
+constraint. These formulations are easily solved by the Simplex Method, as a
+starting vertex can always be chosen by setting $x = 0$.
+
+The $\ell_2$ norm is not as straightforward to solve. As shown
+in \ref{ferris_linear_2008}, the actual norm can be replaced by its square,
+because it is uniformly nonnegative. The resulting optimization problem is shown
+in Equation \ref{eqs:l-2}.
+
+%%% 
+\begin{subequations}\label{eqs:l-2}
+  \begin{align}
+    %%
+    \min \:\: & 
+    y^\top y
+    & \\
+    %%
+    \text{s.t.} \:\: &
+    - y_i \leq A_i x - b_i
+    & \forall i \\
+    %%
+    &
+    y_i \geq A_i x - b_i
+    & \forall i \\
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+As can be seen in its formulation in Equation \ref{eqs:l-2}, the objective
+function is not a linear function of the decision variables. Accordingly, one
+must tackle this problem using a different domain of mathematical programming,
+namely \textit{quadratic programming}, the discussion of which is outside the
+scope of this review due to the lack of its necessity to adequately solve the
+Recipe Approximation Problem described in \S\ref{sec:rap}.
