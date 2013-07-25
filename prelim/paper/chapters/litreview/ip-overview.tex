@@ -344,9 +344,9 @@ $y'$, one produces the following new spaces.
 
 \begin{equation}
 \begin{split}
-& S_1 = S \cap {y: y_i \leq \lfloor y_i' \rfloor}
+& S_1 = S \cap \{y: y_i \leq \lfloor y_i' \rfloor\}
 \\
-& S_2 = S \cap {y: y_i \geq \lceil y_i' \rceil}
+& S_2 = S \cap \{y: y_i \geq \lceil y_i' \rceil\}
 \end{split}
 \end{equation}
 
@@ -404,8 +404,23 @@ The resulting values are shown in Figure \ref{fig:branch}.
 \end{figure}
 
 One could continue in this manner, branching on subsequent variables and
-enumerating all possible solutions, to eventually reach the solution of $y = (1,
-1, 0)$. However, so far we have ignored pruning, the act of terminating a branch
-of the search tree, knowing that no further useful information can be gained
-from its investigation. Pruning provides the ``bounding'' aspect of the Branch
-and Bound algorithm.
+enumerating all possible solutions, to eventually reach the optimal solution of
+$y^* = (1, 1, 0)$. However, so far we have ignored pruning, the act of
+terminating a branch of the search tree, knowing that no further useful
+information can be gained from its investigation. Pruning provides the
+``bounding'' aspect of the Branch and Bound algorithm.
+
+At any point in the process of the BNB algorithm, there is a known global upper
+bound to the optimal solution and lower bound to the optimal
+solution. Accordingly, a branch of the enumeration search tree can be pruned in
+three instances:
+
+\begin{enumerate}
+        \item The subproblem is optimal, given its subspace of the feasible
+        option space.
+        \item The subproblem has a known upper bound that is lower
+        than the global lower bound or the subproblem has a known lower bound
+        that is larger than the global upper bound.
+        \item The subproblem is infeasible.
+\end{enumerate}
+
