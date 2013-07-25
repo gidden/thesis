@@ -350,9 +350,9 @@ $y'$, one produces the following new spaces.
 \end{split}
 \end{equation}
 
-Arbitrarily, for this example case, one could choose to branch on $y_2$. The
-resulting relaxations are shown as Equation \ref{eqs:y2-0} for $y_2 = 0$ and
-Equation \ref{eqs:y2-1} for $y_2 = 1$.
+Arbitrarily, for this example case, one could choose to branch on
+$y_2$. The resulting relaxations are shown as Equation \ref{eqs:y2-0} for $y_2 =
+0$ and Equation \ref{eqs:y2-1} for $y_2 = 1$.
 
 %%% 
 \begin{subequations}\label{eqs:y2-0}
@@ -392,7 +392,11 @@ Equation \ref{eqs:y2-1} for $y_2 = 1$.
 \end{subequations}
 %%% 
 
-The resulting values are shown in Figure \ref{fig:branch}.
+Each of these new subproblems become \textit{active nodes} and are added to
+the \textit{active list}. Active nodes are subproblem nodes that have been
+recognized by the algorithm and the next subproblem to solve is chosen from the
+active list by some strategy. For this simple case, both subproblems are solved
+and the resulting values are shown in Figure \ref{fig:branch}.
 
 \begin{figure}[H]
   \begin{center}
@@ -411,7 +415,7 @@ information can be gained from its investigation. Pruning provides the
 ``bounding'' aspect of the Branch and Bound algorithm.
 
 At any point in the process of the BNB algorithm, there is a known global upper
-bound to the optimal solution and lower bound to the optimal
+bound, $U$, to the optimal solution and lower bound, $L$, to the optimal
 solution. Accordingly, a branch of the enumeration search tree can be pruned in
 three instances:
 
@@ -424,3 +428,88 @@ three instances:
         \item The subproblem is infeasible.
 \end{enumerate}
 
+With the above background, the actual BNB algorithm can be presented.
+\\
+\begin{algorithm}[H]
+ \SetAlgoLined
+ \KwData{Decision variables, an objective function, and a set of constraints.}
+ \KwResult{Optimal values for the decision variables or a flag denoting 
+   infeasibility or unboundedness.}
+ Perform any \emph{preprocessing operations}\;
+ Derive a lower bound, $L$, via a \emph{heuristic}\;
+ Place original problem on the active list\;
+ \While{The active list is \textit{not} empty}{
+       Use a \emph{strategy} to select a candidate node ($S$) from the active 
+       list\;
+       Solve the LP relaxation to get an upper bound for the candidate, $U(S)$\;
+       \If{$U(S) > U$}{$U \leftarrow U(S)$\;}
+       \If{$S$ is infeasible}{
+           prune the branch\;
+       }
+       \ElseIf{$U(S) > L$}{
+           $L \leftarrow U(S)$\;
+       }
+       \ElseIf{$U(S) < L$}{
+           prune the branch\;
+       }
+       \Else{
+           branch on $S$\;
+           add new subproblems to the active list\;
+       }           
+       Remove $S$ from the active list\;
+ }
+ \caption{The Branch and Bound Algorithm}
+\end{algorithm}
+
+There are three ways to assist, or speed up, the Branch and Bound algorithm as
+highlighted above:
+\begin{enumerate}
+        \item Preprocessing
+        \item Lower-bound heuristics
+        \item Node selection strategies
+\end{enumerate}
+
+Preprocessing is a step provided by many solvers. It generally involves an
+investigation of the problem instance in order to minimize future
+work. Preprocessing can affect solution bounds by tightening bounds or providing
+cutoffs to the solver (i.e., preformed feasible solutions). It can speed up the
+internal Simplex Method processing by informing the solver as to good simplex
+pricing strategies. The feasible solution space can also be reduced by finding
+redundant constraints and providing cutting planes, as discussed in the previous
+section. Finally, the preprocessing step can \textit{a priori} fix certain
+decision variables. The variable fixing algorithm is straightforward.
+
+\begin{algorithm}[H]
+ \SetAlgoLined
+ \KwData{An constraint matrix, $A$, objective coefficients, $c$, and decision 
+ variables $x$ with decision variable lower bounds, $l$, and upper bounds 
+ $u$.}
+ \KwResult{A (possibly empty) set of fixed variables.}
+ \ForEach{decision variable, $x_j$,}{
+   \If{$a_{i,j} \geq 0 \;\; \forall \;\; i$ {\emph{and}} $c_j < 0$}{
+     $x_j \leftarrow l_j$\;
+   }
+   \ElseIf{$a_{i,j} \leq 0 \;\; \forall \;\; i$ {\emph{and}} $c_j > 0$}{
+     $x_j \leftarrow u_j$\;
+   }       
+ }  
+ \caption{The Variable Fixing Algorithm for a Maximization Objective Function}
+\end{algorithm}
+
+A variety of lower-bound heuristics exist. Some of the most popular involve
+solving heavily restricted versions of the original problem or diving down the
+enumeration tree, rounding fractional integer values. There are also
+problem-specific heuristics that depend on well-known problem structures.
+
+Finally, there exist nominally three well-used node selection strategies. The
+first is called the \textit{Best Node Search} (BNS) which chooses the next best
+node in the active list based based on the node's upper bound. This requires
+large movement around the search tree, effectively solving dissimilar
+relaxations. The second is the well-known \textit{Depth First Search} (DFS). A
+DFS for an IP-enumeration tree is beneficial because subsequent relaxations are
+related, which allows for \textit{warm start} of the LP relaxations. Warm starts
+allow subsequent relaxations to be solved quickly because good approximations to
+the optimal solution can be provided. The final strategy is a \textit{BNS-DFS
+hybrid}. The hybrid strategy involves estimating an optimal value, performing a
+DFS until the relaxation's optimal value is below that of the estimation, and
+then choosing the next-best node to continue.
