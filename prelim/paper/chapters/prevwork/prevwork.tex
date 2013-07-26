@@ -12,14 +12,27 @@ files. Basic simulation setup and execution has been revised to provide clear
 phases of intialization. Tools have also been added to provide agent-based
 management of building and instatiation of child agents, i.e., facilities in the
 \Cyclus simulation. A (currently) separate library, named \Cyclopts, has been
-developed to provide an interface to optimization solvers which supports
-COIN-OR's linear and integer program solvers. Management of the actual building
-(instantiation) of facilities within the simulation framework has been
-encapsulated in a supplier/manager class pair.
+developed to provide an interface to optimization solvers which currently
+supports COIN-OR's linear and integer program solvers. Management of the actual
+building (instantiation) of facilities within the simulation framework has been
+encapsulated in a supplier/manager class pair. Finally, additional support has
+been added specifically regarding to model enrichment-related calculations,
+allowing for enrichment facilities to be developed in \Cycamore.
 
-Additonal support has been added specifically regarding to model
-enrichment-related calculations, allowing for enrichment facilities to be
-developed in \Cycamore. 
+The combination of the above enhancements, in addition to developing an
+enrichment and batch-based reactor facility models, as well as a managerial
+institution model and demand-based region model, resulted in a \Cyclus
+once-through fuel cycle simulation. In order to benchmark the basic simulation
+infrastructure, the INPRO \cite{_international_2009} once-through benchmark was
+used and compared with results from the VISION \cite{yacout_vision_2006}
+code. Output closely matched for both reactor growth, gross material flows, and
+SWUs utilized. Discrepencies were seen for the amount of natural uranium
+utilized. The exercise of developing an input file for the the benchmark
+specification was tedious due to the lack of published specifications. After a
+review of other benchmarks, this was shown to be a common problem in addition to
+a general lack fully specifying benchmark scenarios. Accordingly, a new
+specification language was proposed and implemented, and a translation package
+was implemented in order to translate that input into a \Cyclus input file.
 
 \section{\Cyclus To Date}
 
