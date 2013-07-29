@@ -3,14 +3,14 @@
 The previous work I've completed has focused primarily on efforts to run and
 benchmark simple, once-through fuel cycle simulations with \Cyclus. Supporting
 this effort has required not only additions to the \Cyclus code base to model
-enrichment and reactor facilities, but also to the peripherial (i.e., linking
+enrichment and reactor facilities, but also to the peripheral (i.e., linking
 and input/output) and simulation-related infrastructure.
 
-Signifigant, strategic improvements have been added to the \Cyclus code base
-regarding interactions with dynamically-loadable libraries and reading xml-input
+Significant, strategic improvements have been added to the \Cyclus code base
+regarding interactions with dynamically-loadable libraries and reading XML-input
 files. Basic simulation setup and execution has been revised to provide clear
-phases of intialization. Tools have also been added to provide agent-based
-management of building and instatiation of child agents, i.e., facilities in the
+phases of initialization. Tools have also been added to provide agent-based
+management of building and instantiation of child agents, i.e., facilities in the
 \Cyclus simulation. A (currently) separate library, named \Cyclopts, has been
 developed to provide an interface to optimization solvers which currently
 supports COIN-OR's linear and integer program solvers
@@ -27,7 +27,7 @@ once-through fuel cycle simulation. In order to benchmark the basic simulation
 infrastructure, the INPRO \cite{_international_2009} once-through benchmark was
 used and compared with results from the VISION \cite{yacout_vision_2006}
 code. Output closely matched for both reactor growth, gross material flows, and
-SWUs utilized. Discrepencies were seen for the amount of natural uranium
+SWUs utilized. Discrepancies were seen for the amount of natural uranium
 utilized. The exercise of developing an input file for the the benchmark
 specification was tedious due to the lack of published specifications. After a
 review of other benchmarks, this was shown to be a common problem in addition to
@@ -69,8 +69,8 @@ specific handler class designed for this purpose.
 \subsection{Input Reading}
 
 A large overhaul to the input-reading code base was performed. \Cyclus currently
-only supports xml input files that adhere to the RNG schema defined in \Cyclus
-rng file. However, it is a well-known best practice to provide an agnostic
+only supports XML input files that adhere to the RNG schema defined in \Cyclus
+RNG file. However, it is a well-known best practice to provide an agnostic
 application programming interface (API) that can be configured with specific
 instances given some user-defined input. Accordingly, such an API was
 constructed which currently supports XML input but can also support future input
@@ -85,7 +85,7 @@ root. The client code then populates input parameters through the QueryEngine
 interface rather than an input-format specific interface.
 
 Support for XML-file reading has been enhanced by separating various concerns
-into approriate classes. Four classes have been constructed with specific
+into appropriate classes. Four classes have been constructed with specific
 purposes regarding input file reading: file loading (XMLFileLoader), file
 validation (RelaxNGValidator), file parsing (XMLParser), and querying
 (XMLQueryEngine). The application interfaces with the file loader, initializing
@@ -97,12 +97,12 @@ XMLQueryEngines. The parser is responsible for providing an interface to the
 underlying C++ XML parsing library (currently libxml++ is used) and invoking the
 appropriate validation routines on the parsed file. The validator is responsible
 for providing access to the RNG-validation operations through, currently, libxml
-and libxml++. Finally, the xml-specific derived QueryEngine class is responsible
+and libxml++. Finally, the XML-specific derived QueryEngine class is responsible
 for implementing XML-specific querying using the generic QueryEngine interface.
 
-Other input file formats can be supported by providing the approriate
+Other input file formats can be supported by providing the appropriate
 format-specific derived QueryEngine class and adjusting the application code as
-neccessary. To developer could then choose how to implement the loading and
+necessary. To developer could then choose how to implement the loading and
 validation, if any, of the input file. The above structure is just one of many
 ways to achieve such a goal.
 
