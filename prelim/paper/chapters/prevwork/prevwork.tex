@@ -108,10 +108,27 @@ ways to achieve such a goal.
 
 \subsection{Enrichment Tools}\label{sec:prev-enrich}
 
+The ability to calculate enrichment-related values is required to provide
+important metrics for the simplest of fuel cycle simulations. Enrichment is the
+process of artificially increasing the relative amount of Uranium-235 in a given
+sample of Uranium. Naturally, Uranium contains approximately 0.72\% U-235, a
+small amount (~0.005\%) U-234, and 99.274\% U-238. In light-water reactors
+(LWRs), fissile U-235 is the primary fission fuel source, and thus reactors run
+longer with higher amounts of U-235. Accordingly, reactor fuels are enriched to
+~3-6\% U-235. It should be noted that enrichment of Uranium above 20\% is
+restricted by international law due to its capacity to be used as a weapon in
+high concentrations. In practice, however, Uranium-based nuclear weapons
+generally have enrichments of greater than 90\%.
 
-\begin{equation}\label{eqs:enr-value}
-  V(x) = (1 - 2x) \ln \left( \frac{1-x}{x} \right)
-\end{equation}
+The enrichment process has one input, or feed, stream (usually natural Uranium)
+and two output streams, the product and the excess Uranium, called tails. The
+U-235 abundance, or assay of each of these streams as well as the mass of each stream
+determines how much work is required to perform the enrichment, where
+enrichment-work is calculated using Separative Work Units (SWUs). The feed,
+product, and tails stream mass and assay values are related. Equation
+\ref{eqs:enr-feed} shows the relation between product and feed masses, and
+Equation \ref{eqs:enr-tails} shows the relation between product and tails
+masses. 
 
 \begin{equation}\label{eqs:enr-feed}
   F = P \frac{x_{p} - x_{t}}{x_{f} - x_{t}}
@@ -121,14 +138,46 @@ ways to achieve such a goal.
   T = P \frac{x_{p} - x_{f}}{x_{f} - x_{t}}
 \end{equation}
 
+Note that both equations depend on the U-235 assay ($x_i$s) of each
+stream. Furthermore, given the assay of each stream, one needs to either set
+the product or feed value (in the case of Equation \ref{eqs:enr-feed}) and the
+product or tails value (in the case of Equation \ref{eqs:enr-tails}). In
+practice, the feed and tail assays are set and an order for some quantity of
+enriched product is requested. The resulting required feed and tail masses are
+then calculated.
+
+Enrichment plants measure their production in SWUs due to the quality
+(enrichment level) variation of their product from order to order. The amount of
+SWUs required to enrich a quantity of Uranium to a certain assay is a
+function of all of the aforementioned variables (assays and masses of the
+feed, product, and tails streams). The SWU calculation is shown in Equation
+\ref{eqs:enr-swu}, where $V(x)$ is the Value Funtion defined in Equation
+\ref{eqs:enr-value}.
+
 \begin{equation}\label{eqs:enr-swu}
-  SWU = P V(x_{p}) + T V(x_{t}) - F V(x_{f})
+  SWU = P \; V(x_{p}) + T \; V(x_{t}) - F \; V(x_{f})
 \end{equation}
+
+\begin{equation}\label{eqs:enr-value}
+  V(x) = (1 - 2x) \ln \left( \frac{1-x}{x} \right)
+\end{equation}
+
+Combining Equations \ref{eqs:enr-feed}, \ref{eqs:enr-tails}, and
+\ref{eqs:enr-swu}, one can represent the SWU calculation as a function only of
+the product mass and feed, product, and feed stream assays as shown in
+Equation \ref{eqs:enr-swu-p}.
 
 \begin{equation}\label{eqs:enr-swu-p}
   SWU = P \left( V(x_{p}) + \frac{x_{p} - x_{f}}{x_{f} - x_{t}} V(x_{t}) 
         - \frac{x_{p} - x_{t}}{x_{f} - x_{t}} V(x_{f}) \right)
 \end{equation}
+
+An Enrichment class was added to the \Cyclus set of utility toolkits under the
+enrichment namespace. A simple Assay container class was also added, and is used
+as the argument to many of the above calculations. The Enrichment toolkit allows
+for the calculation of each of the abovementioned values and is used primarily
+in the EnrichmentFacility that was added to \Cycamore to run the once-through
+fuel cycle benchmarks.
 
 \subsection{Supply/Demand Tools}
 
