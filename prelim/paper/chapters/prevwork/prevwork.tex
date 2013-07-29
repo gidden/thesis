@@ -68,6 +68,44 @@ specific handler class designed for this purpose.
 
 \subsection{Input Reading}
 
+A large overhaul to the input-reading code base was performed. \Cyclus currently
+only supports xml input files that adhere to the RNG schema defined in \Cyclus
+rng file. However, it is a well-known best practice to provide an agnostic
+application programming interface (API) that can be configured with specific
+instances given some user-defined input. Accordingly, such an API was
+constructed which currently supports XML input but can also support future input
+types that are tree-based (e.g., JSON, CSV, etc.).
+
+The top-level abstraction is encased in a QueryEngine class. Basic operations
+are provided assuming a tree-based input formation, including querying the
+number of child elements at the current reading level, the name of each element,
+and access to each element. The application code is responsible for configuring
+the appropriate input parser and populating an instance of a QueryEngine at its
+root. The client code then populates input parameters through the QueryEngine
+interface rather than an input-format specific interface.
+
+Support for XML-file reading has been enhanced by separating various concerns
+into approriate classes. Four classes have been constructed with specific
+purposes regarding input file reading: file loading (XMLFileLoader), file
+validation (RelaxNGValidator), file parsing (XMLParser), and querying
+(XMLQueryEngine). The application interfaces with the file loader, initializing
+it with a given input file path and then invoking the loading of various
+\Cyclus-specific parameters (e.g., simulation control parameters, material
+recipes, agent modules, etc.). The loader is responsible for managing its parser
+and providing client code with correctly-configured instances of
+XMLQueryEngines. The parser is responsible for providing an interface to the
+underlying C++ XML parsing library (currently libxml++ is used) and invoking the
+appropriate validation routines on the parsed file. The validator is responsible
+for providing access to the RNG-validation operations through, currently, libxml
+and libxml++. Finally, the xml-specific derived QueryEngine class is responsible
+for implementing XML-specific querying using the generic QueryEngine interface.
+
+Other input file formats can be supported by providing the approriate
+format-specific derived QueryEngine class and adjusting the application code as
+neccessary. To developer could then choose how to implement the loading and
+validation, if any, of the input file. The above structure is just one of many
+ways to achieve such a goal.
+
 \subsection{Enrichment Tools}\label{sec:prev-enrich}
 
 
