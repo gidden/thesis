@@ -39,6 +39,33 @@ was implemented in order to translate that input into a \Cyclus input file.
 
 \subsection{Dynamic Loading}\label{sec:prev-dynamic}
 
+Libraries can be accessed in a static manner, i.e., they are connected to an
+application during the linkage phase, or can be accessed in a dynamic manner,
+i.e., they are connected at run time. Dynamic linkage, or dynamic loading, is a
+well-known technique for to support connectable, modular components, or
+plug-ins. \Cyclus utilizes a plug-in approach for its facility, institution, and
+region agents. This design decision furthers the \Cyclus development goal of
+providing an agnostic framework into which sophisticated users can develop
+different models of agents to investigate a certain simulation-modeling change.
+
+Work was performed in order to use class-based representation of dynamic
+libraries, allowing for easy opening, closing, and access thereof. Each dynamic
+library represents an agent type in \Cyclus, providing a constructor and
+destructor. The DynamicModule class then provides the \Cyclus Core access to
+these constructors and destructors to perform the appropriate operations at run
+time. Because dynamic loading is treated differently on POSIX-based systems than
+it is on Windows-based systems, specialty functions for library access were
+provided for each system. The correct header file (UnixHelperFunctions.h or
+WindowsHelperFunctions.h) is chosen during compilation. 
+
+These changes simplified the client code that utilizes library access. The
+\Cyclus Core application can now call appropriate library-related functions in
+an agnostic manner. Specific, well-defined time points of module loading
+(dynamic library opening) and unloading (dynamic library closing) were defined
+in the \Cyclus application. These operations, called by the application,
+currently reside in the Model class and could likely be refactored into a
+specific handler class designed for this purpose.
+
 \subsection{Input Reading}
 
 \subsection{Enrichment Tools}\label{sec:prev-enrich}
