@@ -179,6 +179,15 @@ for the calculation of each of the abovementioned values and is used primarily
 in the EnrichmentFacility that was added to \Cycamore to run the once-through
 fuel cycle benchmarks.
 
+\subsection{Facility Building Infrastructure}
+
+Two main additions were made to the infrastructure related to building
+facilities. The primary infrastructure change is the new usage of the Prototype
+design pattern \cite{vlissides_design_1995} to govern how new instances of
+facilities of a given agent-type are instantiated. A mixin class
+\cite{ulrich_mixin-based_2001} (Builder) was also designed to provide an
+interface for building new prototypes.
+
 \subsection{Supply/Demand Tools}
 
 \subsection{\Cyclopts}
