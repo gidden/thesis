@@ -341,20 +341,50 @@ implementation of this thesis.
 As with any code base, validation and verification (V \& V) exercises are
 critical to have confidence in the answers provided by the code. Fuel cycle
 simulators are an interesting V\&V case in that they model proposed future cases
-of nuclear fuel cycles, effectively predicting 
+of nuclear fuel cycles, rather than modeling physical systems that can, in some
+part, be precisely experimentally-verifiable. Accordingly, predefined scenarios
+are generally used to compare different codes to determine relative differences
+between them. A number of benchmarking efforts exist with varying degrees of
+documentation, one of which is the INPRO benchmark - the target of a comparison
+between \Cyclus and VISION for once-through fuel cycle cases. During this
+exercise and in conjunction with investigating expanding the benchmark scope, a
+potential deficiency was discovered. Very rarely do benchmarks describe in
+single location a concise summary of the parameters used therein. In some cases,
+parameters are missing, and in others they are simply no provided to the
+public. Accordingly, a new process for forming and disseminating benchmarks was
+proposed and a proof-of-principle example was developed.
 
-blah blah revisit.
-
-\subsection{VISION Once-Through}
+\subsection{Benchmarks of Once-Through Fuel Cycles vs. VISION}
 
 The \Cyclus core and \Cycamore modules were used to conduct a benchmark
 comparison with VISION, a fuel cycle code developed in PowerSim and Excel by the
-Idaho National Laboratory. A single case was compared, 
+Idaho National Laboratory. A single case was compared, the INPRO GAINS
+\cite{_international_2009} once-through fuel cycle case. The specific reactor
+and fuel parameters were communicated to the research group by personal email of
+one of the participants at the IAEA \cite{dixon_re:_2009}.
 
-blah blah revisit.
+% growth
+\begin{figure}[ht]
+  \includegraphics[width=\linewidth]{./chapters/prevwork/graphs/inpro-demand.png}
+  \caption{Electricity demand in each INPRO demand case.}
+  \label{fig:inpro-demand}
+\end{figure}
+
+The benchmark specified two growth scenarios, moderate and high, as shown in
+Figure \ref{fig:inpro-demand}. Electricity growth was to be met mostly by PWR
+reactors (94\%) with the remaining amount being met by HWR reactors (6\%). The
+major metrics submitted for comparison in the INPRO GAINS work were deployment
+curves and gross material flows. VISION also has the ability to output many
+other metrics, of which enrichment-related parameters, i.e. natural uranium
+usage and SWU consumption, were compared in this case.
+
+Reactor deployment curves are shown in Figure \ref{fig:rxtrs}. General agreement
+is met between the two codes, with a slight difference occuring in how the first
+time step is handled with regard to output recording between the two. There is
+no difference from a system dynamics or simulation mechanics point of view. 
 
 % reactors
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \subfloat[Low Case]{%
     \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/rxtrs_low.png}
@@ -367,8 +397,18 @@ blah blah revisit.
 \label{fig:rxtrs}
 \end{figure}
 
+VISION outputs fuel mass flow curves on a cumulative basis, i.e., a report for
+some time t includes the flows occuring at time t plus all flows occuring at
+previous times. Accordingly, a slight discrepency, occuring at each time period,
+compounds the error as time increases using such a metric. This phenomenon is
+seen in Figure \ref{fig:used_fuel} with respect to the material flow of used
+fuel out of reactors. A hand calculation of the flow for the first year time
+step confirmed that the \Cyclus results were correct given the parameters
+provided. The small difference, consistent between moderate and high scenarios,
+becomes compounded with time. 
+
 % used fuel
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \subfloat[Low Case]{%
     \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/used_fuel_low.png}
@@ -381,8 +421,23 @@ blah blah revisit.
 \label{fig:used_fuel}
 \end{figure}
 
+VISION provides two enrichment-specific parameters as output metrics: cumulative
+natural uranium used each year and cumulative SWUs consumed each year. Each of
+these was compared for both demand scenarios. The results of the natural uranium
+consumption comparison is shown in Figure \ref{fig:nat_u}, showing quite good
+comparisons between the two codes in this regard. There exists a small
+discrepency related to the first time period phase shift with respect to
+reporting differences between the two codes, as was also seen in Figure
+\ref{fig:rxtrs}. The results comparing SWU values shown in Figure \ref{fig:swu}
+are markedly different. It is not clear why VISION reports such a dramatically
+different set of values, given that the amount of SWUs is directly related to
+the amount of natural uranium used and the amount of fuel produced, two metrics
+already shown to be quite close. Because SWU usage is an analytical calculation
+given fuel input and output requirements, the \Cyclus values were checked by
+hand for the first time steps and shown to be in accordance with expectations.
+
 % nat u
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \subfloat[Low Case]{%
     \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/nat_u_low.png}
@@ -396,7 +451,7 @@ blah blah revisit.
 \end{figure}
 
 % swu
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
   \subfloat[Low Case]{%
     \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/swu_low.png}
@@ -408,6 +463,12 @@ blah blah revisit.
 \caption{SWU usage in each INPRO demand case.}
 \label{fig:swu}
 \end{figure}
+
+VISION and \Cyclus mostly agree with each other regarding the core output
+metrics of reactor deployment and used fuel production in this simple
+case. Significant questions remain regarding the difference in SWU consumption,
+which can be addressed with the VISION team if further development of VISION is
+pursued.
 
 \subsection{Benchmark Specification Language}
 
