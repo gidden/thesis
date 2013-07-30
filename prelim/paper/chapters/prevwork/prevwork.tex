@@ -353,44 +353,61 @@ Idaho National Laboratory. A single case was compared,
 
 blah blah revisit.
 
-\begin{figure}
-  \begin{center}
-    \horizfig
-    []
-    {%
-      \label{fig:rxtrs_low}
-      \includegraphics[width=.38\linewidth]{./chapters/prevwork/graphs/rxtrs_low.png}
-    }
-    \hfill
-    \horizfig
-    []
-    {
-      \label{fig:rxtrs_high}
-      \includegraphics[width=.38\linewidth]{./chapters/prevwork/graphs/rxtrs_high.png}
-    }
-  \end{center}
-  \caption{Reactors built in each INPRO demand case.}
-  \label{fig:rxtrs}
+% reactors
+\begin{figure}[H]
+  \centering
+  \subfloat[Low Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/rxtrs_low.png}
+    \label{fig:rxtrs_low}}
+  \quad
+  \subfloat[High Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/rxtrs_high.png}
+    \label{fig:rxtrs_high}}
+\caption{Reactors built in each INPRO demand case.}
+\label{fig:rxtrs}
 \end{figure}
 
-% \begin{figure}
-% \begin{center}
-% \begin{subfigure}{.5\textwidth}
-%   \centering
-%   \includegraphics[width=.4\linewidth]{./chapters/prevwork/graphs/rxtrs_low.png}
-%   \caption{Reactors built due to the ``low'' demand case.}
-%   \label{fig:rxtrs_low}
-% \end{subfigure}
-% \begin{subfigure}{.5\textwidth}
-%   \centering
-%   \includegraphics[width=.4\linewidth]{./chapters/prevwork/graphs/rxtrs_high.png}
-%   \caption{Reactors built due to the ``high'' demand case.}
-%   \label{fig:rxtrs_high}
-% \end{subfigure}
-% \end{center}
-% \caption{Reactors built in each INPRO demand case.}
-% \label{fig:rxtrs}
-% \end{figure}
+% used fuel
+\begin{figure}[H]
+  \centering
+  \subfloat[Low Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/used_fuel_low.png}
+    \label{fig:used_fuel_low}}
+  \quad
+  \subfloat[High Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/used_fuel_high.png}
+    \label{fig:used_fuel_high}}
+\caption{Used fuel exiting reactors in each INPRO demand case.}
+\label{fig:used_fuel}
+\end{figure}
+
+% nat u
+\begin{figure}[H]
+  \centering
+  \subfloat[Low Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/nat_u_low.png}
+    \label{fig:nat_u_low}}
+  \quad
+  \subfloat[High Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/nat_u_high.png}
+    \label{fig:nat_u_high}}
+\caption{Natural uranium usage in each INPRO demand case.}
+\label{fig:nat_u}
+\end{figure}
+
+% swu
+\begin{figure}[H]
+  \centering
+  \subfloat[Low Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/swu_low.png}
+    \label{fig:swu_low}}
+  \quad
+  \subfloat[High Case]{%
+    \includegraphics[width=.45\linewidth]{./chapters/prevwork/graphs/swu_high.png}
+    \label{fig:swu_high}}
+\caption{SWU usage in each INPRO demand case.}
+\label{fig:swu}
+\end{figure}
 
 \subsection{Benchmark Specification Language}
 
