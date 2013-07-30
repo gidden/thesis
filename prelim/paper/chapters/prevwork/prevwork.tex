@@ -185,7 +185,7 @@ In order to support simple, once-through fuel cycle simulations, a nominal
 capacity supply-demand interaction capability was needed. The use case of such a
 system is to define demand for a given installed capacity, say in gigawatts of
 produced power. Agents in a \Cyclus simulation generally have a natural
-lifecycle, leaving the simulation at the end of their lifetimes. The system must
+life cycle, leaving the simulation at the end of their lifetimes. The system must
 be able to respond to changes in installed capacities if it is to continue to
 meet the simulated demand curves.
 
@@ -193,12 +193,12 @@ meet the simulated demand curves.
 After reviewing the prior status of the code base and the way in which
 Facilities were being defined and instantiated, I noted that there was not a
 well-formed entry or exit point for facilities in the simulation
-infrastructure. Accordingly, I updated the methodlogy behind such operations to
+infrastructure. Accordingly, I updated the methodology behind such operations to
 use the Prototype design pattern \cite{vlissides_design_1995}. A prototype is a
 creational pattern that keeps a prototypical instance of an object
 available. When a new instance is required, a copy of this prototypical instance
 is made and returned. This strategy fit naturally with the \Cyclus input format
-and code base. Nominal paramters defining ``classes'' of facilities, e.g. a
+and code base. Nominal parameters defining ``classes'' of facilities, e.g. a
 certain type of reactor or supporting facility, are listed in XML input
 files. The code base has been updated to create prototypical instances of each
 facility defined in the input file during a simulation initialization step. When
@@ -207,19 +207,19 @@ is introduced.
 
 \subsubsection{Symbolic Functions}
 
-The ability to represent symbolic functions was added to the \Cyclus Utiliy
+The ability to represent symbolic functions was added to the \Cyclus Utility
 toolkit. Functions are represented by a base Function class providing an
-appropriate API. Linear, exponential, and piecewise function classes are
-supported, where piecewise functions can utilize both linear and exponential
-piecewise functions. Factory classes are provided to take a string of parameters
+appropriate API. Linear, exponential, and piece-wise function classes are
+supported, where piece-wise functions can utilize both linear and exponential
+piece-wise functions. Factory classes are provided to take a string of parameters
 as read from an input file and return the appropriate symbolic function. A
-simple example of the piecewise function support is provided in Figure
+simple example of the piece-wise function support is provided in Figure
 \ref{fig:piecewise}.
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics[width=\linewidth]{./chapters/prevwork/piecewise.png}
-  \caption{An example of a piecewise function represented using the updated API.}
+  \caption{An example of a piece-wise function represented using the updated API.}
   \label{fig:piecewise}
   \end{center}
 \end{figure}
@@ -251,7 +251,7 @@ power). This manager class is a use of the classic Observer design pattern
 
 Three concerns remain in order to implement an appropriate model of responses to
 changing supply capacity and demand for capacity. First, the current supply and
-demand levels must be queryable. Second, if demand is greater than supply, some
+demand levels must be query-able. Second, if demand is greater than supply, some
 new simulation entity must be built or introduced into the simulation. Third, a
 decision must be made as to which entities should be built to meet a demand gap
 if it exists.
@@ -379,7 +379,7 @@ other metrics, of which enrichment-related parameters, i.e. natural uranium
 usage and SWU consumption, were compared in this case.
 
 Reactor deployment curves are shown in Figure \ref{fig:rxtrs}. General agreement
-is met between the two codes, with a slight difference occuring in how the first
+is met between the two codes, with a slight difference occurring in how the first
 time step is handled with regard to output recording between the two. There is
 no difference from a system dynamics or simulation mechanics point of view. 
 
@@ -398,8 +398,8 @@ no difference from a system dynamics or simulation mechanics point of view.
 \end{figure}
 
 VISION outputs fuel mass flow curves on a cumulative basis, i.e., a report for
-some time t includes the flows occuring at time t plus all flows occuring at
-previous times. Accordingly, a slight discrepency, occuring at each time period,
+some time t includes the flows occurring at time t plus all flows occurring at
+previous times. Accordingly, a slight discrepancy, occurring at each time period,
 compounds the error as time increases using such a metric. This phenomenon is
 seen in Figure \ref{fig:used_fuel} with respect to the material flow of used
 fuel out of reactors. A hand calculation of the flow for the first year time
@@ -426,7 +426,7 @@ natural uranium used each year and cumulative SWUs consumed each year. Each of
 these was compared for both demand scenarios. The results of the natural uranium
 consumption comparison is shown in Figure \ref{fig:nat_u}, showing quite good
 comparisons between the two codes in this regard. There exists a small
-discrepency related to the first time period phase shift with respect to
+discrepancy related to the first time period phase shift with respect to
 reporting differences between the two codes, as was also seen in Figure
 \ref{fig:rxtrs}. The results comparing SWU values shown in Figure \ref{fig:swu}
 are markedly different. It is not clear why VISION reports such a dramatically
