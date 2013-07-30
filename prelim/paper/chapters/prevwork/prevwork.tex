@@ -190,9 +190,20 @@ be able to respond to changes in installed capacities if it is to continue to
 meet the simulated demand curves.
 
 \subsubsection{Facilities as Prototypes}
-The primary infrastructure change is the new usage of the Prototype
-design pattern \cite{vlissides_design_1995} to govern how new instances of
-facilities of a given agent-type are instantiated. TODO: finish.
+After reviewing the prior status of the code base and the way in which
+Facilities were being defined and instantiated, I noted that there was not a
+well-formed entry or exit point for facilities in the simulation
+infrastructure. Accordingly, I updated the methodlogy behind such operations to
+use the Prototype design pattern \cite{vlissides_design_1995}. A prototype is a
+creational pattern that keeps a prototypical instance of an object
+available. When a new instance is required, a copy of this prototypical instance
+is made and returned. This strategy fit naturally with the \Cyclus input format
+and code base. Nominal paramters defining ``classes'' of facilities, e.g. a
+certain type of reactor or supporting facility, are listed in XML input
+files. The code base has been updated to create prototypical instances of each
+facility defined in the input file during a simulation initialization step. When
+a new facility is required to be built in the simulation, a copy of a prototype
+is introduced.
 
 \subsubsection{Symbolic Functions}
 
