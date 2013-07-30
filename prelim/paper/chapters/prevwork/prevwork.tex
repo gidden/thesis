@@ -312,6 +312,30 @@ instances.
 
 \subsection{\Cyclopts}
 
+Proposed in this thesis and already implemented in the \Cyclus code base is a
+heavy usage of integer and linear programming. The domain of mathematical
+programming is well studied and many LP, IP, MILP solvers exist. The majority of
+solvers or codes supporting such solvers are closed source (e.g., BARON, CPLEX,
+Maple, MATLAB, etc.). Such programs are generally faster than their open source
+cousins, but are restrictive to use in implementation of an open source library
+like \Cyclus. Accordingly, there is a use case for providing an abstract
+interface for defining mathematical programs that can support concrete
+implementations based on the library used.
+
+\Cyclopts has been developed as a separate library to provide such an
+interface. Basic constructs such as variables, functions, and solvers are all
+represented as concrete classes. Different solver libraries are implemented by
+deriving from the base Solver class. An interface class is provided to connect
+abstract concepts required to define a problem instance with a concrete solver.
+
+Currently, COIN-OR's Coin-Branch-and-Cut (CBC) \cite{lougee_common_2003} solver
+is supported as a proof of principle. The \Cyclopts library is used by the
+BuilderManager class in \Cyclus to determine the solution of Equation
+\ref{eqs:build-decision}. Future development will include adding a full test
+suite to \Cyclopts and integrating it as a part of the \Cyclus core as
+additional use cases present themselves. Such cases will arise through the
+implementation of this thesis.
+
 \section{Benchmarking Efforts}\label{sec:prev-benchmark}
 
 \subsection{VISION Once-Through}
