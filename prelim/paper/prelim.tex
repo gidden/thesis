@@ -38,7 +38,7 @@
 \date{2013}
 
 %% lets speed up some compile time!
-%\includeonly{chapters/litreview/litreview}
+\includeonly{chapters/prevwork/prevwork}
 
 \begin{document}
 
@@ -61,6 +61,9 @@
 %% of Figures, umiabstract, abstract
 \include{frontmatter/frontmatter}
 
+%% only double spacing the actual chapters
+\begin{doublespace} 
+
 %% Now include the tex files for each chapter, like so (I put these in separate
 %% dirs):
 \include{chapters/intro/intro}
@@ -68,7 +71,8 @@
 \include{chapters/prevwork/prevwork}
 \include{chapters/research/research}
 
-%% etc, etc.
+\end{doublespace} 
+%% only double spacing the actual chapters
 
 %% Do you have appendices?  If so, add them here, just like chapters.
 % \begin{appendices}

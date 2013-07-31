@@ -72,16 +72,19 @@
 \usepackage{calc} % allows for arithmetic on latex variables
 \usepackage{float} % allows for figures to be placed explicitly
 \usepackage{algorithm2e} % for algorithms
-
+\usepackage{subfig}
 
 %% Custom commands added by Matt Gidden
 \newcommand{\Cyclopts}{\textsc{Cyclopts} }
+\newcommand{\Cycamore}{\textsc{Cycamore} }
 \setcounter{tocdepth}{2}
 \theoremstyle{plain}
 %% \newtheorem{thm}{Theorem}[chapter] % reset theorem numbering for each chapter
 %% \theoremstyle{definition}
 %% \newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
 %% \newtheorem{exmp}[thm]{Example} % same for example numbers
+\newcommand{\horizfig}[2][]{%
+  \begin{minipage}{3in}\subfloat[#1]{#2}\end{minipage}}
 
 %% Get rid of ugly borders around PDF hyperlinks (e.g. for cross-references, bib entries, or URLs)
 \hypersetup{pdfborder = 0 0 0}
