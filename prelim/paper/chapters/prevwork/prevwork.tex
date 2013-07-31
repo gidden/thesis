@@ -227,7 +227,7 @@ simple example of the piece-wise function support is provided in Figure
 \subsubsection{Tracking Commodity Production Capacity}
 
 There is a need to track the current capacity of the production of a certain
-commodity. Electrical power was offered the a prime example for this
+commodity. Electrical power was offered as the prime example for this
 once-through fuel cycle use case. Accordingly, a simple ``mixin'' class
 \cite{ulrich_mixin-based_2001} called CommodityProducer was developed. It offers
 an interface for accessing a list of commodities an entity produces and their
@@ -468,7 +468,147 @@ VISION and \Cyclus mostly agree with each other regarding the core output
 metrics of reactor deployment and used fuel production in this simple
 case. Significant questions remain regarding the difference in SWU consumption,
 which can be addressed with the VISION team if further development of VISION is
-pursued.
+pursued. A full description of the work was presented at the 2012
+ANS Winter conference \cite{gidden_once-through_2012}.
 
 \subsection{Benchmark Specification Language}
+
+There have been a number of different benchmarking exercises attempted by
+governmental and international agencies including the International Atomic
+Energy Agency (IAEA) \cite{_international_2011} and the Nuclear Waste Technology
+Review Board (NWTRB) \cite{_nuclear_2011}.  Both examples formulated their
+benchmark specifications at meetings involving all participants, but have not
+provided the full specifications to the public realm. MIT coordinated a
+benchmarking exercise for dynamic simulators of advanced fuel cycles (i.e., fast
+reactors with different conversion ratios) \cite{guerin_benchmark_2009},
+including a specification with higher fidelity than those above. The
+Organization for Economic Cooperation and Development (OECD) has also led a
+benchmarking exercise that covers an example each of open, modified open, and
+closed fuel cycles \cite{boucher_benchmark_2012} and provided a more detailed
+specification \cite{boucher_specification_2008}.
+
+Ubiquitous amongst all of the above-mentioned benchmarks is a lack of a common
+language to describe scenario specifications. Once set, a given specification is
+generally included as prose and numeric tables in a final report, and it may not
+include all the required information to perform the benchmark
+calculation. Accordingly, developing a specification language would greatly
+benefit the fuel cycle simulation community by allowing for a common and
+well-defined set of scenario parameters to be discussed. An example from the
+nuclear data community is the push towards Generalized Nuclear Data (GND)
+\cite{mattoon_generalized_2012}. This language is a \emph{specification} rather
+than an \emph{implementation}, allowing others to tailor implementation details
+(e.g. via XML, HDF5, etc.) to their needs.
+
+Recognizing a lack of a common definition, work was performed to develop a
+proof-of-principle language which can describe fuel cycle simulation scenario
+benchmarks. A translation package was then written to translate the prototype
+language into \Cyclus input. Finally, the translated \Cyclus input was used to
+run the same INPRO GAINS benchmark above. An overview of the specification
+language follows below. A full description of the work was presented at the 2013
+ANS Summer conference \cite{gidden_developing_2013}.
+
+\subsubsection{Materials}
+Materials in a fuel cycle simulation generally come in two flavors: specified
+recipes, which are normally defined as input for reactors, and the resulting
+output which is a function of the input and applied burnup. We denote the two
+flavors as being recipes or not. To begin, all material types are tagged by a
+given name. Recipes are currently the application of a rigid definition of
+constraints. There are hard-coded concentration values for each isotope in the
+recipe as well as a static density value. Because the output is a result of a
+physics calculation which may be implemented with varying fidelity, a less rigid
+approach is used for non-recipes. The specification does not explicitly name all
+isotopes in the output fuel. Rather it defines more liberal constraints on
+certain isotopes that are physically provable.  (For example, a constraint may be
+phrased as ``the concentration of species X must lie between concentrations A
+and B.'') Lastly, we provide a parent field which takes as an argument another
+material. This is a short-hand way of denoting trees of materials, i.e.,
+multiple materials with mutual constraints. An example is provided in
+Figure~\ref{fig:material}.
+
+\begin{figure}[h!]
+\begin{Verbatim}[frame=single]
+"materials": {
+  "nea_leu": {
+    "recipe": true,
+    "attributes" : {
+    "concentrations": ["float","atom"],
+    "density": ["float","g/cc"]
+   },
+   "constraints": [        
+     ["U235", 0.0495],
+     ["U238", 0.9505],
+     ["O16", 2.0],
+     ["density", 10.2]
+   ], 
+   "parents": []
+  },
+  "nea_spent_pwr_uox": {
+    "recipe": false,
+    "attributes" : {
+    "concentrations": ["float","atom"]
+    }
+    "constraints": [
+      id == 92235 && x < 0.0495",
+      "id == 92238 && x < 0.9505"
+    ], 
+    "parents": []
+  }
+}
+\end{Verbatim}
+\caption{NEA1a Materials Implemented in JSON}
+\label{fig:material}
+\end{figure}
+
+\subsubsection{Facilities}
+Facilities in the specification language have many of the same constructs as
+materials. Each facility type has a unique name, an attribute list which
+declares the units for parameters, and a constraint list which declares the
+values for parameters. Facilities must also specify the types of input and
+output materials with which they deal. For each type of facility, e.g. reactors,
+separations facilities, etc., a specification is defined. An example for the
+reactor in the NEA 1a benchmark is provided in Figure~\ref{fig:facility}.
+
+\begin{figure}[h!]
+\begin{Verbatim}[frame=single]
+"facilities": {
+  "lwr_reactor": {
+    "type":"reactor",
+    "attributes": {
+      "thermal_power": ["float", "GWt"],
+      "efficiency": ["float", "percent"],
+      "burnup": ["float", "GWd/tHM"],
+      "storage_time": ["int", "year"],
+      "cooling_time": ["int", "year"],
+      "cycle_length": ["int", "month"],
+      "core_loading": ["float", "tHM"],
+      "batch_number": "int",
+      "lifetime": ["int", "year"]
+    },
+    "constraints": [
+      ["thermal_power", 4.25],
+      ["efficiency", 34.1],
+      ["burnup", 60],
+      ["storage_time", 2],
+      ["cooling_time", 5],
+      ["cycle_length", 12],
+      ["core_loading", 78.7],
+      ["nbatches", 3],
+      ["lifetime", 60]
+    ],
+    "inputs": ["nea_leu"],
+    "outputs": ["nea_spent_pwr_uox"]
+  },
+}
+\end{Verbatim}
+\caption{NEA1a Reactor Facility Implemented in JSON}
+\label{fig:facility}
+\end{figure}
+
+\subsubsection{Fuel Cycle}
+The final section of the scenario specification is that related to global fuel
+cycle parameters, encapsulating the dynamism of the simulation. This section
+describes the time scale of the simulation, the power demand for the system as a
+function of reactor type, any initial facilities in the simulation, and a notion
+of technology availability, i.e., time points at which facilities may be built.
+
 
