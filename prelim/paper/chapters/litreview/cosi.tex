@@ -14,7 +14,7 @@ The main user input for a COSI simulation is the period to be simulated and the
 commissioning and decommissioning date for each type of reactor in the
 simulation. It does not deploy reactors based on any sort of algorithmic
 model. Additional user input includes the processing order of spent fuel
-(e.g. first in/first out, as a function of burnup, as a function of Pu-241
+(e.g., first in/first out, as a function of burnup, as a function of Pu-241
 content, etc.), and the equivalent fissile enrichment for each fuel type of a
 given reactor, a process explained in detail below.
 
@@ -30,11 +30,11 @@ for use in thermal reactors, the equivalence model is simply a predefined
 plutonium content. It is not clear, however, if the plutonium content is in
 total mass or mass of a specific plutonium isotope \cite{meyer_new_2009,
   coquelet-pascal_validation_2011}. Further, I assume that a similar equivalence
-model is used for any other thermal reactor fuel, e.g. thorium-based fuels.
+model is used for any other thermal reactor fuel, e.g., thorium-based fuels.
 
 For each type of reactor, this set of models requires a class fertile of
-material (e.g. depleted uranium, recycled uranium, natural uranium) and a class
-of fissile material (e.g. plutonium, transuranics), and a predefined ratio of
+material (e.g., depleted uranium, recycled uranium, natural uranium) and a class
+of fissile material (e.g., plutonium, transuranics), and a predefined ratio of
 the two. It is unclear how many degrees of freedom a user has in defining these
 parameters for each reactor. Enriched UOX is a special case of the equivalence
 model, because it has no restrictions on its fabrication, i.e., COSI does not

@@ -23,7 +23,7 @@ The main user-provided parameters for a simulation are the power demand for
 nuclear reactors, which is modeled as an exponential cuver, and the fraction of
 TRU or minor actinides (MA) to provide for each reactor technology. TRU set
 aside for each technology is essentially modeled as a different fuel type
-(e.g. TRU for MOX and TRU for Fast Reactors). The simulation framework uses
+(e.g., TRU for MOX and TRU for Fast Reactors). The simulation framework uses
 these fractions to determine the total number of reactors that can be fuel for
 each type of reactor. Users also set a number of other parameters, such as
 reactor power and other reactor characteristics, but the above two parameter
@@ -49,7 +49,7 @@ rules. Each diagram is connected to others via their input or output. Examples
 of such diagrams are: the LWRs structure-policy diagram, the front-end
 structure-policy diagram, and the back-end structure-policy diagram. Further,
 there are diagrams for each reactor fuel type that requires new technologies
-(e.g. MOX, ABR).
+(e.g., MOX, ABR).
 
 In general, CAFCA does not model individual
 facilities \cite{guerin_impact_2009}. Furthermore, it only explicitly models
@@ -122,7 +122,7 @@ plants,
  TRU^{Fuel}_{ABR}(t) = p^{TRU}_{ABR}(t) \sum_{s \in S} TRU^{Fuel}_s(t),
 \end{equation*}
 
-where $S$ is the set of separations technologies, e.g. fast and thermal
+where $S$ is the set of separations technologies, e.g., fast and thermal
 separations plants, and $p^{TRU}_{ABR}(t)$ is the user-defined percentage of TRU
 to be used for ABRs at time $t$. The percentage is modeled as a 0 or some
 constant depending on whether or not the simulation time is past a user-defined

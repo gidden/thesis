@@ -198,7 +198,7 @@ use the Prototype design pattern \cite{vlissides_design_1995}. A prototype is a
 creational pattern that keeps a prototypical instance of an object
 available. When a new instance is required, a copy of this prototypical instance
 is made and returned. This strategy fit naturally with the \Cyclus input format
-and code base. Nominal parameters defining ``classes'' of facilities, e.g. a
+and code base. Nominal parameters defining ``classes'' of facilities, e.g., a
 certain type of reactor or supporting facility, are listed in XML input
 files. The code base has been updated to create prototypical instances of each
 facility defined in the input file during a simulation initialization step. When
@@ -497,7 +497,7 @@ well-defined set of scenario parameters to be discussed. An example from the
 nuclear data community is the push towards Generalized Nuclear Data (GND)
 \cite{mattoon_generalized_2012}. This language is a \emph{specification} rather
 than an \emph{implementation}, allowing others to tailor implementation details
-(e.g. via XML, HDF5, etc.) to their needs.
+(e.g., via XML, HDF5, etc.) to their needs.
 
 Recognizing a lack of a common definition, work was performed to develop a
 proof-of-principle language which can describe fuel cycle simulation scenario
@@ -564,7 +564,7 @@ Facilities in the specification language have many of the same constructs as
 materials. Each facility type has a unique name, an attribute list which
 declares the units for parameters, and a constraint list which declares the
 values for parameters. Facilities must also specify the types of input and
-output materials with which they deal. For each type of facility, e.g. reactors,
+output materials with which they deal. For each type of facility, e.g., reactors,
 separations facilities, etc., a specification is defined. An example for the
 reactor in the NEA 1a benchmark is provided in Figure~\ref{fig:facility}.
 

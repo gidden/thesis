@@ -28,7 +28,7 @@ effectively separating the simulation engine's functionality from the agents in
 the simulation. From an ecosystem point of view, being an open source code and
 having such capability allows expansion of the user and developer base into
 areas and institutions concerned with security and privacy. Furthermore,
-developers could participate both privately and publicly, e.g. adding general
+developers could participate both privately and publicly, e.g., adding general
 capability to the \Cyclus core that is needed for some functionality without
 specifying the internals. Such a community paradigm is shown in Figure
 \ref{fig:community}.
@@ -151,7 +151,7 @@ Strategy design pattern \cite{vlissides_design_1995}.
 \subsection{Institutions}
 
 Institutions in \Cyclus manage a set of facilities. They are tasked with the
-actual instantiation of specific facilities, e.g. it is the institutions job to
+actual instantiation of specific facilities, e.g., it is the institutions job to
 manage which facilities are commissioned and decommissioned at the appropriate
 times. The goal of including a notion of institutions is to allow an increased
 level of detail when investigating regional-specific scenarios. For example,
@@ -174,7 +174,7 @@ order to determine best practices for this type of design.
 
 \subsection{Regions}
 
-Regions in \Cyclus are concerned with meeting certain requirements, e.g. power
+Regions in \Cyclus are concerned with meeting certain requirements, e.g., power
 capacity, fuel cycle service capacity, etc. The notion of which facilities will
 meet this capacity is abstracted away from the region into the set of
 institutions that operate in that region. In other words, in the case of nuclear
@@ -201,8 +201,8 @@ region. Finally, constraints can be applied on the quality of material that may
 occur in a transaction. For example, a region could scan the set of possible
 material leaving its borders via supplier transactions. It could then affect the
 preference of transactions that violate some principle, such as ``no MOX can
-leave my boundaries''. These principles can even exist on a spectrum, e.g. ``no
+leave my boundaries''. These principles can even exist on a spectrum, e.g., ``no
 MOX with a certain content can leave my boundaries'', or be region-specific,
-e.g. ``no MOX can leave my boundaries that will go to some specified
+e.g., ``no MOX can leave my boundaries that will go to some specified
 region''. Again, these policies are prime examples of strategies that can be
 implemented via the Strategy pattern.
