@@ -5,12 +5,16 @@ Kantorovich in 1940 \cite{kantorovich_new_1940}; however, this occurred during
 World War II, and was thus kept secret. An efficient solution technique (called
 the Simplex Method and described further in \S\ref{sec:simplex}) was provided by
 Dantzig in 1947 and published in 1951 \cite{dantzig_maximization_1951},
-effectively opening the field.
+effectively opening the field. The realm of linear programming is well studied
+in the field of optimization sciences. Accordingly, an overview of the theory
+and methods required to implement the proposal in \S \ref{ch:research} is
+covered, with much of the discussion covered in Ferris, Mangasarian, and
+Wright \cite{ferris_linear_2008}.
 
-Linear programs have a relatively simple general construction. There are a set
-of decision variables, $x$, a cost vector, $c$, a constraint matrix, $M$, and a
-right-hand-side threshold vector, $b$. The standard form for linear programs is
-as follows:
+Linear programs (LPs) have a relatively simple general construction. There are a
+set of decision variables, $x$, a cost vector, $c$, a constraint matrix, $M$,
+and a right-hand-side threshold vector, $b$. The standard form for linear
+programs is as follows.
 
 %%% 
 \begin{subequations}\label{eqs:std-form}
@@ -32,9 +36,10 @@ as follows:
 \end{subequations}
 %%% 
 
-Although Equation \ref{eqs:std-form} is the standard form for LPs, any LP not in
-the standard form can be transformed into the standard form by a number of
-transformations, which are described in most LP texts.
+It is important to note that LPs can be formulated in many ways, e.g. as
+minimization problems, with equality constraints, etc. Most texts cover the
+standard transformations required to turn a given formulation into the standard
+form. In general, any LP can be transformed into the standard form.
 
 The $N$ x $M$ dimensional constraint matrix defines an $M$-dimensional option
 space (i.e., the number of columns is assumed equal to the number of decision
@@ -87,8 +92,8 @@ Figure \ref{fig:feasible}.
   \end{center}
 \end{figure}
 
-However, we can the problem can become infeasible by adjusting a
-constraint. Take for instance, an increased boundary constraint for $x_1$.
+The program can become infeasible by adjusting a constraint. Take for instance,
+an increased boundary constraint for $x_2$.
 
 %%% 
 \begin{subequations}\label{eqs:infeas}
@@ -118,7 +123,7 @@ constraint. Take for instance, an increased boundary constraint for $x_1$.
 %%% 
 
 This arrangement results in the infeasible linear program shown in
-Figure \ref{fig:infeasible}, where the limiting constraint's effect is shown in
+Figure \ref{fig:infeasible}, where the updated constraint's effect is shown in
 red.
 
 \begin{figure}[H]
@@ -131,9 +136,9 @@ red.
 
 The standard form of a linear program shown in Equation \ref{eqs:std-form} is an
 example of a \textit{primal} linear program. A distinction is made between
-a \textit{primal} linear program and its \text{dual}, of which there is a unique
-counterpart. The standard form of the dual of Equation \ref{eqs:std-form} is
-given in Equation \ref{eqs:dual-form}.
+a \textit{primal} linear program and its \text{dual}. Duality theory is involved
+and only treated lightly in this review. The standard form of the dual of
+Equation \ref{eqs:std-form} is given in Equation \ref{eqs:dual-form}.
 
 %%% 
 \begin{subequations}\label{eqs:dual-form}
@@ -205,8 +210,7 @@ The Strong Duality Theorem provides the backbone for much of linear programming
 theory and application. It states that not only do feasible solutions to the
 primal and dual programs provide upper and lower bounds on optimal values, but
 that, in fact, the optimal values are \textit{equal}. This provides a criterion
-to \textit{know} when an optimal value is reached, which will prove critical
-even in integer programming, described in \S \ref{sec:ip}.
+to \textit{know} when an optimal value is reached.
 
 With this slight overview of the realm of linear programming, one can move on to
 solution techniques for problems that can be represented as linear programs.
