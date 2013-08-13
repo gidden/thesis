@@ -75,9 +75,9 @@ is the user-defined preferred distribution, and the second is fast reactor fuel
 availability. Given some look-ahead parameter, $\Delta t$, the number of fast
 reactors that will be ordered at the look-ahead time, $t + \Delta t$, is
 
-\begin{equation*}
+\begin{equation}
 N_{FBR}\left(t+\Delta t\right) = min \left( N_{FBR,E}\left(t+\Delta t\right),N_{FBR,SF}\left(t+\Delta t\right)\right),
-\end{equation*}
+\end{equation}
 
 where the user-defined parameter is based on the user-provided distribution
 percentage $p_{FBR}$, the rated power for that type of reactor, $P_{FBR}$, and
@@ -85,21 +85,21 @@ an energy ``gap'', i.e., the amount of energy required in the simulation as
 defined by the user less the current amount of energy in the simulation at the
 look-ahead time,
 
-\begin{equation*}
+\begin{equation}
 N_{FBR,E}\left(t+\Delta t\right) = 
                         \lceil \frac{p_{FBR} \Delta E (t + \Delta t)}
                                     {P_{FBR}} \rceil .
-\end{equation*}
+\end{equation}
 
 The number of fast reactors that can be built based fuel availability is a
 function of the amount of available spent fuel, $SF(t)$, and the amount
 of material required to fuel a reactor for its lifetime,
 
-\begin{equation*}
+\begin{equation}
 N_{FBR,SF}\left(t+\Delta t\right) = 
                         \lceil \frac{SF(t)}
                                     {F^{LWR_SF}_{Total}} \rceil .
-\end{equation*}
+\end{equation}
 
 The above equation allows some insight into the inner workings of VISION. First
 of all, it keeps a running tally of available spent fuel for a given reactor
@@ -113,16 +113,16 @@ notion of mortgaged spent fuel in VISION, i.e., spent fuel set aside for future
 reactors, and unmortgaged spent fuel in VISION, i.e., spent fuel produced but
 not yet mortgaged,
 
-\begin{equation*}
+\begin{equation}
 SF(t) = SF_u(t) - SF_m(t),
-\end{equation*}
+\end{equation}
 
 where the mortgaged spent fuel is, of course, a function of the number of
 reactors to be built in the future and how much spent fuel they use,
 
-\begin{equation*}
+\begin{equation}
 SF_m(t) = SF_m(t - \Delta t_{sim}) + N_{FBR}(t + \Delta t) F^{LWR_SF}_{Total},
-\end{equation*}
+\end{equation}
 
 with $\Delta t_{sim}$ denoting the simulation time step.
 
@@ -132,13 +132,13 @@ times. For each ``pass'', $p$, the amount of fuel reloaded, $FL^p_{FBR}$, into
 the core may be different both at loading and unloading. The amount of total
 required fuel is defined as
 
-\begin{equation*}
+\begin{equation}
 \begin{aligned}
 F^{LWR_SF}_{Total} & = N_{b,FBR} FL^1_{FBR} + \Delta t_p FL^1_{FBR} w^1_{FBR} \\
                    & + \sum_{p=2}^{5} \Delta t_T (FL^p_{FBR,in} w^p_{FBR,in} - FL^{p-1}_{FBR,out} w^{p-1}_{FBR,out}) \\
                    & + (\Delta t_{FBR,l} - 4 \Delta t_T - \Delta t_p) (FL^5_{FBR,in} w^5_{FBR,in} - FL^{5}_{FBR,out} w^{5}_{FBR,out}),
 \end{aligned}
-\end{equation*}
+\end{equation}
 
 where $N_{b,FBR}$ is the number of fuel batches, each $w^p$ is the weight
 percent of the control isotope(s) in the spent fuel, $\Delta t_p$ is the
@@ -158,18 +158,18 @@ will be closed, and does so by building LWRs. In addition to any LWRs requested
 by the user to be built, others may be built depending on the number of FBRs not
 able to be built,
 
-\begin{equation*}
+\begin{equation}
 N^-_{FBR}\left(t+\Delta t\right) = 
                         max(0,N_{FBR,E}\left(t+\Delta t\right) - 
                         N_{FBR}\left(t+\Delta t\right)),
-\end{equation*}
+\end{equation}
 
 which then informs the number of additional light water reactors to be built,
 
-\begin{equation*}
+\begin{equation}
 N^+_{LWR}\left(t+\Delta t\right) = \lceil N^-_{FBR}\left(t+\Delta t\right) 
                         \frac{P_{FBR}}{P_{LWR}} \rceil .
-\end{equation*}
+\end{equation}
 
 According to the VISION literature \cite{schweitzer_improved_2008}, it only has
 the ability to model MOX-fueled reactors in a self-sustaining way. Such reactors
@@ -190,9 +190,9 @@ the following is associated with both products and services, I will use the term
 ``product'' in this discussion. The demand for a product, $x$, is
 represented as
 
-\begin{equation*}
+\begin{equation}
 D_x(t + \Delta t_x) = \sum_{y \in Y} \gamma_{x,y} N_y(t + \Delta t^x) C_y(t + \Delta t^x),
-\end{equation*}
+\end{equation}
 
 where $\Delta t_x$ is the maximum time to bring a facility on line, $D_x(t)$ is
 the demand for product $x$ at time $t$, $N_y(t)$ is the number of
@@ -204,27 +204,27 @@ the product.
 
 The supply of a given of some product $x$ is given as
 
-\begin{equation*}
+\begin{equation}
 S_x(t + \Delta t_x) = \beta_x N_x(t + \Delta t^x) C_x
-\end{equation*}
+\end{equation}
 
 where $S_x(t)$ is the supply of product $x$ at time $t$, and $\beta_x$ is a
 conversion factor between the number of facilities and the supply
 rate. Additionally, facilities can hold an inventory of a product, defined as
 
-\begin{equation*}
+\begin{equation}
 I_x(t) = min \left( S_x(t-\Delta t_{sim}) - D_x(t-\Delta t_{sim}) 
        + I_x(t-\Delta t_{sim}), I_{x,max}(t) \right)
-\end{equation*}
+\end{equation}
 
 where $I_{x,max}(t)$ is the maximum inventory capacity for product $x$ at time
 $t$. The simulation then ``builds'' (i.e., adds product to its stocks and notes
 the increased capacity) a new facility of type $x$ at time $t$ if 
 
-\begin{equation*}
+\begin{equation}
 S_x(t + \Delta t_x) + I_x(t + \Delta t_x) - 
       I_{x,b}(t + \Delta t_x) < D_x(t + \Delta t_x),
-\end{equation*}
+\end{equation}
 
 where $I_{x,b}(t)$ is an inventory quantity that is saved or ``banked'' for
 ``emergency recovery'' \cite{schweitzer_improved_2008}.

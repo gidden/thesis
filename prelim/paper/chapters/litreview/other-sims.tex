@@ -117,23 +117,23 @@ resource in the region. Further, a transport matrix, $T$, is defined, where an
 element $t_{i,j}$, defines the fraction of the resource produced in region $i$
 that is sent to region $j$. The following matrix equation can then be solved,
 
-\begin{equation*}
+\begin{equation}
 \vec{c} = T \cdot \vec{p}.
-\end{equation*}
+\end{equation}
 
 The solution is constrained by total production capacity, i.e., 
 
-\begin{equation*}
+\begin{equation}
 \sum_{i \in N} t_{i,j} = 1,
-\end{equation*}
+\end{equation}
 
 where $N$ is the set of regions in the simulation. The production and supply
 vectors, $\vec{p}$ and $\vec{c}$, are provided as input to the
 calculation. Accordingly, they must be consistent, i.e.,
 
-\begin{equation*}
+\begin{equation}
 \sum_{i \in N} c_i - d_i = 0,
-\end{equation*}
+\end{equation}
 
 however, it is not stated how such a constraint is enforced \textit{a
   priori}. Furthermore, it is not stated how this consistency is maintained
@@ -146,9 +146,9 @@ coefficients. An initial value must be provided (``by an expert'') for the
 transportation matrix, $T_0$. The solution mechanism then iteratively set to
 minimize the aggregate $L_2$ norm of the transportation-matrix elements:
 
-\begin{equation*}
+\begin{equation}
 min \sum_{i \in N} \sum_{j \in N} \left( t_{i,j} - t_{i,j}^0 \right)^2,
-\end{equation*}
+\end{equation}
 
 The actual solution algorithm, i.e., how this minimization calculation is
 achieved, is not described in either \cite{iaea_nuclear_2010} or
