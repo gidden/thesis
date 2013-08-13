@@ -1,26 +1,16 @@
-This section of the literature review is designed to give an overview of the
-current landscape of fuel cycle simulation technology from the perspective of a
-fuel cycle simulation developer. Accordingly, I discuss both the actual
-simulation aspects of each simulator, e.g., how entities are instatiated and
-connected, as well as the more nuts-and-bolts aspects, e.g., how simulation input
-and output are handled. The goal of this part of the review is to inform
-decisions made on a simulation level as \Cyclus is continued to be developed.
-
-While many fuel cycle simulators exist, all of their source code is effectively
-closed source, i.e., not available to the public. Any knowledge, therefore, of
-their inner workings must be gleaned from the available literature published by
-their respective development teams. Additionally, summary information can be
-gathered from the MIT benchmarking exercise \cite{guerin_benchmark_2009},
-because the sections corresponding to each simulator were written by the
-simulator developers. From a developers perspective, I make some assumptions
-when the literature isn't clear, but I do my best to note what are my
-assumptions and what are stated facts in the literature.
-
-%% I'm not sure about this, revise once other sections are written %%
-Finally, let me note that there are really two subjects under investigation
-here. The first is how to go about simulating the nuclear fuel cycle with
-respect to when and how to build facilities in the simulation. The second is how
-to govern those facility's interactions. The former subject varies by each
-simulator in question whereas the latter is generally handled by simulation
-dynamics software in most cases. I highlight a different approach in the section
-on COSI who wrote their own interaction mechanisms from the ground up.
+A number of current fuel cycle simulators are reviewed in this section with a
+keen focus of simulation-developer related design aspects. There are broadly two
+main categories that simulation developers must address: how simulation entities
+enter a given simulation and how simulation entities interact, or are connected,
+in a simulation. The former varies by each simulator, whereas the latter is
+handled by proprietary system dynamics software in most cases. Peripheral
+concerns are also addressed, namely simulation input/output and the associated
+coding platform(s). Because all current fuel cycle simulators are effectively
+closed source, any knowledge of their inner workings must be gleaned from the
+available literature published by their respective development
+teams. Additionally, summary information can be gathered from the MIT
+benchmarking exercise \cite{guerin_benchmark_2009}, because the sections
+corresponding to each simulator were written by the simulator developers. From a
+developers perspective, assumptions are made when the literature does not
+provide a clear explanation of a given design decision, but such assumptions are
+expressly noted.
