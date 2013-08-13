@@ -16,95 +16,97 @@ and ``high burnup fuel in thermal reactors'', fast reactors with conversion
 ratios other than unity, and the use of multiple fuel technologies that require
 recycling in the same scenario (for example, having MOX fuel being recycled
 multiple times). Time steps in CAFCA-SD occur every 1.5
-months \cite{guerin_impact_2009}, at which point discrete events are executed to
-change the system state that depend on the current system state.
+months \cite{guerin_impact_2009}, at which point discrete events that depend on
+the current system state are executed to change the system state.
 
 The main user-provided parameters for a simulation are the power demand for
-nuclear reactors, which is modeled as an exponential cuver, and the fraction of
+nuclear reactors, which is modeled as an exponential curve, and the fraction of
 TRU or minor actinides (MA) to provide for each reactor technology. TRU set
-aside for each technology is essentially modeled as a different fuel type
-(e.g., TRU for MOX and TRU for Fast Reactors). The simulation framework uses
-these fractions to determine the total number of reactors that can be fuel for
-each type of reactor. Users also set a number of other parameters, such as
-reactor power and other reactor characteristics, but the above two parameter
-categories govern the actual course of the simulation with respect to building
-reactors and determining material flows. The forcing function for the
-simulation, is the availability of recycled fuel. In other words, as one of
+aside for each technology is essentially modeled as a different fuel type (e.g.,
+TRU for MOX and TRU for Fast Reactors). The simulation framework uses these
+fractions to determine the total number of reactors that can be fueled at each
+time step. Users also set a number of other parameters, such as reactor power
+and other reactor characteristics, but the above two parameter categories govern
+the actual course of the simulation with respect to building reactors and
+determining material flows. 
+
+CAFCA-SD determines the evolution of system states using system dynamics. The
+CAFCA team states explicitly that their model should be used for large scoping
+studies \cite{guerin_impact_2009}, which informs their simulation methodology
+and inherent assumptions. Their overall system model is comprised of coupled
+single-input, single-output structure-policy diagrams. Each structure-policy
+diagram is composed of a system-structure substructure and a policy-structure
+substructure, which defines decision rules for the diagram. The beginning of a
+time step invokes the application of decision rules which changes the state of
+the system. The new state is then updated in the system structure, which informs
+new decision rules. Each diagram is connected to others via their input or
+output. Examples of such diagrams are: the LWRs structure-policy diagram, the
+front-end structure-policy diagram, and the back-end structure-policy
+diagram. Further, there are diagrams for each reactor fuel type that requires
+new technologies (e.g., MOX,
+ABR) \cite{busquim_e_silva_system_2008,guerin_impact_2009}.
+
+CAFCA uses a fleet-of-facilities model rather than modeling individual
+facilities \cite{guerin_impact_2009}, and it only explicitly models reactors and
+reprocessing fleets. More specifically, rate changes of fleets of facilities are
+calculated and the status of those fleets recorded (e.g., how many should
+currently be in operation). The remaining entities (supporting facilities such
+as enrichment plants), which are conceptually connected to the fleets via
+markets, are assumed to belong to completely elastic markets, i.e., demand is
+always met. 
+
+The population of the reactor fleets are calculated via rate equations, whose
+forcing function is the availability of recycled fuel. In other words, as one of
 CAFCA's basic simulation assumptions, the inventory of used light water reactor
-(LWR) fuel is minimized. Thus the number of reactors using this recycled fuel is
-maximized against this constraint, according to the user-defined fuel technology
-preference fractions. 
+(LWR) fuel is minimized, maximizing the number of reactors using recycled fuel
+subject to the user-defined fuel technology preference fractions. A look-ahead
+value is used to guarantee that reactors are built only if there is available
+fuel for their entire lifetime. This inherent modeling assumption disallows
+the investigation supply interruption cases.
 
-As previously stated, CAFCA-SD determines the evolution of system states using
-system dynamics. It should be noted that the CAFCA team states explicitly that
-their model should be used for large scoping studies \cite{guerin_impact_2009},
-which informs their simulation methodology and inherent assumptions. Their
-overall system model is comprised of coupled single-input, single-output
-structure-policy diagrams. Each structure-policy diagram is composed of a
-system-structure substructure and a policy-structure substructure, which defines
-decision rules for the diagram. The beginning of a time step invokes the
-application of decision rules which changes the state of the system. The new
-state is then updated in the system structure, which informs new decision
-rules. Each diagram is connected to others via their input or output. Examples
-of such diagrams are: the LWRs structure-policy diagram, the front-end
-structure-policy diagram, and the back-end structure-policy diagram. Further,
-there are diagrams for each reactor fuel type that requires new technologies
-(e.g., MOX, ABR).
-
-In general, CAFCA does not model individual
-facilities \cite{guerin_impact_2009}. Furthermore, it only explicitly models
-reactors and reprocessing facilities. The remaining entities, which are
-conceptually connected to the instantiated entities via markets, are assumed to
-belong to completely elastic markets, i.e., demand is always met. Instead of
-modeling individual facilities, it models rate changes of fleets of facilities
-and monitors the status of those fleets (i.e., how many should currently be in
-operation). This methodology is perhaps not intuitively obvious, so let me
-briefly follow a similar overview of such a process as provided in CAFCA's
-original methodology report \cite{busquim_e_silva_system_2008}. First, though, a
-note on their notation; CAFCA's methodology denotes many system variables as a
-function of time for each class (fleet) of reactors, which are described in
-Table \ref{tbl:cafca-rxtr-vars}.
-
-Before wading too deep into CAFCA's methodology formulation, let me take a
-moment to reflect on the variables in Table \ref{tbl:cafca-rxtr-vars}. The
-actual definition of the various rates and stocks described therein depend on
-the type of reactor they are describing. Any reactor that is fueled in some part
-by material that is output from reprocessing facilities has the same general
-form, which incorporates the respective user-defined percentages previously
-discussed. This makes sense, of course, because CAFCA's simulation methodology
-only allows advanced reactors to be built if they can be fueled for their entire
-lifetimes. Accordingly, their building rate depends on the availability of
-recycled fuel. Reactors that use non-recycled fuel, i.e., light water reactors
-(LWRs), have different formulations. There is no restriction on their building
-based on fuel availability (their input fuel markets are assumed totally liquid
-as stated above), and so their rate and state values which are informed by the
-number of recycle-fueled reactors in operation. In other words, LWRs ``fill the
+An overview of the building methodology as provided
+in \cite{busquim_e_silva_system_2008} follows. The key parameters in the system
+dynamics equations are provided in Table \ref{tbl:cafca-rxtr-vars}, where each
+is a function of a reactor type, $r$. It is important to note that different
+methodologies are used for non-recycled-fueled reactors (e.g., UOX-fueled Light
+Water Reactors (LWRs)) and recycled-fueled reactors (e.g., Advanced Breeder
+Reactors (ABRs)). Any reactor that is fueled in some part by material that is
+output from reprocessing facilities has the same general form, which
+incorporates the respective user-defined percentages previously discussed. No
+restriction is placed on reactors fueled only by non-recycled fuel because of
+the assumption of total market elasticity. In other words, LWRs ``fill the
 holes'' in energy demand left by fast reactors that can't otherwise make them up
 due to lack of input fuel. The cycle is connected because LWRs provide the
 source of fast reactor fuel.
 
 %%% 
-\begin{table} [h!]
+\begin{table} [H!]
 \centering
 \begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
 \hline
 Variable    & Description \\
 \hline
-$P_r$            & the power rating for reactors of fleet $r$ \\
-$CF_r$           & the capacity factor rating for reactors of fleet $r$ \\
-$F^r_{Est}(t)$   & the forecasted fleet requirements for the fleet of $r$ at time $t$  \\
-$F_r(t)$         & the actual fleet requirements for the fleet of $r$ at time $t$  \\
-$ADJ_r(t)$       & the adjustment for the fleet of $r$ at time $t$  \\
+$\alpha_r$       & a core depletion constant for reactors of type $r$  \\
 $\tau_r(t)$      & the fleet adjustment time for the fleet of $r$ at time $t$  \\
+$\tau_{l,r}$     & the lifetime of a reactor of type $r$  \\
+$ADJ_r(t)$       & the adjustment for the fleet of $r$ at time $t$  \\
+$CF_r$           & the capacity factor rating for reactors of fleet $r$ \\
+$F_r(t)$         & the actual fleet requirements for the fleet of $r$ at time $t$  \\
+$F^r_{Est}(t)$   & the forecasted fleet requirements for the fleet of $r$ at time $t$  \\
+$F^r_N(t)$       & the rate of reactors $r$ starting commercial operation at time $t$ \\
+$I_r(t)$         & the integer number of reactors ready to start commercial operation for the fleet of $r$ at time $t$  \\
+$L_r$            & the fuel fabrication losses associated with a reactor of type $r$   \\
+$M^-_r$          & the equilibrium core loading for a reactor type $r$   \\
+$M^_{r,c}$       & the full core loading for a reactor type $r$   \\
+$O_r(t)$         & the fulfilled order delay of the fleet of $r$ at time $t$ \\
+$p^f_r$          & the percent of fuel type $f$ to be used for reactor type $r$ \\
+$P_r$            & the power rating for reactors of fleet $r$ \\
 $R^r_{CO}(t)$    & the construction order rate for the fleet of $r$ at time $t$  \\
+$R^r_{CR}(t)$    & the construction rate for the fleet of $r$ at time $t$  \\
+$R^r_{DR}(t)$    & the decommissioning rate for the fleet of $r$ at time $t$  \\
 $R^r_{FO}(t)$    & the fulfilled order rate for the fleet of $r$ at time $t$  \\
 $R^r_{FO}(t)$    & the fulfilled order rate for the fleet of $r$ at time $t$  \\
 $R^r_{Frac}(t)$  & the fractional order rate for the fleet of $r$ at time $t$  \\
-$R^r_{CR}(t)$    & the construction rate for the fleet of $r$ at time $t$  \\
-$R^r_{DR}(t)$    & the decommissioning rate for the fleet of $r$ at time $t$  \\
-$I_r(t)$         & the integer number of reactors ready to start commercial operation for the fleet of $r$ at time $t$  \\
-$F^r_N(t)$       & the rate of reactors $r$ starting commercial operation at time $t$ \\
-$O_r(t)$         & the fulfilled order delay of the fleet of $r$ at time $t$ \\
 \hline
 \end{tabularx}
 \caption{Variables Associated with a Class of Reactor, $r$, in CAFCA's Methodology}
@@ -113,8 +115,8 @@ $O_r(t)$         & the fulfilled order delay of the fleet of $r$ at time $t$ \\
 %%% 
 
 As an example of the mathematics and methodology behind the structure-policy
-diagrams, let us review Busquim e Silva's formulation of the Actinide Burner
-Reactor (ABR)\cite{busquim_e_silva_system_2008}. The input for the system is the
+diagrams, Busquim e Silva's formulation of the Actinide Burner Reactor (ABR) is
+reviewed \cite{busquim_e_silva_system_2008}. The input for the system is the
 amount of separated fuel-usable TRU available for ABRs coming from reprocessing
 plants,
 
@@ -137,8 +139,8 @@ $S_{ABR}(t)$, represented as
 
 where the the rate of change of the ABR fuel stock is equal to the difference
 between the inflow rate, $R_{in}^{ABR}(t)$, and outflow, or utilization rate,
-$R_{out}^{ABR}(t)$. The inflow rate is simply amount of available TRU minus some
-user-defined fabrication losses, $L_{ABR}$,
+$R_{out}^{ABR}(t)$. The inflow rate is defined as the amount of available TRU
+less some user-defined fabrication losses, $L_{ABR}$,
 
 \begin{equation}
  R_{in}^{ABR}(t) = \left( 1 - L_{ABR} \right) TRU^{Fuel}_{ABR}(t).
@@ -213,29 +215,28 @@ where $\bar{M_{ABR}}$ is the equilibrium mass of an ABR (the reload mass), and
 $M_{ABR,c}$ is the core mass for an ABR. This completes the series of equations
 to define the fuel-constrained deployment of ABRs.
 
-Finally, let me note that there are similar rates defined for supporting
-facilities, i.e., reprocessing facilities for each class of reactor. They are
-similar to the above formulation, but have as input the amount of used fuel to
-be reprocessed and output the required number of facilities. A full treatment of
-their reactor, reprocessing, and material state and rate formulations is
-provided in \cite{busquim_e_silva_system_2008}.
+Finally, there are also rate equations defined for reprocessing facilities for
+each class of reactor. They are similar to the above formulation, but have as
+input the amount of used fuel to be reprocessed and output the required number
+of facilities. A full treatment of their reactor, reprocessing, and material
+state and rate formulations is provided in \cite{busquim_e_silva_system_2008}.
 
 CAFCA makes a number of assumptions regarding material isotopic constituencies
 and reactor fuel loading. First of all, each class of reactors is assumed to be
 loaded with equilibrium-cycle fresh fuel. This implies that all reactors of a
 given class of reactors take as input a given makeup of fresh fuel and provide
 as output a given makeup of used fuel. Accordingly, there is no notion of fuel
-isotopics changed based on the number of cycles it has resided in a
+isotopics changed based on the number of residence cycles in a
 reactor. Furthermore, CAFCA models continuous annual mass flows rather than the
 discrete transfer of material amongst facilities. This means that every time
 step, the same amount of material is continuously consumed by a reactor, rather
 than an actual core reload being modeled. The initial core loading is modeled
-similarly, simply with an elevated annual consumption level for its first cycle
-period. This assumption leads to an 0.6\% increased overall fuel usage per
-reactor \cite{guerin_impact_2009}.
+similarly with an elevated annual consumption level for its first cycle
+period. This assumption leads to an error of 0.6\% increased overall fuel usage
+per reactor \cite{guerin_impact_2009}.
 
-An incredibly important consequence of CAFCA's formulation is that it inherently
-bins the isotopics of fuel into categories, e.g., TRU or plutonium and minor
+An important consequence of CAFCA's formulation is that it inherently bins the
+isotopics of fuel into categories, e.g., TRU or plutonium and minor
 actinides. Accordingly, there is no inherent check on the validity of isotopics
 entering or exiting reactors, i.e., their methodology guarantees
 correct \textit{aggregate mass flows} at an elemental scope, but does not
@@ -250,12 +251,12 @@ assumption allows CAFCA to still compute larger aggregate metrics such as
 uranium utilization. Additionally, the lumped material assumption is perhaps one
 reason why the CAFCA team sees minimal impact from isotopic decay.
 
-I will end this section on a note of the requirements to extend CAFCA to allow
-additional reactor/fuel types. Busquim e Silva outlined their original
+Significant work is required to extend CAFCA to allow additional reactor/fuel
+types. Busquim e Silva outlined their original
 methodology \cite{busquim_e_silva_system_2008} and Guerin outlines an extension
 to that methodology \cite{guerin_impact_2009} in order to incorporate MOX-fueled
 LWRs. Consistent with the previous work, an additional user-defined parameter is
-introduced, $P^{Pu}$, representing the ratio of reprocessed spent fuel processed
+introduced, $p^{Pu}$, representing the ratio of reprocessed spent fuel processed
 by plutonium-uranium extraction (PUREX) plants. The MOX technology
 structure-policy diagram uses this value to determine the amount of plutonium
 available for MOX fuel fabrication each year. Reactors that use MOX must be
