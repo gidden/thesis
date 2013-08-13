@@ -3,24 +3,25 @@ date. Different countries will take on the effort for their personal needs,
 examples of which include France, Japan, and Russia. Other simulators are
 developed by international organizations like the International Atomic Energy
 Agency (IAEA). However, all of them, including those outlined in previous
-sections, are have code bases that are closed source, i.e., they are private
-projects. Accordingly we must rely on their respectively produced literature for
-insight into their modeling practice. The fuel cycle simulators presented in the
-previous sections benefited from a reasonably large literature base (with
-respect to the norms of the fuel cycle simulation community). This section
-provides a short overview of other simulators that are important in the world
-context because of their user base, but have few available sources from which to
-glean developer-level information about their simulation structure for either
-proprietary purposes or other reasons. VISTA is a fuel cycle simulation code
-developed by the IAEA and distributed to member states. However, for
-benchmarking exercises more recently, the IAEA has used the Russian code
-DESAE. The Dynamic of Energy System - Atomic Energy (DESAE) is designed with a
-focus on regional material flows, making it relatively unique in the fuel cycle
-simulation community and of interest to the IAEA. The Dynamic Analysis of
-Nuclear System Strategies (DANESS) is a fuel cycle simulation code originally
-developed at Argonne National Laboratory (ANL), but its development has
-transferred to a Belgian group, LISTO bvba. It is currently used by many
-European member states, including Belgium and Italy.
+sections, are closed source, i.e., they are private projects. Accordingly one
+must rely on their respectively produced literature for insight into their
+modeling practice. The fuel cycle simulators presented in the previous sections
+benefited from a reasonably large literature base (with respect to the norms of
+the fuel cycle simulation community). This section provides a short overview of
+other simulators that are important in the world context because of their user
+base, but have few available sources from which to glean developer-level
+information about their simulation structure for either proprietary purposes or
+other reasons. 
+
+VISTA is a fuel cycle simulation code developed by the IAEA and distributed to
+member states. However, for recent benchmarking exercises, the IAEA has used
+Russia's Dynamic of Energy System - Atomic Energy (DESAE) code. DESAE is
+designed with a focus on regional material flows, making it relatively unique in
+the fuel cycle simulation community and of interest to the IAEA. The Dynamic
+Analysis of Nuclear System Strategies (DANESS) is a fuel cycle simulation code
+originally developed at Argonne National Laboratory (ANL), but its development
+has transferred to Listo BVBA, a Belgian fuel cycle consulting group. It is
+currently used by European member states, including Belgium and Italy.
 
 VISTA is designed to estimate the front end and back end material requirements
 for a given fuel cycle. It is not clear what language or platform VISTA is
@@ -57,24 +58,23 @@ the beginning of the simulation), and balance equations are applied at each time
 step to determine the quantity of material flowing between facility fleets. The
 equations presented in \cite{iaea_nuclear_2007} assume reactors are built
 regardless of fuel availability. It appears as if each reactor type has two fuel
-types with which it can be fueled. If there is not enough fuel availability for
-advanced reactors using recycled fuel (type 2), they are considered to be fueled
-with their other fuel type. Such an observation is not explicitly stated by the
-VISTA team, but implied by their series of balance equations. Further, it is
-unclear how the simulation handles isotopic mismatches. As was described above,
-constant plutonium vectors are assumed for fresh fuel, and isotopic-specific
-values are determined for used fuel by CAINS. However, some strategy must be
-used to match the used fuel isotopics to new fresh fuel isotopics, which are
-defined. Such a strategy is not described in the VISTA literature, but some sort
-of check (either at the elemental or isotopic level) must be made, because an
-alternative fuel type is used "[i]f there is enough reprocessed material in the
-stockpile" \cite{iaea_nuclear_2007}. Finally, although again not explicitly
-stated, the set of supply-demand equations are solved for each time step using
-values from the previous time step and the additional reactor requirements for
-the current time step. It does not appear that core reloads are explicitly
-modeled; instead reactor requirements are modeled on simply a per-year basis,
-which implies that reactor fuel requirements are determined for its lifetime and
-then demanded based on a yearly average.
+types with which it can be fueled, where the availability of the primary fuel
+type is queried first. Such an observation is not explicitly stated by the VISTA
+team, but implied by the balance equations provided in the literature. Further,
+it is unclear how the simulation handles isotopic mismatches. As was described
+above, constant plutonium vectors are assumed for fresh fuel, and
+isotopic-specific values are determined for used fuel by CAINS. However, some
+strategy must be used to match the used fuel isotopics to new fresh fuel
+isotopics, which are defined. Such a strategy is not described in the VISTA
+literature, but some sort of check (either at the elemental or isotopic level)
+must be made, because an alternative fuel type is used "[i]f there is enough
+reprocessed material in the stockpile" \cite{iaea_nuclear_2007}. Finally,
+although again not explicitly stated, it appears that the set of supply-demand
+equations are solved for each time step using values from the previous time step
+and the additional reactor requirements for the current time step. Core reloads
+do not appear to be explicitly modeled; instead reactor requirements are modeled
+on simply a per-year basis, which implies that reactor fuel requirements are
+determined for its lifetime and then demanded based on a yearly average.
 
 DESAE is developed by the Russian government as a basis for benchmark
 calculations called for by the IAEA's International Project on Innovative
@@ -96,8 +96,8 @@ pathways are explicitly modeled, with flows going directly between facilities
 based on their isotopic content (e.g., plutonium isotopes from recycling go to
 fuel fabrication). Similar to the VISTA case, it is not clear how
 isotopic-specific information affects the course of a simulation, nor is it
-clear what strategy is taken to model the required advanced fuel to separated
-fuel supply gap.
+clear what strategy is taken to model the required separated isotopics to
+advanced fuel supply gap.
 
 Additional information discussing DESAE's internal modeling methods are
 described in the IAEA's INPRO fuel cycle scenario synopsis document
@@ -105,7 +105,7 @@ described in the IAEA's INPRO fuel cycle scenario synopsis document
 global level, and its is possible (and indeed likely, according to
 \cite{iaea_nuclear_2010}) that the supply-demand regional and global
 requirements will be inconsistent, with the region-specific calculation
-overestimating the resource requirements. The topic is only broached in a broad
+overestimating the resource requirements. The topic is only addressed in a broad
 sense, without specifying which resources are overestimated nor explaining what
 exactly a resource is (e.g., plutonium, a specific isotope of plutonium, or MOX
 fuel). The inter-regional transportation calculation is discussed in slight
@@ -132,22 +132,22 @@ vectors, $\vec{p}$ and $\vec{c}$, are provided as input to the
 calculation. Accordingly, they must be consistent, i.e.,
 
 \begin{equation}
-\sum_{i \in N} c_i - d_i = 0,
+\sum_{i \in N} c_i - p_i = 0,
 \end{equation}
 
 however, it is not stated how such a constraint is enforced \textit{a
   priori}. Furthermore, it is not stated how this consistency is maintained
 across fuel types. Appendix II of \cite{_international_2009} explicitly states
 that reactors can be fueled by two different fuel types, which is not consistent
-with this sort of transportation methodology. 
+with this transportation methodology. 
 
 The unknown variables in this calculation are the transportation
 coefficients. An initial value must be provided (``by an expert'') for the
-transportation matrix, $T_0$. The solution mechanism then iteratively set to
+transportation matrix, $T_0$. The solution mechanism performs an iteration to
 minimize the aggregate $L_2$ norm of the transportation-matrix elements:
 
 \begin{equation}
-min \sum_{i \in N} \sum_{j \in N} \left( t_{i,j} - t_{i,j}^0 \right)^2,
+min \sum_{i \in N} \sum_{j \in N} \left( t_{i,j} - t_{i,j}^0 \right)^2.
 \end{equation}
 
 The actual solution algorithm, i.e., how this minimization calculation is
@@ -155,7 +155,7 @@ achieved, is not described in either \cite{iaea_nuclear_2010} or
 \cite{andrianova_desae_2008}.
 
 DANESS was originally developed at ANL, and its development has subsequently
-been moved to Belgium's LISTO bvba, who provides commercial fuel-cycle modeling
+been moved to Belgium's Listo BVBA, who provides commercial fuel-cycle modeling
 services. Accordingly, its simulation methodology is only lightly treated in the
 available literature, but information can be gathered from updates provided by
 the development team \cite{durpel_daness_2003,van_den_durpel_daness_2009} and
@@ -163,7 +163,7 @@ benchmarking exercises in which the code participates
 \cite{guerin_benchmark_2009}.
 
 DANESS is a system dynamics application written in the system dynamics code
-iThink \cite{richmond_ithink_2004}. It is broken into a variety of ``models''
+iThink \cite{richmond_ithink_2004}. It is comprised of a variety of ``models''
 which house the simulation's decision making methods and track the state of
 various entities in the simulation. DANESS output is supplied via Microsoft
 Excel template files \cite{guerin_benchmark_2009}.
@@ -190,12 +190,13 @@ paired with a specific fuel type; however, this reactor-fuel pairing can evolve
 with time \cite{durpel_daness_2003}. In previous versions, DANESS could model 20
 different types, or classes, of reactors \cite{van_den_durpel_daness_2009}; it
 is currently only able to model 10 types \cite{durpel_daness_2003}. It is
-unclear if this is one of the limitations that caused AFCI to choose DYMOND over
-DANESS, as reported by Schwitzer \cite{schweitzer_improved_2008}. Supporting
-facilities are deployed according to a lookahead function that predicts future
-demand for their services. An explicit repository model is also provided, which
-applies thermal-loading capacity limitations for both Yucca Mountain (which has
-a tuff geology) and a generic clay repository.
+unclear if this is one of the limitations that caused the DOE's Advanced Fuel
+Cycle Initiative (AFCI) to choose DYMOND over DANESS, as reported by
+Schweitzer \cite{schweitzer_improved_2008}. Supporting facilities are deployed
+according to a look-ahead function that predicts future demand for their
+services. An explicit repository model is also provided, which applies
+thermal-loading capacity limitations for both Yucca Mountain (which has a tuff
+geology) and a generic clay repository.
 
 The full set of cost factors involved in the minimum cost deployment algorithm
 is not explicitly stated in the DANESS literature, but a few are
@@ -212,7 +213,7 @@ user. Reactors order fuel for reloading at a specified time prior to its need
 based on known upstream processing times (i.e., reactors orders fuel ``just in
 time''). Upon fueling a reactor, downstream buffers are updated with respect to
 mass-flows resulting from the eventual ejection of this fuel
-\cite{guerin_benchmark_2009}. DANESS uses a table lookup system to determine the
+\cite{guerin_benchmark_2009}. DANESS uses a table look-up system to determine the
 isotopics of spent fuel based on burnup for thermal reactors and conversion
 ratio for fast reactors. Isotopics are modeled (mostly) explicitly. DANESS
 tracks 68 different isotopes and two aggregate isotopic groups, comprised of
@@ -221,9 +222,9 @@ provided in \cite{van_den_durpel_daness_2009}; from a review of the DANESS
 literature, it appears that the code does not have any sort of isotopic decay
 mechanism. Further, it is not stated how DANESS deals with mismatches between
 requested fuel recipes and available separated isotopics. However, it is
-specifically mentioned that they bin separated material by element
+specifically mentioned that separated material is binned by element
 \cite{van_den_durpel_daness_2009}, so it is possible that only bulk elements are
-taken into account for such purposes. Finally, If a reactor can not be fueled
+taken into account for such purposes. Finally, if a reactor can not be fueled
 due simulation-based material availability, e.g., a lack of fissile material, it
 is placed in a ``stand by'' mode and does not generate energy for that period of
 time in the simulation.
