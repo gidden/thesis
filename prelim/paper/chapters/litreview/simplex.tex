@@ -1,11 +1,10 @@
 \subsubsection{Overview}
 The Simplex Method is a popular algorithm to solve linear programs first
 published by Dantzig \cite{dantzig_maximization_1951}. Conceptually, it is quite
-intuitive, especially from a geometrical point of view. I'll introduce the
-method first in simple terms to provide a general idea before being a bit more
-formal. Let us begin by discussing the example provided in the previous section.
-
-We have the linear program:
+intuitive, especially from a geometrical point of view. Before continuing in
+more detail, an overview of the method is provided via the example from the
+previous section. Take the linear program shown in Equation \ref{eqs:lp} and its
+geometrical view shown in Figure \ref{fig:geometric}.
 
 %%% 
 \begin{subequations}\label{eqs:lp}
@@ -33,8 +32,6 @@ We have the linear program:
   \end{align}
 \end{subequations}
 %%% 
- 
-Which appears geometrically as:
 
 \begin{figure}[H]
   \begin{center}
@@ -44,8 +41,8 @@ Which appears geometrically as:
   \end{center}
 \end{figure}
 
-Note that there are five vertices of the polygon (i.e., polytope) formed by the
-full set of constraints:
+Note that there are five vertices of the polygon (i.e., a polytope more
+generally) formed by the full set of constraints:
 
 \begin{enumerate}
   \item $(0, 0)$
@@ -101,9 +98,9 @@ is immediately obvious that the simplex algorithm in this state is a hill
 climbing (or hill descending) algorithm. The chief reason why this is possible
 (i.e., why one is guaranteed to find a globally optimum solution) is that the
 objective function and constraints are \textit{convex} functions of the decision
-variables. Convexification is a requirement for optimum solutions to both linear
-and integer programs, and the tightest possible set of constraints for a given
-program describes its \textit{convex hull}.
+variables. Convexification is requiried to find optimum solutions to both linear
+and integer programs, and the concept is covered with slightly more detail
+in \S \ref{sec:formulations}.
 
 \subsubsection{In-Depth Discussion}
 To begin a more robust discussion of the Simplex Method, one must introduce the
@@ -158,29 +155,37 @@ standard form of Equation \ref{eqs:std-form} as the \textit{canonical form}.
 %%% 
 
 Given that there are $N$ decision variables and $M$ constraints, the cardinality
-of $x$ is $N$ and the cardinality of $s$ is $M$. Furthermore, in these examples,
+of $x$ is $N$ and the cardinality of $s$ is $M$. Furthermore, in the literature,
 the $x_i$ variables are termed \textit{nonbasic} variables whereas the $s_i$
 variables are termed \textit{basic} variables.
 
-For any LP in the canonical form, the Simplex Algorithm can applied to it to
+For any LP in the canonical form, the Simplex Algorithm can be applied to it to
 determine optimal values for its decision variables, or to determine that it is
-unbounded or infeasible.
+unbounded or infeasible. The basic structure of the method is outlined below in
+Algorithm \ref{alg:simplex}.
 
-\begin{algorithm}[H]
+\begin{algorithm}[h!]
  \SetAlgoLined
  \KwData{Decision variables, an objective function, and a set of constraints.}
  \KwResult{Optimal values for the decision variables or a flag denoting 
    infeasibility or unboundedness.}
  Get initial vertex\;
- \If{no vertex is found}{feasible solution space is empty}
-  \While{not unbounded and not empty and not done}{ 
+ \If{no vertex is found}{
+ feasible solution space is empty\;
+ }
+ \While{not unbounded and not empty and not done}{ 
     Select column, i, via pricing\;
-    \If{no column is found}{optimal condition found => done}
+    \If{no column is found}{
+    optimal condition found\;
+    done\;
+    }
     Select row, j, via the ratio test\;
-    \If{no row is found}{solution space is unbounded}
+    \If{no row is found}{
+    solution space is unbounded\;
+    }
     Perform a Jordan exchange on element (i, j)\;
   }
-  \caption{The Simplex Algorithm}
+  \caption{The Simplex Algorithm}\label{alg:simplex}
 \end{algorithm}
 
 There are four core operations associated with the Simplex Algorithm:
@@ -193,8 +198,8 @@ There are four core operations associated with the Simplex Algorithm:
 
 If finding an initial vertex is not trivial (e.g., if the origin is not a
 candidate), then the operation to do so requires use of the Simplex Method on a
-related LP where the origin is an available candidate. Accordingly, that process
-will be described last.
+related LP where the origin is an available candidate. That process will be
+described last.
 
 The primary concept required to understand the Simplex Method's operations is
 that of the \textit{basis}. The basis begins as the set of decision
@@ -203,15 +208,15 @@ and it does so efficiently by analyzing the most ``valuable'' variables to
 target (i.e., which current basis variable affects the optimal value the most).
 
 Column pricing and row selection are the operations that select the current
-basis and nonbasis variables to target. The Jordan exchange actually performs
-the translation of exchanging the basic and nonbasic variables. This is perhaps
-more intuitive from a geometrical point of view. Consider some starting vertex
-with many possible sides along which to move. The process of column pricing and
-row selection \textit{chooses} the side along which to move, and the Jordan
-exchange \textit{reorients} the problem. Revisiting the example problem,
-remember the first step. The vertex $(4, 0)$ was determined to be the best
-direction in which to move. After a Jordan exchange, the resulting LP would look
-like Figure \ref{fig:rotated}.
+basis and nonbasis variables to target. The Jordan exchange process translates
+the formulation into the new basis, exchanging basic and nonbasic
+variables. This is perhaps more intuitive from a geometrical point of
+view. Consider some starting vertex with many possible sides along which to
+move. The process of column pricing and row selection \textit{chooses} the side
+along which to move, and the Jordan exchange \textit{reorients} the
+problem. Revisiting the example problem, remember the first step. The vertex
+$(4, 0)$ was determined to be the best direction in which to move. After a
+Jordan exchange, the resulting LP would look like Figure \ref{fig:rotated}.
 
 \begin{figure}[H]
   \begin{center}
@@ -233,9 +238,9 @@ long as the reduced cost is positive.
 
 Row selection, i.e., selecting the basic variable to enter the basis, is
 performed via a ratio test. Given that a column $j$ has been selected, the
-corresponding row, and thus basic variable, is selected according to
-Equation \ref{eqs:ratio-max} in the case of a maximization objective and
-Equation \ref{eqs:ratio-min} in the case of a minimization objective.
+corresponding row is selected according to Equation \ref{eqs:ratio-max} in the
+case of a maximization objective and Equation \ref{eqs:ratio-min} in the case of
+a minimization objective.
 
 \begin{equation}\label{eqs:ratio-max}
   \min \left\{ \frac{-b_i}{A_{i,j}} \:\: | \:\: A_{i,j} > 0 \right\}
@@ -274,9 +279,10 @@ Equation \ref{eqs:jordan}.
 %%% 
 
 Finally, one must determine a starting vertex. The original linear program is
-modified in the following way. For each row, $i$, if $b_i > 0$, then add an
-additional variable, $x_0$ to the constraint with coefficient $a_i,0 = 1$. An
-initial feasible point is then immediately available for $x = 0 \forall i \neq
-0$ and $x_0 = \max(\max(b),0)$. The Simplex Method is then applied, with $x_0$
-being the first variable to leave the basis. When $x_0$ returns to the basis, a
-suitable starting vertex results from the removal of $x_0$.
+modified as shown in \S 3.4 of \cite{ferris_linear_2008}. For each row, $i$, if
+$b_i > 0$, then add an additional variable, $x_0$, to the constraint with
+coefficient $a_{i,0} = 1$. An initial feasible point is then immediately
+available for $x = 0 \:\: \forall \:\: i \neq 0$ and $x_0
+= \max(\max(b),0)$. The Simplex Method is then applied, with $x_0$ being the
+first variable to leave the basis. When $x_0$ returns to the basis, a suitable
+starting vertex results from the removal of $x_0$.
