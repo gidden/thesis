@@ -5,13 +5,13 @@ linear systems of equations in the form of Equation \ref{eqs:lin-sys}.
 A x = b
 \end{equation}
 
-$A$ is an $m x n$-dimensional constraint matrix that can
+$A$ is an $m \times n$-dimensional constraint matrix that can
 be \textit{overdetermined}, i.e., include more constraints than decision
 variables. Given some approximation of the solution, $\tilde{x}$, one can define
 the residual, $r$, associated with that approximation.
 
 \begin{equation}\label{eqs:lin-sys}
-A \tilde{x} - b = r
+r = A \tilde{x} - b
 \end{equation}
 
 One can then formulate an optimization problem that seeks to minimize the
@@ -47,11 +47,11 @@ in Equation \ref{eqs:l-inf}.
     \epsilon  \\
     %%
     \text{s.t.} \:\: &
-    - \epsilon \leq A_i x - b_i
+    - \epsilon \leq \sum_{j \in J} a_{i,j} x_i - b_i
     & \forall i \\
     %%
     &
-    \epsilon \geq A_i x - b_i
+    \epsilon \geq \sum_{j \in J} a_{i,j} x_i - b_i
     & \forall i \\
     %%
   \end{align}
@@ -70,11 +70,11 @@ Equation \ref{eqs:l-1}, by using a proxy vector, $y$.
     & \\
     %%
     \text{s.t.} \:\: &
-    - y_i \leq A_i x - b_i
+    - y_i \leq \sum_{j \in J} a_{i,j} x_i - b_i
     & \forall i \\
     %%
     &
-    y_i \geq A_i x - b_i
+    y_i \geq \sum_{j \in J} a_{i,j} x_i - b_i
     & \forall i \\
     %%
   \end{align}
@@ -84,8 +84,8 @@ Equation \ref{eqs:l-1}, by using a proxy vector, $y$.
 The core difference between the two formulations is of course the norm used. The
 $\ell_1$ norm in this case stores more information about the total violation,
 whereas the $\ell_\infty$ norm is concerned with only the largest violating
-constraint. These formulations are easily solved by the Simplex Method, as a
-starting vertex can always be chosen by setting $x = 0$.
+constraint. These formulations are good candidates for the Simplex Method, as,
+by inspection, a starting vertex can always be chosen by setting $x = 0$.
 
 The $\ell_2$ norm is not as straightforward to solve. As shown
 in \cite{ferris_linear_2008}, the actual norm can be replaced by its square,
@@ -112,9 +112,9 @@ in Equation \ref{eqs:l-2}.
 \end{subequations}
 %%% 
 
-As can be seen in its formulation in Equation \ref{eqs:l-2}, the objective
-function is not a linear function of the decision variables. Accordingly, one
-must tackle this problem using a different domain of mathematical programming,
-namely \textit{quadratic programming}, the discussion of which is outside the
-scope of this review due to the lack of its necessity to adequately solve the
-Recipe Approximation Problem described in \S\ref{sec:rap}.
+The objective function in Equation \ref{eqs:l-2} is not a linear function of the
+decision variables. Accordingly, one must solve this problem using a different
+domain of mathematical programming, namely \textit{quadratic programming}, the
+discussion of which is outside the scope of this review due to the lack of its
+necessity to adequately solve the Recipe Approximation Problem described
+in \S\ref{sec:rap}.

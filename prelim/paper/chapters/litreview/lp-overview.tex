@@ -12,8 +12,8 @@ covered, with much of the discussion covered in Ferris, Mangasarian, and
 Wright \cite{ferris_linear_2008}.
 
 Linear programs (LPs) have a relatively simple general construction. There are a
-set of $N$ decision variables, $x$, a cost vector, $c$, a constraint matrix,
-$A$, associated with $M$ constraints and a right-hand-side threshold vector,
+set of $n$ decision variables, $x$, a cost vector, $c$, a constraint matrix,
+$A$, associated with $m$ constraints and a right-hand-side threshold vector,
 $b$. The standard form for linear programs is as follows.
 
 %%% 
@@ -41,10 +41,9 @@ minimization problems, with equality constraints, etc. Most texts cover the
 standard transformations required to turn a given formulation into the standard
 form. In general, any LP can be transformed into the standard form.
 
-The $N$ x $M$ dimensional constraint matrix defines an $M$-dimensional option
-space (i.e., the number of columns is assumed equal to the number of decision
-variables). Any set of values for the vector of decision variables, $x$, that
-does not violate a constraint (including those bounding the variables) is termed
+The $m \times n$ dimensional constraint matrix defines an $n$-dimensional option
+space. Any set of values for the vector of decision variables, $x$, that does
+not violate a constraint (including those bounding the variables) is termed
 a \textit{feasible solution}. It is not only possible, but likely that a given
 problem formation has many feasible solutions, in which case any feasible
 solution that optimally satisfies the objective function (i.e., provides a
@@ -162,9 +161,9 @@ Equation \ref{eqs:std-form} is given in Equation \ref{eqs:dual-form}.
 
 A few critical differences exist. First note that the objective directions are
 switched: if a primal form has a minimization objective, its dual has a
-maximization objective. The constraint matrix is now $M$ x $N$-dimensional (it
-is in fact the original constraint matrix transposed). There is a new series of
-decision variables that form the corresponding solution space, i.e., the
+maximization objective. The constraint matrix is now $m \times n$-dimensional
+(it is in fact the original constraint matrix transposed). There is a new series
+of decision variables that form the corresponding solution space, i.e., the
 positive vector $u$, as shown in Equation \ref{eqs:dual-form_obj}. These
 variables are related to the original right-hand side of the constraint
 formulation, the vector $b$. The costs of the original problem, $c$, now form
