@@ -72,7 +72,7 @@ Transportation problems are a subset of the network flow problems and can
 therefore be modeled using linear programming. Transportation problems model the
 flow of a commodity between source nodes and sink nodes, i.e., there are no
 transshipment nodes in the general transportation problem. Critically, this
-simplifications allows for the nodes in the transportation problem to be
+simplification allows for the nodes in the transportation problem to be
 categorized into two explicit groups, sources and sinks. In other words, source
 nodes and sink nodes comprise two distinct subsets, $N_1, N_2$, the union of
 which comprises all nodes in the transportation graph, $N$. These properties can
@@ -97,20 +97,19 @@ the transportation problem to be modeled as a \textit{bipartite} graph.
   \begin{center}
     \includegraphics[width=\linewidth]{./chapters/litreview/node-arcs-bipartite.png}
   \caption{An example node-arc transportation network configuration. Arrows
-    denote possible flow directions. Note that all nodes either belog to the set
-    of sources (left) or set of sinks (right).}
+    denote possible flow directions. Note that all nodes either belong to the 
+    set of sources (left) or set of sinks (right).}
   \label{fig:node-arcs-bipartite}
   \end{center}
 \end{figure}
 
-The transportation problem is a general platform on which one can model more
-general problems. Previously, a maximum-flow problem was described, but the
-transportation problem lends itself more generally to the minimum-cost network
-problems. In such a formulation, each arc has an associated \textit{unit cost}
-associated with the cost of transporting a unit of a commodity along it,
-$c_{i,j}$. Additionally, instead of the notion of divergence, supplier and
-consumer nodes have an associated supply, $s_i$, or demand, $d_i$, which provide
-a notion of \textit{node capacity} rather than arc capacity.
+The transportation problem is a platform on which one can model more general
+problems. The minimum-cost transportation problem is a useful example. In such a
+formulation, each arc has an associated \textit{unit cost} associated with the
+cost of transporting a unit of a commodity along it, $c_{i,j}$. Additionally,
+instead of the notion of divergence, supplier and consumer nodes have an
+associated supply, $s_i$, or demand, $d_i$, which provide a notion
+of \textit{node capacity} rather than arc capacity.
 
 Accordingly, the minimum-cost transportation problem can be formulated as a
 linear program in the following manner.
@@ -139,7 +138,7 @@ linear program in the following manner.
 \end{subequations}
 %%% 
 
-As is noted in most every text on the Transportation Problem Linear Program
+As is noted in many texts on the Transportation Problem Linear Program
 formulation, an intuitive constraint on the problem to guarantee a feasible
 solution is that the total demand in the system must be no greater than the
 total supply in the system.
@@ -219,7 +218,8 @@ The formulation of the multi-commodity flow problem is shown in Equation
 %%% 
 
 A number of important reductions are possible for the multi-commodity
-transportation problem. The most important of all is when there is no arc that
-shares multiple commodities. In such a case, the single multi-commodity problem
-can be broken into $m$ different single-commodity transportation problems where
-$m$ is the cardinality of the set of commodities, $H$.
+transportation problem, e.g., the case in which is no arc that shares multiple
+commodities. In this instance the multicommodity connection constraints
+disappear, and the single multi-commodity problem can be broken into $m$
+different single-commodity transportation problems, where $m$ is the cardinality
+of the set of commodities, $H$. 
