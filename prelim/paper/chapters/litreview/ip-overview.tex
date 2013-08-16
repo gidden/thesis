@@ -1,20 +1,20 @@
-Integer programming expands upon the possible problems that can be modeled by
-linear programming. Whereas decision variables in linear programming are
-optimized on a continuum, i.e., all decision variables are real numbers,
-$x \in \mathbb{R}^n$. Integer programming allows for decision variables to take
-on integer-only values, i.e., $y \in \mathbb{Z}^n$. Strictly speaking, a
-programming formulation for which all decision variables are integer (i.e.,
-integer and binary) is called an \textit{integer program} (IP), whereas a
-programming formulation for which some deicision variables are integer while
+\Integer programming expands upon the possible problems that can be modeled by
+linear programming. Decision variables in linear programming are optimized on a
+continuum, i.e., all decision variables, $x$, are real numbers,
+$x \in \mathbb{R}^n$. Integer programming allows for certain decision variables,
+$y$, to take on integer-only values, i.e., $y \in \mathbb{Z}^n$. Strictly
+speaking, a programming formulation for which all decision variables are integer
+(i.e., integer and binary) is called an \textit{integer program} (IP), whereas a
+programming formulation for which some decision variables are integer while
 others are linear is called a \textit{mixed integer-linear program} (MILP). The
 discussion that follows is informed largely by Wolsey's
 text \cite{wolsey_integer_1998} from which I cite many definitions,
-etc. Additional clarification comes from class notes \cite{luedtke_class_2010}.
+etc. Additional clarification comes from course notes \cite{luedtke_class_2010}.
 
 Integer programming allows one to model specialized decision cases. Take for
 example one of the most well-known problems in mathematical programming and
-optimization, the \textit{Knapsack Problem}. The Knapsack problems is described
-as follows:
+optimization, the \textit{Knapsack Problem}. A version of the Knapsack problem
+is described as follows:
 
 \begin{itemize}
         \item A knapsack can hold at most $b$ pounds. 
@@ -64,17 +64,17 @@ highest benefit?''. Any problem can be associated with one of four categories of
 computational complexity:
 
 \begin{itemize}
-        \item Polynomial ($\mathcal{P}$)
-        \item Nondeterministic Polynomial ($\mathcal{NP}$)
-        \item Nondeterministic Polynomial Complete  ($\mathcal{NP}$-C)
-        \item Nondeterministic Polynomial Hard  ($\mathcal{NP}$-hard)
+        \item Polynomial-time ($\mathcal{P}$)
+        \item Nondeterministic Polynomial-time ($\mathcal{NP}$)
+        \item Nondeterministic Polynomial-time Complete  ($\mathcal{NP}$-C)
+        \item Nondeterministic Polynomial-time Hard  ($\mathcal{NP}$-hard)
 \end{itemize}
 
 The topic of computational complexity is relatively involved, thus I will only
-provide a short overview to simply provide context. A problem is considered to
-reside in $\mathcal{P}$ if there is a polynomial-time algorithm that can solve
-it. A classic example is that of naive matrix inversion, known to be of order
-$n^3$ (i.e., $\mathcal{O}(n^3)$) for a given $n$ x $n$ matrix.
+provide a short overview to provide context. A problem is considered to reside
+in $\mathcal{P}$ if there is a polynomial-time algorithm that can solve it. A
+classic example is that of naive matrix inversion, known to be of order $n^3$
+(i.e., $\mathcal{O}(n^3)$) for a given $n \times n$ matrix.
 
 A decision problem is considered to be in ($\mathcal{NP}$) if for any proposed
 solution, there is a \textit{short certificate}.
@@ -88,13 +88,13 @@ polynomial time.
 
 A decision problem, $Q$, is considered to be in $\mathcal{NP}$-C, if
 $Q \in \mathcal{NP}$ and \textit{any} problem, $P \in \mathcal{NP}$ is
-polynomially reducable to $Q$, i.e., instances of $P$ can be reformulated as
+polynomial-time reducible to $Q$, i.e., instances of $P$ can be reformulated as
 instances of $Q$ in polynomial time. The most popular candidate of this
-polynomial reduction is the Satisfiabiliy Problem, known to be in
+polynomial reduction is the Satisfiability Problem, known to be in
 $\mathcal{NP}$-C.
 
 Finally, a problem $Q$, is in $\mathcal{NP}$-hard, if any problem
-$P \in \mathcal{NP}$ is polynomially reducible to $Q$, but
+$P \in \mathcal{NP}$ is polynomial-time reducible to $Q$, but
 $Q \not\in \mathcal{NP}$. If a decision problem is in $\mathcal{NP}$-C, then the
 corresponding optimization problem is $\mathcal{NP}$-hard.
 
@@ -247,12 +247,12 @@ constraints are termed \textit{cutting planes}.
 \subsection{The Branch and Bound Algorithm}\label{sec:bnb}
 
 One of the most popular solution techniques used to solve integer programs is an
-algorithm called \textit{Branch and Bound} (BNB). At its core, BNB is a divide
-and conquer search algorithm that uses an enumeration tree to find optimal
-solutions to $\mathcal{NP}$-hard IPs and MILPs. There are a number of ways to
-speed up the search based on general techniques and problem-specific insights, a
-number of which have been discussed in the previous section. In this section,
-I'd like to highlight the basic nature of the algorithm and discuss lightly some
+algorithm called \textit{Branch and Bound} (BNB). At its core, BNB is a
+divide-and-conquer search algorithm that uses an enumeration tree to find
+optimal solutions to $\mathcal{NP}$-hard IPs and MILPs. There are a number of
+ways to speed up the search based on general techniques and problem-specific
+insights, a number of which have been discussed in the previous section. This
+section highlights the basic nature of the algorithm and discusses lightly some
 of the variety of solution strategies available. Again, the discussion here
 comes largely from \cite{wolsey_integer_1998} and \cite{luedtke_class_2010}.
 
@@ -268,7 +268,7 @@ given \textit{branch}.
 
 A simple example greatly helps to show the process of the BNB algorithm. Let us
 use a specific instance of Equation \ref{eqs:knapsack}. This example is
-contritite and does not involve pruning; it is useful simply to show how
+contrite and does not involve pruning; it is useful simply to show how
 branching occurs. Consider a knapsack with three items. The items have benefits
 of 0.5, 1, and 1.4, respectively and weights of 2, 3, and 4 pounds,
 respectively. The knapsack can hold 5 pounds. The integer program is shown in
