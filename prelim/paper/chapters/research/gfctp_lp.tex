@@ -1,11 +1,29 @@
+The linear program formulation of the GFCTP involves a set of players that act
+in an overarching market. The players are the supplier and consumer facilities
+involved in the simulation, i.e., the reactors, fabrication facilities,
+repositories, etc. In strict mathematical programming parlance, the GFCTP can be
+described as a Multicommodity Transportation Problem with Side
+Constraints, but there are a number of departures from the classical MTP.
 
-The Generic Fuel Cycle Transportation Problem with Side Constraints (GFCTP-LP)
-describes a multi-commodity setting in which demand can be met by multiple
-commodities. Consumers denote a cost preference over the possible commodities
-they consume and a demand for the set of commodities that must be met. Suppliers
+To begin, the multicommodity aspect of the problem is not manifest on arc
+capacities. Instead, facility demand constraints, whose equivalent in the MTP
+are Equation \ref{eqs:MCTP_dem}, incorporate a set of satisfactory commodities,
+rather than a single satisfactory commodity. For example, a reactor may be able
+to accept UOX or MOX fuel, but has a demand for total fuel. Additionally,
+supplier facilities may have a set of constraints on their ability to supply a
+given commodity and they may not be able to directly express those constraints
+with the unit of the commodity market, which is generally kilograms of a
+commodity. Take an enrichment facility for example. Such a facility has
+nominally two constraints: SWU capacity and natural uranium capacity. The former
+constraint is a processing constraint, and the latter is an inventory
+constraint; however, both are necessary to fully define the
+problem. Furthermore, let us note that the output of this facility is kilograms
+of enriched uranium. Accordingly, the above capacities must be translated into
+units of this output. Because multiple commodities can satisfy demand, consumers
+denote a cost preference over the possible commodities they consume. Suppliers
 denote one or more production capacities for a given commodity which serve as
 the set of supply capacities analogous to the normal MCTP
-(see \S\ref{sec:MCTP}). The GFCTP-LP formulation is as follows:
+(Equation \ref{eqs:MCTP_sup}). The GFCTP-LP formulation is as follows:
 
 %%% 
 \begin{subequations}\label{eqs:GFCTP-LP}
@@ -27,7 +45,7 @@ the set of supply capacities analogous to the normal MCTP
     \forall \: j \in J \label{eqs:GFCTP-LP_dem} \\
     %%
     &
-    x_{i,j} \geq 0
+    x^h_{i,j} \geq 0
     &
     \forall \: x \in X \label{eqs:GFCTP-LP_x}
     %%
@@ -45,7 +63,7 @@ and \ref{tbl:GFCTP-LP-vars}. Note that $H_{j}$ is a subset of the commodities:
 %%% 
 \begin{table} [h!]
 \centering
-\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
 \hline
 Set         & Description \\
 \hline
@@ -66,7 +84,7 @@ $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 %%% 
 \begin{table} [h!]
 \centering
-\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
 \hline
 Variable    & Description \\
 \hline
@@ -93,90 +111,118 @@ This formulation deviates from the normal MCTP formulation via the expansion of
 capacity constraints (Equation \ref{eqs:GFCTP-LP_sup}) and the inclusion of a
 constraint allowing multiple commodities that are able to meet the demand of a
 producer (Equation \ref{eqs:GFCTP-LP_dem}). The former constraint maintains the
-multi-commodity nature of the formulation. This leads to an important insight: if
-Equation \ref{eqs:1demand} holds,
+multi-commodity nature of the formulation. 
+
+Under certain conditions, the GFCTP-LP will result in a simpler problem. The
+first possible condition is that each consumer could have its demand met by only
+one commodity, i.e.,
 
 \begin{equation}\label{eqs:1demand}
-  \left|{H_{j}}\right| = 1 \: \forall \: j \in J
+  \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
 \end{equation}
 
-then the GFCTP-LP can be transformed into a separable multi-commodity
-transportation problem as shown in \cite{bertsekas_network_1998}. If the problem
-is separable, then the Transportation Problem Simplex Method shown in
-\S\ref{sec:trans-simplex} can be applied to a series of smaller subproblems,
-reducing overall complexity. Furthermore, if Equations \ref{eqs:1demand} and
-\ref{eqs:1constraint} both hold,
+In such a situation, the GFCTP-LP can be transformed into an analog of the
+separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
+a condition will effectively allow one to solve $N$ different instances of a
+single-commodity problem, where $N$ is the cardinality of $H$. 
+
+The second simplifying condition is if the constraining capacity set has a
+cardinality of unity, i.e., 
 
 \begin{equation}\label{eqs:1constraint}
-  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H
+  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H.
 \end{equation}
 
-then the GFCTP-LP is in fact the a normal Transportation Problem, because the
-quality translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant
-at solution time.
+If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
+GFCTP-LP is in fact the a normal Transportation Problem, because the quality
+translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
+solution time. 
 
-\paragraph{Capacity Translation Function and Constraints Example}~\\
+These simplifications are important to the computation time required to solve
+the resulting problem instance. The general solution technique for LPs is the
+Simplex Method, as previously described. Klee and Minty show that in the worst
+case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
+but in practice it is generally considered very computationally efficient. If
+the problem can be simplified to a TP, then the Transportation Simplex Method
+can be used \cite{ahuja_network_1993}.
 
-The notion of a capacity translation function is something that I have
+\paragraph{Capacity Translation Function and Constraints Example}
+
+The notion of a capacity translation function is something that has been
 introduced out of necessity due to the complexity of the GFCTP. Accordingly, an
-example will help clarify its purpose. I'll use this time to also to provide an
+example will help clarify its purpose. This time can also be used to provide an
 example of a producer with multiple capacity constraints for a given commodity.
 
 Take, for example, an enrichment facility. Such a facility produces the
-commodity ``Enriched Uranium''. This facility has two constraints on its
+commodity enriched uranium (EU). This facility has two constraints on its
 operation for any given time period: the amount of Separative Work Units (SWU)
 that it can process, $s_{enr,SWU}$ and the total natural uranium (NU) feed it
 has on hand, $s_{enr,NU}$. Note that neither of these capacities are measure
 directly in the units of the commodity it produces, i.e., kilograms of enriched
-uranium (EU). We can now state the set the values for $K_{i}^{h}$ for this
-facility:
+uranium (EU). The set of values for $K_{i}^{h}$ for this facility are:
 
 \begin{equation}\label{eqs:enr-constr-commods}
   K_{enr}^{EU} = \{ \mbox{SWU}, \mbox{NU} \}
 \end{equation}
 
-Let us now consider that there is a set of requests for enriched uranium that
-this facility can possibly meet. Such requests have, in general, two parameters:
-$P_{j}$, the total product quantity (in kilograms), and $\varepsilon_{j}$, the
-product enrichment (in w/o U-235). Although it would be consistent to use the
-notation that has previously been used in \S\ref{sec:prev-enrich}, I will denote
-the product weight fraction as $\varepsilon_{j}$ rather than $x_{p,j}$ to reduce
-confusion with the similar notation of commodity flow, $x_{i,j}$. In any case,
-notice that we have provided the following definition:
+Consider a set of requests for enriched uranium that this facility can possibly
+meet. Such requests have, in general, two parameters: $P_{j}$, the total product
+quantity (in kilograms), and $\varepsilon_{j}$, the product enrichment (in w/o
+\nucl{235}{U}). The notation for enrichment, $\varepsilon_{j}$, is chosen over its
+normal form, $x_p$, to limit confusion with the LP notation of material flow,
+$x^h_{i,j}$. For the purposes of this constraint set, the quality of material in
+question is its enrichment, i.e.,
 
 \begin{equation}\label{eqs:enr-q-swu}
-  q_{j}^{EU} \equiv \varepsilon_{j}
+  q_{j}^{EU} \equiv \varepsilon_{j}.
 \end{equation}
 
 These values are set during a prior phase of the overall matching algorithm, and
-can therefore be considered constants. Further, let us note that, in general, an
-enrichment facility's operation, or rather its capacity thereof, is governed by
-two parameters: $x_{f,enr}$, the fraction of U-235 in its feed material, and
-$x_{t,enr}$, the fraction of U-235 in its tails material. Let us assume both of
-these are constants of the facility. Utilizing the equations presented in
-\S\ref{sec:prev-enrich}, we can denote the functional forms of the arguments of 
-this facility's two capacity constraints.
+can therefore be considered constant. Further, let us note that, in general, an
+enrichment facility's operation, or rather its capacity, is governed by two
+parameters: $\varepsilon_{f,enr}$, the fraction of \nucl{235}{U} in its feed material, and
+$\varepsilon_{t,enr}$, the fraction of \nucl{235}{U} in its tails material. These parameters
+determine the amount of SWU required to produce some amount of enriched uranium:
 
 \begin{align}
-\label{eqs:enr-prod-beta}
-\beta_{enr,NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - x_{t,enr}}
-                                      {x_{f,enr} - x_{t,enr}} \\
 \begin{split}
-\label{eqs:enr-swu-beta}
-\beta_{enr,SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
-                         & + \frac{\varepsilon_{j} - x_{t,enr}}
-                                  {x_{f,enr} - x_{t,enr}} V(x_{t,enr}) \\
-                         & - \frac{\varepsilon_{j} - x_{f,enr}}
-                                  {x_{f,enr} - x_{t,enr}} V(x_{f,enr})
+\label{eqs:swu}
+SWU = & \:\: P ( V(\varepsilon_{j}) 
+      + \frac{\varepsilon_{j} - \varepsilon_{f,enr}}
+               {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{t,enr}) \\
+      & - \frac{\varepsilon_{j} - \varepsilon_{t,enr}}
+               {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{f,enr}) )
 \end{split}
 \end{align}
 
-where $V(x)$ is the value function described in Equation
-\ref{eqs:enr-value}. These constraints correspond to the per-unit requirements
-for enriched uranium of natural uranium feed shown in Equation
-\ref{eqs:enr-feed} and SWU shown in Equation \ref{eqs:enr-swu-p}. Finally, we
-can form the set of constraint equations for the enrichment facility by
-combining Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
+$P$ in Equation \ref{eqs:swu} is the amount of produced enriched uranium, and
+$V(x)$ is the value function,
+
+\begin{equation}\label{eqs:value}
+  V(x) = (1-2x) \ln \left(\frac{1-x}{x}\right)
+\end{equation}
+
+Utilizing the above equations, one can denote the functional forms of the
+arguments of this facility's two capacity constraints.
+
+\begin{align}
+\label{eqs:enr-prod-beta}
+\beta_{enr,NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t,enr}}
+                                      {\varepsilon_{f,enr} - \varepsilon_{t,enr}} \\
+\begin{split}
+\label{eqs:enr-swu-beta}
+\beta_{enr,SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
+                         & + \frac{\varepsilon_{j} - \varepsilon_{f,enr}}
+                                  {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{t,enr}) \\
+                         & - \frac{\varepsilon_{j} - \varepsilon_{t,enr}}
+                                  {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{f,enr})
+\end{split}
+\end{align}
+
+These constraints correspond to the per-unit requirements for enriched uranium
+of natural uranium feed and SWU. Finally, we can form the set of constraint
+equations for the enrichment facility by combining
+Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 \ref{eqs:enr-prod-beta}, and \ref{eqs:enr-swu-beta}.
 
 \begin{align}
@@ -186,26 +232,25 @@ combining Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 \sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}^{EU} & \leq s_{enr,SWU}
 \end{align}
 
-\paragraph{Satisfying Commodity Set Example}~\\
+\paragraph{Satisfying Commodity Set Example}
 
 The other departure the GFCTP-LP takes from the normal MCTP formulation is the
-location of its multicommodity dependence. As presented in \S\ref{sec:MCTP}, the
+location of its multicommodity dependence. As presented above, the
 MCTP formulation includes a multicommodity arc capacity constraint, Equation
-\ref{eqs:MCTP_cap}. There is no direct analog in the GFCTP, i.e., transportation
+\ref{eqs:MCTP_arc}. There is no direct analog in the GFCTP, i.e., transportation
 arcs are assumed separate for separate commodities. There is still a notion of
 multicommodity dependence, however, via Equation \ref{eqs:GFCTP-LP_dem}. This
 constraint models a situation in which different commodities can satisfy a
 consumer's demand.
 
-Let us again use the enrichment facility example, expanding on the previous
-discussion. Note that an enrichment facility takes feed uranium and then
-enriches its U-235 content. This feed uranium can come from different sources
-which have different feed enrichments. The most likely case in practice of
-multiple sources of feed uranium for such a facility involves the recycling of
-uranium where an enrichment facility can use either natural uranium (NU) or
-recycled uranium (RU), which has a higher weight percent of U-235 than does
-natural uranium. We can now state the set the values for $H_{j}$ for this
-facility:
+Take the enrichment facility example, expanding on the previous discussion. Note
+that an enrichment facility takes feed uranium and then enriches its \nucl{235}{U}
+content. This feed uranium can come from different sources which have different
+feed enrichments. In practice, the most likely sources of feed uranium are
+natural uranium (NU) or recycled uranium (RU), a product of reprocessing light
+water reactor fuel. Recycled uranium may be advantageous to use if it has a
+higher weight percent of \nucl{235}{U} than does natural uranium. We can now state the
+set the values for $H_{j}$ for this facility:
 
 \begin{equation}\label{eqs:enr-dem-commods}
   H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
@@ -213,9 +258,8 @@ facility:
 
 Of course, the facility must define some preference function over the set of
 satisfying commodities. In this example, recycled uranium is more valuable
-because of its higher U-235 content, which translates into a (relatively large)
+because of its higher \nucl{235}{U} content, which translates into a (relatively large)
 SWU reduction in order to meet identical enrichment requests. This preference
 ordering is encapsulated in the cost function in Equation
 \ref{eqs:GFCTP-LP_obj}. The nature of the cost function in the \Cyclus
-simulation environment is nontrivial and explained further in
-\S\ref{sec:cost-function}.
+simulation environment is nontrivial and explained further in this section.

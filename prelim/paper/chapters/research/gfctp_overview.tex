@@ -1,0 +1,18 @@
+This section describes a mathematical programming formulation that can be used
+in \Cyclus simulations to determine material flows between simulation
+entities. The formulation is informed by the supply-demand parameters gathered
+by the methodology described in the previous section. The basis for the
+formulation is the Multi-commodity Transportation Problem described
+in \S\ref{sec:MCTP} with some departures described in detail below. Two separate
+formulations are provided. The first is a strictly linear program. It is
+proposed a basis for proof-of-principle work which may not fully adequately
+describe supply-demand scenarios. A primary example of its shortcoming is that
+it allows split orders, i.e., orders that are not fully filled. The nuclear fuel
+cycle deals with bundled orders, such as nuclear fuel assemblies, thus this
+modeling paradigm is only an approximation. Accordingly, a mixed integer-linear
+formulation is also provided to address this concern. It splits the class of
+orders into two distinct sets, one that allows order splitting and one that does
+not. Solving the more complex problem will result in longer simulation times.
+Accordingly, one of the focuses of this research is to determine the effect on
+the simulation between the two formulations and analyze the cases in which
+additional fidelity is needed.

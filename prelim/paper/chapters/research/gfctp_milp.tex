@@ -10,13 +10,22 @@ detail is not necessary in every simulation, but we wish to allow this advanced
 modeling for those that do need it. In order to provide this capability of
 quantizing orders, binary decision variables must be introduced and integer
 programming techniques must be utilized to solve the resulting mixed
-integer-linear program. I present the updated formulation below. The key
-difference is the inclusion binary variables $y_{i,j}^{h}$, which are 1 if
-producer $i$ trades commodity $h$ with consumer $j$ and constants
-$\tilde{x}_{j}^{h}$, which denote the quantity of a quantized order. Further a
-new set is introduced, $J_{e}$, the set of consumers who require quantized, or
-exclusive, orders. The original set of consumers, those who allow partial
-orders, I denote $J_{p}$. These two sets constitute the set of all consumers.
+integer-linear program. 
+
+It should be noted that the addition of integer variables changes both the
+complexity of the formulation and the complexity of the solution technique. Such
+a change requires a Mixed Integer-Linear Program (MILP) formulation and solution
+via the branch-and-bound method which solves NP-Hard combinatorial optimization
+problems whereas the Linear Program (LP) version requires the simplex method
+which is much more efficient.
+
+The updated formulation is presented below. The key difference is the inclusion
+binary variables $y_{i,j}^{h}$, which are 1 if producer $i$ trades commodity $h$
+with consumer $j$ and constants $\tilde{x}_{j}^{h}$, which denote the quantity
+of a quantized order. Further a new set is introduced, $J_{e}$, the set of
+consumers who require quantized, or exclusive, orders. The original set of
+consumers, i.e., those who allow partial orders, are denoted $J_{p}$. These two
+sets constitute the set of all consumers.
 
 \begin{equation}\label{eqs:consumer-union}
   J = J_{p} \cup J_{e}
@@ -36,17 +45,18 @@ formulation follows:
     && \\
     %%
     \label{eq:GRCTP-E_sup}
-    \text{s.t.} \:\: 
     &
+    \text{s.t.} \:\: 
     \sum_{j \in J_{p}}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h}
-    + \sum_{j \in J_{e}}\beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{j}^{h} \leq s_{i,k}^{h} 
-    &&
-    \forall \: i \in I, \: \forall \: k \in K_{i}^{h}, \forall \: {h \in H} \\
+    + \sum_{j \in J_{e}}\beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{j}^{h} \leq s_{i,k}^{h} \nonumber \\
+    &
+    \qquad\qquad\qquad\qquad
+    \forall \: i \in I, \: \forall \: k \in K_{i}^{h}, \forall \: {h \in H}\\
     %%
     \label{eq:GRCTP-E_dem_p}
     &
-    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j}) 
-    & 
+    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})
+    &
     \forall \: j \in J_{o} &\\
     %%
     \label{eq:GRCTP-E_dem_e}
@@ -86,13 +96,13 @@ and \ref{tbl:GFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
 %%% 
 \begin{table} [h!]
 \centering
-\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
 \hline
 Set         & Description \\
 \hline
 $H$         & all commodities  \\
 $I$         & all producers  \\
-$J_{p}$     & all consumers who accept parital orders  \\
+$J_{p}$     & all consumers who accept partial orders  \\
 $J_{e}$     & all consumers who accept only exclusive orders  \\
 $X$         & the feasible set of flows between producers and consumers  \\
 $Y$         & the feasible set of exclusive flows between 
@@ -110,7 +120,7 @@ $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 %%% 
 \begin{table} [h!]
 \centering
-\begin{tabularx}{\textwidth-20pt}{|c|X|} % line wraps second column if too long
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
 \hline
 Variable    & Description \\
 \hline
@@ -139,16 +149,14 @@ $d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of
 %%%
 
 The examples of the various constraints from the previous section also apply
-here. The only difference is the notion of the binary variables, $y_{i,j}^{h}$s,
+here. The only difference is the notion of the binary variables, $y_{i,j}^{h}$,
 which denote a sort of on/off switch as to whether a consumer's entire requested
 amount of material is met by a supplier or not.
 
-It should be noted that this advanced formulation brings in signifigant
-complexity to the resolution method at every time step. As with other mixed
-integer-linear programs, the GFCTP-E is NP-Complete and must be solved using the
-Branch-and-Bound technique described in \S\ref{sec:bnb}. However, simple
-heuristics exist. The most common of them is to solve a relaxed version of the
-problem in the form of a linear program, and to round values to form an integer
-solution. The exploration of additional heuristics will be performed based on
-the outcome of the implementation and analysis of this formulation in
-the \Cyclus simulation environment.
+It should be noted that this advanced formulation adds significant complexity to
+the resolution method at every time step. However, simple heuristics exist. The
+most common of them is to solve a relaxed version of the problem in the form of
+a linear program, and to round values to form an integer solution. The
+exploration of additional heuristics will be performed based on the outcome of
+the implementation and analysis of this formulation in the \Cyclus simulation
+environment.
