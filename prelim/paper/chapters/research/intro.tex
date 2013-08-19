@@ -1,50 +1,41 @@
-In this chapter I seek to lay out a plan by which a fully agent-based simulation
-can be implemented for a generic fuel cycle. By generic, I mean that the
-facilities involved are not known \textit{a priori} and, accordingly,
-facilities can be coupled together as the designer wishes. For example, a
-designer has the choice to model a separations facility and advanced fuel
+This chapter seeks to lay out a plan by which a fully agent-based simulation can
+be implemented for a generic nuclear fuel cycle with a more realistic chemical
+separations and fuel-matching model than currently exists in the field. The term
+generic implies that the facilities involved are not known \textit{a priori}
+and, accordingly, facilities can be coupled together automatically. For example,
+a modeler has the choice to model a separations facility and advanced fuel
 fabrication facility as separate entities whose connected supply and demand are
 met by a generic engine, or to model the two facilities as a single combined and
 coupled entity. Additionally, the solution framework for this matching engine
-must be agnostic as to the classes of materials involved. Rather than
-hard-coding in constraints and capacities for different material classes, they
-are added dynamically based on the entities involved in the solution.
+must be agnostic as to the classes of commodities and materials involved. Rather
+than hard-coding in constraints and capacities for different material classes,
+they are added dynamically based on the entities involved in the
+simulation-based solution.
 
-Furthermore, there has been previous work in automating the input and output of
-fuel cycle facilities in order to reduce rigorously voluminous user input of
-required material and to reduce reliance on closed-source depletion codes that
-greatly increase simulation times, such as ORIGIN~\cite{bell_origen_1973} and
-CESAR~\cite{vidal_cesar:_2006}. To this effect, Anthony Scopatz has developed
-the Bright reactor simulator~\cite{scopatz_essential_2011} that captures the
-essential physics of reactor depletion calculations. Katy Huff has also added to
-this area of work by developing a repository simulator that analyzes repository
-effects due to different combinations of materials in different repository
-geologies~\cite{huff_integrated_2013}. This work adds a separations facility
-automation to this family of facilities, allowing for the matching of a set of
-requested materials with the capability of defining preferences over separated
-materials based on material properties and facility properties. An example of
-the latter is the desire to test last-in-first-out (LIFO) and first-in-first-out
-(FIFO) queues of materials while meeting the constraints of the required
-material properties.
+As fuel cycle simulators have progressed from simple spreadsheet applications,
+work advancing the field has focused on including in-simulation dynamic
+calculations of important metrics and parameters in order to provide feedback to
+the simulation rather than solely post-processing simulation output. A number of
+examples exist. COSI uses the CESAR depletion code \cite{vidal_cesar:_2006} to
+automate output fuel characteristics in order to reduce voluminous user input
+for simulated materials. Scopatz introduced the notion of essential physics
+modeling with his Bright simulation engine \cite{scopatz_essential_2011}. Most
+recently, Huff has added to this area of work by developing a repository
+facility for the \Cyclus simulator that analyzes repository effects due to
+different combinations of materials in different repository
+geologies~\cite{huff_integrated_2013}.
 
-Finally, I discuss my proposal for entity interaction within the generic fuel
-cycle simulator framework. The goal of this section is to identify the different
-design decisions made by the authors of the various simulators in
-\S\ref{sec:simulators} and to encapsulate the design decisions into the
-appropriate entities in the \Cyclus simulation. Again, the design purpose of
-\Cyclus is to provide a minimal framework for agent-based simulation while
-maximizing the capability of future developers to adapt reusable sections of
-code to implement their own design decisions. The interaction between entities
-is interesting on two fronts: defining their interaction behavior, for which
-inspiration is taken from previous fuel cycle simulation work (see
-\S\ref{sec:simulators}), and implementing the design decisions, for which
-``mixins'' will be used. It should be noted that in the object-oriented
-community, there are nominally two distinct types of mixins, which I will call
-the classical type and updated type. The classical type is discussed slightly in
-pp. 390-402 of \cite{stroustrup_c++_2000} as well as Item 43 of
-\cite{meyers_effective_2005}. The updated type of mixin makes heavy use of
-template metaprogramming and is discussed in \cite{ulrich_mixin-based_2001} and
-\cite{smaragdakis_mixin_2002}. Due to the nature of the \Cyclus dynamic-loading
-simulation infrastructure and the \Cyclus ecosystem demand for barriers to entry
-being as-low-as-reasonably-allowable (ALARA), I chose to use the classical type
-of mixin.
+This work proposes additional advancement of the dynamic simulation of nuclear
+fuel cycles using the \Cyclus simulator. First, a simulation framework for
+simulation entity interaction is introduced, the primary goal of which is to
+encapsulate simulation-level design decisions. The framework allows for market
+interactions to be defined, providing a formalism by which information related
+to supply and demand of commodities and materials can be represented in a
+general sense. The framework also provides a formal definition for the types of
+interactions between entities (for example, the building of facilities). Next, a
+mathematical programming formulation based on the multi-commodity transport
+problem is proposed to solve the generic supply-demand matching problem. A
+linear program formulation and mixed integer-linear program formulation is
+proposed, the latter of which addresses the trade-off between computation speed
+and realism. Finally, the issue of matching separated elemental streams with
+requested recycled fuel is addressed via an approximation linear program. 
