@@ -1,5 +1,50 @@
+The Recipe Approximation Problem formulation is designed to match a set of
+target materials given a set of separated material streams. A \textit{match} is
+an approximation of a target material that is \textit{close enough} to the
+target material. Accordingly, an approximation linear program as described
+in \S\ref{sec:approx} is proposed that attempts to minimize the residual
+isotopic vectors associated a series of matches. 
+
+A weighted $\ell_1$ norm is used to measure the size of the residual to maintain the
+linear nature of the program. The residual associated with a given target recipe
+mass is defined as
+
+\begin{equation}\label{eqs:norm}
+\vec{y_{t}} = \left| M \cdot \vec{x_{t}}  - m_t \vec{I_{t}} \right|.
+\end{equation}
+
+Weights are required in the in the objective function for primarily two
+reasons. First, the isotopes that are most important from a nuclear engineering
+domain knowledge point of view are known to of relatively low concentration in
+the final fuel recipe (e.g., U-235 is only 3-5 w/o of LWR fuel). Second,
+isotopes may exist in barrels that are not specified in target recipes. A simple
+physical explanation is that any separations process has an efficiency which
+governs how ``pure'' a separated elemental stream is -- there are always some
+contaminants. Accordingly, I adopt Oliver's definition of this weight
+from \cite{oliver_geniusv2:_2009}, which normalizes the importance of isotopes
+in the final mixture.
+
+\begin{equation}\label{eqs:weights}
+c_{i,t} = 
+\begin{cases}
+ \frac{1}{m_{i,t}} & \text{if } i \in I_{t} \\
+ \frac{1}{m_{t}}   & \text{if } i \not\in I_{t}
+\end{cases}
+\end{equation}
+
+Combing Equation \ref{eqs:weights} with Equation \ref{eqs:norm} yields the
+weighted-norm objective function.
+
+\begin{equation}
+\min_{z} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
+\end{equation}
+
+%% end of work so far %%
+
+
+
 The goal of this formuation is to match a set of fuel requests as closely as
-possible, where proximity in this sense is defined by the $L^{1}$ norm of the
+possible, where proximity in this sense is defined by the $\ell_1$ norm of the
 distance between a mixture attribute and a target attribute. In the following
 linear program, the mixture attribute is the dot product of a matrix and a
 vector. The matrix is that of all isotopic masses in barrels, $M$, where an

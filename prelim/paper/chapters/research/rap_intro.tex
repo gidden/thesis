@@ -1,21 +1,26 @@
 The Recipe Approximation Problem (RAP) was originally conceived by Kyle Oliver
-in \cite{oliver_geniusv2:_2009}. It was the result of conversations with
-scientists of the VISION fuel cycle simulation team \cite{vision2009} with what
-was then called the Winery Problem, because of the similarity due to mixing
-vintages of win to match a given recipe. This work expands Oliver's initial
-formulation by correcting an error and expanding the single-request formulation
-to an N-request formulation.
+in \cite{oliver_geniusv2:_2009}. Its conception was the result of conversations
+with scientists of the VISION fuel cycle simulation team \cite{vision2009}
+concerning what was then called the ``Winery Problem'' due to the similarity to
+the problem of mixing vintages of win to match a given recipe. This work expands
+Oliver's initial formulation by correcting an error and expanding the
+single-request formulation to an $n$-request formulation.
 
 The Recipe Approximation Problem (RAP) seeks to model a separations facility
-matching reactor fuel orders. The basic assumptions of the problem are the
-following: there are a set of barrels of separated material, $B$, and a set of
-fuel requests, $R$, that specify an target isotopic vector, $\vec{t_{r}}$, and
-quantity, $q_{r}$, that fully describe a desired fuel order. The goal of the
-solution methodology is to determine a matrix of extraction fractions $X$, where
-each entry, $x_{b,r}$ denotes the fraction of barrel $b$ being used to match
-fuel request $r$. The problem is shown graphically in Figure \ref{fig:rap},
-displaying the set of barrels, $B$, the set of fuel requests, $R$, and the set
-of extraction fractions, $X$.
+matching reactor fuel orders. Conceptually, the problem formulation is
+relatively simple. The basic constituents include a set of barrels of separated
+material, $B$, and a set of target recipes, $T$. Each barrel is defined by a
+quantity, $m_b$, and isotopic quality vector, $I_b$. The barrel mass matrix,
+$M$, is constructed of column vectors by multiplying $m_b$ and $I_b$ for each
+barrel. Similarly, each target recipe is defined by a quantity, $m_t$, and
+isotopic quality vector, $I_t$. A mass vector for the target recipe is defined
+by multiplying $m_t$ and $I_t$. The goal of the program is to find a extraction
+matrix, $X$, which minimizes the residual associated with the matching of
+recipes, where the most straight forward residual is associated with target
+recipe isotopic masses. Each consitituent, $x_{b,t}$, represents a fraction of
+barrel, $b$, taken to match a target recipe, $t$. The problem is shown
+graphically in Figure \ref{fig:rap}, displaying the set of barrels, $B$, the set
+of fuel requests, $R$, and the set of extraction fractions, $X$.
 
 \begin{figure}[h]
   \begin{center}
@@ -28,8 +33,8 @@ of extraction fractions, $X$.
 
 The optimal extraction fractions are modeled as the solution to an
 approximation linear program, the foundations of which were described in
-\S\ref{sec:approx}. Below I describe the most straightforward formulation of 
-the RAP, expanding upon the work in \cite{oliver_geniusv2:_2009}. I then
-describe how additional constraints can be added to the formulation given
-additional information. Finally, I describe a more abstract version that adds a
-notion of agency to the problem formulation.
+\S\ref{sec:approx}. The most straightforward formulation of 
+the RAP is described below, expanding upon the work
+in \cite{oliver_geniusv2:_2009}. The addition of other domain-specific
+constraints is then described. Finally, a more abstract version that adds a
+notion of agency to the problem formulation is provided.
