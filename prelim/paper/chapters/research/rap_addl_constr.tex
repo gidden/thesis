@@ -1,83 +1,88 @@
-A viable critique of the proposal of the formulation of the RAP is that it does
-not capture reactor-specific information in its application of a neutronics
-parameter approximation. This initial formulation uses the neutron production
-factor ($\eta$) primarily because of precedence and because of the nature of the
-\Cyclus simulation engine. As it is currently designed, the \Cyclus engine
-treats facilities as black boxes, which is to say that it only concerned with
-material flowing into and out of those boxes for which there may or may not be
-an isotopic profile accompanying an amount of requested material. This loose
-coupling is by design, the \Cyclus development team wishes to maintain the
-ease-of-use of connecting new simulation entities at run time, as was described
-in the dynamic loading segment of \S\ref{sec:prev-dynamic}. Accordingly,
-decisions to include facility-specific information, e.g., reactor assembly
-characteristics, must be made with forethought and knowledge as to their
-usefulness for inclusion and straining the minimal-connections model. However,
-as future work progresses, such a need may arise.
-
-One possible extension of the RAP formulation that includes reactor information
-(albeit minimally) would be a use of a $k_{\infty}$ constraint either in
-conjunction with or instead of the $\eta$ constraint. If used in conjunction
-with the $\eta$ constraint, the new formulation would effectively add loss
-information due to the presence of moderator parameters, creating a tighter
-feasible solution space than would exist with simply using a $k_{\infty}$
-constraint in isolation. 
-
-The definition of $k_{\infty}$ is as follows.
-
-\begin{equation}\label{eqs:kinf_macro}
-k_{\infty} = \frac{\sum_{i \in I_{F}} \nu^{i} \Sigma_{f}^{i}}
-                  {\Sigma_{a}^{M} + \sum_{i \in I_{F}} \Sigma_{a}^{i}}
-\end{equation}
-
-The notation is almost the same as Equation \ref{eqs:eta_macro}, except that the
-difference between fuel and moderator cross sections are denoted by $F$ and $M$
-superscripts respectively. For the remainder of this section, though, I will
-drop the $F$ superscript because it can be assumed that the isotopes under
-consideration for this problem are those of the fuel. The moderator-based
-neutron losses are also accounted for in the denominator of the expression. It
-should be noted again that this expression assumes a homogenization of fuel and
-moderator material, i.e., they are considered ``smeared''. The corresponding
-constraint would take the following form, again, similarly to Equation
-\ref{eqs:eta_nonlin}.
+A viable critique of the proposed RAP formulation is that it does not capture
+reactor-specific information in its application of a neutronics parameter
+approximation. As stated in the previous section, the neutron reproduction
+factor was chosen because it is a function purely of the fuel isotopics present
+in a target recipe. The best candidate for an additional neutronics parameter
+the \textit{infinite medium neutron multiplication factor}, $k_\infty$. In it's
+simplest form, $k_\infty$ is a function of the neutron reproduction factor and
+the \textit{fuel utilization factor}, where the fuel utilization factor is
+defined as
 
 \begin{equation}
-\label{eqs:kinf_nonlin}
-\epsilon_{k_{\infty}} \geq \left| 
-\frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}}
-     {\Sigma_{a,r}^{M} + \sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}} 
-- k_{\infty,r} \right|
-\: \forall \: r \in R
+f = \frac{\Sigma_{a, F}}{\Sigma_{a, F} + \Sigma_{a, M}},
 \end{equation}
 
-$k_{\infty,r}$ in Equation \ref{eqs:kinf_nonlin} is defined in the normal way.
+and the neutron reproduction factor is more precisely defined as 
 
 \begin{equation}
-\label{eqs:kinf_r}
-k_{\infty,r} = \frac{\sum_{i \in I_{r}} \nu^{i} \Sigma_{f}^{i}}
-                    {\Sigma_{a,r}^{M} + \sum_{i \in I_{r}} \Sigma_{a}^{i}}
+\eta = \frac{\nu_F \Sigma_{f, F}}{\Sigma_{a, F}}.
 \end{equation}
 
-Applying similar operations to Equation \ref{eqs:kinf_nonlin} as were applied to
-Equation \ref{eqs:eta_nonlin} result in a similarly linearized constraint.
+Note the distinction made between physical properties of the fuel region, $F$,
+and the moderator region, $M$, and the use of macroscopic rather than
+microscopic cross sections (see Equation \ref{eqs:micro-macro}. $k_\infty$ in
+the energy-independent case can then be defined as
+
+\begin{equation}
+k_\infty =  \eta f = \frac{\nu_F \Sigma_{f, F}}{\Sigma_{a, F} + \Sigma_{a, M}}.
+\end{equation}
+
+Critically, $k_\infty$ requires some information about reactor geometry, where
+in this case information regarding the ratio of moderator to fuel and the type
+of moderator used is required. Such a requirement breaks the modular nature of
+facilities in \Cyclus described in \S \ref{sec:agent-interaction}, and as such
+would require some amount of simulation redesign and source code refactor.
+Accordingly, decisions to include facility-specific information, e.g., reactor
+assembly characteristics, must be made with forethought and knowledge as to
+their usefulness for inclusion and straining the minimal-connections
+model. However, as future work progresses, a need may arise.
+
+If such a design decision was taken, though, the RAP formulation could be
+enhanced by adding an additional neutronics constraint related to
+$k_\infty$. Given that a reactor facility provides the information required in
+the original RAP formulation in addition to a macroscopic moderator cross
+section, $\Sigma^M_{a,t}$, the target's multiplication factor is defined as
+
+\begin{equation}
+\label{eqs:kinf_t}
+k_{\infty, t} = \frac{\sum_{i \in I_t} \nu^i \sigma_f^i N^i}
+                      {\Sigma^M_{a, t} + \sum_{i \in I_t} \sigma_a^i N^i},
+\end{equation}
+
+and a proposed mixture's multiplication factor is defined as 
+
+\begin{equation}
+\label{eqs:kinf_t*}
+k_{\infty, t*} = \frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b,t}}
+                {\Sigma^M_{a,r} + \sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b,t}}.
+\end{equation}
+
+The corresponding violation constraint follows, much like Equation
+\ref{eqs:eta-constraint-nonlin}, as
+
+\begin{equation}\label{eqs:kinf-constraint-nonlin}
+\epsilon_{k_\infty} \geq \left| k_{\infty, t^*} - k_{\infty, t} \right|.
+\end{equation}
+
+Like Equation \ref{eqs:eta-constraint-nonlin}, Equation
+\ref{eqs:kinf-constraint-nonlin} is a nonlinear function of the decision
+variables, $x_{b, t}$. It can also be linearized, resulting in a similar
+constraint to Equation \ref{eqs:eta_linear}.
 
 \begin{equation}
 \label{eqs:kinf_linear}
-\epsilon_{k_{\infty}} \left( \Sigma_{a,r}^{M} + \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right)
+\epsilon_{k_{\infty}} \left( \Sigma_{a,t}^{M} + \sum_{b \in B} \eta_{b}^{-} x_{b,t} \right)
 \geq
-\left| \sum_{b \in B} \eta_{b}^{+} x_{b,r}
-- k_{\infty,r}  \left( \Sigma_{a,r}^{M} + \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right) \right|
-\: \forall \: r \in R
+\left| \sum_{b \in B} \eta_{b}^{+} x_{b,t}
+- k_{\infty,t}  \left( \Sigma_{a,t}^{M} + \sum_{b \in B} \eta_{b}^{-} x_{b,t} \right) \right|
 \end{equation}
 
-As can be seen, increasing the information in given to the problem formulation
-increases the complexity of the formulation. Further, to preserve the linear
-nature of the formulation, any additional parameters that we wish to provide a
-constraint for must be able to be decomposed into, at worst, a ratio of linear
-combinations of barrel-specific parameters and barrel fractions. Should this
-formulation prove too simplistic in practice, one way forward would be to move
-into the nonlinear realm of approximation formulations. This would open up a
-much more robust set of parameters that we could constrain and would also allow
-usage of tighter norms than the $L_1$ norm, e.g., the $L_2$ norm. However,
-solution techniques for nonlinear programs are significantly more complicated
-and computationally time consuming than for linear programs. Indeed, they
-constitute an entirely new field of study.
+Equation \ref{eqs:kinf_linear} can then be added to Equation \ref{eqs:rap} to
+include moderator information in the formulation. As can be seen, increasing the
+information given to the problem formulation increases the complexity of the
+formulation. A barrier exists, though, if additional or more precise
+(e.g. adding energy dependence) neutronics parameters are added to the
+formulation. Such additions likely would break the linear-programming nature of
+the formulation, which would require advanced, nonlinear programming methods to
+solve. A move to nonlinear programming would also provide access to the $\ell_2$
+norm, tightening the approximations provided by the RAP formulation..

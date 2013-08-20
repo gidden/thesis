@@ -77,7 +77,12 @@ mixture, $N^i$, $\eta_t$ for homogeneous media is formulated as
 with physical constants $\nu^{i}$, the average number of neutrons produced by
 fission of isotope $i$, $\sigma_{f}^{i}$, the microscopic fission cross section
 for isotope $i$, and $\sigma_{a}^{i}$, the microscopic absorption cross section
-for isotope $i$.
+for isotope $i$. Note that an isotopes microscopic cross section and macroscopic
+cross section for some reaction, $r$, are related by
+
+\begin{equation}\label{eqs:micro-macro}
+\Sigma^i_r = \sigma^i_r N_i
+\end{equation}
 
 One can then define the neutronic parameter associated with a mixture of
 isotopes and a target recipe,
