@@ -39,27 +39,14 @@ weighted-norm objective function.
 \min_{z} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
 \end{equation}
 
-%% end of work so far %%
-
-
-
-The goal of this formuation is to match a set of fuel requests as closely as
-possible, where proximity in this sense is defined by the $\ell_1$ norm of the
-distance between a mixture attribute and a target attribute. In the following
-linear program, the mixture attribute is the dot product of a matrix and a
-vector. The matrix is that of all isotopic masses in barrels, $M$, where an
-entry, $M_{b,i}$, is the mass of isotope $i$ in barrel $b$. The vector is the
-decision variables for a given recipe, $\vec{x_{r}}$, where an entry, $x_{b,r}$,
-is the fraction of barrel $b$ being assigned to fuel request $r$. The target
-attribute is the target fuel request composition, $\vec{t_{r}}$. where an entry,
-$t_{i,r}$, is the mass of isotope $i$ in fuel request $r$.
-
 The minimization objective in and of itself is not necessarily interesting. In
 order to enforce physical realities and domain-level knowledge, additional
-constraints are added that the result must comply with. These include total
-mass, isotopic masses, and neutronics constraints. I present the full
-formulation below in Equation \ref{eqs:rap} and explain more fully its
-derivation and interpretation in the following paragraphs.
+constraints are added with which any set of extraction vectors must
+comply. These include total mass and neutronics constraints. Each constraint has
+an violation associated with it, i.e., a number defining the maximum distance
+allowable away from the target recipe.
+
+%% end of work so far %%
 
 %%% 
 \begin{subequations}\label{eqs:rap}
