@@ -7,22 +7,22 @@ isotopic vectors associated a series of matches.
 
 A weighted $\ell_1$ norm is used to measure the size of the residual to maintain the
 linear nature of the program. The residual associated with a given target recipe
-mass is defined as
+is defined as
 
 \begin{equation}\label{eqs:norm}
 \vec{y_{t}} = \left| M \cdot \vec{x_{t}}  - m_t \vec{I_{t}} \right|.
 \end{equation}
 
-Weights are required in the in the objective function for primarily two
-reasons. First, the isotopes that are most important from a nuclear engineering
-domain knowledge point of view are known to of relatively low concentration in
-the final fuel recipe (e.g., U-235 is only 3-5 w/o of LWR fuel). Second,
-isotopes may exist in barrels that are not specified in target recipes. A simple
-physical explanation is that any separations process has an efficiency which
-governs how ``pure'' a separated elemental stream is -- there are always some
-contaminants. Accordingly, I adopt Oliver's definition of this weight
-from \cite{oliver_geniusv2:_2009}, which normalizes the importance of isotopes
-in the final mixture.
+Weights are required in the objective function for primarily two reasons. First,
+the isotopes that are most important from a nuclear engineering domain knowledge
+point of view are known to of relatively low concentration in the final fuel
+recipe (e.g., U-235 is only 3-5 w/o of LWR fuel). Second, isotopes may exist in
+barrels that are not specified in target recipes. A simple physical explanation
+is that any separations process has an efficiency which governs how ``pure'' a
+separated elemental stream is -- there are always some
+contaminants. Accordingly, I adopt Oliver's definition of this weight from
+\cite{oliver_geniusv2:_2009}, which normalizes the importance of isotopes in the
+final mixture.
 
 \begin{equation}\label{eqs:weights}
 c_{i,t} = 
@@ -35,193 +35,77 @@ c_{i,t} =
 Combing Equation \ref{eqs:weights} with Equation \ref{eqs:norm} yields the
 weighted-norm objective function.
 
-\begin{equation}
+\begin{equation}\label{rap-obj}
 \min_{z} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
 \end{equation}
 
 The minimization objective in and of itself is not necessarily interesting. In
 order to enforce physical realities and domain-level knowledge, additional
-constraints are added with which any set of extraction vectors must
-comply. These include total mass and neutronics constraints. Each constraint has
-an violation associated with it, i.e., a number defining the maximum distance
-allowable away from the target recipe.
+constraints are added with which any set of extraction vectors must comply. In
+the simplest formulation, these include total mass and neutronics
+constraints. Each constraint has an violation associated with it, i.e., a number
+defining the maximum distance allowable away from the target recipe. 
 
-%% end of work so far %%
+The mass violation constraint associated with a given target recipe is defined
+as the difference between the mass of a proposed recipe matching and a target
+recipe mass. The mass of the proposed matching is defined as
 
-%%% 
-\begin{subequations}\label{eqs:rap}
-  \begin{align}
-    %%
-    \min_{z} \:\: & 
-    z = \sum_{r \in R} \vec{c_{r}}^{\top} \cdot \vec{y_{r}}
-    & \label{eqs:rap_obj} \\
-    %%
-    \text{s.t.} \:\: &
-    \vec{y_{r}} = \left| M \cdot \vec{x_{r}}  - \vec{t_{r}} \right|
-    &
-    \: \forall \: r \in R \label{eqs:rap_iso} \\
-    %%
-    &
-    \epsilon_{m} \geq \left| \sum_{b \in B} m_{b} x_{b,r} - m_{r} \right|
-    & 
-    \forall \: r \in R \label{eqs:rap_mass} \\
-    %%
-    &
-    \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq 
-    \left| \sum_{b \in B} \eta_{b}^{+} x_{b,r} - 
-           \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
-    & 
-    \forall \: r \in R \label{eqs:rap_eta} \\
-    &
-    \sum_{r \in R} x_{b,r} \leq 1
-    & 
-    \forall \: b \in B \label{eqs:rap_conserv} \\
-    &
-    x_{b,r} \in \left[ 0, 1 \right]
-    & 
-    \forall \: b \in B, \forall \: r \in R  \label{eqs:rap_x}
-    %%
-  \end{align}
-\end{subequations}
-%%% 
-
-Let me begin the discussion of the RAP formulation by noting that the
-$\vec{y_{r}}$ variables occur twice, once as an assignment in
-Equation \ref{eqs:rap_iso} and again in Equation \ref{eqs:rap_obj}, the
-objective function. The $\vec{y_{r}}$ variables are column vectors that
-represent the different between the isotopic composition of a proposed mixed
-solution for a target fuel request, $r$, and the target fuel request itself. The
-goal of this formulation is to minimize that difference. However, a strict
-difference minimization is not directly suitable. Because separations plants can
-separate materials only on elemental scales, not on isotopic scales, and because
-fuel recipes are isotopic-specific, there will inevitively be isotopes present
-in the barrels that are not requested in the recipe. This is described formally
-in Equation \ref{eqs:barrel-req-iso}.
-
-\begin{equation}
-\label{eqs:barrel-req-iso}
-I_{B} \supseteq I_{r} \: \forall r \in R
+\begin{equation}\label{eqs:mass-constraint}
+m_{t^*} = \sum_{b \in B} m_{b} x_{b,t}
 \end{equation}
 
-Additionally, the isotopes that are most important from a nuclear engineering
-domain knowledge point of view are known to of relatively low concentration in
-the final fuel recipe (e.g., U-235 is only 3-5 w/o of LWR fuel). Accordingly,
-some kind of weighting function is required to determine the relative importance
-among isotopes in the resulting solution. I adopt Oliver's definition of this
-weight from \cite{oliver_geniusv2:_2009}, which normalizes the importance of
-isotopes in the final mixture.
+which then yields the violation constraint for a given target recipe, $t$,
 
-\begin{equation}
-c_{i,r} = 
-\begin{cases}
- \frac{1}{m_{i,r}} & \text{if } i \in I_{r} \\
- \frac{1}{m_{r}}   & \text{if } i \not\in I_{r}
-\end{cases}
+\begin{equation}\label{eqs:mass-constraint-simple}
+\epsilon_{m} \geq \left| m_{t^*} - m_{t} \right|.
 \end{equation}
 
-Note that the dot product of the vectors $\vec{y_{r}}$ and $\vec{c_{r}}^{\top}$
-results in a scalar, and we wish to minimize the aggregate sum of scalars for
-all fuel requests.
-
-Moving on to the physical constraints, let us cover the simpler
-Equation \ref{eqs:rap_mass} first. This constraint states that the mass of a
-feasible matching solution, i.e., $\sum_{b \in B} m_{b} x_{b,r}$, must be within
-some range of the mass of the given fuel request, $m_{r}$. This range is defined
-by some small value, $\epsilon_{m}$. It is important to realize that the
-$\epsilon$ vaules appearing in these constraints critically affect the
-feasibility space. Whereas the objective function seeks to minimize the
-difference between a mixture attribute and target attribute, the $\epsilon$
-values define a maximum allowable difference. Accordingly, the define the bounds
-of the feasible solution space. It entirely possible that during the course of a
-simulation, an instance of the RAP will not have a feasible solution. In such a
-scenario, the various $\epsilon$ values will have to be incrementally increased,
-or relaxed, until feasibility is attained.
-
-The neutronics constraint, Equation \ref{eqs:rap_eta}, is more complicated and
-deserves its own derivation. First, note its purpose. It is a constraint on the
-neutronics parameter $\eta$, i.e., the number of neutrons produced per fission
-per absorption in the fuel. It is a material-specific value, which is to say
-that it is a function only of material properties of the fuel, rather than the
-reactor geometry or the material properties of the fuel or the moderator, as are
-most other neutronics-related parameters, e.g., the effective multiplication
-factor, $k_{eff}$. This parameter is ideal for an initial attempt at this
-formulation because it requires only the minimal information associated with
-material requests in \Cyclus, i.e., a quantity and an isotopic profile. The
-equation for $\eta$ of a homogenous medium is as follows.
-
-\begin{equation}
-\label{eqs:eta_macro}
-\eta = \frac{\sum_{i \in I} \nu^{i} \Sigma_{f}^{i}}
-            {\sum_{i \in I} \Sigma_{a}^{i}}
-\end{equation}
-
-In Equation \ref{eqs:eta_macro}, $I$ is the set of isotopes in the material,
-$\nu^{i}$ is the average neutrons produced per fisison of isotope $i$,
-$\Sigma_{f}^{i}$ is the macroscopic cross section for fission of isotope $i$,
-and $\Sigma_{a}^{i}$ is the macroscopic cross section for absorption of isotope
-$i$. The ratio of the two cross sections produces the probability that a neutron
-causes fission given that is absorbed by isotope $i$. For our purposes, because
-we do not know how much of each material will contribute to a final mixture, it
-is more ideal to work with microscopic cross sections and number densities of an
-isotope $i$, $N^{i}$, as shown in Equation \ref{eqs:eta_micro}.
+The neutronics parameter that is constrained in this formulation is the average
+number of neutrons produced in a fission reaction per absorption by a given
+isotope, $\eta$. It is chosen as a proof-of-principle constraining parameter
+because it can be calculated purely from target fuel recipes without any reactor
+core-specific information. Given a set of target isotopes, $I_t$, and the number
+density of each isotope in the mixture, $N^i$, $\eta_t$ for homogenous media is
+formulated as
 
 \begin{equation}
 \label{eqs:eta_micro}
-\eta = \frac{\sum_{i \in I} \nu^{i} \sigma_{f}^{i} N^{i}}
-            {\sum_{i \in I} \sigma_{a}^{i} N^{i}}
+\eta_t = \frac{\sum_{i \in I_t} \nu^{i} \sigma_{f}^{i} N^{i}}
+            {\sum_{i \in I_t} \sigma_{a}^{i} N^{i}},
 \end{equation}
 
-In order to discuss this in terms of barrel fractions, we must include them as
-multiples of the number densities. 
+with physical constants $\nu^{i}$, the average number of neutrons produced by
+fission of isotope $i$, $\sigma_{f}^{i}$, the microscopic fission cross section
+for isotope $i$, and $\sigma_{a}^{i}$, the microscopic absorption cross section
+for isotope $i$.
+
+One can then define the neutronic parameter associated with a mixture of
+isotopes and a target recipe,
 
 \begin{equation}
 \label{eqs:eta_fractions_nonlin}
-\eta_{B} = \frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b}}
-                {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b}}
+\eta_{t^*} = \frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b,t}}
+                {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b,t}},
 \end{equation}
 
-In Equation \ref{eqs:eta_fractions_nonlin}, $I_{B}$ denotes the set of all
-isotopes in barrels, $N_{b}^{i}$ denotes the number density of isotope $i$ in
-barrel $b$, and $\eta_{B}$ is the reproduction factor resulting from the
-specific values of barrel fractions $x_{b}$. If we were to leave the definition
-of $\eta_{B}$ in this form, we could formulate the constraint in
-Equation \ref{eqs:rap_eta} in the same way as is done in
-Equation \ref{eqs:rap_mass}.
+resulting in a constraint similar to Equation \ref{eqs:mass-constraint}.
 
-\begin{equation}
-\label{eqs:eta_nonlin}
-\epsilon_{\eta} \geq \left| 
-\frac{\sum_{i \in I_{B}} \nu^{i} \sigma_{f}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}}
-     {\sum_{i \in I_{B}} \sigma_{a}^{i} \sum_{b \in B} N_{b}^{i} x_{b,r}} 
-- \eta_{r} \right|
-\: \forall \: r \in R
+\begin{equation}\label{eqs:eta-constraint-nonlin}
+\epsilon_{\eta} \geq \left| \eta_{t^*} - \eta_t \right|
 \end{equation}
 
-$\eta_{r}$ in Equation \ref{eqs:eta_nonlin} is defined in the normal way.
-
-\begin{equation}
-\label{eqs:eta_r}
-\eta_{r} = \frac{\sum_{i \in I_{r}} \nu^{i} \Sigma_{f}^{i}}
-                {\sum_{i \in I_{r}} \Sigma_{a}^{i}}
-\end{equation}
-
-Furthermore, $\eta_{r}$ is presumed to be predefined and is a constant with
-respect to the RAP. Equation \ref{eqs:eta_nonlin} presents a problem; it
-introduces a ratio of decision variables, which is a nonlinearity. In general,
-nonlinear programs are much more difficult to solve than linear programs and
-require much more exotic techniques. Some algebra can relieve this issue,
-however. We begin by massaging Equation \ref{eqs:eta_nonlin}, reformulating it
-into Equation \ref{eqs:eta_fractions_nonlin}.
+Such a constraint, however, is a nonlinear function of the decision variables,
+$x_{b,t}$, and some additional algebra is needed to place them into a linear
+form. Equation \ref{eqs:eta_fractions_nonlin} can be rearranged as
 
 \begin{equation}
 \label{eqs:eta_fractions_lin}
-\eta_{B} = \frac{\sum_{b \in B} x_{b} \sum_{i \in I_{b}} \nu^{i} \sigma_{f}^{i} N_{b}^{i}}
-                {\sum_{b \in B} x_{b} \sum_{i \in I_{b}} \sigma_{a}^{i} N_{b}^{i}}
+\eta_{t^*} = \frac{\sum_{b \in B} x_{b, t} \sum_{i \in I_{b}} \nu^{i} \sigma_{f}^{i} N_{b}^{i}}
+                {\sum_{b \in B} x_{b, t} \sum_{i \in I_{b}} \sigma_{a}^{i} N_{b}^{i}},
 \end{equation}
 
-Note that out of Equation \ref{eqs:eta_fractions_nonlin} fall two parameters
-that are defined for each barrel, which I denote $\eta_{b}^{+}$ and
-$\eta_{b}^{-}$.
+allowing one to define two parameters associated with the production and
+absorption of neutrons associated with a given barrel of isotopes, $b$.
 
 \begin{equation}
 \label{eqs:eta_+}
@@ -233,46 +117,84 @@ $\eta_{b}^{-}$.
 \eta_{b}^{-} \equiv \sum_{i \in I_{b}} \sigma_{a}^{i} N_{b}^{i}
 \end{equation}
 
-Equations \ref{eqs:eta_+} and \ref{eqs:eta_-} allow us to write
-Equation \ref{eqs:eta_fractions_lin} more simply.
+Equation \ref{eqs:eta_fractions_lin} can then be rewritten using Equations
+\ref{eqs:eta_+} and \ref{eqs:eta_-}.
 
 \begin{equation}
 \label{eqs:eta_simple}
-\eta_{B} = \frac{\sum_{b \in B} \eta_{b}^{+} x_{b}}
-                {\sum_{b \in B} \eta_{b}^{-} x_{b}}
+\eta_{t^*} = \frac{\sum_{b \in B} \eta_{b}^{+} x_{b, t}}
+                {\sum_{b \in B} \eta_{b}^{-} x_{b, t}}
 \end{equation}
 
-We can then rewrite Equation \ref{eqs:eta_nonlin} using
-Equation \ref{eqs:eta_simple}.
+The nonlinear neutronics constraint can then be rewritten using Equation
+\ref{eqs:eta_simple}.
 
 \begin{equation}
 \label{eqs:eta_nonlin_simple}
 \epsilon_{\eta} \geq \left| 
-\frac{\sum_{b \in B} \eta_{b}^{+} x_{b_r}}
-     {\sum_{b \in B} \eta_{b}^{-} x_{b_r}}
-- \eta_{r} \right|
-\: \forall \: r \in R
+\frac{\sum_{b \in B} \eta_{b}^{+} x_{b,t}}
+     {\sum_{b \in B} \eta_{b}^{-} x_{b,t}}
+- \eta_{t} \right|
 \end{equation}
 
-Finally, we can multiply Equation \ref{eqs:eta_nonlin_simple} through by the
-denominator of Equation \ref{eqs:eta_simple} to arrive at the form of the
-constraint in \ref{eqs:rap_eta}.
+Finally, Equation \ref{eqs:eta_nonlin_simple} can be massaged to provide the
+constraint as a linear function of the decision variables. Note that no sign
+change occurs because the multiplicative constant, $\sum_{b \in B} \eta_{b}^{-}
+x_{b,t}$, is guaranteed to be positive.
 
 \begin{equation}
 \label{eqs:eta_linear}
-\epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \geq
-\left| \sum_{b \in B} \eta_{b}^{+} x_{b,r}
-- \eta_{r} \sum_{b \in B} \eta_{b}^{-} x_{b,r} \right|
-\: \forall \: r \in R
+\epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b,t} \geq
+\left| \sum_{b \in B} \eta_{b}^{+} x_{b,t}
+- \eta_{t} \sum_{b \in B} \eta_{b}^{-} x_{b,t} \right|
 \end{equation}
 
-The constraint in Equation \ref{eqs:eta_linear} has been linearized, and the
-polynomial-time Simplex Method can again be applied as the solution mechanism. 
+A final constraint is placed on the decision variables, stating that for any
+barrel, $b$, the total fraction of material leaving the barrel must be within
+the barrel size.
 
-Finally, let me discuss Equations \ref{eqs:rap_conserv} and \ref{eqs:rap_x}.
-Equation \ref{eqs:rap_conserv} simply states that the sum of all barrel
-fractions for any given barrel must be less than one. This is simply a check on
-reality -- you can't take more things from a container than exist in the
-container in the first place. Equation \ref{eqs:rap_x} simply defines the notion of
-a fraction, saying that all barrel fractions must lie in the range of 0 and 1,
-inclusive.
+\begin{equation}
+\label{eqs:barrel-fracs}
+\sum_{t \in T} x_{b, t} \leq 1
+\end{equation}
+
+Combining Equations \ref{eqs:norm}, \ref{rap-obj}, 
+\ref{eqs:mass-constraint-simple}, \ref{eqs:eta_linear}, and
+\ref{eqs:barrel-fracs} the full RAP linear program can be constructed.
+
+%%% 
+\begin{subequations}\label{eqs:rap}
+  \begin{align}
+    %%
+    \min_{z} \:\: & 
+    z = \sum_{t \in t} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
+    & \label{eqs:rap_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \vec{y_{t}} = \left| M \cdot \vec{x_{t}}  - m_t \vec{I_{t}} \right|
+    &
+    \: \forall \: t \in T \label{eqs:rap_iso} \\
+    %%
+    &
+    \epsilon_{m} \geq \left| \sum_{b \in B} m_{b} x_{b, t} - m_{t} \right|
+    & 
+    \forall \: t \in T \label{eqs:rap_mass} \\
+    %%
+    &
+    \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b, t} \geq 
+    \left| \sum_{b \in B} \eta_{b}^{+} x_{b, t} - 
+           \eta_{t} \sum_{b \in B} \eta_{b}^{-} x_{b, t} \right|
+    & 
+    \forall \: t \in T \label{eqs:rap_eta} \\
+    &
+    \sum_{t \in T} x_{b, t} \leq 1
+    & 
+    \forall \: b \in B \label{eqs:rap_conserv} \\
+    &
+    x_{b, t} \in \left[ 0, 1 \right]
+    & 
+    \forall \: b \in B, \forall \: t \in T  \label{eqs:rap_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
