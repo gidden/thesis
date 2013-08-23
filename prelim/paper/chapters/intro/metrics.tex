@@ -1,20 +1,23 @@
-Fuel cycle simulators have a number of possible output metrics of interest. One
-of the original reasons that fuel cycle simulators were developed was to
-determine the relative cost of different fuel cycles. The notion of fuel cycle
-cost can either be calculated in a post-processing step, or it can be calculated
-on-the-fly during a simulation. The benefit of maintaining cost information
-during a simulation is that the simulation can react to these costs. A prime
-example of such behavior is in the DANESS simulation code, described
-in \S\ref{sec:other-sims}. Other simulators, such as VISION, determine costs at
-the end of a simulation based on all events in the simulation using values from
-AFCI cost basis report \cite{yacout_vision_2006,shropshire_advanced_2007}. It
-must be stressed that the notion of predicting future fuel cycle costs have a
-high degree of variability. They depend not only on the level of maturity of
-technologies as a function of time (i.e., the R\&D investment level for the
-technology), but also on material costs which are relatively unknown and/or very
-hard to predict. Accordingly, it helps to determine relative costs of fuel
-cycles rather than absolute costs of fuel cycles. Further, it helps to classify
-fuel cycles by the technology used in them. 
+Fuel cycle simulators have a number of possible output metrics of interest, and
+the Department of Energy has initiated a number of exercises to discuss them
+through its Used Fuel Disposition campaign \ref{nutt_proposed_2012,
+taiwo_summary_2012}. One of the original reasons that fuel cycle simulators were
+developed was to determine the relative cost of different fuel cycles. The
+notion of fuel cycle cost can either be calculated in a post-processing step, or
+it can be calculated on-the-fly during a simulation. The benefit of maintaining
+cost information during a simulation is that the simulation can react to these
+costs. A prime example of such behavior is in the DANESS simulation code,
+described in \S\ref{sec:other-sims}. Other simulators, such as VISION, determine
+costs at the end of a simulation based on all events in the simulation using
+values from AFCI cost basis report
+\cite{yacout_vision_2006,shropshire_advanced_2007}. It must be stressed that the
+notion of predicting future fuel cycle costs have a high degree of
+variability. They depend not only on the level of maturity of technologies as a
+function of time (i.e., the R\&D investment level for the technology), but also
+on material costs which are relatively unknown and/or very hard to
+predict. Accordingly, it helps to determine relative costs of fuel cycles rather
+than absolute costs of fuel cycles. Further, it helps to classify fuel cycles by
+the technology used in them.
 
 The fuel cycle cost metric provides a prime example of a key choice of
 developers of fuel cycle simulators. Most metrics outside the actual
@@ -25,13 +28,15 @@ some aspect of the simulation depends upon them. Accordingly, unless decisions
 are being made on the basis of costs, there is no reason to maintain a cost
 metric at simulation time. Simulators can generally be divided into two groups,
 those that make decisions at run time based on certain metrics and those that do
-not.
+not. \Cyclus is designed to provide dynamic support of metric-based decision
+making, e.g., Huff's recent work with dynamic repository capacity determination
+\cite{huff_integrated_2013}.
 
 A large number of metrics related to fuel cycle simulation come directly from
 the material mass flows. For instance, proliferation based metrics are generally
 determined by the amount of separated transuranic material at any point in the
 fuel cycle. Metrics that lead to less proliferation resistance include the
-amount of signifigant quantities of material, defined by the IAEA to be the
+amount of significant quantities of material, defined by the IAEA to be the
 quantity of any given material (e.g., TRU or plutonium) sufficient to make a
 nuclear weapon. These are generally defined on the elemental level, which
 ignores realities based on isotopic dependencies (e.g., \nucl{240}{Pu} is a
@@ -45,27 +50,29 @@ the United States political stance is to continue the once-through fuel cycle
 until it is economically viable to begin reprocessing spent fuel for recycle in
 reactors \cite{hamilton_blue_2012}. Such a situation can only arise if the
 supply of uranium dwindles to a low-enough level which will raise the price of
-uranium sufficiently enough to make reprocessing a viable alternative. It is
+uranium sufficiently to make reprocessing a viable alternative. It is
 additionally interesting to note the approximate time at which uranium capture
-from seawater, which is in developmental stages, will become economically
+from sea water, which is in developmental stages, will become economically
 viable. These situations all depend on the amount of uranium used in a given
 simulation, which is, of course, related to fuel mass flows.
 
-One of the key outputs of simulators is related to repository capacities. The
+Another key output of simulators is related to repository capacities. The
 capacity a repository to store spent fuel could be reached in a number of
 ways. Spent fuel isotopics, especially fission products, produce a large amount
 of decay heat which can reach the thermal limits of their containers over short
-periods of (geologic) time. There are also radiotoxity limits for repositories
-in order to limit the risk of radiological releases. Finally, there is a mass
-and volume limit on repositories, representing a space storage capacity. It is
-not clear at the current time which of these limiting capacities will
-ultimiately be the governing factor for repositories. Furthermore these
-capacities change based on repository layout and geology. A more in-depth study
-is presented by Katy Huff in her thesis work
-\cite{huff_integrated_2013}. Furthermore, this parameter was key in Scopatz's
-work with static fuel cycle simulation \cite{scopatz_essential_2011}. In all
-cases, these capacities can be calculated in terms of isotopic quantities of
-waste products. It is possible to calculate the capacity parameters \textit{in
-  situ} during the simulation and dynamically alter the simulation based on the
+periods of (geologic) time. There are also radiotoxicity limits for repositories
+in order to limit the risk of radiological releases. Finally, there are mass and
+volume limits on repositories, representing a space storage capacity. In fact,
+the Nuclear Waste Policy Act, the current U.S. law determining the U.S.'s used
+fuel management strategy, places a blanket mass capacity limit of 70,000 t on
+Yucca Mountain \cite{us_nuclear_1982}.  It is not clear at the current time
+which of these limiting capacities will ultimately be the governing
+engineering-based limiting factor for repositories. Furthermore these capacities
+change based on repository layout and geology.  This parameter was key in
+Scopatz's work with static fuel cycle simulation
+\cite{scopatz_essential_2011}. In all cases, these capacities can be calculated
+in terms of isotopic quantities of waste products. It is possible to calculate
+the capacity parameters \textit{in situ} during the simulation, shown by Huff in
+\cite{huff_integrated_2013} and dynamically alter the simulation based on the
 results rather than simply performing a post-processing operation to report the
-required number of repositories for the simulation. 
+required number of repositories for the simulation.

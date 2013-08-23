@@ -28,57 +28,58 @@ traded. A more fully formed proposal for such a treatment is presented in
 \subsection{Input Fuel Isotopic Matching}
 
 One of the major issues with current fuel cycle simulation is the disconnect
-between fuel recipes being requested by reactors that need recycled fuel,
-e.g., MOX fuel. The isotopics that comprise these materials, especially the
-transuranic isotopes, are radioactive, and thus the actual isotopic composition
-of material change with time. Accordingly, if a simulator wishes to try to match
-the requested isotopics, it must keep track of the decay of isotopes. Further
-complicating the problem is that requested input fuel recipes may not
-necessarily be related to the provided output fuels, i.e., there is a mismatch
-between the output isotopics and input isotopics even without the presence of
-isotopic decay. The majority of fuel cycle simulators to date ignore this issue
-and instead choose to match recipes ``exactly'' based on a subset of
-isotopes. Further details of how other simulators tackle this issue are reviewed
-in \S\ref{sec:simulators}. A full treatment of the recipe-matching problem would
-require an approach similar to the pooling-blending problem
-\cite{tawarmalani_convexification_2002}. There is a rich literature base for
-pooling-blending problems
+between fuel recipes being requested by reactors that need recycled fuel, e.g.,
+MOX fuel and the facility that produces MOX. The isotopics that comprise these
+materials, especially the transuranic isotopes, are radioactive, and thus the
+actual isotopic composition of material change with time due to radioisotope
+decay. Accordingly, if a simulator wishes to try to match the requested
+isotopics, it must keep track of the decay of isotopes. Further complicating the
+problem is that requested input fuel recipes may not necessarily be related to
+the provided output fuels, i.e., there is a mismatch between output isotopics
+and input isotopics even without the presence of isotopic decay. The majority of
+fuel cycle simulators to date ignore this issue and instead choose to match
+recipes ``exactly'' based on a subset of isotopes. Further details of how other
+simulators tackle this issue are reviewed in \S\ref{sec:simulators}. A full
+treatment of the recipe-matching problem would require an approach similar to
+the pooling-blending problem \cite{tawarmalani_convexification_2002}. There is a
+rich literature base for pooling-blending problems
 \cite{glen_mixed_1988,rigby_evolution_1995,mendez_simultaneous_2006,misener_advances_2009}
 in the industrial processes literature. However, the majority of the subject
 matter concentrates on refinery operations such as mixing various crude oils to
-hit a certain octane level. These are (relatively) simple problems because the
-properties that are trying to be matched are extrinsic and linear function of
-the mixing variables. The nuclear arena is much more complicated because of
+achieve a certain octane level. These are (relatively) simple problems because
+the properties that are trying to be matched are extrinsic and linear function
+of the mixing variables. The nuclear arena is much more complicated because of
 criticality limitations and the want to match aggregate nuclear properties of
-materials. Accordingly, a hybrid approach was proposed that involves blending and
-approximation theory. The approach is outlined in \S\ref{sec:rap}.
+materials. Accordingly, a hybrid approach was proposed that involves a notion of
+blending via an approximation linear program. The approach is outlined in
+\S\ref{sec:rap}.
 
 \subsection{Modeling Global Regions}
 
-The notion of regional modeling in fuel cycle simulation has always been a
-secondary concern. Certain simulators attempt to model it explicitly, e.g., DESAE
-\cite{iaea_nuclear_2010}. Other simulators have attempted to add the capability
-at some point after their simulator had already been developed, e.g., VISION and
-COSI. A discussion of these capabilities follows in \S\ref{sec:simulators}. Some
-semblance of this capability is needed if one is to incorporate outside effects
-on a domestic fuel cycle. Furthermore, a robust capability is required if one
-wishes to actually investigate dynamic interactions amongst regional
-entities. Again, a full treatment of this sort of regional interaction would
-require international relations models, most of which can be found in the
-cross-cutting realm of economics, political science, and game theory. The
-primary solution technique is called Nash Equilibrium, and effectively describes
-an optimal solution as follows: given a set of players, states, preferences,
-and actions, all players choose an action such that any single player's
-deviation from that actions results in a state of lower preference for that
-player (thus no player has an incentive to deviate)
+The notion of regional modeling in fuel cycle simulation has to date been a
+secondary concern. Certain simulators attempt to model it explicitly, e.g.,
+DESAE \cite{iaea_nuclear_2010}. Other simulators have attempted to add the
+capability at some point after their simulator had already been developed, e.g.,
+VISION and COSI. A discussion of these capabilities follows in
+\S\ref{sec:simulators}. Some semblance of this capability is needed if one is to
+incorporate outside effects on a domestic fuel cycle. Furthermore, a robust
+capability is required if one wishes to actually investigate dynamic
+interactions amongst regional entities. Again, a full treatment of this sort of
+regional interaction would require international relations models, most of which
+can be found in the cross-cutting disciplines of economics, political science,
+and game theory. The primary solution technique is called Nash Equilibrium, and
+effectively describes an optimal solution as follows: given a set of players,
+states, preferences, and actions, all players choose an action such that any
+single player's deviation from that actions results in a state of lower
+preference for that player (thus no player has an incentive to deviate)
 \cite{mccarty_political_2007}. There also exists a body of literature that
 examine Nash Equilibria in the context of optimal flow models
 \cite{mazumdar_fairness_1991,nagurney_supply_2002,song_nash_2002}. However, the
 complexity of such models quickly brings them out of the scope of our needs,
-i.e., dynamic modeling of multi-lateral scenarios ranging 100+ years in a
-short-time ($\sim$2-5 minutes). Accordingly, a market resolution mechanism has
-been proposed that allows for interaction amongst the various facilities and
-managing entities (e.g., their regions). In order to inform a cardinal preference
-\cite{strotz_cardinal_1953} relation for a facility over its possible supply
-materials. The full approach is outlined in sections \S\ref{sec:gfctp} and
-\S\ref{sec:agent-interaction}.
+i.e., dynamic modeling of multi-lateral scenarios ranging 100+ years in a short
+computation time ($\sim 10^0 - 10^1$ minutes). Accordingly, a market resolution mechanism
+has been proposed that allows for interaction amongst the various facilities and
+managing entities (e.g., their regions). In order to inform a cardinal
+preference \cite{strotz_cardinal_1953} relation for a facility over its possible
+supply materials. The full approach is outlined in sections
+\S\ref{sec:agent-interaction} and \S\ref{sec:gfctp}.
