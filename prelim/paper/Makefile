@@ -22,7 +22,7 @@ all-via-dvi:
 	dvipdf $(manuscript)
 
 clean:
-	rm -f *.pdf *.dvi *.toc *.aux *.out *.log *.bbl *.blg *.log *.spl *~ *.spl *.zip *.idx *.lof *.lot
+	rm -f *.pdf *.dvi *.toc *.aux *.out *.log *.bbl *.blg *.log *.spl *~ *.spl *.zip *.idx *.lof *.lot *.acn *.glo *.ist
 
 realclean: clean
 	rm -rf $(manuscript).dvi
