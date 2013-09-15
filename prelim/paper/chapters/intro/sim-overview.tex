@@ -11,69 +11,68 @@ that depend (generally) on burnup values for thermal reactors and conversion
 ratios for fast reactors.
 
 There are, broadly, three decision categories that are of concern to fuel cycle
-simulation. The first is facility deployment, specifically, how and why certain
-facilities are deployed. There is general consensus regarding reactor deployment
-in the community: a user defines an energy growth curve and, for each type of
-reactor in the simulation, a percentage of that total energy demand to be met by
-the reactor type. However, the nuclear fuel cycle is a special case of
-supply-demand modeling where certain facilities (e.g., fast reactors) require
-fuel that has been processed by other facilities (e.g., thermal
-reactors). Accordingly, simulation developers must make a choice: should one
-allow a facility to be built if it may not be able to be fueled? Certain
-simulators explicitly disallow this behavior by determining reactor build
-decisions based on lookahead algorithms (e.g., CAFCA, VISION), others explicitly
-allow it (e.g., COSI), while still others offer a hybrid approach that allow a
+simulation. The first is facility deployment, specifically, how, why, and when
+certain facilities are deployed. In the current simulation development
+environment, the most common reactor deployment mechanism is allowing a user to
+define an energy growth curve and, for each type of reactor in the simulation, a
+percentage of that total energy demand to be met by the reactor type. However,
+the nuclear fuel cycle is a special case of supply-demand modeling where certain
+facilities (e.g., fast reactors) require fuel that has been processed by other
+facilities (e.g., thermal reactors). Accordingly, simulation developers must
+make a choice regarding the ability for facilities to be built if fuel may not
+be available for their use. Certain simulators explicitly disallow this behavior
+by determining reactor build decisions based on lookahead algorithms, others
+explicitly allow it, while still others offer a hybrid approach that allow a
 lookahead function based on a certain amount of fuel that will eventually be
-needed over a reactors lifetime (e.g., DANESS). The eventual choice of this
-decision making process greatly affects simulation outcomes in any scenario in
-which a lack of fuel exists. Because these simulation tools are built to analyze
-the dynamic symbiotic relationship between different reactors in a cyclical
-process (e.g., thermal and fast reactors), among other scenarios, this
-simulation development decision is arguably very important to simulation
-outcomes.
+needed over a reactors lifetime. The eventual choice of this decision making
+process greatly affects simulation outcomes in any scenario in which a lack of
+fuel exists. Because these simulation tools are built to analyze the dynamic
+symbiotic relationship between different reactors in a cyclical process (e.g.,
+thermal and fast reactors), among other scenarios, this simulation development
+decision is arguably very important to simulation outcomes.
 
-The second major simulation development decision is determining fuel
-isotopics. A number of complications are encompassed in this decision. As an
-example, consider MOX fuel for thermal reactors. In general, MOX fuel is
-composed of oxide forms of plutonium (and some minor actinides, such as
-americium) from spent thermal fuel as well as uranium (the source of which can
-be depleted enrichment tails, depleted recycled uranium or natural uranium). The
-fact that depleted uranium, rather than enriched uranium, can be used stems from
-the fact that the separated plutonium is largely comprised of fissile isotopes
-(\nucl{239}{Pu} and \nucl{241}{Pu}). The source of uranium already introduces an
-isotopic dependency of importance: the \nucl{235}{U} enrichment of the fill
-uranium should affect either the quantity of plutonium used, the isotopics of
-plutonium used (with higher \nucl{235}{U} enrichment implying a lower
-concentration of fissile plutonium isotopes), or both. Further complicating the
-issue is that plutonium isotopes are radioactive and decay on (relatively) short
-time scales. For instance, the half life of \nucl{241}{Pu} is $\sim$14
-years. Accordingly, the quality, or isotopic content, of the separated plutonium
-changes on a time scale on the order of the simulation due to decay. There is a
-similar issue with other transuranic radioactive isotopes of interest to nuclear
-fuel cycles.
+The second simulation design decision category is the level of fidelity with
+which to model the physical and chemical processes involved in the nuclear fuel
+cycle. Broadly, physical fidelity includes two processes, isotopic decay and
+isotopic transmutation due to residency in a reactor. Physical fidelity is an
+important concern because fuel cycle simulation measures individual isotopic
+masses at each point in the fuel cycle, and the isotopic profiles of those mass
+streams change due to physical processes. 
 
-Accordingly, simulation developers have two general choices with respect to
-input fuel isotopics (and isotopic-level modeling in general). The first is
-whether or not to include isotope decay. As might be expected, the simulators
-fall into two camps, those that include decay (e.g., VISION and COSI) and those
-that do not (e.g., DANESS and CAFCA). Interestingly, the MIT development team
-claims that the lack of modeling decay does not affect the simulation as long as
-all transuranic isotopes are lumped together \cite{guerin_impact_2009}. Other
-codes appear to include isotopic decay in order to inform output metrics such as
-repository heat capacity. The second choice involves matching input isotopics
-with available separated isotopes. This is an interesting problem because
-separations technology work on a elemental scale, whereas input fuel recipes are
-defined on an isotopic scale because neutronics properties are functions of
-individual isotopes rather than elemental aggregates. In other words, you can't
-change the separated plutonium isotopic vector to match a recipe, as one does
-with uranium enrichment (which is an isotopic-scale process). A full treatment
-of the problem is relatively complicated and requires mixing separated plutonium
-vectors to find a ``best match''; this problem has been termed the Winery
-Problem or the Recipe Approximation Problem \cite{oliver_geniusv2:_2009}. The
-current generation of fuel cycle simulators generally punt on this issue. A
-common strategy is to declare a target subset of isotopics, normally a specific
-plutonium isotope or the aggregate plutonium isotopes, and match quantities of
-that set. For example, if the set is of single cardinality (e.g.,
+Isotopic decay is important to consider because some isotopes decay on time
+scales on the order of or smaller than the simulation time. \nucl{241}{Pu}, for
+instance, has a half life of $\sim$14 years. As might be expected, the
+simulators fall into two camps, those that include decay and those that do
+not. Interestingly, the MIT development team claims that the lack of modeling
+decay does not affect the simulation as long as all transuranic isotopes are
+lumped together \cite{guerin_impact_2009}. Other codes appear to include
+isotopic decay in order to inform output metrics such as repository heat
+capacity. 
+
+Reactor physics, i.e., the process by which the transmuted isotopic profile of
+fuel due to reactor residency is determined, is also an important physical
+consideration. The rigorous solution of reactor physics equations is an entire
+field in nuclear science unto itself, and is thus not normally treated by fuel
+cycle simulators. In most cases for the current suite of simulators, some amount
+of calculation is performed before a simulation is run, and isotopic profiles
+are determined via lookup tables. Some simulators, however, choose to perform
+transmutation calculations \textit{in situ}, during the simulation.
+
+The chemical process fidelity design decision occurs at the interface between
+the elemental separations process in fuel recycling and the usage of recycled
+fuel by reactors. This is an interesting problem because separations technology
+work on a elemental scale, whereas input fuel recipes are defined on an isotopic
+scale because neutronics properties are functions of individual isotopes rather
+than elemental aggregates. In other words, you can't change the separated
+plutonium isotopic vector to match a recipe, as one does with uranium enrichment
+(which is an isotopic-scale process). A full treatment of the problem is
+relatively complicated and requires mixing separated plutonium vectors to find a
+``best match''; this problem has been termed the Winery Problem or the Recipe
+Approximation Problem \cite{oliver_geniusv2:_2009}. The current generation of
+fuel cycle simulators generally do not address this issue. A common strategy is
+to declare a target subset of isotopics, normally a specific plutonium isotope
+or the aggregate plutonium isotopes, and match quantities of that set. For
+example, if the set is of single cardinality (e.g.,
 \nucl{239}{Pu}), then the amount of that isotope is guaranteed to be correct,
 but accompanying isotopics are not. On the other hand, if the set is a group of
 isotopes (e.g., all plutonium isotopes), that group's quantity is guaranteed to
@@ -86,23 +85,42 @@ treatment of how the current generation of simulators tackle this issue is
 described in \S\ref{sec:simulators}. An overview of the proposed strategy to
 take in the \Cyclus simulation environment is described in \S\ref{sec:rap}.
 
-The third major development decision is how to determine connections between
-facilities. At issue here is how servicing facilities (e.g., fuel fabrication
-facilities) are connected to serviced facilities (e.g., reactors). For those
-simulators that do not model discrete facilities (e.g., CAFCA), the modeling
+The third simulation-level design decision concerns the connections between
+facilities and the type of material that flows along those connections. In
+general, connections between facilities can either be static or dynamic, and can
+either be fleet-based or facility-based. A static connection implies that
+material will always flow between two facilities, whereas a dynamic connection
+implies that a facility's input or output connection may change.  For those
+simulators that model fleets of facilities with static connections, the modeling
 technique is relatively trivial: a fleet of servicing facilities are directly
 connected to their serviced facilities. If more than one type of facility is
 being serviced (e.g., TRU-based fuels going to thermal and fast reactors), then
-a user must define the percentage of capacity going towards each type of
-serviced facility \cite{busquim_e_silva_system_2008}. A similar situation arises
-in other systems-dynamics based simulators, because mass flow balance equations
-govern the inner workings of the simulations. This situation becomes even more
-complicated if regional scenarios are to be modeled. In addition to determining
-which serviced facilities will be connected to servicing facilities, one must
-also incorporate a notion of the region of serviced and servicing
-facilities. DESAE includes a rather simplistic model of this relational nature
-that predetermines the yearly intra-regional trading \cite{iaea_nuclear_2010}. A
-full treatment of this class of developmental decision making with respect to
-the current set of fuel cycle simulators is provided in
-\S\ref{sec:simulators}. An overview of the proposed strategy to take in the
-\Cyclus simulation environment is described in \S\ref{sec:rap}.
+either a user or the simulation engine must define the percentage of capacity
+going towards each type of serviced facility \cite{busquim_e_silva_system_2008}.
+
+Most simulators to date have taken the fleet-based, static connection approach
+to modeling fuel cycles which lacks the ability to be easily extended and
+improved upon, a key feature of a research code. The \Cyclus fuel cycle
+simulator has taken the dynamic connection approach. Dynamic connections between
+facilities allow for more complicated scenarios, e.g., scenarios with regional
+influences, to be modeled. The dynamic exchange of resources, however,
+introduces two complications. The first is that a given need, e.g., for fuel,
+can be met by multiple commodities. As an example, consider fuel for thermal
+reactors. Such fuel can be either uranium oxide (UOX) or mixed uranium-plutonium
+oxide (MOX). Furthermore, MOX fuel is composed of plutonium (and some minor
+actinides, such as americium) from spent thermal fuel as well as uranium (the
+source of which can be depleted enrichment tails, depleted recycled uranium or
+natural uranium). The second is that the isotopics comprising fuel orders
+are \textit{fungible}, i.e., the source of isotopes are generally exchangeable. 
+
+The core concept that connects both the design decisions regarding fidelity and
+facility connections is the notion of material \textit{quality}. Because of the
+nature of nuclear reactors, the simulation of their fuel usage must consider the
+isotopic profile of material being produced and consumed. This additional
+concern greatly complicates the modeling of fuel cycles and must be taken into
+account. Each of the issues addressed by the fidelity decision, decay,
+transmutation, and fuel fabrication, are all operations on the isotopic profile
+of material. The mechanism by which dynamic connections between facilities are
+determined must also take into account the isotopic profiles of the commodities
+produced and consumed by those facilities. This work attempts to satisfy the
+material quality concerns in fuel cycle simulation.
