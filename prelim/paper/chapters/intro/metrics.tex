@@ -1,17 +1,12 @@
 Fuel cycle simulators have a number of possible output metrics of interest, and
 the Department of Energy has initiated a number of exercises to discuss them
 through its Systems Analysis campaign \cite{nutt_proposed_2012,
-taiwo_summary_2012}. One of the original reasons that fuel cycle simulators were
-developed was to determine the relative cost of different fuel cycles. The
-notion of fuel cycle cost can either be calculated in a post-processing step, or
-it can be calculated on-the-fly during a simulation. The benefit of maintaining
-cost information during a simulation is that the simulation can react to these
-costs. A prime example of such behavior is in the DANESS simulation code,
-described in \S\ref{sec:other-sims}. Other simulators, such as VISION, determine
-costs at the end of a simulation based on all events in the simulation using
-values from AFCI cost basis report
-\cite{yacout_vision_2006,shropshire_advanced_2007}. It must be stressed that the
-notion of predicting future fuel cycle costs have a high degree of
+taiwo_summary_2012}. Individual metrics, however, can largely be grouped into
+four categories: economics, waste management, sustainability, and proliferation.
+
+One of the original reasons that fuel cycle simulators were developed was to
+determine the relative cost of different fuel cycles. It must be stressed that
+the notion of predicting future fuel cycle costs have a high degree of
 variability. They depend not only on the level of maturity of technologies as a
 function of time (i.e., the R\&D investment level for the technology), but also
 on material costs which are relatively unknown and/or very hard to
@@ -19,44 +14,7 @@ predict. Accordingly, it helps to determine relative costs of fuel cycles rather
 than absolute costs of fuel cycles. Further, it helps to classify fuel cycles by
 the technology used in them.
 
-The fuel cycle cost metric provides a prime example of a key choice of
-developers of fuel cycle simulators. Most metrics outside the actual
-instantiation of facilities (i.e., which facilities are built when) and the flow
-of material, which are integral to the running of the simulation, can be post
-processed. They are only required to be maintained during the simulation if the
-some aspect of the simulation depends upon them. Accordingly, unless decisions
-are being made on the basis of costs, there is no reason to maintain a cost
-metric at simulation time. Simulators can generally be divided into two groups,
-those that make decisions at run time based on certain metrics and those that do
-not. \Cyclus is designed to provide dynamic support of metric-based decision
-making, e.g., Huff's recent work with dynamic repository capacity determination
-\cite{huff_integrated_2013}.
-
-A large number of metrics related to fuel cycle simulation come directly from
-the material mass flows. For instance, proliferation based metrics are generally
-determined by the amount of separated transuranic material at any point in the
-fuel cycle. Metrics that lead to less proliferation resistance include the
-amount of significant quantities of material, defined by the IAEA to be the
-quantity of any given material (e.g., TRU or plutonium) sufficient to make a
-nuclear weapon. These are generally defined on the elemental level, which
-ignores realities based on isotopic dependencies (e.g., \nucl{240}{Pu} is a
-relatively large source of decay heat and is thus reduces the aggregate
-plutonium's effectiveness for use as a weapon). Metrics that lead to more
-resistance of proliferation activities include the unshielded dose rate of a
-given material, which makes handling (and thus diverting) the material more
-difficult \cite{yacout_vision_2006}. Another key metric that is important to
-many in the fuel cycle simulation community is uranium utilization. At present,
-the United States political stance is to continue the once-through fuel cycle
-until it is economically viable to begin reprocessing spent fuel for recycle in
-reactors \cite{hamilton_blue_2012}. Such a situation can only arise if the
-supply of uranium dwindles to a low-enough level which will raise the price of
-uranium sufficiently to make reprocessing a viable alternative. It is
-additionally interesting to note the approximate time at which uranium capture
-from sea water, which is in developmental stages, will become economically
-viable. These situations all depend on the amount of uranium used in a given
-simulation, which is, of course, related to fuel mass flows.
-
-Another key output of simulators is related to repository capacities. The
+Waste management metrics include a measurement of repository capacities. The
 capacity a repository to store spent fuel could be reached in a number of
 ways. Spent fuel isotopics, especially fission products, produce a large amount
 of decay heat which can reach the thermal limits of their containers over short
@@ -71,8 +29,42 @@ engineering-based limiting factor for repositories. Furthermore these capacities
 change based on repository layout and geology.  This parameter was key in
 Scopatz's work with static fuel cycle simulation
 \cite{scopatz_essential_2011}. In all cases, these capacities can be calculated
-in terms of isotopic quantities of waste products. It is possible to calculate
-the capacity parameters \textit{in situ} during the simulation, shown by Huff in
-\cite{huff_integrated_2013} and dynamically alter the simulation based on the
-results rather than simply performing a post-processing operation to report the
-required number of repositories for the simulation.
+in terms of isotopic quantities of waste products. 
+
+Another key metric that is important to many in the fuel cycle simulation
+community is uranium utilization, which measures the sustainability of a given
+fuel cycle. At present, the United States political stance is to continue the
+once-through fuel cycle until it is economically viable to begin reprocessing
+spent fuel for recycle in reactors \cite{hamilton_blue_2012}. Such a situation
+can only arise if the supply of uranium dwindles to a low-enough level which
+will raise the price of uranium sufficiently to make reprocessing a viable
+alternative. It is additionally interesting to note the approximate time at
+which uranium capture from sea water, which is in developmental stages, will
+become economically viable. These situations all depend on the amount of uranium
+used in a given simulation, which is, of course, related to fuel mass flows.
+
+Proliferation based metrics are generally functions of the amount of separated
+transuranic material at any point in the fuel cycle. Metrics that measure
+negative proliferation resistance include the amount of significant quantities
+of material, defined by the IAEA to be the quantity of any given material (e.g.,
+TRU or plutonium) sufficient to make a nuclear weapon. These are generally
+defined on the elemental level, which ignores realities based on isotopic
+dependencies (e.g., \nucl{240}{Pu} is a relatively large source of decay heat
+and is thus reduces the aggregate plutonium's effectiveness for use as a
+weapon). Metrics that measure positive resistance of proliferation activities
+include the unshielded dose rate of a given material, which makes handling (and
+thus diverting) the material more difficult \cite{yacout_vision_2006}.
+
+In general, fuel cycle simulators can provide metrics at the end of a simulation
+or they can be used to enhance decision making during a simulation. Most metrics
+outside the actual instantiation of facilities (i.e., which facilities are built
+when) and the flow of material, which are integral to the running of the
+simulation, can be post processed. They are only required to be maintained
+during the simulation if the some aspect of the simulation depends upon
+them. Accordingly, unless decisions are being made on the basis of costs, there
+is no reason to maintain a cost metric at simulation time. Simulators can
+generally be divided into two groups, those that make decisions at run time
+based on certain metrics and those that do not. \Cyclus is designed to provide
+dynamic support of metric-based decision making, e.g., Huff's recent work with
+dynamic repository capacity determination
+\cite{huff_integrated_2013}.
