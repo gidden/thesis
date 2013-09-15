@@ -19,11 +19,10 @@ etc. Such an approach has not heretofore been attempted for the nuclear fuel
 cycle and opens up a variety of doors. For example, reactor facilities could be
 allowed to be fueled by multiple fuel types (e.g., UOX or MOX), and decide which
 type to choose based on the simulation environment. However, due to the
-fungibility of material in the fuel cycle (plutonium, for instance, can be used
-by fast reactors and thermal reactors), many questions remain about how to
-describe the materials to be traded and the markets on which they will be
-traded. A more fully formed proposal for such a treatment is presented in
-\S\ref{sec:gfctp}.
+fungibility of material in the fuel cycle and its multicommodity nature, many
+questions remain about how to describe the materials to be traded and the
+markets on which they will be traded. A more fully formed proposal for such a
+treatment is presented in \S\ref{sec:gfctp}.
 
 \subsection{Input Fuel Isotopic Matching}
 
@@ -33,16 +32,17 @@ MOX fuel and the facility that produces MOX. The isotopics that comprise these
 materials, especially the transuranic isotopes, are radioactive, and thus the
 actual isotopic composition of material change with time due to radioisotope
 decay. Accordingly, if a simulator wishes to try to match the requested
-isotopics, it must keep track of the decay of isotopes. Further complicating the
-problem is that requested input fuel recipes may not necessarily be related to
-the provided output fuels, i.e., there is a mismatch between output isotopics
-and input isotopics even without the presence of isotopic decay. The majority of
-fuel cycle simulators to date ignore this issue and instead choose to match
-recipes ``exactly'' based on a subset of isotopes. Further details of how other
-simulators tackle this issue are reviewed in \S\ref{sec:simulators}. A full
-treatment of the recipe-matching problem would require an approach similar to
-the pooling-blending problem \cite{tawarmalani_convexification_2002}. There is a
-rich literature base for pooling-blending problems
+isotopics, it must keep track of the decay of isotopes.  Further complicating
+the problem is that, for a given fuel fabrication facility, stocks of available
+materials may not exactly match the materials being requested, , i.e., there is
+a mismatch between output isotopics and input isotopics even without the
+presence of isotopic decay.  The majority of fuel cycle simulators to date
+ignore this issue and instead choose to match recipes ``exactly'' based on a
+subset of isotopes. Further details of how other simulators tackle this issue
+are reviewed in \S\ref{sec:simulators}. A full treatment of the recipe-matching
+problem would require an approach similar to the pooling-blending problem
+\cite{tawarmalani_convexification_2002}. There is a rich literature base for
+pooling-blending problems
 \cite{glen_mixed_1988,rigby_evolution_1995,mendez_simultaneous_2006,misener_advances_2009}
 in the industrial processes literature. However, the majority of the subject
 matter concentrates on refinery operations such as mixing various crude oils to
