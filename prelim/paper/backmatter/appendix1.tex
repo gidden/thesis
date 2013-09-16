@@ -1,0 +1,75 @@
+\section{\Cyclus To Date}\label{sec:cyclus}
+
+Significant, strategic improvements have been added to the \Cyclus code base.
+Interactions with dynamically-loadable libraries and reading XML-input files
+have been encapsulated in classes and enhanced. 
+
+\subsection{Dynamic Loading}\label{sec:prev-dynamic}
+
+Software libraries can be accessed in a static manner, i.e., they are connected
+to an application during the linking phase of building a program, or can be
+accessed in a dynamic manner, i.e., they are connected at run time. Dynamic
+linkage, or dynamic loading, is a well-known technique for to support
+connectable, modular components, or plug-ins. \Cyclus utilizes a plug-in
+approach for its facility, institution, and region agent libraries. This design
+decision furthers the \Cyclus development goal of providing an agnostic
+framework into which sophisticated users can develop different models of agents
+to investigate specific simulation-modeling change.
+
+Work was performed in order to use class-based representation of dynamic
+libraries, allowing for easy opening, closing, and access thereof. Each dynamic
+library represents an agent type in \Cyclus, providing a constructor and
+destructor. The DynamicModule class then provides the \Cyclus core access to
+these constructors and destructors to perform the appropriate operations at run
+time. Because dynamic loading is treated differently on POSIX-based systems than
+it is on Windows-based systems, specialty functions for library access were
+provided for each system. The correct header file (UnixHelperFunctions.h or
+WindowsHelperFunctions.h) is chosen during compilation. 
+
+These changes simplified the client code that utilizes library access. The
+\Cyclus core application can now call appropriate library-related functions in
+an agnostic manner. Specific, well-defined time points of module loading
+(dynamic library opening) and unloading (dynamic library closing) were defined
+in the \Cyclus application. These operations, called by the application,
+currently reside in the Model class and could likely be refactored into a
+specific handler class designed for this purpose.
+
+\subsection{Input Reading}
+
+A large overhaul to the input-reading code base was performed. \Cyclus currently
+only supports XML input files that adhere to the RNG schema defined in the
+\Cyclus RNG file. However, it is a well-known best practice to provide an
+agnostic application programming interface (API) that can be configured with
+specific class instances given some user-defined input. Accordingly, such an API
+was constructed which currently supports XML input but can also support future
+input types that are tree-based (e.g., JSON, CSV, etc.).
+
+The top-level abstraction is encased in a QueryEngine class. Basic operations
+are provided assuming a tree-based input formation, including querying the
+number of child elements at the current reading level, the name of each element,
+and access to each element. The application code is responsible for configuring
+the appropriate input parser and populating an instance of a QueryEngine at its
+root. The client code then populates input parameters through the QueryEngine
+interface rather than an input-format specific interface.
+
+Support for XML-file reading has been enhanced by separating various concerns
+into appropriate classes. Four classes have been constructed with specific
+purposes regarding input file reading: file loading (XMLFileLoader), file
+validation (RelaxNGValidator), file parsing (XMLParser), and querying
+(XMLQueryEngine). The application interfaces with the file loader, initializing
+it with a given input file path and then invoking the loading of various
+\Cyclus-specific parameters (e.g., simulation control parameters, material
+recipes, agent modules, etc.). The loader is responsible for managing its parser
+and providing client code with correctly-configured instances of
+XMLQueryEngines. The parser is responsible for providing an interface to the
+underlying C++ XML parsing library (i.e., libxml++) and invoking the appropriate
+validation routines on the parsed file. The validator is responsible for
+providing access to the RNG-validation operations through libxml and
+libxml++. Finally, the XML-specific derived QueryEngine class is responsible for
+implementing XML querying using the generic QueryEngine interface.
+
+Other input file formats can be supported by providing the appropriate
+format-specific derived QueryEngine class and adjusting the application code as
+necessary. A developer could then choose how to implement the loading and
+validation, if any, of the input file. The structure described above is just one
+of many ways to achieve such a goal.

@@ -1,13 +1,16 @@
 \chapter{Previous Work}\label{ch:prevwork}
 
-Significant, strategic improvements have been added to the \Cyclus code base.
-Interactions with dynamically-loadable libraries and reading XML-input files
-have been encapsulated in classes and enhanced. Basic simulation setup and
-execution has been revised to provide clear phases of initialization. Tools have
-also been added to provide agent-based management of building and instantiation
-of child agents, i.e., facilities in the \Cyclus simulation. A tools suite named
-\Cyclopts has been developed to provide an interface to optimization solvers
-which currently supports COIN-OR's linear and integer program solvers
+Improvements to the \Cyclus code base have been realized to provide the basis
+for the simulation-level design decisions discussed in
+Chapter~\ref{sec:intro}. Enhancements to the code base not related specifically
+to such design decisions are provided in Appendix \ref{sec:cyclus}. The facility
+deployment concern has been addressed by revising basic simulation setup and
+execution to provide clear phases of initialization. Tools have also been added
+to provide agent-based management of building and instantiation of child agents,
+i.e., facilities in the \Cyclus simulation. Addressing the future needs of both
+facility deployment and dynamic market resolution, a tools suite named \Cyclopts
+has been developed to provide an interface to optimization solvers which
+currently supports COIN-OR's linear and integer program solvers
 \cite{lougee_common_2003}. Management of the actual building (instantiation) of
 facilities within the simulation framework has been encapsulated in a
 supplier/manager class pair. Finally, additional support has been added
@@ -30,161 +33,18 @@ scenarios. Accordingly, a new specification language was proposed and
 implemented, and a translation package was implemented in order to translate
 that input into a \Cyclus input file.
 
-\section{\Cyclus To Date}
-
-\subsection{Dynamic Loading}\label{sec:prev-dynamic}
-
-Software libraries can be accessed in a static manner, i.e., they are connected
-to an application during the linking phase of building a program, or can be
-accessed in a dynamic manner, i.e., they are connected at run time. Dynamic
-linkage, or dynamic loading, is a well-known technique for to support
-connectable, modular components, or plug-ins. \Cyclus utilizes a plug-in
-approach for its facility, institution, and region agent libraries. This design
-decision furthers the \Cyclus development goal of providing an agnostic
-framework into which sophisticated users can develop different models of agents
-to investigate specific simulation-modeling change.
-
-Work was performed in order to use class-based representation of dynamic
-libraries, allowing for easy opening, closing, and access thereof. Each dynamic
-library represents an agent type in \Cyclus, providing a constructor and
-destructor. The DynamicModule class then provides the \Cyclus core access to
-these constructors and destructors to perform the appropriate operations at run
-time. Because dynamic loading is treated differently on POSIX-based systems than
-it is on Windows-based systems, specialty functions for library access were
-provided for each system. The correct header file (UnixHelperFunctions.h or
-WindowsHelperFunctions.h) is chosen during compilation. 
-
-These changes simplified the client code that utilizes library access. The
-\Cyclus core application can now call appropriate library-related functions in
-an agnostic manner. Specific, well-defined time points of module loading
-(dynamic library opening) and unloading (dynamic library closing) were defined
-in the \Cyclus application. These operations, called by the application,
-currently reside in the Model class and could likely be refactored into a
-specific handler class designed for this purpose.
-
-\subsection{Input Reading}
-
-A large overhaul to the input-reading code base was performed. \Cyclus currently
-only supports XML input files that adhere to the RNG schema defined in the
-\Cyclus RNG file. However, it is a well-known best practice to provide an
-agnostic application programming interface (API) that can be configured with
-specific class instances given some user-defined input. Accordingly, such an API
-was constructed which currently supports XML input but can also support future
-input types that are tree-based (e.g., JSON, CSV, etc.).
-
-The top-level abstraction is encased in a QueryEngine class. Basic operations
-are provided assuming a tree-based input formation, including querying the
-number of child elements at the current reading level, the name of each element,
-and access to each element. The application code is responsible for configuring
-the appropriate input parser and populating an instance of a QueryEngine at its
-root. The client code then populates input parameters through the QueryEngine
-interface rather than an input-format specific interface.
-
-Support for XML-file reading has been enhanced by separating various concerns
-into appropriate classes. Four classes have been constructed with specific
-purposes regarding input file reading: file loading (XMLFileLoader), file
-validation (RelaxNGValidator), file parsing (XMLParser), and querying
-(XMLQueryEngine). The application interfaces with the file loader, initializing
-it with a given input file path and then invoking the loading of various
-\Cyclus-specific parameters (e.g., simulation control parameters, material
-recipes, agent modules, etc.). The loader is responsible for managing its parser
-and providing client code with correctly-configured instances of
-XMLQueryEngines. The parser is responsible for providing an interface to the
-underlying C++ XML parsing library (i.e., libxml++) and invoking the appropriate
-validation routines on the parsed file. The validator is responsible for
-providing access to the RNG-validation operations through libxml and
-libxml++. Finally, the XML-specific derived QueryEngine class is responsible for
-implementing XML querying using the generic QueryEngine interface.
-
-Other input file formats can be supported by providing the appropriate
-format-specific derived QueryEngine class and adjusting the application code as
-necessary. A developer could then choose how to implement the loading and
-validation, if any, of the input file. The structure described above is just one
-of many ways to achieve such a goal.
-
-\subsection{Enrichment Tools}\label{sec:prev-enrich}
-
-The ability to calculate enrichment-related values is required to provide
-important metrics for the simplest of fuel cycle simulations. Enrichment is the
-process of artificially increasing the relative amount of Uranium-235 in a given
-sample of Uranium. Naturally, Uranium contains approximately 0.72\%
-\nucl{235}{U}, a small amount (~0.005\%) \nucl{234}{U}, and 99.274\%
-\nucl{238}{U}. In light-water reactors (LWRs), fissile \nucl{235}{U} is the
-primary fission fuel source, and thus reactors run longer with higher amounts of
-\nucl{235}{U}. Accordingly, reactor fuels are enriched to ~3-6\%
-\nucl{235}{U}. It should be noted that enrichment of Uranium above 20\% is
-restricted by international law due to its capacity to be used as a weapon in
-high concentrations. In practice, however, Uranium-based nuclear weapons
-generally have enrichments of greater than 90\%.
-
-The enrichment process has one input, or feed, stream (usually natural Uranium)
-and two output streams, the product and the excess Uranium, called tails. The
-\nucl{235}{U} abundance, or assay of each of these streams as well as the mass of each stream
-determines how much work is required to perform the enrichment, where
-enrichment-work is calculated using Separative Work Units (SWUs). The feed,
-product, and tails stream mass and assay values are related. Equation
-\ref{eqs:enr-feed} shows the relation between product and feed masses, and
-Equation \ref{eqs:enr-tails} shows the relation between product and tails
-masses. 
-
-\begin{equation}\label{eqs:enr-feed}
-  F = P \frac{x_{p} - x_{t}}{x_{f} - x_{t}}
-\end{equation}
-
-\begin{equation}\label{eqs:enr-tails}
-  T = P \frac{x_{p} - x_{f}}{x_{f} - x_{t}}
-\end{equation}
-
-Note that both equations depend on the \nucl{235}{U} assay ($x_i$s) of each
-stream. Furthermore, given the assay of each stream, one needs to set the
-product or feed value (in the case of Equation \ref{eqs:enr-feed}) and the
-product or tails value (in the case of Equation \ref{eqs:enr-tails}). In
-practice, the feed and tail assays are set and an order for some quantity of
-enriched product is requested. The resulting required feed and tail masses are
-then calculated.
-
-Enrichment plants measure their production in SWUs due to the quality
-(enrichment level) variation of their product from order to order. The amount of
-SWUs required to enrich a quantity of Uranium to a certain assay is a
-function of all of the aforementioned variables (assays and masses of the
-feed, product, and tails streams). The SWU calculation is shown in Equation
-\ref{eqs:enr-swu}, where $V(x)$ is the Value Function defined in Equation
-\ref{eqs:enr-value}.
-
-\begin{equation}\label{eqs:enr-swu}
-  SWU = P \; V(x_{p}) + T \; V(x_{t}) - F \; V(x_{f})
-\end{equation}
-
-\begin{equation}\label{eqs:enr-value}
-  V(x) = (1 - 2x) \ln \left( \frac{1-x}{x} \right)
-\end{equation}
-
-Combining Equations \ref{eqs:enr-feed}, \ref{eqs:enr-tails}, and
-\ref{eqs:enr-swu}, one can represent the SWU calculation as a function only of
-the product mass and feed, product, and feed stream assays as shown in
-Equation \ref{eqs:enr-swu-p}.
-
-\begin{equation}\label{eqs:enr-swu-p}
-  SWU = P \left( V(x_{p}) + \frac{x_{p} - x_{f}}{x_{f} - x_{t}} V(x_{t}) 
-        - \frac{x_{p} - x_{t}}{x_{f} - x_{t}} V(x_{f}) \right)
-\end{equation}
-
-An Enrichment class was added to the \Cyclus set of utility toolkits under the
-enrichment namespace. A simple Assay container class was also added, and is used
-as the argument to many of the above calculations. The Enrichment toolkit allows
-for the calculation of each of the above-mentioned values and is used primarily
-in the EnrichmentFacility that was added to \Cycamore to run the once-through
-fuel cycle benchmarks.
+\section{Simulation-level Design Concerns}
 
 \subsection{Facility Building and Supply/Demand Tools}
 
 In order to support simple, once-through fuel cycle simulations, a nominal
 capacity supply-demand interaction capability was needed. The use case of such a
 system is to define demand for a given installed capacity, say in gigawatts of
-produced power. Agents in a \Cyclus simulation generally have a natural
-life cycle, leaving the simulation at the end of their lifetimes. The system must
-be able to respond to changes in installed capacities if it is to continue to
-meet the simulated demand curves.
+produced power. Agents in a \Cyclus simulation generally have a natural life
+cycle, leaving the simulation at the end of their lifetimes. The system must be
+able to respond to changes in installed capacities if it is to continue to meet
+the simulated demand curves. These capabilities support the facility
+instantiation design concept discussed in Chapter~\ref{sec:intro}.
 
 \subsubsection{Facilities as Prototypes}
 After reviewing the prior status of the code base and the way in which
@@ -307,6 +167,84 @@ building, and $\phi_f$ is the nameplate capacity.  Finally, $n_f$ is the
 optimized number of facilities to build of type $f$. The set of facilities and
 their associated costs and capacities are queried through the managed Builder
 instances.
+
+\subsection{Enrichment Tools}\label{sec:prev-enrich}
+
+The ability to calculate enrichment-related values is required to provide
+important metrics for the simplest of fuel cycle simulations. Enrichment is the
+process of artificially increasing the relative amount of Uranium-235 in a given
+sample of Uranium. Naturally, Uranium contains approximately 0.72\%
+\nucl{235}{U}, a small amount (~0.005\%) \nucl{234}{U}, and 99.274\%
+\nucl{238}{U}. In light-water reactors (LWRs), fissile \nucl{235}{U} is the
+primary fission fuel source, and thus reactors run longer with higher amounts of
+\nucl{235}{U}. Accordingly, reactor fuels are enriched to ~3-6\%
+\nucl{235}{U}. It should be noted that enrichment of Uranium above 20\% is
+restricted by international law due to its capacity to be used as a weapon in
+high concentrations. In practice, however, Uranium-based nuclear weapons
+generally have enrichments of greater than 90\%.
+
+The enrichment process has one input, or feed, stream (usually natural Uranium)
+and two output streams, the product and the excess Uranium, called tails. The
+\nucl{235}{U} abundance, or assay of each of these streams as well as the mass
+of each stream determines how much work is required to perform the enrichment,
+where enrichment-work is calculated using Separative Work Units (SWUs). The
+feed, product, and tails stream mass and assay values are related. Equation
+\ref{eqs:enr-feed} shows the relation between product and feed masses, and
+Equation \ref{eqs:enr-tails} shows the relation between product and tails
+masses. The enrichment of uranium is a special case of material quality-related
+concerns, as discussed in Chapter~\ref{sec:intro}, where capcities are generally
+defined by SWUs, not by gross quantity of material. In other words, enrichment
+facilities are capacitated by the amount of work they perform, not on the
+quantity of material they produce.
+
+\begin{equation}\label{eqs:enr-feed}
+  F = P \frac{x_{p} - x_{t}}{x_{f} - x_{t}}
+\end{equation}
+
+\begin{equation}\label{eqs:enr-tails}
+  T = P \frac{x_{p} - x_{f}}{x_{f} - x_{t}}
+\end{equation}
+
+Note that both equations depend on the \nucl{235}{U} assay ($x_i$s) of each
+stream. Furthermore, given the assay of each stream, one needs to set the
+product or feed value (in the case of Equation \ref{eqs:enr-feed}) and the
+product or tails value (in the case of Equation \ref{eqs:enr-tails}). In
+practice, the feed and tail assays are set and an order for some quantity of
+enriched product is requested. The resulting required feed and tail masses are
+then calculated.
+
+Enrichment plants measure their production in SWUs due to the quality
+(enrichment level) variation of their product from order to order. The amount of
+SWUs required to enrich a quantity of Uranium to a certain assay is a
+function of all of the aforementioned variables (assays and masses of the
+feed, product, and tails streams). The SWU calculation is shown in Equation
+\ref{eqs:enr-swu}, where $V(x)$ is the Value Function defined in Equation
+\ref{eqs:enr-value}.
+
+\begin{equation}\label{eqs:enr-swu}
+  SWU = P \; V(x_{p}) + T \; V(x_{t}) - F \; V(x_{f})
+\end{equation}
+
+\begin{equation}\label{eqs:enr-value}
+  V(x) = (1 - 2x) \ln \left( \frac{1-x}{x} \right)
+\end{equation}
+
+Combining Equations \ref{eqs:enr-feed}, \ref{eqs:enr-tails}, and
+\ref{eqs:enr-swu}, one can represent the SWU calculation as a function only of
+the product mass and feed, product, and feed stream assays as shown in
+Equation \ref{eqs:enr-swu-p}.
+
+\begin{equation}\label{eqs:enr-swu-p}
+  SWU = P \left( V(x_{p}) + \frac{x_{p} - x_{f}}{x_{f} - x_{t}} V(x_{t}) 
+        - \frac{x_{p} - x_{t}}{x_{f} - x_{t}} V(x_{f}) \right)
+\end{equation}
+
+An Enrichment class was added to the \Cyclus set of utility toolkits under the
+enrichment namespace. A simple Assay container class was also added, and is used
+as the argument to many of the above calculations. The Enrichment toolkit allows
+for the calculation of each of the above-mentioned values and is used primarily
+in the EnrichmentFacility that was added to \Cycamore to run the once-through
+fuel cycle benchmarks.
 
 \subsection{\Cyclopts}
 
