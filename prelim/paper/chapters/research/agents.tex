@@ -1,20 +1,19 @@
 Deciding how a simulation is structured from an interactions standpoint is a
 delicate balance of known necessity and perceived future needs. There are basic
-decisions to make: do you want a system with discrete material transfers or
-continuous material flows? Discrete transfers more closely match reality and may
-provide insights in that regard, however they require more of their modeling
-apparatus due to messaging needs and other structures. More complex decisions
-include how one wants to determine connections between facilities. Does one
-assign supplier-consumer pairs to facilities? Does one allow them to change?
-Should the facility make such a decision? Should that decision be affected by
-any other entities? Guerin's comment in \S\ref{sec:litrev-benchmarks} stems from
-this ``freedom''. These simulation-engine decisions comprise the art-related
-portion of fuel cycle simulation, but developers have a goal of making these
-decisions in as informed a way as possible using domain-level knowledge with
-respect to our known and perceived requirements. In general, this work tries to
-minimize the sheer number of choices we make in this regard, instead relying on
-well known and well documented practices of computer scientists and systems
-engineers.
+decisions to make, such as modeling material transfer as discrete or
+continuous. Discrete transfers more closely match reality and may provide
+insights in that regard, however they require more of their modeling apparatus
+due to messaging needs and other structures. More complex decisions include how
+one wants to determine connections between facilities, and whether such
+connections are assigned statically and incorporated into the simulation
+architecture or determined dynamically. Guerin's comment
+in \S\ref{sec:litrev-benchmarks} stems from this ``freedom''. These
+simulation-engine decisions comprise the art-related portion of fuel cycle
+simulation, but developers have a goal of making these decisions in as informed
+a way as possible using domain-level knowledge with respect to our known and
+perceived requirements. In general, this work tries to minimize the sheer number
+of choices we make in this regard, instead relying on well known and well
+documented practices of computer scientists and systems engineers.
 
 The \Cyclus team is also interested in fostering a user and developer ecosystem.
 Accordingly, such concerns also drive the simulation architecture design. The
@@ -154,9 +153,9 @@ Institutions in \Cyclus manage a set of facilities. Facility management is
 nominally split into two main categories: the commissioning and decommissioning
 of facilities and supply-demand association. The goal of including a notion of
 institutions is to allow an increased level of detail when investigating
-regional-specific scenarios. For example, there exist multi-national
-enterprises, such as AREVA, that operate fuel cycle facilities in a variety of
-countries, or regions. Furthermore, there are international governmental
+regional-specific scenarios. For example, a consumer facility may prefer to be
+supplied by a supplier facility in its instution rather than one associated with
+a different institution. Furthermore, there are international governmental
 organizations, such as the IAEA, have proposed managing large fuel cycle
 facilities that service many countries in a given global region. A fuel bank is
 an example of such a facility. Accordingly, institutions in \Cyclus are able to
@@ -180,14 +179,15 @@ that certain parameters be met, e.g., power capacity, fuel cycle service
 capacity, etc. For example, in the case of nuclear power capacity, a region
 knows that it needs additional reactors to be built, but leaves the building of
 those reactors to the institutions that operate in the region. The current
-Region model in the \Cyclus code base takes the cost and nameplate capacity for
-each facility in a set of acceptable facilities and a demand gap, and solves a
-minimum-cost capacity production problem to determine the number and type of
-facilities to request. It is important to note here that this abstraction allows
-for different deployment algorithms to be tested and exchanged in the \Cyclus
-framework without necessitating changes to the simulation engine, as is the case
-with other simulators described in \S\ref{sec:simulators} and is consistent with
-the types of simulation design decisions described in
+GrowthRegion model in the \Cycamore \cite{cycamore2013} code base takes the cost
+and nameplate capacity for each facility in a set of acceptable facilities and a
+demand gap, and solves a minimum-cost capacity production problem to determine
+the number and type of facilities to request. It is important to note here that
+this abstraction allows for different deployment algorithms to be tested and
+exchanged in the \Cyclus framework without necessitating changes to the
+simulation engine, as is the case with other simulators described
+in \S\ref{sec:simulators} and is consistent with the types of simulation design
+decisions described in
 \S\ref{sec:simulators-overview}. 
 
 Regions are further provided agency by their ability to affect preferences
