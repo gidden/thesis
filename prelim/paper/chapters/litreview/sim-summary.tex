@@ -1,24 +1,25 @@
 Chapter~\ref{ch:intro} introduced three major simulation-level design decisions
 with some specific subcategories for each. Although it is not possible to
 analyze these decisions for all reviewed simulators due to a lack of available
-literature, it is possible to do so for three: CAFCA, COSI, and VISION. 
+literature, it is possible to do so for three: CAFCA, COSI, and VISION. A
+summary of such design decisions is provided in Table~\ref{tab:sim-summary}.
 
 \begin{savenotes}
 \begin{table} [h!]
 \centering
-\begin{tabular} {|c|c|c|c|c|} 
+\begin{tabular} {|c|c|c|c|c|}
 \hline
 Decision                     & Category & CAFCA & COSI & VISION \\ 
 \hline
 \multirow{2}{*}{Deployment}  & Determined by 
                              & user & user & user \\ \cline{2-5}
-                             & Constrained\footnote{Whether or not deployment is constrained by future simulation states.}   
-                             & by available material & not treated by literature & by available material \\ \hline
+                             & Constrained by\footnote{Generally a lookahead function determines the associated metric.}   
+                             & available material & not treated by literature & available material \\ \hline
 \multirow{3}{*}{Fidelity}    & Decay 
-                             & yes\footnote{There is capability, but it is not used. See \S\ref{sec:cafca}.} & yes & yes \\ \cline{2-5}
+                             & yes\footnote{Capability is available, but it is not used. See \S\ref{sec:cafca}.} & yes & yes \\ \cline{2-5}
                              & Reactor Physics 
                              & no & yes & no \\ \cline{2-5}
-                             & Fuel Matching\footnote{How recycled fuel orders are handled.} 
+                             & Fuel Matching\footnote{How recycled fuel orders are ``matched'' with available isotopics.} 
                              & aggregate mass flows & equivalence method & aggregate mass flows \\ \hline
 \multirow{2}{*}{Connections} & Static/Dynamic 
                              & static & static & static \\ \cline{2-5}

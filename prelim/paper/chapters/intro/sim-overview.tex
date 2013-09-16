@@ -64,26 +64,26 @@ fuel by reactors. This is an interesting problem because separations technology
 work on a elemental scale, whereas input fuel recipes are defined on an isotopic
 scale because neutronics properties are functions of individual isotopes rather
 than elemental aggregates. In other words, you can't change the separated
-plutonium isotopic vector to match a recipe, as one does with uranium enrichment
-(which is an isotopic-scale process). A full treatment of the problem is
-relatively complicated and requires mixing separated plutonium vectors to find a
-``best match''; this problem has been termed the Winery Problem or the Recipe
+isotopic vector to match a recipe, as one does with uranium enrichment (which is
+an isotopic-scale process). A full treatment of the problem is relatively
+complicated and requires mixing separated isotopic vectors to find a ``best
+match''; this problem has been termed the Winery Problem or the Recipe
 Approximation Problem \cite{oliver_geniusv2:_2009}. The current generation of
 fuel cycle simulators generally do not address this issue. A common strategy is
-to declare a target subset of isotopics, normally a specific plutonium isotope
-or the aggregate plutonium isotopes, and match quantities of that set. For
-example, if the set is of single cardinality (e.g.,
-\nucl{239}{Pu}), then the amount of that isotope is guaranteed to be correct,
-but accompanying isotopics are not. On the other hand, if the set is a group of
-isotopes (e.g., all plutonium isotopes), that group's quantity is guaranteed to
-be correct, but the specific isotopics are not. One can conclude from this
-discussion that the level of isotopic detail modeling in a simulation could
-greatly affect the outcome of the simulation, especially if decisions are made
-mid-simulation regarding the isotopes in question (e.g., whether or not to build
-a fast reactor given the available amount of separated isotopes). A full
-treatment of how the current generation of simulators tackle this issue is
-described in \S\ref{sec:simulators}. An overview of the proposed strategy to
-take in the \Cyclus simulation environment is described in \S\ref{sec:rap}.
+to declare a target subset of isotopics, normally a specific isotope or the
+aggregate isotopes of a given element, and match quantities of that set. For
+example, if the set is of single cardinality (e.g., \nucl{239}{Pu}), then the
+amount of that isotope is guaranteed to be correct, but accompanying isotopics
+are not. On the other hand, if the set is a group of isotopes (e.g., all
+plutonium isotopes), that group's quantity is guaranteed to be correct, but the
+specific isotopics are not. One can conclude from this discussion that the level
+of isotopic detail modeling in a simulation could greatly affect the outcome of
+the simulation, especially if decisions are made mid-simulation regarding the
+isotopes in question (e.g., whether or not to build a fast reactor given the
+available amount of separated isotopes). A full treatment of how the current
+generation of simulators tackle this issue is described in
+\S\ref{sec:simulators}. An overview of the proposed strategy to take in the
+\Cyclus simulation environment is described in \S\ref{sec:rap}.
 
 The third simulation-level design decision concerns the connections between
 facilities and the type of material that flows along those connections. In
