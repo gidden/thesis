@@ -301,6 +301,7 @@ one of the participants at the IAEA \cite{dixon_re:_2009}.
 
 % growth
 \begin{figure}[ht]
+  \centering
   \includegraphics[height=7.5cm]{./chapters/prevwork/graphs/inpro-demand.png}
   \caption{Electricity demand in each INPRO demand case.}
   \label{fig:inpro-demand}
@@ -461,39 +462,40 @@ material. This is a short-hand way of denoting trees of materials, i.e.,
 multiple materials with mutual constraints. An example is provided in
 Figure~\ref{fig:material}.
 
-\begin{figure}[h!]
-\begin{Verbatim}[frame=single]
-"materials": {
-  "nea_leu": {
-    "recipe": true,
-    "attributes" : {
-    "concentrations": ["float","atom"],
-    "density": ["float","g/cc"]
-   },
-   "constraints": [        
-     ["U235", 0.0495],
-     ["U238", 0.9505],
-     ["O16", 2.0],
-     ["density", 10.2]
-   ], 
-   "parents": []
-  },
-  "nea_spent_pwr_uox": {
-    "recipe": false,
-    "attributes" : {
-    "concentrations": ["float","atom"]
-    }
-    "constraints": [
-      id == 92235 && x < 0.0495",
-      "id == 92238 && x < 0.9505"
-    ], 
-    "parents": []
-  }
-}
-\end{Verbatim}
-\caption{NEA1a Materials Implemented in JSON}
-\label{fig:material}
-\end{figure}
+% \begin{figure}[h!]
+% \centering
+% \begin{Verbatim}[frame=single]
+% "materials": {
+%   "nea_leu": {
+%     "recipe": true,
+%     "attributes" : {
+%     "concentrations": ["float","atom"],
+%     "density": ["float","g/cc"]
+%    },
+%    "constraints": [        
+%      ["U235", 0.0495],
+%      ["U238", 0.9505],
+%      ["O16", 2.0],
+%      ["density", 10.2]
+%    ], 
+%    "parents": []
+%   },
+%   "nea_spent_pwr_uox": {
+%     "recipe": false,
+%     "attributes" : {
+%     "concentrations": ["float","atom"]
+%     }
+%     "constraints": [
+%       id == 92235 && x < 0.0495",
+%       "id == 92238 && x < 0.9505"
+%     ], 
+%     "parents": []
+%   }
+% }
+% \end{Verbatim}
+% \caption{NEA1a Materials Implemented in JSON}
+% \label{fig:material}
+% \end{figure}
 
 \subsubsection{Facilities}
 Facilities in the specification language have many of the same constructs as
@@ -504,23 +506,59 @@ output materials with which they deal. For each type of facility, e.g., reactors
 separations facilities, etc., a specification is defined. An example for the
 reactor in the NEA 1a benchmark is provided in Figure~\ref{fig:facility}.
 
-\begin{figure}[h!]
-\begin{Verbatim}[frame=single]
-"facilities": {
-  "lwr_reactor": {
-    "type":"reactor",
-    "attributes": {
-      "thermal_power": ["float", "GWt"],
-      "efficiency": ["float", "percent"],
-      "burnup": ["float", "GWd/tHM"],
-      "storage_time": ["int", "year"],
-      "cooling_time": ["int", "year"],
-      "cycle_length": ["int", "month"],
-      "core_loading": ["float", "tHM"],
-      "batch_number": "int",
-      "lifetime": ["int", "year"]
-    },
-    "constraints": [
+% \begin{figure}[h!]
+% \begin{Verbatim}[frame=single]
+% "facilities": {
+%   "lwr_reactor": {
+%     "type":"reactor",
+%     "attributes": {
+%       "thermal_power": ["float", "GWt"],
+%       "efficiency": ["float", "percent"],
+%       "burnup": ["float", "GWd/tHM"],
+%       "storage_time": ["int", "year"],
+%       "cooling_time": ["int", "year"],
+%       "cycle_length": ["int", "month"],
+%       "core_loading": ["float", "tHM"],
+%       "batch_number": "int",
+%       "lifetime": ["int", "year"]
+%     },
+%     "constraints": [
+%       ["thermal_power", 4.25],
+%       ["efficiency", 34.1],
+%       ["burnup", 60],
+%       ["storage_time", 2],
+%       ["cooling_time", 5],
+%       ["cycle_length", 12],
+%       ["core_loading", 78.7],
+%       ["nbatches", 3],
+%       ["lifetime", 60]
+%     ],
+%     "inputs": ["nea_leu"],
+%     "outputs": ["nea_spent_pwr_uox"]
+%   },
+% }
+% \end{Verbatim}
+% \caption{NEA1a Reactor Facility Implemented in JSON}
+% \label{fig:facility}
+% \end{figure}
+
+% specs in json
+\begin{SaveVerbatim}[]{FacEnv}
+  "facilities": {
+    "lwr_reactor": {
+      "type":"reactor",
+      "attributes": {
+        "thermal_power": ["float", "GWt"],
+        "efficiency": ["float", "percent"],
+        "burnup": ["float", "GWd/tHM"],
+        "storage_time": ["int", "year"],
+        "cooling_time": ["int", "year"],
+        "cycle_length": ["int", "month"],
+        "core_loading": ["float", "tHM"],
+        "batch_number": "int",
+        "lifetime": ["int", "year"]
+      },
+      "constraints": [
       ["thermal_power", 4.25],
       ["efficiency", 34.1],
       ["burnup", 60],
@@ -530,14 +568,55 @@ reactor in the NEA 1a benchmark is provided in Figure~\ref{fig:facility}.
       ["core_loading", 78.7],
       ["nbatches", 3],
       ["lifetime", 60]
-    ],
-    "inputs": ["nea_leu"],
-    "outputs": ["nea_spent_pwr_uox"]
-  },
-}
-\end{Verbatim}
-\caption{NEA1a Reactor Facility Implemented in JSON}
-\label{fig:facility}
+      ],
+      "inputs": ["nea_leu"],
+      "outputs": ["nea_spent_pwr_uox"]
+    }
+  }
+\end{SaveVerbatim}
+
+\begin{SaveVerbatim}[]{MatEnv}
+  "materials": {
+    "nea_leu": {
+      "recipe": true,
+      "attributes" : {
+        "concentrations": ["float","atom"],
+        "density": ["float","g/cc"]
+      },
+      "constraints": [        
+      ["U235", 0.0495],
+      ["U238", 0.9505],
+      ["O16", 2.0],
+      ["density", 10.2]
+      ], 
+      "parents": []
+    },
+    "nea_spent_pwr_uox": {
+      "recipe": false,
+      "attributes" : {
+        "concentrations": ["float","atom"]
+      }
+      "constraints": [
+      id == 92235 && x < 0.0495",
+      "id == 92238 && x < 0.9505"
+      ], 
+      "parents": []
+    }
+  }
+\end{SaveVerbatim}
+
+\begin{figure}[ht]
+  \subfloat[Reactor Facility]{%fontshape=it,fontsize=\footnotesize,fontfamily=courier
+    \BUseVerbatim[boxwidth=.45\linewidth]{FacEnv}
+    \label{fig:facility}
+  }
+  \quad
+  \subfloat[Materials]{%fontshape=it,fontsize=\footnotesize,fontfamily=courier
+    \BUseVerbatim[boxwidth=.45\linewidth]{MatEnv}
+    \label{fig:material}
+  }
+\caption{NEA1a Specification Examples Implemented in JSON.}
+\label{fig:json-specs}
 \end{figure}
 
 \subsubsection{Fuel Cycle}
