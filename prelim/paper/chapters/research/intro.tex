@@ -2,15 +2,16 @@ This chapter seeks to lay out a plan by which a fully agent-based simulation can
 be implemented for a generic nuclear fuel cycle with a more realistic chemical
 separations and fuel-matching model than currently exists in the field. The term
 generic implies that the facilities involved are not known \textit{a priori}
-and, accordingly, facilities can be coupled together automatically. For example,
-a modeler has the choice to model a separations facility and advanced fuel
-fabrication facility as separate entities whose connected supply and demand are
-met by a generic engine, or to model the two facilities as a single combined and
-coupled entity. Additionally, the solution framework for this matching engine
-must be agnostic as to the classes of commodities and materials involved. Rather
-than hard-coding in constraints and capacities for different material classes,
-they are added dynamically based on the entities involved in the
-simulation-based solution.
+and, accordingly, facilities can be coupled together automatically, separating
+the concern of fuel facility modeling and connection from the simulation
+solution engine. For example, a modeler has the choice to model a separations
+facility and advanced fuel fabrication facility as separate entities whose
+connected supply and demand are met by a generic engine, or to model the two
+facilities as a single combined and coupled entity. Additionally, the solution
+framework for this matching engine must be agnostic as to the classes of
+commodities and materials involved. Rather than hard-coding in constraints and
+capacities for different material classes, they are added dynamically based on
+the entities involved in the simulation-based solution.
 
 As fuel cycle simulators have progressed from simple spreadsheet applications,
 work advancing the field has focused on including in-simulation dynamic
@@ -32,12 +33,10 @@ encapsulate simulation-level design decisions. The framework allows for market
 interactions to be defined, providing a formalism by which information related
 to supply and demand of commodities and materials can be represented in a
 general sense. Commodities are not treated simply as quantities, instead the
-quantity and \textit{quality} of commodities is treated. The framework also
-provides a formal definition for the types of interactions between entities (for
-example, the building of facilities). Next, a mathematical programming
-formulation based on the multi-commodity transport problem is proposed to solve
-the generic supply-demand matching problem. A linear program formulation and
-mixed integer-linear program formulation is proposed, the latter of which
-addresses the trade-off between computation speed and realism. Finally, the
-issue of matching separated elemental streams with requested recycled fuel is
-addressed via an approximation linear program.
+quantity and \textit{quality} of commodities is treated.  Next, a mathematical
+programming formulation based on the multi-commodity transport problem is
+proposed to solve the generic supply-demand matching problem. A linear program
+formulation and mixed integer-linear program formulation is proposed, the latter
+of which addresses the trade-off between computation speed and realism. Finally,
+the issue of matching separated elemental streams with requested recycled fuel
+is addressed via an approximation linear program.

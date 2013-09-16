@@ -6,11 +6,16 @@ fabrication. Such a scenario will be used a baseline for implementation of this
 proposed work.
 
 As an initial step, the dynamic resource exchange framework proposed in
-\S\ref{sec:agent-interaction} will be implemented. This will allow for basic
-decision making when facilities have more than one possible input or output in
-the \Cyclus simulation framework. In order to demonstrate the nature of the
-preferential market exchange as outlined in \S\ref{sec:gfctp-lp}, the same
-scenario will be run with multiple institutions involved. A successful
+\S\ref{sec:agent-interaction} will be implemented with a basic, ``greedy''
+matching algorithm. This will allow for decision making when facilities have
+more than one possible input or output in the \Cyclus simulation framework. The
+linear programming version of the GFCTP outlined in \S\ref{sec:gfctp-lp} will
+then be implemented in order to confirm similar results to the simplistic
+matching algorithm. 
+
+In order to demonstrate the nature of the preferential market exchange, the same
+scenario will be run with multiple institutions involved, and cardinal
+preference assigned between facilities within those institutions. A successful
 implementation will show changing material flows based on varying preferences,
 and will demonstrate the ease with which such institutional and regional
 modeling can be achieved with such a final product. With the linear programming
@@ -18,8 +23,10 @@ formulation complete, the integer programming formulation described in
 \S\ref{sec:gfctp-ip} will be implemented and investigated. Key items of concern
 is the increased computation time resulting from the MILP formulation and the
 degree to which it is required, i.e., the degree to which orders are split in an
-actual simulation. Finally, the fidelity of recycled fuel orders will be
-investigated by implementing the RAP as proposed in \S\ref{sec:RAP}. Comparisons
-will be made between this model and the aggregate flow and equivalence models
-currently implemented by other simulators as summarized in
-\S\ref{sec:sim-summary}.
+actual simulation. 
+
+Finally, the fidelity of recycled fuel orders will be investigated by
+implementing the RAP as proposed in \S\ref{sec:RAP}. Comparisons will be made
+between this model and the aggregate flow and equivalence models currently
+implemented by other simulators as summarized in \S\ref{sec:sim-summary}. The
+effect and usefulness of the RAP formulation will be reported.
