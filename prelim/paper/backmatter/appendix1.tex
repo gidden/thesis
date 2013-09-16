@@ -1,10 +1,10 @@
-\section{\Cyclus To Date}\label{sec:cyclus}
+\chapter{\Cyclus To Date}\label{sec:cyclus}
 
 Significant, strategic improvements have been added to the \Cyclus code base.
 Interactions with dynamically-loadable libraries and reading XML-input files
 have been encapsulated in classes and enhanced. 
 
-\subsection{Dynamic Loading}\label{sec:prev-dynamic}
+\section{Dynamic Loading}\label{sec:prev-dynamic}
 
 Software libraries can be accessed in a static manner, i.e., they are connected
 to an application during the linking phase of building a program, or can be
@@ -34,7 +34,7 @@ in the \Cyclus application. These operations, called by the application,
 currently reside in the Model class and could likely be refactored into a
 specific handler class designed for this purpose.
 
-\subsection{Input Reading}
+\section{Input Reading}
 
 A large overhaul to the input-reading code base was performed. \Cyclus currently
 only supports XML input files that adhere to the RNG schema defined in the
