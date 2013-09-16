@@ -1,0 +1,40 @@
+Chapter~\ref{ch:intro} introduced three major simulation-level design decisions
+with some specific subcategories for each. Although it is not possible to
+analyze these decisions for all reviewed simulators due to a lack of available
+literature, it is possible to do so for three: CAFCA, COSI, and VISION. 
+
+\begin{savenotes}
+\begin{table} [h!]
+\centering
+\begin{tabular} {|c|c|c|c|c|} 
+\hline
+Decision                     & Category & CAFCA & COSI & VISION \\ 
+\hline
+\multirow{2}{*}{Deployment}  & Determined by 
+                             & user & user & user \\ \cline{2-5}
+                             & Constrained\footnote{Whether or not deployment is constrained by future simulation states.}   
+                             & by available material & not treated by literature & by available material \\ \hline
+\multirow{3}{*}{Fidelity}    & Decay 
+                             & yes\footnote{There is capability, but it is not used. See \S\ref{sec:cafca}.} & yes & yes \\ \cline{2-5}
+                             & Reactor Physics 
+                             & no & yes & no \\ \cline{2-5}
+                             & Fuel Matching\footnote{How recycled fuel orders are handled.} 
+                             & aggregate mass flows & equivalence method & aggregate mass flows \\ \hline
+\multirow{2}{*}{Connections} & Static/Dynamic 
+                             & static & static & static \\ \cline{2-5}
+                             & Fleet/Individual 
+                             & fleet & fleet & fleet \\
+\hline
+\end{tabular}
+\caption{Simulation-Level Design Decisions as Taken by Each Simulator}
+\label{tab:sim-summary}
+\end{table}
+\end{savenotes}
+
+While most of the above information is not available for DANESS, it does
+introduce additional functionality by allowing minimum-cost deployments,
+constraining deployment based on a percentage of future required material (thus
+allowing facilities to idle if not fueled), and treating facilities
+individually, rather than explicitly as a fleet. It is not clear from the
+literature if the facilities are only tracked individually or if they are
+specifically interacted with on an individual basis.

@@ -8,7 +8,8 @@ study transition scenarios at a high level of isotopic and physical
 fidelity. Its origins date to 1991, and it has been updated with relative
 frequency since 2005 \cite{boucher_cosi_2005,boucher_cosi:_2006,meyer_new_2009,
 coquelet-pascal_validation_2011}. A time step is never specified in the COSI
-literature, so it is possible that COSI is an event-driven simulation.
+literature, so it is possible that COSI is an event-driven simulation. Finally,
+reactors are modeled in ``pools'', i.e., fleets.
 
 The main user input for a COSI simulation is the period to be simulated and the
 commissioning and decommissioning date for each type of reactor in the
@@ -29,19 +30,20 @@ predefined enrichment.  Similarly, for mixed plutonium-uranium oxide (MOX) fuel
 for use in thermal reactors, the equivalence model is simply a predefined
 plutonium content. It is not clear, however, if the plutonium content is in
 total mass or mass of a specific plutonium isotope \cite{meyer_new_2009,
-  coquelet-pascal_validation_2011}. Further, I assume that a similar equivalence
-model is used for any other thermal reactor fuel, e.g., thorium-based fuels.
+coquelet-pascal_validation_2011}. Further, it is assumed that a similar
+equivalence model is used for any other thermal reactor fuel, e.g.,
+thorium-based fuels.
 
-For each type of reactor, this set of models requires a class fertile of
-material (e.g., depleted uranium, recycled uranium, natural uranium) and a class
-of fissile material (e.g., plutonium, transuranics), and a predefined ratio of
-the two. It is unclear how many degrees of freedom a user has in defining these
-parameters for each reactor. Enriched UOX is a special case of the equivalence
-model, because it has no restrictions on its fabrication, i.e., COSI does not
-allow natural uranium availability to be a constraining parameter in a
-simulation. In all other cases, the fissile material must come from recycled
-fuel, and is therefore restricted based upon material availability in the
-simulation.
+For each type of reactor, this set of models requires a class (or type) of
+fertile material (e.g., depleted uranium, recycled uranium, natural uranium) and
+a class of fissile material (e.g., plutonium, transuranics), and a predefined
+ratio of the two. It is unclear how many degrees of freedom a user has in
+defining these parameters for each reactor. Enriched UOX is a special case of
+the equivalence model, because it has no restrictions on its fabrication, i.e.,
+COSI does not allow natural uranium availability to be a constraining parameter
+in a simulation. In all other cases, the fissile material must come from
+recycled fuel, and is therefore restricted based upon material availability in
+the simulation.
 
 Thermal reactors and fast reactors are treated differently in COSI. As discussed
 previously, thermal reactors simply define a fissile enrichment and assemble the
@@ -59,11 +61,11 @@ just critical and
 \end{equation}
 
 where $c$ is a constant, and for a given isotope $i$ in the set of heavy fuel
-elemental isotopes, $I$, $N_i$ is its average number density, $\nu_{i}$ is the
-average number of neutrons resulting from its fission, $\sigma_{f,i}$ is its
-microscopic fission cross section, and $\sigma_{a,i}$ is its microscopic
-absorption cross section. For convenience, let us (as Baker and Ross do) define
-the collection of intrinsic isotopic parameters as
+elemental isotopes, $I$, $N_i$ is its number density, $\nu_{i}$ is the average
+number of neutrons resulting from its fission, $\sigma_{f,i}$ is its microscopic
+fission cross section, and $\sigma_{a,i}$ is its microscopic absorption cross
+section. For convenience, let us (as Baker and Ross do) define the collection of
+intrinsic isotopic parameters as
 
 \begin{equation}
 x_i = \nu_{i} \sigma_{f,i} - \sigma_{a,i}.
@@ -104,11 +106,12 @@ material to take from available fissile stockpiles and the amount of material to
 take from available fertile stockpiles, i.e., $1 - E$.
 
 It is important to note that the resulting isotopics for either thermal or fast
-reactor fuel is a function of the user-defined reprocessing order. The
-equivalence model simply determines the quantity of fertile and fissile material
-to extract from the available stockpiles. Granted, the equivalence models
-are \textit{informed} by the isotopics of those stockpiles, but they are
-considered constants in the calculation. 
+reactor fuel is a function of the user-defined reprocessing order, e.g., yougest
+fuel first or oldest fuel first. The equivalence model simply determines the
+quantity of fertile and fissile material to extract from the available
+stockpiles. Granted, the equivalence models are \textit{informed} by the
+isotopics of those stockpiles, but they are considered constants in the
+calculation.
 
 It is not clear how COSI models fuel batch processing sizes in the separations
 and fabrication process; batches of material are referred to in the COSI

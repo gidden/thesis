@@ -1,16 +1,18 @@
 A number of current fuel cycle simulators are reviewed in this section with a
-keen focus of simulation-developer related design aspects. There are broadly two
-main categories that simulation developers must address: how simulation entities
-enter a given simulation and how simulation entities interact, or are connected,
-in a simulation. The former varies by each simulator, whereas the latter is
-handled by proprietary system dynamics software in most cases. Peripheral
-concerns are also addressed, namely simulation input/output and the associated
-coding platform(s). Because all current fuel cycle simulators are effectively
-closed source, any knowledge of their inner workings must be gleaned from the
-available literature published by their respective development
-teams. Additionally, summary information can be gathered from the MIT
-benchmarking exercise \cite{guerin_benchmark_2009}, because the sections
-corresponding to each simulator were written by the simulator developers. From a
-developers perspective, assumptions are made when the literature does not
-provide a clear explanation of a given design decision, but such assumptions are
-expressly noted.
+keen focus of simulation-developer related design aspects. There are broadly
+three main categories that simulation developers must address: how simulation
+entities enter a given simulation, at what level of fidelity the physical and
+chemical processes are modeled, and how simulation entities interact, or are
+connected, in a simulation. Deployment and process fidelity concerns are
+generally handled differently by each simulator. Entity interaction, i.e., the
+determining of mass flows, is generally handled by proprietary system dynamics
+software in most cases. Peripheral concerns are also addressed, namely
+simulation input/output and the associated coding platform(s). Because all
+current fuel cycle simulators are effectively closed source, any knowledge of
+their inner workings must be gleaned from the available literature published by
+their respective development teams. Additionally, summary information can be
+gathered from the MIT benchmarking exercise \cite{guerin_benchmark_2009},
+because the sections corresponding to each simulator were written by the
+simulator developers. From a developers perspective, assumptions are made when
+the literature does not provide a clear explanation of a given design decision,
+but such assumptions are expressly noted.
