@@ -92,24 +92,24 @@ constraints over the requests, $C_R$. Each request consists of a quantity,
 $q_r$, and a target isotopic vector, $I_r$.
 
 The second phase allows suppliers to \textit{respond} to the set of consumption
-portfolios, and is termed the \textit{Bidding} (B) phase (analogous to Julka's
-Reply to Request for Quote phase \cite{julka_agent-based_2002}). Each
-consumption portfolio is comprised of requests for some set of
-commodities. Accordingly, for each request, suppliers of that commodity denote
-production capacities and an isotopic profile of the commodity they can
-provide. Suppliers are allowed to offer the null set of isotopics as their
-profile, effectively providing no information. A supplier may have its
-production constrained by more than one parameter. For example, a processing
-facility may have both a throughput constraint (i.e., it can only process
-material at a certain rate) and an inventory constraint (i.e., it can only hold
-some total material). Further, the facility could have a constraint on the
-quality of material to be processed, e.g., it may be able to handle a maximum
-radiotoxicity for any given time step which is a function of both the quantity
-of material in processes and the isotopic content of that material. The
+portfolios, and is termed the \textit{Response to Request for Bids} (RRFB) phase
+(analogous to Julka's Reply to Request for Quote phase
+\cite{julka_agent-based_2002}). Each consumption portfolio is comprised of
+requests for some set of commodities. Accordingly, for each request, suppliers
+of that commodity denote production capacities and an isotopic profile of the
+commodity they can provide. Suppliers are allowed to offer the null set of
+isotopics as their profile, effectively providing no information. A supplier may
+have its production constrained by more than one parameter. For example, a
+processing facility may have both a throughput constraint (i.e., it can only
+process material at a certain rate) and an inventory constraint (i.e., it can
+only hold some total material). Further, the facility could have a constraint on
+the quality of material to be processed, e.g., it may be able to handle a
+maximum radiotoxicity for any given time step which is a function of both the
+quantity of material in processes and the isotopic content of that material. The
 formulation provided in \S\ref{sec:gfctp} allows for multiple of such
 constraints as long as they are linear functions of the demanded commodity
-quantity. At the completion of the Bidding phase the possible connections
-between supplier and producer facilities, i.e., the arcs in the graph of the
+quantity. At the completion of the RRFB phase the possible connections between
+supplier and producer facilities, i.e., the arcs in the graph of the
 transportation problem, have been established with specific capacity constraints
 defined both by the quantity and quality of commodities that will traverse the
 arcs.
