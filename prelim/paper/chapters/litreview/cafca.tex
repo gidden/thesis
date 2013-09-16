@@ -62,7 +62,7 @@ CAFCA's basic simulation assumptions, the inventory of used light water reactor
 subject to the user-defined fuel technology preference fractions. A look-ahead
 value is used to guarantee that reactors are built only if there is available
 fuel for their entire lifetime. This inherent modeling assumption disallows
-the investigation supply interruption cases.
+the investigation of supply interruption cases.
 
 An overview of the building methodology as provided
 in \cite{busquim_e_silva_system_2008} follows. The key parameters in the system
@@ -120,7 +120,7 @@ reviewed \cite{busquim_e_silva_system_2008}. The input for the system is the
 amount of separated fuel-usable TRU available for ABRs coming from reprocessing
 plants,
 
-\begin{equation}
+\begin{equation}\label{eqn:tru}
  TRU^{Fuel}_{ABR}(t) = p^{TRU}_{ABR}(t) \sum_{s \in S} TRU^{Fuel}_s(t),
 \end{equation}
 
@@ -236,20 +236,21 @@ period. This assumption leads to an error of 0.6\% increased overall fuel usage
 per reactor \cite{guerin_impact_2009}.
 
 An important consequence of CAFCA's formulation is that it inherently bins the
-isotopics of fuel into categories, e.g., TRU or plutonium and minor
-actinides. Accordingly, there is no inherent check on the validity of isotopics
-entering or exiting reactors, i.e., their methodology guarantees
-correct \textit{aggregate mass flows} at an elemental scope, but does not
-consider individual isotopics at a simulation-methodology level. In other words,
-CAFCA treats all classes of material as lumped \cite{guerin_impact_2009}. One
-aspect of their simulation where this assumption is plays a critical role is in
-their determination of input fuel for fast reactors that have a conversion ratio
-other than unity. In such scenarios, TRU from LWRs and similar fast reactors are
-lumped together and treated as one fuel source commodity after being mixed with
-either depleted or recycled uranium \cite{guerin_impact_2009}. Such an
-assumption allows CAFCA to still compute larger aggregate metrics such as
-uranium utilization. Additionally, the lumped material assumption is perhaps one
-reason why the CAFCA team sees minimal impact from isotopic decay.
+isotopics of fuel into categories, e.g., TRU or plutonium and minor actinides,
+as demonstrated by Equation~\ref{eqn:tru}. Accordingly, there is no inherent
+check on the validity of isotopics entering or exiting reactors, i.e., their
+methodology guarantees correct \textit{aggregate mass flows} at an elemental
+scope, but does not consider individual isotopics at a simulation-methodology
+level. In other words, CAFCA treats all classes of material as
+lumped \cite{guerin_impact_2009}. One aspect of their simulation where this
+assumption is plays a critical role is in their determination of input fuel for
+fast reactors that have a conversion ratio other than unity. In such scenarios,
+TRU from LWRs and similar fast reactors are lumped together and treated as one
+fuel source commodity after being mixed with either depleted or recycled
+uranium \cite{guerin_impact_2009}. Such an assumption allows CAFCA to still
+compute larger aggregate metrics such as uranium utilization. Additionally, the
+lumped material assumption is perhaps one reason why the CAFCA team sees minimal
+impact from isotopic decay.
 
 Significant work is required to extend CAFCA to allow additional reactor/fuel
 types. Busquim e Silva outlined their original
@@ -267,10 +268,10 @@ LWRs-MOX2), and those that have 100\% of their core fueled by MOX (named
 LWRs-MOX3). The non-MOX using reactor fleet must be included because they
 produce fuel that is reprocessed for use in MOX-fueled reactors. The actual fuel
 that is provided to each class of reactor is separate. In other words, MOX fuel
-that is set aside for MOX2 LWRs can only be used in MOX2 LWRs and \textit{vice
-versa} for MOX3 LWRs. Furthermore, there is an (arbitrary) priority ordering
-amongst the two classes, i.e., MOX2 LWRs are fueled before MOX3
-LWRs. Mathematically, this is represented as
+that is set aside for MOX2 LWRs can only be used in MOX2 LWRs and similarly for
+MOX3 LWRs. Furthermore, there is an (arbitrary) priority ordering amongst the
+two classes, i.e., MOX2 LWRs are fueled before MOX3 LWRs. Mathematically, this
+is represented as
 
 \begin{equation}
 PU_{MOX3}(t) = PU_{MOX}(t) - PU_{MOX2}(t).

@@ -49,9 +49,10 @@ interpolating based on fuel type and ``key input parameters''
 then output fuel recipes are determined based on burnup for LWR UOX fuel and
 conversion ratio for fast reactor fuel. Accordingly, input fuel recipes must be
 known \textit{a priori} and physics calculations must be run to populate a
-database of preformed fuel output recipes. It is not clear if such an operation
-has been implemented to date, nor it is not clear how isotopic decay is involved
-in determining perturbations to the input fuel recipes, if at all.
+database of preformed fuel output recipes. Such an operation has been
+implemented for the current predefined cases, but it is not clear how isotopic
+decay is involved in determining perturbations to the input fuel recipes, if at
+all.
 
 Schweitzer provides a look at the facility ordering methodology in his master's
 thesis \cite{schweitzer_improved_2008}. Understanding this methodology is
@@ -61,13 +62,14 @@ the methodology. First, the only limiting factor on reactor fuel supply is used
 LWR fuel, i.e., there is no limiting factor on fresh UOX. Secondly, it is
 assumed that reactors have a known fuel usage over their lifetime and that this
 usage is divided into fuel of different integral number of passes through the
-reactor type. Put another way, fast reactors begin with some fuel isotopic
-makeup and each successive refueling is comprised of a different isotopic
-makeup, as defined by the user, up to some limit. Any additional recycles are
-assumed to have reached an equilibrium and their isotopics remain at this
-maximum. In Schweitzer's work and in the VISION literature, the limit is five
-passes. In general, the driving force behind facilities being built in the
-simulation is the need for separated spent fuel for fast reactors.
+reactor type. Put another way, fast reactors lifetime inventories are measured
+by some fuel isotopic makeup and each successive refueling (pass) is comprised
+of a different isotopic makeup, as defined by the user, up to some limit. Any
+additional recycles are assumed to have reached an equilibrium and their
+isotopics remain at this maximum. In Schweitzer's work and in the VISION
+literature, the limit is five passes. In general, the driving force behind
+facilities being built in the simulation is the need for separated spent fuel
+for fast reactors.
 
 Fast reactors are ordered based on a user-defined preferred distribution,
 $N_{FBR,E}$, and fast reactor fuel availability, $N_{FBR,SF}$. Given some
@@ -178,15 +180,14 @@ profile. Reactors are assumed to consume more UOX for the remaining reload
 amount not met by their own MOX. The material from the final core ejection is
 then added to the available spent fuel pool for fast reactors.
 
-To wrap up the building methodology, support facilities are built based one the
-demand of power reactors. VISION is able to guarantee that connections between
-facility fleets are maintained at an appropriate capacity because the look-ahead
-calculation uses as its look-ahead time the maximum time required to build any
-facility in the simulation. Therefore, a VISION simulation can not ``run out''
-of a servicing capacity, for additional capacity will be built in time. Although
-the following is associated with both products and services, I will use the term
-``product'' in this discussion. The demand for a product, $x$, is
-represented as
+Support facilities are built based on the demand of power reactors. VISION is
+able to guarantee that connections between facility fleets are maintained at an
+appropriate capacity because the look-ahead calculation uses as its look-ahead
+time the maximum time required to build any facility in the
+simulation. Therefore, a VISION simulation can not ``run out'' of a servicing
+capacity, for additional capacity will be built in time. Although the following
+is associated with both products and services, I will use the term ``product''
+in this discussion. The demand for a product, $x$, is represented as
 
 \begin{equation}
 D_x(t + \Delta t_x) = \sum_{y \in Y} \gamma_{x,y} N_y(t + \Delta t^x) C_y(t + \Delta t^x),
