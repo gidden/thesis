@@ -8,6 +8,8 @@
 %\title[short title]{long title}
 \title[Cyclus]{An Agent-Based Modeling Framework and Application for the Generic
   Nuclear Fuel Cycle}
+%\subtitle[short subtitle]{long subtitle}
+\subtitle[PhD Preliminary Examination]{PhD Preliminary Examination}
 %\author[short name]{long name}
 \author[MJG]{Matthew Gidden}
 %\date[short date]{long date}
@@ -18,6 +20,13 @@
 \setbeamertemplate{footline}[page number]
 % Those icons  in the references are terrible looking.
 \setbeamertemplate{bibliography item}[text]
+%try to get rid of header on title page\dots
+\makeatletter
+    \newenvironment{withoutheadline}{
+        \setbeamertemplate{headline}[default]
+        \def\beamer@entrycode{\vspace*{-\headheight}}
+    }{}
+\makeatother
 
 %% % this is a great way to compile only one (or more) frames at a time as you're
 %% % working, saving tons on compile time
@@ -40,9 +49,19 @@
 \newcommand*{\Highlight}{\rlap{\textcolor{HighlightBackground}{\rule[-\highlightdepth]{\linewidth}{\highlightheight}}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%||||---------------
+%%--------------------------------%%
+\begin{withoutheadline}
 \frame{
-\titlepage
+  \titlepage
+}
+\end{withoutheadline}
+
+%%--------------------------------%%
+\AtBeginSection[]{
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents[currentsection]
+\end{frame}
 }
 %---------------||||
 
