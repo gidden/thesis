@@ -1,0 +1,73 @@
+%%  File: main.tex
+%%  Author: Matthew Gidden
+%%  Created: Sept. 17, 2013
+%%  Purpose: Prelim Presenation
+     
+\documentclass[9pt]{beamer}
+\usetheme[white]{Wisconsin}
+%\title[short title]{long title}
+\title[Cyclus]{An Agent-Based Modeling Framework and Application for the Generic
+  Nuclear Fuel Cycle}
+%\author[short name]{long name}
+\author[MJG]{Matthew Gidden}
+%\date[short date]{long date}
+\date[09.23.2013]{September 23, 2013}
+%\institution[short name]{long name}
+\institute[UW-Madison]{University of Wisconsin-Madison}
+% Page numbers.
+\setbeamertemplate{footline}[page number]
+% Those icons  in the references are terrible looking.
+\setbeamertemplate{bibliography item}[text]
+
+%% % this is a great way to compile only one (or more) frames at a time as you're
+%% % working, saving tons on compile time
+%% \includeonlyframes{current}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% From uw-beamer Here's a handy bit of code to place at 
+%% the beginning of your presentation (after \begin{document}):
+\newcommand*{\alphabet}{ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz}
+\newlength{\highlightheight}
+\newlength{\highlightdepth}
+\newlength{\highlightmargin}
+\setlength{\highlightmargin}{2pt}
+\settoheight{\highlightheight}{\alphabet}
+\settodepth{\highlightdepth}{\alphabet}
+\addtolength{\highlightheight}{\highlightmargin}
+\addtolength{\highlightdepth}{\highlightmargin}
+\addtolength{\highlightheight}{\highlightdepth}
+\newcommand*{\Highlight}{\rlap{\textcolor{HighlightBackground}{\rule[-\highlightdepth]{\linewidth}{\highlightheight}}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%||||---------------
+\frame{
+\titlepage
+}
+%---------------||||
+
+%---------------||||
+\section{Introduction}
+\include{intro}
+\section{Fuel Cycle Simulation}
+\include{simulation}
+\section{Motivation}
+\include{motivation}
+\section{Proposal}
+\include{proposal}
+And an example \cite{hamilton_blue_2012}.
+\section{Acknowledgements}
+\include{acknowledgements}
+
+%||||---------------
+\begin{frame}[allowframebreaks]
+  \frametitle{References}
+  \bibliographystyle{plain}
+  \bibliography{main}
+\end{frame}
+%---------------||||
+
+
+
+
+\end{document}
