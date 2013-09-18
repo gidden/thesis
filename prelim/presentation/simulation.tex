@@ -1,6 +1,58 @@
 % simulation.tex
 
 \begin{frame}[ctb!]
+  \frametitle{Simulating the Nuclear Fuel Cycle} 
+
+  Fuel cycle simulators are designed to answer policy-related questions
+  regarding transitions from one equilibrium state to another.
+
+  \vspace{0.2cm}
+
+  \pause
+  A simulator answers the following questions as a function of its 
+  parameter space:
+  \begin{itemize}
+    \item how much material exists
+    \item where does that material reside
+    \item from/to where and when is material transported
+    \item what kinds of facilities are needed
+    \item when is each type of facility needed
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[ctb!]
   \frametitle{Simulating the Nuclear Fuel Cycle}
-  
+  The nuclear fuel cycle is simulated via \textit{scenarios}.
+
+  Some codes currently in use today:
+  \begin{itemize}
+    \item CAFCA (MIT) \cite{busquim_e_silva_system_2008}
+    \item COSI (CEA) \cite{boucher_cosi:_2006}
+    \item DANESS (ANL) \cite{durpel_daness_2003}
+    \item VISION (INL) \cite{yacout_vision_2006}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Nuclear Fuel Cycle Simulation Metrics}
+
+  Fuel Cycle Simulators generally report back metrics about the fuel cycle in
+  question, including:
+
+  \begin{itemize}
+    \item economics
+    \item waste management
+    \item sustainability
+    \item nonproliferation
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Nuclear Fuel Cycle Simulation Design Choices}
+  Simulation designers are faced with a number of decisions, including:
+  \begin{itemize}
+    \item facility deployment
+    \item fidelity of physical, chemical, and industrial processes
+    \item material transaction modeling
+  \end{itemize}
 \end{frame}
