@@ -11,20 +11,42 @@
   \end{figure}
 \end{frame}
 
-%% \begin{frame}[ctb!]
-%%   \frametitle{The Nuclear Fuel Cycle: Front End}
-%%   \begin{figure}
-%%     \includegraphics[height=4cm]{./images/fc-front.eps}
-%%     \caption{An example Advanced Breeder Reator (ABR) fuel cycle. \cite{lisowski_global_2007}.}
-%%     \label{fig:fc}  
-%%   \end{figure}
-%% \end{frame}
+\begin{frame}[ctb!]
+  \frametitle{Recycling Fuel}
+  Used fuel exiting light water reactors has the following average elemental
+  breakdown:
 
-%% \begin{frame}[ctb!]
-%%   \frametitle{The Nuclear Fuel Cycle: Back End}
-%%   \begin{figure}
-%%     \includegraphics[height=4cm]{./images/fc-back.eps}
-%%     \caption{An example Advanced Breeder Reator (ABR) fuel cycle. \cite{lisowski_global_2007}.}
-%%     \label{fig:fc}  
-%%   \end{figure}
-%% \end{frame}
+  \begin{table} [h]
+    \centering
+    \begin{tabular} {|c|c|} 
+      \hline
+      Element Group & wt \% \\
+      \hline
+      Uranium           & $\sim$95  \\
+      Plutonium         & $\sim$1   \\
+      Mixed Actinides   & $\sim$0.1 \\
+      Fission Products  & $\sim$4   \\
+      \hline
+    \end{tabular}
+    \caption{Elemental Breakdown of Spent Fuel Exiting a Typical LWR}
+    \label{tab:lwr_fuel}
+  \end{table}
+
+  Recycled fuel can be used in both thermal and fast reactors.
+
+  Fast reactors are defined by transuranic conversion ratios.
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Fuel Cycle Modeling Complexity}
+  Modeling the nuclear fuel cycle is complex for a variety of reasons:
+
+  \begin{enumerate}
+    \item recycling
+    \item material quantity and \textit{quality}
+    \item \textit{fungibility} from both a supplier and consumer perspective
+    \item the Department of Energy has identified ``an endless'' number of
+      possible fuel cycles, but identifies 40 ``evaluation groups'' of cycles
+      \cite{wigeland_evaluation_2013}
+  \end{enumerate}
+\end{frame}
