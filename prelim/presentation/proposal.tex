@@ -16,22 +16,17 @@
       provide
   \end{itemize}
   
-\end{frametitle}
-
+\end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Resource Exchange Information Gathering}
 
   The nuclear fuel cycle has some similarities to the petroleum industry (i.e.,
   the quality of the product must be taken into account), and is a
-  \textit{supply chain}.
-
-  \\
+  \textit{supply chain}.\\
 
   Furthermore, facilities making decisions based on product quality act in an
-  agent-like manner.
-
-  \\ 
+  agent-like manner.\\ 
 
   Accordingly, I looked toward agent-based supply chain modeling of the
   petroleum industry for inspiration, and have adopted an approach proposed by
@@ -51,7 +46,7 @@
 \begin{frame}[ctb!]
   \frametitle{Resource Exchange: Response to Request for Bids}
   \begin{figure}
-    \includegraphics[height=5cm]{./images/suppliers.eps}
+    \includegraphics[height=5cm]{./images/supplier.eps}
     \caption{Suppliers respond to each request during the Response to Request
       for Bids (RRFB) phase.}
   \end{figure}
@@ -60,7 +55,7 @@
 \begin{frame}[ctb!]
   \frametitle{Resource Exchange: Preference Adjustment}
   \begin{figure}
-    \includegraphics[height=5cm]{./images/suppliers-requesters.eps}
+    \includegraphics[height=5cm]{./images/supplier-requester.eps}
     \caption{Consumers adjust preferences based on Supplier-given information
       during the Preference Adjustment (PA) phase.}
   \end{figure}
@@ -81,20 +76,14 @@
   \frametitle{Resource Exchange Solution Mechanism}
   
   As defined, facilities in \Cyclus are black boxes, but there is a notion of
-  supplier and consumer facilities of a variety of commodities.
-
-  \\
+  supplier and consumer facilities of a variety of commodities.\\
 
   We seek a solution to a flow of (discrete) materials, where for each
   commodity, we have now defined a set of suppliers and consumers of that
-  commodity. 
-
-  \\ 
+  commodity.\\ 
   
   Furthermore, suppliers may be able to provide more than one commodity and
-  consumers may be able to consume more than one commodity.
-
-  \\
+  consumers may be able to consume more than one commodity.\\
 
   Accordingly, a Multicommodity Transportation Problem formulation naturally
   fits the needs of our simulation. Let's call it the Generic Fuel Cycle
@@ -105,5 +94,7 @@
 
 \begin{frame}[ctb!]
   \frametitle{GFCTP - Description}
+
+  here we are
   
 \end{frame}
