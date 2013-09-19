@@ -22,9 +22,14 @@
 
 \begin{frame}[ctb!]
   \frametitle{Simulating the Nuclear Fuel Cycle}
-  The nuclear fuel cycle is simulated via \textit{scenarios}.
+  The nuclear fuel cycle is simulated via \textit{scenarios}.\\
 
-  Some codes currently in use today:
+  A scenario generally defines a demand for nuclear power and the types of
+  reactors that can respond to that demand. Supporting facilities can be
+  explicitly or implicitly modeled to provide fuel for the reactors, and such
+  behavior depends on the model used by the simulator.\\
+
+  Some nuclear fuel cycle simulators (FCS) currently in use today:
   \begin{itemize}
     \item CAFCA (MIT) \cite{busquim_e_silva_system_2008}
     \item COSI (CEA) \cite{boucher_cosi:_2006}
@@ -34,10 +39,11 @@
 \end{frame}
 
 \begin{frame}[ctb!]
-  \frametitle{Nuclear Fuel Cycle Simulation Metrics}
+  \frametitle{FCS Metrics}
 
-  Fuel Cycle Simulators generally report back metrics about the fuel cycle in
-  question, including:
+  FCSs generally report back metrics about the fuel cycle in question. Many of
+  these metrics are functions of facility deployment, material flow, and
+  material residency, including:
 
   \begin{itemize}
     \item economics
@@ -48,11 +54,89 @@
 \end{frame}
 
 \begin{frame}[ctb!]
-  \frametitle{Nuclear Fuel Cycle Simulation Design Choices}
+  \frametitle{FCS Design Choices}
   Simulation designers are faced with a number of decisions, including:
   \begin{itemize}
     \item facility deployment
     \item fidelity of physical, chemical, and industrial processes
     \item material transaction modeling
   \end{itemize}
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{FCS Design Choices: Deployment}
+
+  Reactor deployment choices in almost all cases are chosen by the user.\\
+
+  Supporting facility deployment can be chosen by the user, but in most present
+  cases, they are deployed when needed by a look-ahead function.\\
+
+  In many present cases, deployment, although user defined, is restricted by
+  future available material. For example, if an advanced reactor requires
+  transuranic (TRU) fuel, and a simulation knows that TRU will not be available,
+  simulators instead deploy a non-constrained reactor.\\
+
+  In such scenarios, a class of reactors, e.g. LWRs, is considered never to be
+  fuel constrained.
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{FCS Design Choices: Fidelity}
+
+  Physical, chemical, and process fidelity are all design choices for simulators.\\
+
+  Physical fidelity includes the choice to model isotopic decay and whether or
+  not to model in-core reactor physics.\\
+
+  Chemical and process fidelity include the modeling of the chemical separations
+  and advanced fuel fabrication processes. The separations-fuel fabrication
+  interface is generally not treated by the current simulator cadre.
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{FCS Design Choices: Material Transactions}
+
+  Determining how material flows, or is transacted, is a critical design
+  decision, because of the effect it has on output metrics.\\
+  
+  Most simulators in use to date use a systems dynamics approach, which models
+  aggregate material flows between fleets of reactors.\\
+
+  These flows are \textit{static}, i.e., connections between fleets of
+  facilities are known \textit{apriori}. In fact, these connections govern the
+  equations used in the systems dynamics modeling architecture. This makes
+  extensibility of the codes difficult for any new type of fuel cycle.
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{FCS Design Choices: Summary}
+  
+  \begin{savenotes}
+    \begin{table} [h!]
+      \centering
+      \begin{tabular} {|c|c|c|c|c|}
+        \hline
+        Decision                     & Category & CAFCA & COSI & VISION \\ 
+        \hline
+        \multirow{2}{*}{Deployment}  & Determined by 
+        & user & user & user \\ \cline{2-5}
+        & Constrained by\footnote{Generally a look-ahead function determines the associated metric.}   
+        & available material & not treated by literature & available material \\ \hline
+        \multirow{3}{*}{Fidelity}    & Decay 
+        & yes\footnote{Capability is available, but it is not used. See \S\ref{sec:cafca}.} & yes & yes \\ \cline{2-5}
+        & Reactor Physics 
+        & no & yes & no \\ \cline{2-5}
+        & Fuel Matching\footnote{How recycled fuel orders are ``matched'' with available isotopics.} 
+        & aggregate mass flows & equivalence method & aggregate mass flows \\ \hline
+        \multirow{2}{*}{Connections} & Static/Dynamic 
+        & static & static & static \\ \cline{2-5}
+        & Fleet/Individual 
+        & fleet & fleet & fleet \\
+        \hline
+      \end{tabular}
+      \caption{Simulation-Level Design Decisions as Taken by Each Simulator}
+      \label{tab:sim-summary}
+    \end{table}
+  \end{savenotes}
+
 \end{frame}
