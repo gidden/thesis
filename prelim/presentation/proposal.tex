@@ -603,6 +603,42 @@
 
 \begin{frame}[ctb!]
   \frametitle{Next Steps} 
+  
+  The \Cyclus team has identified the one and two-tier fuel cycles proposed in
+  the recent Dynamic Systems Analysis Report for Nuclear Fuel Recycle (DSARR)
+  \cite{dixon_dynamic_2008} as targets for development.\\
 
-  And now its come to this...
+  The Information Gathering mechanism is required for a first-blush attempt at
+  these cycles, as it provides a mechanism to determine basic preferential flow
+  when there is more than one possible destination or source of
+  material. Accordingly, it will be implemented first.\\
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Next Steps} 
+
+  The LP formulation of the GFCTP will then be implemented for this simple
+  case. Its capability will be demonstrated by providing preferences across
+  institutions or regions. For example, servicing facilities (e.g. enrichment
+  plants and separations facilities) can be either in the same instituion or
+  region as a reactor, and preferences can be assigned accordingly.\\
+
+  The MILP formulation for the GFCTP will then be implemented. Comparisions in
+  run time and output will be observed, and, depending on outcomes, acceleration
+  methods, such as cutting planes and preprocessing, will be investigated.\\
+
+  In both cases, the COIN-OR\cite{lougee_common_2003} suite of libraries will be
+  used as the Simplex and Branch-and-Bound solvers.
+
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Next Steps} 
+  
+  Finally, the RAP will be implemented in the simple simulation cases and
+  compared with both the naive approach to fuel matching and the Equivalence
+  Method as used in COSI. 
+
+  Again, the COIN-OR Simplex solver will be leveraged to solve the RAP.
+
 \end{frame}
