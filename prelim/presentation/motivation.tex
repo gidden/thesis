@@ -85,6 +85,87 @@
 \end{frame}
 
 \begin{frame}[ctb!]
+  \frametitle{Issues with Current Recycled Fuel Matching}
+  
+  Current implementations of the modeling of recycled fuel fabrication lack
+  rigor.\\
+
+  While DANESS does not provide explicit documentation as to its process
+  \cite{durpel_daness_2003}, VISION and COSI both provide some insight.\\
+
+  In both cases, due to their fleet-based modeling and aggregation of mass
+  flows, separated used fuel isotopcis appear to be aggregated together, i.e.,
+  they are all placed in the same ``bin''.\\
+
+  In VISION's case, control isotopes are declared, which determine the amount of
+  material to take out of the ``bin''.\cite{yacout_vision_2006}
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Issues with Current Recycled Fuel Matching}
+
+  In COSI's case, a slightly more rigorous approach termed an ``Equivalence
+  Model'', adapted from a method introduced in 1963 by Baker and
+  Ross\cite{baker_comparison_1963}, is used for fast reactor fuel.\\
+
+  The method assumes that an ideal fuel recipe contains only Pu-239 and
+  U-238. Deviations from this ``pure'' recipe must be accounted for to maintain
+  beginning of cycle reactivity.\\
+
+  In such a model, the following are defined:
+  \begin{itemize}
+    \item a quantity of fuel
+    \item a target Pu-239 enrichment, $E_0$
+    \item a ``bin'' of fertile isotopes
+    \item a ``bin'' of fissile isotopes
+  \end{itemize}
+
+  And its output is:
+  \begin{itemize}
+    \item a weight fraction, $E$, to extract from the fissile isotopes
+    \item a weight fraction, $1-E$, to extract from the fertile isotopes
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Issues with Current Recycled Fuel Matching}
+  An isotopic ``worth'' is defined as
+  
+  \begin{equation}
+    w_i = \frac{x_i - x_{^{238}U}}
+    {x_{^{239}Pu} - x_{^{238}U}}.
+  \end{equation}
+
+  And each $x_i$ is defined as a function of physical parameters of the isotope
+  
+  \begin{equation}
+    x_i = \nu_{i} \sigma_{f,i} - \sigma_{a,i}
+  \end{equation}
+
+  where $\nu_{i}$ is the average number of neutrons resulting from its fission,
+  $\sigma_{f,i}$ is its microscopic fission cross section, and $\sigma_{a,i}$ is
+  its microscopic absorption cross section.
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Issues with Current Recycled Fuel Matching} 
+  
+  The fraction of material to take form each isotope ``bin'' is determined in
+  order to maintain a constant neutronic weight between the hypothetical
+  Pu-239/U-238 composition and the perturbed composition. The appropriate
+  perturbed weight fraction to take from the fissile ``bin'', $E$, is defined
+  as:
+  
+  \begin{equation}
+    E = \frac{E_0 - \sum_{i \in I_{Fe}} \xi_i w_i}
+    {\sum_{i \in I_{Fi}} \xi_i w_i - \sum_{i \in I_{Fe}} \xi_i w_i}.
+  \end{equation}
+
+  The weight fraction to removed from the fertile bin is, of course, $1-E$.
+
+\end{frame}
+  
+\begin{frame}[ctb!]
   \frametitle{Two Motivating Questions}
 
   \begin{block}{Dynamic Resource Exchange}
