@@ -6,6 +6,8 @@
   in the fuel cycle, detailed information about both the supply and demand must
   be known.
 
+  \vspace{0.2cm}
+  
   Some examples:
   
   \begin{itemize}
@@ -123,10 +125,10 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP - Nomenclature}
 
-  As we continue, I assume that the set of commodities is denoted $H$, the set
-  of suppliers is denoted $I$, and the set of requesters is denoted $J$. The
-  flow of commodity $h$ from supplier $i$ to consumer $j$ is denoted
-  $x^h_{i,j}$.\vspace{0.2cm}
+  As we continue, I use the following nomenclature: the set of commodities is
+  denoted $H$, the set of suppliers is denoted $I$, and the set of requesters is
+  denoted $J$. The flow of commodity $h$ from supplier $i$ to consumer $j$ is
+  denoted $x^h_{i,j}$.\vspace{0.2cm}
 
   I will first introduce the linear programming (LP) formulation, and then
   discuss its limitations when introducing the mixed integer-linear programming
@@ -443,7 +445,7 @@
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Objective}
 
-  In the current formulation, the matching the target recipe is the objective.
+  In the current formulation, matching the target recipe is the objective.
 
   Given a matrix of the barrel isotopic quantities, $M$, the residual between a
   possible solution and the target is defined as:
@@ -631,11 +633,15 @@
   case. Its capability will be demonstrated by providing preferences across
   institutions or regions. For example, servicing facilities (e.g. enrichment
   plants and separations facilities) can be either in the same institution or
-  region as a reactor, and preferences can be assigned accordingly.\vspace{0.2cm}
+  region as a reactor, and preferences can be assigned accordingly.
+
+  \vspace{0.2cm}
 
   The MILP formulation for the GFCTP will then be implemented. Comparisons in
   run time and output will be observed, and, depending on outcomes, acceleration
-  methods, such as cutting planes and preprocessing, will be investigated.\vspace{0.2cm}
+  methods, such as cutting planes and preprocessing, will be investigated.
+  
+  \vspace{0.2cm}
 
   In both cases, the COIN-OR\cite{lougee_common_2003} suite of libraries will be
   used as the Simplex and Branch-and-Bound solvers.
@@ -648,6 +654,8 @@
   Finally, the RAP will be implemented in the simple simulation cases and
   compared with both the naive approach to fuel matching and the Equivalence
   Method as used in COSI. 
+
+  \vspace{0.2cm}
 
   Again, the COIN-OR Simplex solver will be leveraged to solve the RAP.
 
