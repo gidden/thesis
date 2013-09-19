@@ -88,14 +88,20 @@
   \frametitle{Issues with Current Recycled Fuel Matching}
   
   Current implementations of the modeling of recycled fuel fabrication lack
-  rigor.\\
+  rigor.
+
+  \vspace{0.2cm}
 
   While DANESS does not provide explicit documentation as to its process
-  \cite{durpel_daness_2003}, VISION and COSI both provide some insight.\\
+  \cite{durpel_daness_2003}, VISION and COSI both provide some insight.
+  
+  \vspace{0.2cm}
 
   In both cases, due to their fleet-based modeling and aggregation of mass
-  flows, separated used fuel isotopcis appear to be aggregated together, i.e.,
-  they are all placed in the same ``bin''.\\
+  flows, separated used fuel isotopics appear to be aggregated together, i.e.,
+  they are all placed in the same ``bin''.
+  
+  \vspace{0.2cm}
 
   In VISION's case, control isotopes are declared, which determine the amount of
   material to take out of the ``bin''.\cite{yacout_vision_2006}
@@ -106,11 +112,17 @@
 
   In COSI's case, a slightly more rigorous approach termed an ``Equivalence
   Model'', adapted from a method introduced in 1963 by Baker and
-  Ross\cite{baker_comparison_1963}, is used for fast reactor fuel.\\
+  Ross\cite{baker_comparison_1963}, is used for fast reactor fuel.
+  
+  \vspace{0.2cm}
 
   The method assumes that an ideal fuel recipe contains only Pu-239 and
   U-238. Deviations from this ``pure'' recipe must be accounted for to maintain
-  beginning of cycle reactivity.\\
+  beginning of cycle reactivity.
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Issues with Current Recycled Fuel Matching}
 
   In such a model, the following are defined:
   \begin{itemize}
@@ -152,9 +164,9 @@
   
   The fraction of material to take form each isotope ``bin'' is determined in
   order to maintain a constant neutronic weight between the hypothetical
-  Pu-239/U-238 composition and the perturbed composition. The appropriate
-  perturbed weight fraction to take from the fissile ``bin'', $E$, is defined
-  as:
+  Pu-239/U-238 composition and the perturbed composition. Given the weight
+  fractions of isotopes in each bin, $\xi_i$, the appropriate perturbed weight
+  fraction to take from the fissile ``bin'', $E$, is defined as:
   
   \begin{equation}
     E = \frac{E_0 - \sum_{i \in I_{Fe}} \xi_i w_i}
