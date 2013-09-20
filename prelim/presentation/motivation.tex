@@ -72,12 +72,10 @@
 \begin{frame}[ctb!]
   \frametitle{Making \Cyclus Extensible}
   
-  Instead of treating facilities and materials (i.e., commodities) explicitly,
-  leading to less extensibility, \Cyclus treats them generally. Facilities are
-  black boxes.
-  
+  Facilities, materials (i.e., commodities) are treated generally in \Cyclus.
+
   \begin{figure}
-    \includegraphics[height=5cm]{./images/facs.eps}
+    \includegraphics[height=4cm]{./images/facs.eps}
     \caption{Facilities as black boxes. \cite{cyclus2012}.}
     \label{fig:facs}  
   \end{figure}
@@ -87,38 +85,37 @@
 \begin{frame}[ctb!]
   \frametitle{Issues with Current Recycled Fuel Matching}
   
-  Current implementations of the modeling of recycled fuel fabrication lack
-  rigor.
-
-  \vspace{0.2cm}
-
-  While DANESS does not provide explicit documentation as to its process
-  \cite{durpel_daness_2003}, VISION and COSI both provide some insight.
+  Current implementations of the modeling of recycled fuel fabrication
+  \begin{itemize}
+    \item lack rigor
+    \item don't account for element-isotope issues present at this interface
+  \end{itemize}
   
   \vspace{0.2cm}
 
-  In both cases, due to their fleet-based modeling and aggregation of mass
-  flows, separated used fuel isotopics appear to be aggregated together, i.e.,
-  they are all placed in the same ``bin''.
+  VISION models the process by:
+  \begin{itemize}
+    \item placing separated isotopes in ``bins''
+    \item declaring ``control isotopes''
+    \item removing the correct control isotopes fraction from the bin
+  \end{itemize}
   
-  \vspace{0.2cm}
-
-  In VISION's case, control isotopes are declared, which determine the amount of
-  material to take out of the ``bin''.\cite{yacout_vision_2006}
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Issues with Current Recycled Fuel Matching}
 
-  In COSI's case, a slightly more rigorous approach termed an ``Equivalence
-  Model'', adapted from a method introduced in 1963 by Baker and
-  Ross\cite{baker_comparison_1963}, is used for fast reactor fuel.
+  COSI's uses the ``Equivalence Model'', adapted from a method introduced in
+  1963 by Baker and Ross\cite{baker_comparison_1963}.
   
   \vspace{0.2cm}
 
-  The method assumes that an ideal fuel recipe contains only Pu-239 and
-  U-238. Deviations from this ``pure'' recipe must be accounted for to maintain
-  beginning of cycle reactivity.
+  Method and implementation outline:
+  \begin{itemize}
+    \item used for recycled fuel recipes
+    \item assumes ``ideal'' recipe of $^{239}$Pu and $^{238}$U
+    \item determines a recipe given ``bins'' of fissile and fertile material
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[ctb!]
@@ -141,40 +138,41 @@
 
 \begin{frame}[ctb!]
   \frametitle{Issues with Current Recycled Fuel Matching}
-  An isotopic ``worth'' is defined as
   
+  An isotopic ``worth'' is defined for each isotope, $i$, as:
   \begin{equation}
     w_i = \frac{x_i - x_{^{238}U}}
     {x_{^{239}Pu} - x_{^{238}U}}.
   \end{equation}
 
-  And each $x_i$ is defined as a function of physical parameters of the isotope
+  with $x_i$ defined as:
   
   \begin{equation}
     x_i = \nu_{i} \sigma_{f,i} - \sigma_{a,i}
   \end{equation}
 
-  where $\nu_{i}$ is the average number of neutrons resulting from its fission,
-  $\sigma_{f,i}$ is its microscopic fission cross section, and $\sigma_{a,i}$ is
-  its microscopic absorption cross section.
+  with physical parameters:
+  \begin{itemize}
+    \item $\nu_{i}$ - average number of neutrons resulting from fission
+    \item $\sigma_{f,i}$ - microscopic fission cross section
+    \item $\sigma_{a,i}$ - microscopic absorption cross section
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Issues with Current Recycled Fuel Matching} 
   
-  The fraction of material to take form each isotope ``bin'' is determined in
-  order to maintain a constant neutronic weight between the hypothetical
-  Pu-239/U-238 composition and the perturbed composition. Given the weight
-  fractions of isotopes in each bin, $\xi_i$, the appropriate perturbed weight
-  fraction to take from the fissile ``bin'', $E$, is defined as:
-  
+  With isotopic weight fractions, $\xi_i$, the fissile fraction, $E$, is given
+  by:
   \begin{equation}
     E = \frac{E_0 - \sum_{i \in I_{Fe}} \xi_i w_i}
     {\sum_{i \in I_{Fi}} \xi_i w_i - \sum_{i \in I_{Fe}} \xi_i w_i}.
   \end{equation}
 
-  The weight fraction to removed from the fertile bin is, of course, $1-E$.
-
+  \begin{figure}
+    \includegraphics[height=3cm]{./images/equiv.eps}
+    \caption{Result of COSI's Equivalence Method. \cite{meyer_new_2009}.}
+  \end{figure}
 \end{frame}
   
 \begin{frame}[ctb!]

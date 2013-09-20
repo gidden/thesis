@@ -3,14 +3,12 @@
 \begin{frame}[ctb!]
   \frametitle{Simulating the Nuclear Fuel Cycle} 
 
-  Fuel cycle simulators are designed to answer policy-related questions
-  regarding transitions from one equilibrium state to another.
+  Goal: address policy-related questions regarding transitions from one
+  equilibrium state to another
 
   \vspace{0.2cm}
-
-  \pause
-  A simulator answers the following questions as a function of its 
-  parameter space:
+  
+  Answers as a function of its parameter space:
   \begin{itemize}
     \item how much material exists
     \item where does that material reside
@@ -22,18 +20,21 @@
 
 \begin{frame}[ctb!]
   \frametitle{Simulating the Nuclear Fuel Cycle}
-  The nuclear fuel cycle is simulated via \textit{scenarios}.\vspace{0.2cm}
+  Simulated via \textit{scenarios}:
+  \begin{itemize}
+    \item demand for power defined
+    \item a set of reactors
+    \item supporting facility (explict or implicit)
+  \end{itemize}
 
-  A scenario generally defines a demand for nuclear power and the types of
-  reactors that can respond to that demand. Supporting facilities can be
-  explicitly or implicitly modeled to provide fuel for the reactors, and such
-  behavior depends on the model used by the simulator.\vspace{0.2cm}
-
-  Some nuclear fuel cycle simulators (FCS) currently in use today:
+  \vspace{0.2cm}
+  
+  Some nuclear fuel cycle simulators (FCS):
   \begin{itemize}
     \item CAFCA (MIT) \cite{busquim_e_silva_system_2008}
     \item COSI (CEA) \cite{boucher_cosi:_2006}
     \item DANESS (ANL) \cite{durpel_daness_2003}
+    \item NFCSim (LANL) \cite{schneider_nfcsim:_2005}
     \item VISION (INL) \cite{yacout_vision_2006}
   \end{itemize}
 \end{frame}
@@ -41,9 +42,8 @@
 \begin{frame}[ctb!]
   \frametitle{FCS Metrics}
 
-  FCSs generally report back metrics about the fuel cycle in question. Many of
-  these metrics are functions of facility deployment, material flow, and
-  material residency, including:
+  Metrics are generally functions of facility deployment, material flow, and
+  material residency:
 
   \begin{itemize}
     \item economics
@@ -66,76 +66,71 @@
 \begin{frame}[ctb!]
   \frametitle{FCS Design Choices: Deployment}
 
-  Reactor deployment choices in almost all cases are chosen by the user.\vspace{0.2cm}
+  Deployment-related decisions include:
+  \begin{itemize}
+    \item how to determine reactor deployment (e.g., user/automated)
+    \item how/if to deploy supporting facilities
+    \item whether to restrict/constrain deployment (e.g., using a lookahead function)
+    \item if a ``default'' reactor type should be used
+  \end{itemize}
 
-  Supporting facility deployment can be chosen by the user, but in most present
-  cases, they are deployed when needed by a look-ahead function.\vspace{0.2cm}
-
-  In many present cases, deployment, although user defined, is restricted by
-  future available material. For example, if an advanced reactor requires
-  transuranic (TRU) fuel, and a simulation knows that TRU will not be available,
-  simulators instead deploy a non-constrained reactor.\vspace{0.2cm}
-
-  In such cases, a class of reactors, e.g. LWRs, is considered never to be
-  fuel constrained.
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{FCS Design Choices: Fidelity}
 
-  Physical, chemical, and process fidelity are all design choices for simulators.\vspace{0.2cm}
+  Fidelity-related decisions include:
+  \begin{itemize}
+    \item whether to include isotopic decay
+    \item performing reactor physics calculations
+    \item how to treat recycled fuel fabrication
+    \item how materials are defined (isotopic fidelity)
+  \end{itemize}
 
-  Physical fidelity includes the choice to model isotopic decay and whether or
-  not to model in-core reactor physics.\vspace{0.2cm}
-
-  Chemical and process fidelity include the modeling of the chemical separations
-  and advanced fuel fabrication processes. The separations-fuel fabrication
-  interface is generally not treated by the current simulator cadre.
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{FCS Design Choices: Material Transactions}
 
-  Determining how material flows, or is transacted, is a critical design
-  decision, because of the effect it has on output metrics.\vspace{0.2cm}
-  
-  Most simulators in use to date use a systems dynamics approach, which models
-  aggregate material flows between fleets of reactors.\vspace{0.2cm}
+  Transaction-related decisions include:
+  \begin{itemize}
+    \item underlying engine (e.g., system dynamics)
+    \item continuous or discrete flow
+    \item fleet-based or facility-based
+    \item static or dynamic connections (i.e., supplier/consumer changes)
+    \item level of generality
+  \end{itemize}
 
-  These flows are \textit{static}, i.e., connections between fleets of
-  facilities are known \textit{apriori}. In fact, these connections govern the
-  equations used in the systems dynamics modeling architecture. This makes
-  extensibility of the codes difficult for any new type of fuel cycle.
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{FCS Design Choices: Summary}
+
+  \fontsize{7pt}{\baselineskip}\selectfont
   
-    \begin{table} [h!]
-      \small
-      \centering
-      \begin{tabular} {|c|c|c|c|c|}
-        \hline
-        Decision                     & Category & CAFCA & COSI & VISION \\ 
-        \hline
-        \multirow{2}{*}{Deployment}  & Determined by 
-        & user & user & user \\ \cline{2-5}
-        & Constrained by\footnote{Generally a look-ahead function determines the associated metric.}   
-        & available material & not treated by literature & available material \\ \hline
-        \multirow{3}{*}{Fidelity}    & Decay 
-        & yes\footnote{Capability is available, but it is not used.} & yes & yes \\ \cline{2-5}
-        & Reactor Physics 
-        & no & yes & no \\ \cline{2-5}
-        & Fuel Matching\footnote{How recycled fuel orders are ``matched'' with available isotopics.} 
-        & aggregate mass flows & equivalence method & aggregate mass flows \\ \hline
-        \multirow{2}{*}{Connections} & Static/Dynamic 
-        & static & static & static \\ \cline{2-5}
-        & Fleet/Individual 
-        & fleet & fleet & fleet \\
-        \hline
-      \end{tabular}
-      \caption{Simulation-Level Design Decisions as Taken by Each Simulator}
-      \label{tab:sim-summary}
-    \end{table}
+  \begin{table} [h!]
+    \begin{tabularx}{\textwidth}{|c|X|X|X|X|}
+      \hline
+      Decision                     & Category & CAFCA & COSI & VISION \\ 
+      \hline
+      \multirow{2}{*}{Deployment}  & Determined by 
+      & user & user & user \\ \cline{2-5}
+      & Constrained by\footnote{Generally a look-ahead function determines the associated metric.}   
+      & available material & not treated by literature & available material \\ \hline
+      \multirow{3}{*}{Fidelity}    & Decay 
+      & yes\footnote{Capability is available, but it is not used.} & yes & yes \\ \cline{2-5}
+      & Reactor Physics 
+      & no & yes & no \\ \cline{2-5}
+      & Fuel Matching\footnote{How recycled fuel orders are ``matched'' with available isotopics.} 
+      & aggregate mass flows & equivalence method & aggregate mass flows \\ \hline
+      \multirow{2}{*}{Connections} & Static/Dynamic 
+      & static & static & static \\ \cline{2-5}
+      & Fleet/Individual 
+      & fleet & fleet & fleet \\
+      \hline
+    \end{tabularx}
+    \caption{Simulation-Level Design Decisions as Taken by Some Simulators}
+    \label{tab:sim-summary}
+  \end{table}
 
 \end{frame}
