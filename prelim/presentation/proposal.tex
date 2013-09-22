@@ -19,8 +19,22 @@
 \begin{frame}[ctb!]
   \frametitle{Resource Exchange Generality}
 
-  add enrichment picture
+  \begin{figure}
+    \includegraphics[height=3cm]{./images/enr.eps}
+    \caption{Two Demands for Enriched Uranium}
+  \end{figure}
   
+  \begin{table} [h!]
+    \begin{tabular}{|c|c|c|}
+      \hline  
+      Order & SWU & Nat'l U (kg) \\
+      \hline  
+      A & 71 & 112\\
+      B & 34 & 64\\
+      \hline  
+    \end{tabular}
+  \end{table}
+
 \end{frame}
 
 \begin{frame}[ctb!]
@@ -37,17 +51,14 @@
 \begin{frame}[ctb!]
   \frametitle{Resource Exchange Information Gathering}
 
-  The nuclear fuel cycle has some similarities to the petroleum industry (i.e.,
-  the quality of the product must be taken into account), and is a
-  \textit{supply chain}.\vspace{0.2cm}
+  Inspiration taken from Julka et. al. \cite{julka_agent-based_2002},
 
-  Furthermore, facilities making decisions based on product quality act in an
-  agent-like manner.\vspace{0.2cm} 
-
-  Accordingly, I looked toward agent-based supply chain modeling of the
-  petroleum industry for inspiration, and have adopted an approach proposed by
-  Julka et. al. \cite{julka_agent-based_2002} to be used under the proposed
-  \Cyclus design constraints.
+  \begin{itemize}
+    \item fuel cycle is a supply chain
+    \item individual facilities are agents
+    \item petroleum industry also deals with material quality
+  \end{itemize}
+  
 \end{frame}
 
 \begin{frame}[ctb!]
@@ -90,20 +101,18 @@
 
 \begin{frame}[ctb!]
   \frametitle{Resource Exchange Solution Mechanism}
-  
-  As defined, facilities in \Cyclus are black boxes, but there is a notion of
-  supplier and consumer facilities of a variety of commodities.\vspace{0.2cm}
 
-  We seek a solution to a flow of (discrete) materials, where for each
-  commodity, we have now defined a set of suppliers and consumers of that
-  commodity.\vspace{0.2cm} 
-  
-  Furthermore, suppliers may be able to provide more than one commodity and
-  consumers may be able to consume more than one commodity.\vspace{0.2cm}
+  A Multicommodity Transportation Problem (MTP) formulation naturally fits the
+  requirements of the simulation.
 
-  Accordingly, a Multicommodity Transportation Problem formulation naturally
-  fits the needs of our simulation. I have termed the formulation the Generic
-  Fuel Cycle Transportation Problem (GFCTP).
+  \begin{itemize}
+    \item supplier and consumer facilities
+    \item discrete transfers of commodities
+    \item demand can be met by multiple commodities
+  \end{itemize}
+
+  Departs from classic MTP, thus is called Generic Fuel Cycle Transportation
+  Problem (GFCTP).
   
 \end{frame}
 
@@ -111,16 +120,18 @@
   \frametitle{GFCTP - Overview}
   
   The Generic Fuel Cycle Transportation problem assumes the following:
-
   \begin{itemize}
     \item there is a set of suppliers, a set of requesters, a set of
       commodities, and a set of possible resource transfers, defining arcs
       between suppliers and requesters
-    \item a cardinal preference ordering if defined over the set of possible
+    \item a cardinal preference ordering is defined over the set of possible
       resource transfers
     \item suppliers can be constrained both by resource quantities and qualities
     \item multiple commodity types may satisfy a consumer
   \end{itemize}
+
+  A linear programming (LP) formulation and mixed integer-linear programming
+  (MILP) formulation is proposed.
 
 \end{frame}
   
@@ -128,28 +139,28 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP - Nomenclature}
 
-  As we continue, I use the following nomenclature: the set of commodities is
-  denoted $H$, the set of suppliers is denoted $I$, and the set of requesters is
-  denoted $J$. The flow of commodity $h$ from supplier $i$ to consumer $j$ is
-  denoted $x^h_{i,j}$.\vspace{0.2cm}
-
-  I will first introduce the linear programming (LP) formulation, and then
-  discuss its limitations when introducing the mixed integer-linear programming
-  (MILP) formulation.
+  Nomenclature used:
+  \begin{itemize}
+    \item set of commodities, $H$
+    \item set of suppliers, $I$
+    \item set of requesters, $J$
+    \item flow, $x^h_{i,j}$
+  \end{itemize}
 
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Request Constraint}
   
-  A request can be met by multiple commodities in this framework. Take, for
-  example, a reactor that can be supplied with two types of fuel, e.g. UOX and
-  MOX.\vspace{0.2cm}
-
-  Accordingly a consumer demands a set of commodities, $H_j$, and the total
-  demand, $d_j$ must be met\footnote{A ``fake'' supplier with negative
-    preference or infinite cost can be provided to avoid infeasibility},
-  providing:
+  \begin{itemize}
+    \item multiple commodities can meet a request, e.g., UOX and MOX
+    \item a consumer requests\footnote{A ``fake'' supplier with negative
+      preference or infinite cost can be provided to avoid infeasibility}
+      \begin{itemize}
+        \item a quantity, $d_j$
+        \item a set of commodities, $H_j$
+      \end{itemize}
+  \end{itemize}
 
   \begin{equation}
     \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})  \: \forall j \in J
@@ -160,12 +171,12 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Supply Constraint - Example}
   
-  A supplier of a commodity can meet multiple demands given constraints on its
-  supply. There may be multiple constraints on supply, which may be a function
-  of both quality and quantity of a requested commodity.\vspace{0.2cm}
+  \begin{itemize}
+    \item multiple possible constraints on supply
+    \item functions of quality and quantity
+  \end{itemize}
 
-  Take, for example, an enrichment facility that provides the commodity enriched
-  uranium (ER). It may have multiple supply constraints, $s$, e.g.:
+  E.g., an enrichment facility that provides the commodity enriched uranium (ER):
   \begin{itemize}
     \item A processing constraint, which has units of SWU
     \item An inventory constraint, which has units of kilograms of natural
@@ -177,9 +188,14 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Supply Constraint - Example}
   
-  Given a request of ER at some enrichment level, $\varepsilon_j$, the
-  constraints are defined as:
+  Given
+  \begin{itemize}
+    \item a requested enrichment level, $\varepsilon_j$
+    \item a supply capacity, $s$
+    \item a conversion function, $f$
+  \end{itemize}
 
+  Associated constraints are
   \begin{equation}
     \sum_{j \in J} f_{SWU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,SWU} 
   \end{equation}
@@ -199,10 +215,16 @@
 
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Supply Constraint}
-  
-  Assuming that a supplier may have $K$ different types of constraints for a
-  commodity, $h$, the supply constraint is:
 
+  Given
+  \begin{itemize}
+    \item a commodity, $h$
+    \item a set of constraints, $K_i^h$
+    \item supply capacities, $s_{i,k}$
+    \item conversion functions, $\beta_{i,k}(q_{j}^{h})$
+  \end{itemize}
+
+  Associated constraints are
   \begin{equation}
     \sum_{j \in J}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h} \leq s_{i,k} 
     \: \forall \: k \in K_{i}^{h},  
@@ -214,12 +236,18 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Objective Function}
 
-  It is an open question whether the objective function should maximize
-  preference or minimize an implied cost.\vspace{0.2cm}
+  Two options in proposed framework:
+  \begin{enumerate}
+    \item maximize preferences
+    \item minimize cost
+  \end{enumerate}
 
-  Because economics is a central metric, I believe that a general minimum cost
-  architecture should be developed, and a preference-to-cost translation
-  function should be used for the present time.\vspace{0.2cm}
+  Pros and cons:
+  \begin{itemize}
+    \item preferences are ``natural'' fit
+    \item economics is a future concern
+    \item cost minimization requires a translation function
+  \end{itemize}
 
   Assuming there is such a function, $f$, i.e.,
   \begin{equation}
@@ -269,20 +297,20 @@
 
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Comments} 
-
-  The LP formulation of the GFCTP is a fairly robust treatment of the proposed
-  problem. It lacks robustness in one key area, though: order splitting.\vspace{0.2cm}
+  
+  Issues with LP formulation:
+  \begin{enumerate}
+    \item orders can be split
+    \item orders can be satisfied by multiple suppliers
+  \end{enumerate}
 
   Consider a thermal reactor's order constraint for UOX and MOX under the LP
   framework:
-
   \begin{equation}
     \sum_{i \in I} x_{i}^{MOX} + x_{i}^{UOX} \geq d(\{MOX,UOX\})
   \end{equation} 
 
-  Such an order can be split by commodity and supplier. Given a solution,
-  $x^{MOX}$, and $x^{UOX}$, the following values are possible:
-
+  Given a solution, $x^{MOX}$, and $x^{UOX}$, the following values are possible:
   \begin{equation}
     x^{MOX} \in [0, d(\{MOX,UOX\})], \: x^{UOX} \in [0, d(\{MOX,UOX\})]
   \end{equation} 
@@ -292,21 +320,24 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (MILP) - Overview}
 
-  A tweaking of the LP formulation is provided to prevent order splitting. I
-  assume that there is now a bipartite partition of consumers, those that
-  require \textit{exclusive} orders, i.e., those that can not be split, and
-  those allow \textit{partial}.
+  Split consumers into two groups:
+  \begin{enumerate}
+    \item those that require \textit{exclusive} orders
+    \item those allow \textit{partial} orders
+  \end{enumerate}
 
   \begin{equation}\label{eqs:consumer-union}
     J = J_{p} \cup J_{e}
   \end{equation}
 
-  A binary variable is assigned to suppliers to guarantee that only one
-  commodity from their demand set, $H_j$, is provided from a single supplier,
-  $i$, i.e.,
+  Introduce a binary variable, $y_{i,j}^{h}$.  
+  \begin{itemize}
+    \item 1 if consumer $j$ is sent commodity $h$ by supplier $i$
+    \item restrict sum of variables for consumer $j$ to 1
+  \end{itemize}
 
   \begin{equation}
-    \sum_{h \in H_j}\sum_{i \in I} y_{i,j}^{h} = 1
+    \sum_{h \in H_j}\sum_{i \in I}  = 1
      \: \forall \: j \in J_{e}
   \end{equation}
   
@@ -315,12 +346,11 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (MILP) - Request Constraint} 
 
-  The MILP formulation now has two requests constraints, for each family of
-  requests:
+  There are now two requests constraints, for each family of requests:
 
   \begin{equation}
     \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})
-     \: \forall \: j \in J_{o}
+     \: \forall \: j \in J_{p}
   \end{equation}
   
   \begin{equation}    
@@ -335,8 +365,8 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (MILP) - Supply Constraint} 
 
-  The MILP formulation supply constraints incorporate to two possible flows of
-  material out of a supplier:
+  Supply constraints also incorporate to two possible flows of material out of a
+  supplier:
   
   \begin{equation}    
     \sum_{j \in J_{p}}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h}
@@ -374,7 +404,7 @@
       &
       \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})
       &
-      \forall \: j \in J_{o} &\\
+      \forall \: j \in J_{p} &\\
       %%
       \label{eq:GRCTP-E_dem_e}
       &
@@ -409,26 +439,24 @@
   \frametitle{Recipe Approximation Problem - Set Up} 
 
   Originally posed in a slightly different form by Oliver
-  \cite{oliver_geniusv2:_2009}, the RAP assumes that a recycle fuel fabrication
-  facility has a set of barrels of separated material.\vspace{0.2cm}
-
-  Separated material is assumed to be separated by element (e.g. Pu) or by a
-  group of elements (e.g. Am + Pu).\vspace{0.2cm}
-
-  Each barrel is a homogeneous mixture of its isotopics, i.e., there is a barrel
-  isotopic profile, $I_b$ and a barrel mass, $m_b$.\vspace{0.2cm}
-
-  There are a series of orders, or target recipes, to fill, which similarly
-  define an isotopic profile, $I_t$ and mass $m_t$.\vspace{0.2cm}
+  \cite{oliver_geniusv2:_2009}, the RAP assumes:
+  \begin{enumerate}
+    \item a recycled fuel fabrication facility has a set of barrels of separated
+      material
+    \item each barrel is a homogeneous mixture of its isotopics
+    \item barrels have a mass, $m_b$, and isotopic profile, $I_b$
+    \item there are a set of target recipes
+    \item target recipes have a mass, $m_t$, and isotopic profile, $I_t$
+  \end{enumerate}
 
   Goal: Match the recipes as ``closely'' as possible.
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Set Up} 
-    \begin{figure}
+  \begin{figure}
     \includegraphics[height=5cm]{./images/rap.eps}
-    \caption{A graphical view of the Recipe Approximation Problem.}
+    \caption{A pictorial example of the Recipe Approximation Problem.}
   \end{figure}
 \end{frame}
 
@@ -450,15 +478,18 @@
 
   In the current formulation, matching the target recipe is the objective.
 
-  Given a matrix of the barrel isotopic quantities, $M$, the residual between a
-  possible solution and the target is defined as:
+  Given
+  \begin{itemize}
+    \item a barrel mass matrix $M$, i.e., $I_b * m_b$ for each barrel
+    \item a feasible solution for a target recipe, $x_t$
+  \end{itemize}
   
+  The residual is defined as
   \begin{equation}\label{eqs:residual}
     \vec{y_{t}} = \left| M \cdot \vec{x_{t}}  - m_t \vec{I_{t}} \right|.
   \end{equation}
 
-  This sum of possible residuals is minimized, given a weighting factor, $c_t$:
-  
+  This sum of possible residuals is minimized, given a weighting factor, $c_t$,
   \begin{equation}\label{rap-obj}
     \min_{z} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
   \end{equation}
@@ -467,13 +498,14 @@
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Objective Weights}
 
-  A barrel may contain isotopics not present in a given target recipes.\vspace{0.2cm}
+  Issues with strictly matching recipes include:
+  \begin{enumerate}
+    \item presence of contaminants
+    \item relative importance of fertile vs. fissile isotopes
+  \end{enumerate}
 
-  Furthermore, certain isotopes, e.g. U-238, may dominate the mass of a
-  recipe. However, their contribution to the running of a reactor may be
-  relatively very low. Accordingly, the isotopic masses are weighted in a
-  normalized manner, i.e.,
-
+  A weighting factor is used to normalize contributions to the objective
+  function:
   \begin{equation}\label{eqs:weights}
     c_{i,t} = 
     \begin{cases}
@@ -486,11 +518,10 @@
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Mass Constraint}
 
-  A solution should be of approximately the same mass as the target. This
-  constraint is required because of the normalization of the objective function.
-
-  Given the mass of a possible solution, $m_{t^*}$, and a maximum violation,
-  $\epsilon_{m}$, the constraint is
+  \begin{itemize}
+    \item the solution should have approximately the same mass as the target
+    \item a maximum violation, $\epsilon_{m}$, is provided
+  \end{itemize}
   
   \begin{equation}\label{eqs:mass-constraint-simple}
     \epsilon_{m} \geq \left| m_{t^*} - m_{t} \right|.
@@ -500,23 +531,26 @@
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Neutronics Constraint}
 
-  A solution should behave neutronically approximately the same as the
-  target. The chosen parameter to constrain was the neutron reproduction factor,
-  $eta$, due to its being a function solely of the recipe, rather than geometry
-  or other reactor-specific parameters.
+  \begin{itemize}
+    \item the solution should behave similar neutronically to the target
+    \item neutron reproduction factor, $\eta$, is chosen
+    \item $\eta$ is a function solely of the recipe, not reactor geometry, etc.
+  \end{itemize}
 
-  $eta$ is defined for a homogeneous material as:
-
+  $\eta$ is defined for a homogeneous material as:
   \begin{equation}
     \label{eqs:eta_micro}
     \eta_t = \frac{\sum_{i \in I_t} \nu^{i} \sigma_{f}^{i} N^{i}}
         {\sum_{i \in I_t} \sigma_{a}^{i} N^{i}},
   \end{equation}
 
-  with physical constants $\nu^{i}$, the average number of neutrons produced by
-  fission of isotope $i$, $\sigma_{f}^{i}$, the microscopic fission cross
-  section for isotope $i$, and $\sigma_{a}^{i}$, the microscopic absorption
-  cross section for isotope $i$. $N^i$ is the number density for isotope $i$.
+  with physical constants:
+  \begin{itemize}
+    \item $\nu^{i}$ - the average number of neutrons produced by fission of isotope $i$
+    \item $\sigma_{f}^{i}$ - the microscopic fission cross section for isotope $i$
+    \item $\sigma_{a}^{i}$ - the microscopic absorption cross section for isotope $i$
+    \item $N^i$ - the number density of isotope $i$
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[ctb!]
@@ -619,47 +653,43 @@
 \begin{frame}[ctb!]
   \frametitle{Next Steps} 
   
-  The \Cyclus team has identified the one and two-tier fuel cycles proposed in
-  the recent Dynamic Systems Analysis Report for Nuclear Fuel Recycle (DSARR)
-  \cite{dixon_dynamic_2008} as targets for development.\vspace{0.2cm}
-
-  The Information Gathering mechanism is required for a first-blush attempt at
-  these cycles, as it provides a mechanism to determine basic preferential flow
-  when there is more than one possible destination or source of
-  material. Accordingly, it will be implemented first.\vspace{0.2cm}
+  \begin{itemize}
+    \item the \Cyclus team has identified the one and two-tier fuel cycles
+      proposed in the recent Dynamic Systems Analysis Report for Nuclear Fuel
+      Recycle (DSARR) \cite{dixon_dynamic_2008} as targets for
+      development
+    \item \Cyclus requires additional capability for modeling instances of
+      multiple commodity supply/demand
+    \item the proposed Information Gathering mechanism can supply this capability
+      and provide downstream flexibility for future work
+    \item accordingly, it will be implemented first
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Next Steps} 
 
-  The LP formulation of the GFCTP will then be implemented for this simple
-  case. Its capability will be demonstrated by providing preferences across
-  institutions or regions. For example, servicing facilities (e.g. enrichment
-  plants and separations facilities) can be either in the same institution or
-  region as a reactor, and preferences can be assigned accordingly.
-
-  \vspace{0.2cm}
-
-  The MILP formulation for the GFCTP will then be implemented. Comparisons in
-  run time and output will be observed, and, depending on outcomes, acceleration
-  methods, such as cutting planes and preprocessing, will be investigated.
-  
-  \vspace{0.2cm}
-
-  In both cases, the COIN-OR\cite{lougee_common_2003} suite of libraries will be
-  used as the Simplex and Branch-and-Bound solvers.
-
+  \begin{itemize}
+    \item the LP formulation of the GFCTP will be implemented for this simple
+      case
+    \item the DSAR scenario will be extended to include multiple regions to
+      provide a proof-of-principle example of preference-based material flow
+    \item the MILP formulation for the GFCTP will then be implemented
+    \item comparisons in run time and output will be observed, and, depending on
+      outcomes, acceleration methods, such as cutting planes and preprocessing,
+      will be investigated
+    \item COIN-OR\cite{lougee_common_2003} open source libraries will be used
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Next Steps} 
   
-  Finally, the RAP will be implemented in the simple simulation cases and
-  compared with both the naive approach to fuel matching and the Equivalence
-  Method as used in COSI. 
-
-  \vspace{0.2cm}
-
-  Again, the COIN-OR Simplex solver will be leveraged to solve the RAP.
-
+  \begin{itemize}
+    \item initially, a ``naive'' advanced fabrication facility will be used
+    \item the RAP will be implemented 
+    \item comparisons will be made with current approaches (e.g. COSI's equivalence method)
+    \item simulation-level effects will be investigated (e.g., barrel size)
+    \item again, COIN-OR open source libraries will be used
+  \end{itemize}
 \end{frame}
