@@ -152,10 +152,10 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Request Constraint}
   
+  Requests
   \begin{itemize}
-    \item multiple commodities can meet a request, e.g., UOX and MOX
-    \item a consumer requests\footnote{A ``fake'' supplier with negative
-      preference or infinite cost can be provided to avoid infeasibility}
+    \item can be met by multiple commodities, e.g., UOX and MOX
+    \item are comprised of
       \begin{itemize}
         \item a quantity, $d_j$
         \item a set of commodities, $H_j$
@@ -166,14 +166,18 @@
     \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})  \: \forall j \in J
   \end{equation}
   
+  Feasibility can be guaranteed by using ``fake'' supplier with negative
+  preference or infinite cost.
+
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Supply Constraint - Example}
-  
+
+  Supply
   \begin{itemize}
-    \item multiple possible constraints on supply
-    \item functions of quality and quantity
+    \item can have multiple possible constraints
+    \item constraints can be functions of quality and quantity
   \end{itemize}
 
   E.g., an enrichment facility that provides the commodity enriched uranium (ER):
@@ -216,20 +220,20 @@
 \begin{frame}[ctb!]
   \frametitle{GFCTP (LP) - Supply Constraint}
 
-  Given
-  \begin{itemize}
-    \item a commodity, $h$
-    \item a set of constraints, $K_i^h$
-    \item supply capacities, $s_{i,k}$
-    \item conversion functions, $\beta_{i,k}(q_{j}^{h})$
-  \end{itemize}
-
   Associated constraints are
   \begin{equation}
     \sum_{j \in J}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h} \leq s_{i,k} 
     \: \forall \: k \in K_{i}^{h},  
     \forall \: i \in I, \forall \: h \in H
   \end{equation}
+
+  with notation defined as
+  \begin{itemize}
+    \item $h$ - a commodity
+    \item $K_i^h$ - a set of constraints
+    \item $s_{i,k}$ - a supply capacity
+    \item $\beta_{i,k}(q_{j}^{h})$ - a conversion function
+  \end{itemize}
 
 \end{frame}
 
@@ -248,6 +252,11 @@
     \item economics is a future concern
     \item cost minimization requires a translation function
   \end{itemize}
+
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{GFCTP (LP) - Objective Function}
 
   Assuming there is such a function, $f$, i.e.,
   \begin{equation}
@@ -477,19 +486,19 @@
   \frametitle{Recipe Approximation Problem - Objective}
 
   In the current formulation, matching the target recipe is the objective.
-
-  Given
-  \begin{itemize}
-    \item a barrel mass matrix $M$, i.e., $I_b * m_b$ for each barrel
-    \item a feasible solution for a target recipe, $x_t$
-  \end{itemize}
   
   The residual is defined as
   \begin{equation}\label{eqs:residual}
     \vec{y_{t}} = \left| M \cdot \vec{x_{t}}  - m_t \vec{I_{t}} \right|.
   \end{equation}
 
-  This sum of possible residuals is minimized, given a weighting factor, $c_t$,
+  Given
+  \begin{itemize}
+    \item a barrel mass matrix $M$, i.e., $I_b * m_b$ for each barrel
+    \item a feasible solution for a target recipe, $x_t$
+  \end{itemize}
+
+  The sum of residuals is minimized, using a weighting factor, $c_t$,
   \begin{equation}\label{rap-obj}
     \min_{z} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
   \end{equation}
@@ -503,6 +512,8 @@
     \item presence of contaminants
     \item relative importance of fertile vs. fissile isotopes
   \end{enumerate}
+
+  \vspace{0.2cm}
 
   A weighting factor is used to normalize contributions to the objective
   function:
@@ -518,24 +529,30 @@
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Mass Constraint}
 
+  The mass differential is constrainted
   \begin{itemize}
     \item the solution should have approximately the same mass as the target
     \item a maximum violation, $\epsilon_{m}$, is provided
   \end{itemize}
   
   \begin{equation}\label{eqs:mass-constraint-simple}
-    \epsilon_{m} \geq \left| m_{t^*} - m_{t} \right|.
+    \epsilon_{m} \geq \left| m_{x_t} - m_{t} \right|.
   \end{equation}
 \end{frame}
 
 \begin{frame}[ctb!]
   \frametitle{Recipe Approximation Problem - Neutronics Constraint}
 
+  A neutronics parameter is constrainted
   \begin{itemize}
     \item the solution should behave similar neutronically to the target
     \item neutron reproduction factor, $\eta$, is chosen
     \item $\eta$ is a function solely of the recipe, not reactor geometry, etc.
   \end{itemize}
+\end{frame}
+
+\begin{frame}[ctb!]
+  \frametitle{Recipe Approximation Problem - Neutronics Constraint}
 
   $\eta$ is defined for a homogeneous material as:
   \begin{equation}
@@ -597,7 +614,7 @@
   \frametitle{Recipe Approximation Problem - Formulation}
 
   The full formulation for the RAP is then:
-
+  \fontsize{7pt}{\baselineskip}\selectfont
   %%% 
   \begin{subequations}\label{eqs:rap}
     \begin{align}
@@ -609,27 +626,27 @@
       \text{s.t.} \:\: &
       \vec{y_{t}} = \left| M \cdot \vec{x_{t}}  - m_t \vec{I_{t}} \right|
       &
-      \: \forall \: t \in T \label{eqs:rap_iso} \\
+      \forall t \in T \label{eqs:rap_iso} \\
       %%
       &
       \epsilon_{m} \geq \left| \sum_{b \in B} m_{b} x_{b, t} - m_{t} \right|
       & 
-      \forall \: t \in T \label{eqs:rap_mass} \\
+      \forall t \in T \label{eqs:rap_mass} \\
       %%
       &
       \epsilon_{\eta} \sum_{b \in B} \eta_{b}^{-} x_{b, t} \geq 
       \left| \sum_{b \in B} \eta_{b}^{+} x_{b, t} - 
       \eta_{t} \sum_{b \in B} \eta_{b}^{-} x_{b, t} \right|
       & 
-      \forall \: t \in T \label{eqs:rap_eta} \\
+      \forall t \in T \label{eqs:rap_eta} \\
       &
       \sum_{t \in T} x_{b, t} \leq 1
       & 
-      \forall \: b \in B \label{eqs:rap_conserv} \\
+      \forall b \in B \label{eqs:rap_conserv} \\
       &
       x_{b, t} \in \left[ 0, 1 \right]
       & 
-      \forall \: b \in B, \forall \: t \in T  \label{eqs:rap_x}
+      \forall b \in B, \forall t \in T  \label{eqs:rap_x}
       %%
     \end{align}
   \end{subequations}
@@ -654,6 +671,9 @@
   \frametitle{Next Steps} 
   
   \begin{itemize}
+    \item all work will be done in the
+      \href{github.com/cyclus/cyclus}{\Cyclus} code base, incorporating
+      continuous integration and unit testing
     \item the \Cyclus team has identified the one and two-tier fuel cycles
       proposed in the recent Dynamic Systems Analysis Report for Nuclear Fuel
       Recycle (DSARR) \cite{dixon_dynamic_2008} as targets for
