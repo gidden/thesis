@@ -75,44 +75,266 @@ capacity, request quantity, supplier unit capacity, and request unit capacity.
 
 Case3: two suppliers, one consumer
 
-The two supplier, one consumer has five parameters: supplier 1 capacity,
-supplier 2 capacity, request quantity, supplier 1 preference, and supplier 2
-preference.
+The two supplier, one consumer case has five parameters: supplier 1 capacity,
+supplier 1 preference, supplier 2 capacity, supplier 2 preference, and request
+quantity.
 
 \begin{table}[ht]
   \begin{center}
-    \caption{Parameters for test case 2.}
+    \caption{Parameters for test case 3.}
     \begin{tabular}{cccccc}
     \toprule
-    Subcase & $c_1$ & $p_1$ & $c_2$ & $p_2$ & $q$ & $f_{1, exp}$ & $f_{2, exp}$\\
+    Subcase & $c_1$ & $p_1$ & $c_2$ & $p_2$ & $q$ \\
     \midrule
-    a & 5  & 1   & 10  & 1   & 5  & 5  & 0  \\
-    b & 3  & 1   & 2.1 & 1   & 5  & 3  & 2  \\
-    c & 3  & 1   & 2.1 & 1   & 5  & 3  & 2  \\
+    a & 5  & 1   & 10  & 1   & 5  \\
+    b & 3  & 1   & 2.1 & 1   & 5  \\
+    c & 3  & 1   & 2   & 1   & 5  \\
+    d & 3  & 1   & 1.9 & 1   & 5  \\
+    e & 2  & 2   & 5   & 5   & 5  \\
+    f & 3  & 2   & 4   & 5   & 5  \\
     \bottomrule
     \end{tabular}
   \end{center}
 \end{table}
 
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 3 using the Greedy Solver.}
+    \begin{tabular}{ccc}
+    \toprule
+    Subcase & $f_{1, exp}$ & $f_{2, exp}$\\
+    \midrule
+    a & 5  & 0   \\
+    b & 3  & 2   \\
+    c & 3  & 2   \\
+    d & 3  & 1.9 \\
+    e & 0  & 5   \\
+    f & 1  & 4   \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
 
-Case4:
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 3 using the Greedy Solver with 
+      exclusive orders.}
+    \begin{tabular}{ccc}
+    \toprule
+    Subcase & $f_{1, exp}$ & $f_{2, exp}$\\
+    \midrule
+    a & 5  & 0   \\
+    b & 0  & 0   \\
+    c & 0  & 0   \\
+    d & 0  & 0   \\
+    e & 0  & 5   \\
+    f & 0  & 0   \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
 
-%% \begin{table}[ht]
-%%   \begin{center}
-%%     \caption{Parameters for test case 2.}
-%%     \begin{tabular}{cccccc}
-%%     \toprule
-%%     Subcase & $c_s$ & $u_s$ & $q$ & $u_r$ & $f_{exp}$\\
-%%     \midrule
-%%     h & 10 & 1   & 10 & 2   & 5  \\
-%%     \bottomrule
-%%     \end{tabular}
-%%   \end{center}
-%% \end{table}
+Case4: one supplier two consumers
 
-Case5:
+The one supplier, two consumer case has three parameters: supplier capacity,
+request quantity 1, and request quantity 2.
 
-Case6:
+\begin{table}[ht]
+  \begin{center}
+    \caption{Parameters for test case 4.}
+    \begin{tabular}{cccc}
+    \toprule
+    Subcase & $c$ & $q_1$ & $q_2$ \\
+    \midrule
+    a & 1 & 5 & 1    \\
+    b & 1 & 1 & 3    \\
+    c & 5 & 3 & 2.1  \\
+    d & 5 & 2 & 3    \\
+    e & 8 & 3 & 4.9  \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
 
-Case7:
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 4 using the Greedy Solver.}
+    \begin{tabular}{ccc}
+    \toprule
+    Subcase & $f_{1, exp}$ & $f_{2, exp}$\\
+    \midrule
+    a & 1  & 0   \\
+    b & 1  & 0   \\
+    c & 3  & 2   \\
+    d & 2  & 3   \\
+    e & 3  & 4.9 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
 
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 4 using the Greedy Solver with 
+      exclusive orders.}
+    \begin{tabular}{ccc}
+    \toprule
+    Subcase & $f_{1, exp}$ & $f_{2, exp}$\\
+    \midrule
+    a & 0  & 1   \\
+    b & 1  & 0   \\
+    c & 3  & 0   \\
+    d & 2  & 3   \\
+    e & 3  & 4.9 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Case5: two suppliers, one consumer, two commodities
+
+The fifth case tests a situation in which a consumer's request can be met by two
+different commodities. It has three parameters: supplier capacity 1, supplier
+capacity 2, and a request quantity.
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Parameters for test case 5.}
+    \begin{tabular}{cccc}
+    \toprule
+    Subcase & $c_1$ & $c_2$ & $q$ \\
+    \midrule
+    a & 5  & 0.5 & 1 \\
+    b & 5  & 0.5 & 5 \\
+    c & 5  & 3   & 7 \\
+    d & 5  & 2   & 7 \\
+    e & 5  & 1   & 7 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 5 using the Greedy Solver.}
+    \begin{tabular}{ccc}
+    \toprule
+    Subcase & $f_{1, exp}$ & $f_{2, exp}$\\
+    \midrule
+    a & 1  & 0   \\
+    b & 5  & 0   \\
+    c & 5  & 2   \\
+    d & 5  & 2   \\
+    e & 5  & 1   \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 5 using the Greedy Solver with 
+      exclusive orders.}
+    \begin{tabular}{ccc}
+    \toprule
+    Subcase & $f_{1, exp}$ & $f_{2, exp}$\\
+    \midrule
+    a & 1  & 0   \\
+    b & 5  & 0   \\
+    c & 0  & 0   \\
+    d & 0  & 0   \\
+    e & 0  & 0   \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Case6: two suppliers, two requesters, two commodities
+
+This case tests a case with two suppliers and two requesters. Each supplier
+supplies a distinct commodity and each requester's request can be met by either
+commodity. There are four parameters, supply capacity 1, supply capacity 2,
+request quantity 1, and request quantity 2.
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Parameters for test case 6.}
+    \begin{tabular}{ccccc}
+    \toprule
+    Subcase & $c_1$ & $c_2$ & $q_1$ & $q_2$ \\
+    \midrule
+    a & 5  & 5   & 7 & 2   \\
+    b & 7  & 5.5 & 5 & 2.5 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+%% need a figure to show flow labeling
+%% from the code
+%% /// flow from s1 -> r1 := f1
+%% /// flow from s2 -> r1 := f2
+%% /// flow from s1 -> r2 := f3
+%% /// flow from s2 -> r2 := f4
+%% I will map:
+%% f1 -> f1_1
+%% f3 -> f1_2
+%% f2 -> f2_1
+%% f4 -> f2_2
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 6 using the Greedy Solver.}
+    \begin{tabular}{ccccc}
+    \toprule
+    Subcase & $f_{1, 1, exp}$ & $f_{1, 2, exp}$ 
+    & $f_{2, 1, exp}$ & $f_{2, 2, exp}$ \\
+    \midrule
+    a & 5  & 0  & 2  & 2   \\
+    b & 5  & 2  & 0  & 0.5 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Expected solutions for test case 6 using the Greedy Solver with 
+      exclusive orders.}
+    \begin{tabular}{ccccc}
+    \toprule
+    Subcase & $f_{1, 1, exp}$ & $f_{1, 2, exp}$ 
+    & $f_{2, 1, exp}$ & $f_{2, 2, exp}$ \\
+    \midrule
+    a & 0  & 2  & 0  & 0   \\
+    b & 5  & 0  & 0  & 2.5 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Case7: a fuel assembly supplier
+
+This case is designed to test an exchange that would occur with a fuel assembly
+supplier. It is comprised of a 1 supply group with $N$ nodes within the group,
+each having a capacity of $\frac{q}{N}$, where $q$ is the request
+quantity. While $N$ and $q$ could be varied, the problem structure does not
+change.
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Parameters for test case 7.}
+    \begin{tabular}{cc}
+    \toprule
+    $N$ & $q$ \\
+    \midrule
+    10 & 5 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+The expected result is $N$ flows, each maximizing their capacity. In this case,
+10 flows, each of size 0.5, is expected. Because a single request is being met
+by many bids, any exclusive request algorithm should report no flow in the
+system.
