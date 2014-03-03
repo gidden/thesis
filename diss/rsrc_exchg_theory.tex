@@ -1,0 +1,13 @@
+The exchange of resources in Cyclus is designed to create a generic resource
+exchange graph that can be solved to determine the matched supply and demand of
+resources amongst agents in a simulation.
+
+In general, a resource exchange is made up of \textit{requests} and
+\textit{bids}. A request defines a specific resource that is demanded by an
+agent in the simulation. A bid defines a corresponding resource that is offered
+to meet a given request.
+
+Requests and bids can be mutually constraining, i.e., they can be grouped into
+mutually-constraining sets. For example, a supplier agent may respond to many
+requests but may only be able to meet a certain fraction of them; accordingly
+the bids from this supplier agent can be grouped into a single constraining set.
