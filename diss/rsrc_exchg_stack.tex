@@ -1,0 +1,39 @@
+The resource exchange model implemented in Cyclus is designed to allow for the
+possibly iterative communication between agents regarding the quality-specific
+supply and demand of resources. That supply, demand, and associated cost-like
+parameters are then translated into a bipartite graph of supplier nodes,
+consumer nodes, and arcs connecting each. A solver is then applied to the graph,
+providing flows along arcs as output. Finally, the model back translates the arc
+flows into trades to be executed the Cyclus resource exchange framework.
+
+The resource exchange process has four classes of participants and three
+distinct interface layers, between each class of participant. The first layer
+exists between agents interacting in the exchange and the kernel's exchange
+manager. The exchange manager executes each phase of the pre-exchange process,
+the request for bids (RFB) phase, response to request for bids (RRFB) phase, and
+preference adjustment (PA) phase. The PA phase acts to effectively set costs for
+resource exchange over defined arcs. The second layer exists between the
+kernel's exchange manager, which is distinct for distinct resource types, and
+the associated generic exchange graph. It defines the interface of communication
+required for the translation of an instance of a resource-type defined exchange
+into an instance of a resource-neutral exchange. The third interface layer
+exists the generic resource exchange instance and a given instance of a resource
+exchange solver. It defines the interface of communication that allows for the
+translation of a resource exchange graph into the solver's problem instance
+language and the back translation from the solver's solution into matched
+resource flow over arcs on the generic resource exchange graph. Similarly, the
+defined flows are back translated from the generic resource exchange into the
+resource-specific exchange, which form trades to be executed by the kernel's
+exchange manager.
+
+% include execution pipeline image
+
+The resource-specific interface is defined by four primary objects:
+\begin{enumerate}
+  \item \textit{Request}
+  \item \textit{RequestPortfolio}
+  \item \textit{Bid}
+  \item \textit{BidPortfolio}
+\end{enumerate}
+
+A 
