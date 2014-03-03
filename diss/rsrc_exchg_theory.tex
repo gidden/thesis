@@ -11,3 +11,13 @@ Requests and bids can be mutually constraining, i.e., they can be grouped into
 mutually-constraining sets. For example, a supplier agent may respond to many
 requests but may only be able to meet a certain fraction of them; accordingly
 the bids from this supplier agent can be grouped into a single constraining set.
+
+A given request can have arbitrarily many demand constraints, and a given bid
+grouping can have arbitrarily many supply constraints. Furthermore, each
+bid-request pair has an associated unit coefficient related to each supply or
+demand constraint. Finally, a given request can be \textit{exclusive} or a bid
+grouping may be \textit{exclusive}. If a request is exclusive, then it can only
+be met by a single bid. If a bid grouping is exclusive, then only one of bid in
+its group may be selected. Both of these cases allows for the modeling of
+quantized, undivisable trades. Such capability is required to model
+naturally-integral objects such as fuel assemblies.
