@@ -35,3 +35,62 @@ The resource-specific interface is defined by four primary objects:
   \item \texttt{Bid}
   \item \texttt{BidPortfolio}
 \end{enumerate}
+
+
+\begin{subequations}\label{eqs:GFCTP-E}
+  \begin{align}
+    %%
+    \label{eq:GRCTP-E_obj}
+    \min_{z} \:\: 
+    & 
+    z = \sum_{h \in H}\sum_{i \in I_{p}}\sum_{j \in J_{p}}c_{i,j}^{h} x_{i,j}^{h} 
+    + \sum_{h \in H}\sum_{i \in I_{p}}\sum_{j \in J_{e}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{i,j}^{h} \nonumber \\
+    & 
+    \qquad\qquad\qquad\qquad
+    + \sum_{h \in H}\sum_{i \in I_{e}}\sum_{j \in J_{p}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{i,j}^{h}
+    + \sum_{h \in H}\sum_{i \in I_{e}}\sum_{j \in J_{e}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{i,j}^{h}
+    && \\
+    %%
+    \label{eq:GRCTP-E_sup}
+    &
+    \text{s.t.} \:\: 
+    \sum_{j \in J_{p}}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h}
+    + \sum_{j \in J_{e}}\beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{i, j}^{h} \leq s_{i,k}^{h} \nonumber \\
+    &
+    \qquad\qquad\qquad\qquad
+    \forall \: i \in I, \: \forall \: k \in K_{i}^{h}, \forall \: {h \in H}\\
+    %%
+    \label{eq:GRCTP-E_dem}
+    &
+    \sum_{h \in H}\sum_{i \in I_{p}}\beta_{j,k}(q_{j}^{h}) x_{i,j}^{h}
+    + \sum_{h \in H}\sum_{i \in I_{e}}\beta_{j,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{i, j}^{h} \leq d_{j,k} \nonumber \\
+    &
+    \qquad\qquad\qquad\qquad
+    \forall \: j \in J, \: \forall \: k \in K_{i}\\
+    %%
+    \label{eq:GRCTP-E_sumy_j}
+    &
+    \sum_{h \in H}\sum_{i \in I} y_{i,j}^{h} = 1
+    &
+    \forall \: j \in J_{e}  &\\
+    %%
+    \label{eq:GRCTP-E_sumy_i}
+    &
+    \sum_{h \in H}\sum_{j \in J} y_{i,j}^{h} = 1
+    &
+    \forall \: i \in I_{e}  &\\
+    %%
+    \label{eq:GRCTP-E_x}
+    &
+    x_{i,j}^{h} \geq 0
+    &
+    \forall \: x \in X  &\\
+    %%
+    \label{eq:GRCTP-E_y}
+    &
+    y_{i,j}^{h} \in \{0,1\}
+    &
+    \forall \: y \in Y &
+    %%
+  \end{align}
+\end{subequations}
