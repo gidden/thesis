@@ -279,7 +279,7 @@
   \begin{subequations}\label{eqs:GFCTP-LP}
     \begin{align}
       %%
-      \min_{z} \:\: & 
+      \min_{x} \:\: & 
       z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}^{h} x_{i,j}^{h} 
       & \label{eqs:GFCTP-LP_obj} \\
       %%
@@ -395,7 +395,7 @@
     \begin{align}
       %%
       \label{eq:GRCTP-E_obj}
-      \min_{z} \:\: 
+      \min_{x, y} \:\: 
       & 
       z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{p}}c_{i,j}^{h} x_{i,j}^{h} 
       + \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{e}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{j}^{h}
@@ -526,7 +526,7 @@
 
   The sum of residuals is minimized, using a weighting factor, $c_t$,
   \begin{equation}\label{rap-obj}
-    \min_{z} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
+    \min_{y} \:\: z = \sum_{t \in T} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
   \end{equation}
 \end{frame}
 
@@ -645,7 +645,7 @@
   \begin{subequations}\label{eqs:rap}
     \begin{align}
       %%
-      \min_{z} \:\: & 
+      \min_{y} \:\: & 
       z = \sum_{t \in t} \vec{c_{t}}^{\top} \cdot \vec{y_{t}}
       & \label{eqs:rap_obj} \\
       %%
