@@ -412,15 +412,15 @@
       %%
       \label{eq:GRCTP-E_dem_p}
       &
-      \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})
+      \sum_{i \in I}\sum_{h \in H_{j}} \beta_{i,k}(q_{j}^{h}) x_{i,j}^{h} \geq d_{j}(H_{j})
       &
-      \forall \: j \in J_{p} &\\
+      \forall \: k \in K_{j}, \: \forall \: j \in J_{p} &\\
       %%
       \label{eq:GRCTP-E_dem_e}
       &
-      \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j}^{h} \tilde{x}_{j}^{h} \geq d_{j}(H_{j}) 
+      \sum_{i \in I}\sum_{h \in H_{j}}  \beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{j}^{h} \geq d_{j}(H_{j}) 
       &
-      \forall \: j \in J_{e}  &\\
+      \forall \: k \in K_{j}, \: \forall \: j \in J_{e}  &\\
       %%
       \label{eq:GRCTP-E_sumy}
       &
@@ -442,6 +442,32 @@
       %%
     \end{align}
   \end{subequations}
+
+\end{frame}
+\begin{frame}[ctb!]
+  \frametitle{GFCTP (MILP) - Formulation} 
+
+  \fontsize{7pt}{\baselineskip}\selectfont  
+
+%%% 
+\begin{subequations}\label{eqs:std-form}
+  \begin{align}
+    %%
+    \min_{x} \:\: & 
+    z = c^{\top} x
+    & \label{eqs:std-form_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    A x \geq b 
+    & \label{eqs:std-form_sup} \\
+    %%
+    &
+    x \geq 0
+    &\label{eqs:std-form_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
 
 \end{frame}
 
