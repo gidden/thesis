@@ -21,8 +21,14 @@ all-via-dvi:
 	latex $(latexopt) $(manuscript)
 	dvipdf $(manuscript)
 
+epub: 
+	latex $(latexopt) $(manuscript)
+	bibtex $(manuscript).aux
+	mk4ht htlatex $(manuscript).tex 'xhtml,charset=utf-8,pmathml' ' -cunihtf -utf8 -cvalidate'
+	ebook-convert $(manuscript).html $(manuscript).epub
+
 clean:
-	rm -f *.pdf *.dvi *.toc *.aux *.out *.log *.bbl *.blg *.log *.spl *~ *.spl *.zip *.idx *.lof *.lot *.acn *.glo *.ist
+	rm -f *.pdf *.dvi *.toc *.aux *.out *.log *.bbl *.blg *.log *.spl *~ *.spl *.zip *.idx *.lof *.lot *.acn *.glo *.ist *.epub
 
 realclean: clean
 	rm -rf $(manuscript).dvi
