@@ -1,0 +1,91 @@
+%!TEX TS-program = pdflatex
+% paper.tex -- main diss file
+%
+% Wisconsin dissertation template
+% Copyright (c) 2008-2009 William C. Benton.  All rights reserved.
+%
+% This program can redistributed and/or modified under the terms of the LaTeX
+% Project Public License Distributed from CTAN archives in directory
+% macros/latex/base/lppl.txt; either version 1 of the License, or (at your
+% option) any later version.
+%
+% This program includes other software that is licensed under the terms of the
+% LPPL and the Perl Artistic License; see README for details.
+%
+% You, the user, still hold the copyright to any document you produce with this
+% software (like your dissertation).
+%
+
+%%% You'll want ``oneside'' for the deposit version, but probably not for any
+%%% versions that don't need to meet the UW requirements
+%%% MJG - note that the thesis dept updated the pt requirement from 12 to 10
+%%% (2013)
+\documentclass[10pt,oneside,letterpaper]{memoir}
+\setlrmarginsandblock{1.1in}{*}{1}
+\setulmarginsandblock{1.7in}{1in}{*}
+\checkandfixthelayout
+
+\input{includes/preamble}
+\input{includes/defs}
+\input{includes/thesisdefs}
+
+\clearpage\pagenumbering{roman}  % This makes the page numbers Roman (i, ii, etc)
+
+\title{An Agent-Based Modeling Framework and Application for the Generic Nuclear
+  Fuel Cycle}
+\author{Matthew J.~Gidden}
+\department{Nuclear Engineering \& Engineering Physics}
+\dissertation
+
+\date{2015}
+
+%% lets speed up some compile time!
+%\includeonly{chapters/prevwork/prevwork}
+
+\begin{document}
+
+%%% Uncomment the following if your .bib contains references that you will not 
+%%% explicitly cite, but that should be in the final bibliography:
+% \nocite{*}
+
+\ifpdf
+\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
+\else
+\DeclareGraphicsExtensions{.eps, .jpg}
+\fi
+
+\maketitle
+
+%% Add \part declarations if you want, but it's not necessary
+%\part{Preliminaries}
+
+%% frontmatter includes dedication, acknowledgements, TOC, List of Tables, List
+%% of Figures, umiabstract, abstract
+\include{frontmatter/frontmatter}
+
+%% only double spacing the actual chapters
+\begin{doublespace} 
+
+%% Now include the tex files for each chapter, like so (I put these in separate
+%% dirs):
+\include{chapters/intro}
+%\include{chapters/litreview/litreview}
+%\include{chapters/prevwork/prevwork}
+%\include{chapters/research/research}
+
+\end{doublespace} 
+%% only double spacing the actual chapters
+
+%% %% Do you have appendices?  If so, add them here, just like chapters.
+%% \begin{appendices}
+%% \include{backmatter/appendix1}
+%% \end{appendices}
+
+%% McBride is a very nice style (some version is included in this distribution)
+\bibliographystyle{mcbride}
+\bibliography{./bibs/refs,./bibs/simulators,./bibs/benchmarks,./bibs/cosi,./bibs/abm-supply-chain,./bibs/blending}%,./chapters/litreview/refs}
+
+%% Want an index?  Neither did I.
+%\printindex
+
+\end{document}
