@@ -1,14 +1,162 @@
 
 \section{Agents and Agent Based Modeling}\label{abm:abm}
 
-- taxonomy of basic agents in cyclus
+Moving from a modeling paradigm that does not differentiate between individual
+facilities to one that does requires a nuanced approach to determine facility
+behavior. In the absence of supply constraints, aggregated individual facility
+behavior and fleet-based models are equivalent. However, any system in which
+recycling exists will, by definition, have some supply constraints. 
 
-- methods of agency
+Furthermore, if resource supply and demand depends on more than the quantity of
+a resource, moving global management logic becomes difficult. As the complexity
+of a quality metric increases, an aggregate approach becomes less desireable as
+it loses such detail through aggregation.
 
-- once through proof of principle
+In the extreme in which a high level of detail is required in the notion of
+resource quality, e.g. tracking an arbitrary number of isotopes, adopting
+techniques that allow decision-making based on that level of detail is
+desireable. Modeling the nuclear fuel cycle represents such a level of
+detail. For example, even in the case of a once-through fuel cycle, many
+reactors of the same type (e.g., PWRs), may require different resource qualities
+(i.e., Uranium enrichment).
 
-  - agents required/developed
+\subsection{Agent Taxonomy}
 
-  - results
+(Insert section on RIF from prelim/papers here)
 
-- limitations of multi market approach
+The Cyclus kernel implements a basic \code{Agent} class that provides the
+minimal interface for agents to be built within a simualtion. Furthermore, the
+\code{Trader} interface provides a communication layer required for agents to be
+included in the exchange of resources. \code{Facility} agents in Cyclus
+implement both interfaces, while \code{Institution} and \code{Region} agents
+implement only the \code{Agent} interface.
+
+\subsection{Methods of Agency}
+
+Agency is provided in two primary modes: determining facility deployment and
+informing resource exchange mechanisms. 
+
+Facility deployment has, to date, involved some combination of an
+\code{Institution} agent, a \code{Facility} agent, and a \code{Region}
+agent. \code{Institution} agents represent a simulation entity abstraction that
+can deploy \code{Facility} agents. \code{Region} agents represent a simulation
+entity abstraction that have a demand for certain commodities that
+\code{Facility} agents provide, for example, reactor-like \code{Facility} agents
+provide electrical power.
+
+\code{Facility} agents are further provided agency by informing market
+mechanisms of thesupply and demand of resource quantity and quality. Cyclus
+initially used a very crude interface and algorithm for determining resource
+transactions. Individual markets were defined, and initially designed to be
+agents much like \code{Facility}, \code{Institution}, and \code{Region}
+agents. Many limitations were identified at the time, however, and this approach
+was eventually abandoned. An enumeration of the observed limitations is
+described further in \S \ref{abm:abm:limits}.
+
+The Dynamic Resource Exchange (DRE), described in detail in \S \ref{abm:dre}, is
+the mechanism eventually developed to drive supply-demand transactions. The
+primary source of agency is provided to \code{Facility} agents in order to
+negotiate the quanity and quality of potential resource
+transactions. \code{Region}, \code{Instituion}, and \code{Facility} agents are
+then provided agency in the negotiation of preferences of potential
+transactions, where preference is a proxy for price.
+
+\subsection{Proof of Principle}\label{abm:abm:proof}
+
+Agents were developed to show an initial proof of principle that fuel cycle
+simulation can be implemented using an agent-based modeling methodology.
+
+Facility deployment decision making is the fundamental building block of any
+dynamic simulator. By definition, dynamic simulators model the deployment of
+facilities and measure the flow of resources in the system over time. 
+
+Furthermore, in the extreme case of unconstrained supply and no competition for
+resources, resource exchange decisions can be made arbitrarily. Therefore, only
+facility deployment agency is required.
+
+\subsubsection{Benchmark Case}
+
+(Take from ANS Paper)
+
+\subsubsection{Agents Developed}
+
+(fill in from other descriptions)
+
+\paragraph{GrowthRegion}
+
+\paragraph{ManagerInst}
+
+\paragraph{BatchReactor}
+
+\paragraph{EnrichmentFacility}
+
+\paragraph{Source}
+
+\paragraph{Sink}
+
+\subsubsection{Results}
+
+As designed, facility deployment curves match the required benchmark specification. 
+
+Further, material transaction quantities match VISION values.
+
+Enrichment values match VISION for SWU, however, tails values did not match.
+
+(add more discussion and result images from ANS talk)
+
+\subsection{Multiple Market Limitations}\label{abm:abm:limits}
+
+Cyclus was originally designed to use an addition agent type, the \code{Market}
+agent. The \code{Market} agents were envisioned to represent markets for
+specific commodities. For example, the simulation described in \S
+\ref{abm:abm:proof} used three commodity markets: natural uranium, enriched
+uranium fuel, and used fuel. This approach is valid in the absence of supply or
+demand constraints, competition, and fungibility. However, the inclusion of any
+one of these features requires a much more involved process.
+
+If supply or demand constraints are to be modeled, each
+associated \code{Market} agent must have both a corresponding communication
+interface and an implementation that accounts for such constraints. While
+quantity constraints are not unreasonable to implement and support, quality
+constraints are much more difficult. Furthermore, communicating such constraints
+is difficult. Whereas the \code{Market} agent can implement a solver algorithm,
+constraints are more naturally defined by the trader interacting with the
+\code{Market} agent. For example, consider the enriched uranium market used in
+\S \ref{abm:abm:proof}. While the simulation used an agent abstraction for an
+enrichment facility and fuel fabrication plant, another simulation may wish to
+model facilities that downblend HEU, rather than enrich LEU. Such a process will
+have different constraints. Importantly, those constraints are a function of the
+\code{Facility} agent, not of a \code{Market} agent.
+
+Assuming that supply or demand is constrained either quantitatively or
+qualitatively, competition for the resource in question can arise. In fact,
+resources constraints are only interesting in the presence of competition. When
+competition for resources exist, there must be some mechanism that determines
+which transactions are to be executed, i.e., which agents should trade which
+resources. Determining supply and demand under competition is a well studied
+problem with many possible formulations and solution frameworks.
+
+Fungibility is the property of a good or commodity to be \textit{capable of
+  being substituted in place of one another} (CITE
+http://www.merriam-webster.com/thesaurus/fungible). For example, a light water
+reactor generates power by fissioning nuclei in the thermal energy
+spectrum. Whether those nuclei are \nucl{239}{Pu}, \nucl{235}{U}, or
+\nucl{233}{U} makes little difference from a power generation perspective. In
+other words, those nuclei are \textit{fungible} for light water reactors, given
+some safety and cycle length considerations. A similar issue arises from a
+suppliers perspective. Consider a MOX fuel supplier and two requesters: a fast
+reactor and a thermal reactor. Given the isotopic makeup of Plutonium in the MOX
+fuel, such could be potentially be used in either reactor type. Again, Plutonium
+in this example is a \textit{fungible} resource. Accordingly, a facility may
+demand multiple fungible commodities, which must be accounted for by a given
+market clearing mechanism.
+
+The one-market-per-commodity approach does not treat competition, constrained
+supply and demand, and fungibility particularly well. Constraints are handled
+poorly because constraints are determined by the supplying and demanding
+agents. Because the markets are separated, they must either be solved
+sequentially or in parallel. If solved sequentially, competition and fungibility
+are treated poorly, because information involving multiple commodities is not
+taken into account during the solution of a single market. Accordingly, a
+solution framework and methodology that incorporates agent querying of supply,
+demand, and constraints and resolves markets in parallel is required.
