@@ -1,12 +1,129 @@
 
 \section{Dynamic Resource Exchange}\label{abm:dre}
 
-- prelim + global + physor
-
 \subsection{Problem Statement}
+
+As a next-generation nuclear fuel cycle simulation framework, Cyclus maintains a
+primary goal of modeling flexibility. As facility, institutional, and regional
+models are proposed, they should be relatively easily implemented and utilized
+in the Cyclus simulation framework. Furthermore, the level of modeling
+abstraction for different facilities in a fuel cycle will be different based on
+the needs of archetype developer. Any supply-demand resolution framework,
+therefore, must be able to support arbitrary facilities. One way to approach
+such a problem is to treat facilities as black boxes, clearly defining a
+supply-demand communication framework.
+
+As stated previously in \S \ref{abm:abm}, a number of considerations must be
+taken into account in such a framework. Supply and demand must be able to be
+solved globally at any given time step. Resources must be able to be treated in
+a fungible manner. The framework must be able to incorporate arbitrary,
+agent-defined constraints. 
+
+In order to address each of these concerns, the concept of a Dynamic Resource
+Exchange (DRE) was developed and implemented. That process was motivated by the
+following problem statement:
+
+\begin{quote}
+    If facilities are treated as individual black boxes and connections between
+    facilities are determined dynamically, how does one match suppliers with
+    demanders considering quantity and quality-based supply constraints,
+    quantity and quality-based demand constraints, supply response to
+    quality-based demands, and issues of fungibility?
+\end{quote}
+
+\subsection{Information Gathering}
+
+Supply-demand determination at any given time step begins with three
+\textit{phases}, the terminology of which is influenced from previous supply
+chain agent-based modeling work \cite{julka_agent-based_2002}. Importantly, this
+information-gathering step is agnostic as to the actual matching algorithm used,
+it is concerned only with querying the current status of supply and demand in
+the simulation.
+
+The first phase allows consumers of commodities to denote both the quantity of a
+commodity they need to consume as well as the target isotopics, or quality, by
+\textit{posting} their demand to the market exchange. This posting informs
+producers of commodities what is needed by consumers, and is termed the
+\textit{Request for Bids} (RFB) phase. Consumers are allowed to over-post, i.e.,
+request more quantity than they can actually consume, as long as a corresponding
+capacity constraint accompanies this posting. Further, consumers are allowed to
+post demand for multiple commodities that may serve to meet the same combine
+capacity. For example, consider an LWR that can be filled with MOX or UOX. It
+can post a demand for both, but must define a preference over the set of
+possible commodities it can consume. Another example is that of an advanced fuel
+fabrication facility, i.e., one that fabricates fuel partially from separated
+material that has already passed through a reactor. Such a facility can choose
+to fill the remaining space in a certain assembly with various types of fertile
+material, including depleted uranium from enrichment or reprocessed uranium from
+separations. Accordingly, it could demand both commodities as long as it
+provides a corresponding constraint with respect to total consumption. At the
+completion of the RFB phase, the market exchange will have a set of consumption
+portfolios, $P$, where each portfolio consists of a set requests, $R$, a
+cardinal preference over the requests, $\alpha_R$, and possibly a set of
+constraints over the requests, $C_R$. Each request consists of a quantity,
+$q_r$, and a target isotopic vector, $I_r$.
+
+The second phase allows suppliers to \textit{respond} to the set of consumption
+portfolios, and is termed the \textit{Response to Request for Bids} (RRFB) phase
+(analogous to Julka's Reply to Request for Quote phase
+\cite{julka_agent-based_2002}). Each consumption portfolio is comprised of
+requests for some set of commodities. Accordingly, for each request, suppliers
+of that commodity denote production capacities and an isotopic profile of the
+commodity they can provide. Suppliers are allowed to offer the null set of
+isotopics as their profile, effectively providing no information. A supplier may
+have its production constrained by more than one parameter. For example, a
+processing facility may have both a throughput constraint (i.e., it can only
+process material at a certain rate) and an inventory constraint (i.e., it can
+only hold some total material). Further, the facility could have a constraint on
+the quality of material to be processed, e.g., it may be able to handle a
+maximum radiotoxicity for any given time step which is a function of both the
+quantity of material in processes and the isotopic content of that material. The
+formulation provided in \S\ref{sec:gfctp} allows for multiple of such
+constraints as long as they are linear functions of the demanded commodity
+quantity. At the completion of the RRFB phase the possible connections between
+supplier and producer facilities, i.e., the arcs in the graph of the
+transportation problem, have been established with specific capacity constraints
+defined both by the quantity and quality of commodities that will traverse the
+arcs.
+
+The final phase of the information gathering procedure allows consumer
+facilities to adjust their set of preferences and for managers of consumer
+facilities to affect the consumer's set of preferences, as described in the
+remaining sections. Accordingly, the last phase is termed the \textit{Preference
+ Adjustment} (PA) phase. Preference adjustments can occur in response to the
+set of responses provided by producer facilities. Consider the example of a
+reactor facility that requests two fuel types, MOX and UOX. It may get two
+responses to its request for MOX, each with different isotopic profiles of the
+MOX that can be provided. It can then assign preference values over this set of
+potential MOX providers. Another prime example is in the case of repositories. A
+repository may have a defined preference of material to accept based upon its
+heat load or radiotoxicity, both of which are functions of the quality, or
+isotopics, of a material. In certain simulators, limits on fuel entering a
+repository are imposed based upon the amount of time that has elapsed since the
+fuel has exited a reactor, which can be assessed during this phase. The time
+constraint is, in actuality, a constraint on heat load or radiotoxicity (one
+must let enough of the fission products decay). A repository could analyze
+possible input fuel isotopics and set the arc preference of any that violate a
+given rule to 0, effectively eliminating that arc.
+
+\subsubsection{Structure}
+
+bipartite graph discussion
+
+\subsubsection{A Heuristic Solution}
+
+greedy solver discussion
 
 \subsection{Formulation}
 
-\subsection{Implementation}
+- transportation problem
+
+- basic formulation
+
+- supply and demand constraints
+
+- adaptation for assemblies
 
 \subsection{Proof of Principle}
+
+physor paper
