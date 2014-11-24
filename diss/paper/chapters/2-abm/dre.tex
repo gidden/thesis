@@ -31,7 +31,7 @@ following problem statement:
     quality-based demands, and issues of fungibility?
 \end{quote}
 
-\subsection{Information Gathering}
+\subsection{Information Gathering}\label{abm:dre:info}
 
 Supply-demand determination at any given time step begins with three
 \textit{phases}, the terminology of which is influenced from previous supply
@@ -108,13 +108,60 @@ given rule to 0, effectively eliminating that arc.
 
 \subsubsection{Structure}
 
-bipartite graph discussion
+Upon completion of the information gathering phase, a \textit{bipartite} network
+is formed. The network consists of receiving (request) nodes, $U$, and sending
+(bid) nodes, $V$. For each request node, $u$, there may be many bid nodes;
+however, there is a one-to-one mapping between bid nodes and request nodes. In
+other words, a given bid node, $v$, is a unique response to a request node, $v$.
+
+\TODO{Include figure}
+
+There is not a direct analog between the \textit{portfolios} described in \S
+\ref{abm:dre:info} and the bipartite graph structure. The notion of
+\textit{portfolios} does map onto the formulation, however, and will be
+described further in \S \ref{abm:dre:form}.
+
+To ensure a feasible solution, additional nodes are added to both $U$
+and $V$. A single bid node is added to $V$ and $N_{p}$ nodes are added to $U$,
+where $N_{p}$ is the number of request portfolios. Thus, the total size of node
+sets and the total number of arcs in the system are
+
+\begin{equation}
+  \left|{U}\right| = \left|{U}\right| + N_{p}
+\end{equation}
+
+\begin{equation}
+  \left|{V}\right| = \left|{V}\right| + 1
+\end{equation}
+
+\begin{equation}
+  \left|{A}\right| = \left|{A}\right| + N_{p}
+\end{equation}
+
+Each arc in the additional set, $A'$, is unconstrained (any amount of resource
+flow is allowed) and is given a preference strictly less than the lowest
+preference in the system, i.e.,
+
+\begin{equation}
+  p' < \min P.
+\end{equation}
+
+Accordingly, any additional arc will only be engaged if no other into a request
+node, $u$, have available capacity and if the associated request portfolio is
+not satisfied.
+
+\TODO{Include figure}
 
 \subsubsection{A Heuristic Solution}
 
+With full simluation domain knowledge of supply and demand, a feasible solution
+can be found.
+
 greedy solver discussion
 
-\subsection{Formulation}
+\TODO{Include figures}
+
+\subsection{Formulation}\label{abm:dre:form}
 
 - transportation problem
 
