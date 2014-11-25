@@ -504,7 +504,168 @@ Combining the previous discussions, the LP Formulation of the NFCTP can be const
 
 \subsubsection{Adaptation for Fuel Assemblies}
 
+The previous linear program (LP) formulation of the Generic Fuel Cycle
+Transportation Problem fully describes many of the types of transactions that
+arise at any given time step. However, it importantly glosses over the critical
+case of reactor fuel orders, which comprise a large amount of material orders
+within the simulation context. Specifically, it allows reactor fuel orders to be
+met by more than one supplier with an arbitrary amount of the order met by each
+supplier. Put another way, the LP formulation does not contain the discrete
+material information required to model the transaction of fuel assemblies. Such
+detail is not necessary in every simulation, but we wish to allow this advanced
+modeling for those that do need it. In order to provide this capability of
+quantizing orders, binary decision variables must be introduced and integer
+programming techniques must be utilized to solve the resulting mixed
+integer-linear program. 
 
+It should be noted that the addition of integer variables changes both the
+complexity of the formulation and the complexity of the solution technique. Such
+a change requires a Mixed Integer-Linear Program (MILP) formulation and solution
+via the branch-and-bound method which solves NP-Hard combinatorial optimization
+problems whereas the Linear Program (LP) version requires the simplex method
+which is much more efficient.
+
+The updated formulation is presented below. The key difference is the inclusion
+binary variables $y_{i,j}^{h}$, which are 1 if producer $i$ trades commodity $h$
+with consumer $j$ and constants $\tilde{x}_{j}^{h}$, which denote the quantity
+of a quantized order. Further a new set is introduced, $J_{e}$, the set of
+consumers who require quantized, or exclusive, orders. The original set of
+consumers, i.e., those who allow partial orders, are denoted $J_{p}$. These two
+sets constitute the set of all consumers.
+
+\begin{equation}\label{eqs:consumer-union}
+  J = J_{p} \cup J_{e}
+\end{equation}
+
+The Generic Fuel Cycle Transportation Problem with Exclusive Orders (GFCTP-E)
+formulation follows:
+
+\begin{subequations}\label{eqs:GFCTP-E}
+  \begin{align}
+    %%
+    \label{eq:GRCTP-E_obj}
+    \min_{z} \:\: 
+    & 
+    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{p}}c_{i,j}^{h} x_{i,j}^{h} 
+    + \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{e}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{j}^{h}
+    && \\
+    %%
+    \label{eq:GRCTP-E_sup}
+    &
+    \text{s.t.} \:\: 
+    \sum_{j \in J_{p}}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h}
+    + \sum_{j \in J_{e}}\beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{j}^{h} \leq s_{i,k}^{h} \nonumber \\
+    &
+    \qquad\qquad\qquad\qquad
+    \forall \: i \in I, \: \forall \: k \in K_{i}^{h}, \forall \: {h \in H}\\
+    %%
+    \label{eq:GRCTP-E_dem_p}
+    &
+    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})
+    &
+    \forall \: j \in J_{o} &\\
+    %%
+    \label{eq:GRCTP-E_dem_e}
+    &
+    \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j}^{h} \tilde{x}_{j}^{h} \geq d_{j}(H_{j}) 
+    &
+    \forall \: j \in J_{e}  &\\
+    %%
+    \label{eq:GRCTP-E_sumy}
+    &
+    \sum_{h \in H}\sum_{i \in I} y_{i,j}^{h} = 1
+    &
+    \forall \: j \in J_{e}  &\\
+    %%
+    \label{eq:GRCTP-E_x}
+    &
+    x_{i,j}^{h} \geq 0
+    &
+    \forall \: x \in X  &\\
+    %%
+    \label{eq:GRCTP-E_y}
+    &
+    y_{i,j}^{h} \in \{0,1\}
+    &
+    \forall \: y \in Y &
+    %%
+  \end{align}
+\end{subequations}
+
+The sets and variables involved are described in Tables \ref{tbl:GFCTP-E-sets}
+and \ref{tbl:GFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
+
+\begin{equation}
+  H_{j} \subseteq H \: \forall \: j \in J_{p}, \forall \: j \in J_{e}
+\end{equation}
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Set         & Description \\
+\hline
+$H$         & all commodities  \\
+$I$         & all producers  \\
+$J_{p}$     & all consumers who accept partial orders  \\
+$J_{e}$     & all consumers who accept only exclusive orders  \\
+$X$         & the feasible set of flows between producers and consumers  \\
+$Y$         & the feasible set of exclusive flows between 
+            producers and consumers  \\
+$K_{i}^{h}$ & the set of constraining capacities for 
+            producer $i$ of commodity $h$  \\
+$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
+\hline
+\end{tabularx}
+\caption{Sets Appearing in the GFCTP-E Formulation}
+\label{tbl:GFCTP-E-sets}
+\end{table}
+%%% 
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Variable    & Description \\
+\hline
+$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
+                          for producer $i$ and consumer $j$  \\
+$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
+                          for producer $i$ and consumer $j$  \\
+$q_{j}^{h}$               & the requested quality of commodity $h$ 
+                          by consumer $j$  \\
+$y_{i,j}^{h}$             & a binary decision variable that is equal to 1 if 
+                          there is flow from producer $i$ to consumer $j$ of 
+                          commodity $h$ \\
+$\tilde{x}_{j}^{h}$       & the amount of commodity $h$ requested by 
+                          consumer $j$ \\
+$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
+                          constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
+$s_{i,k}^{h}$             & a supply capacity of producer $i$ corresponding to 
+                          capacity constraint $k$ of commodity $h$ \\
+$d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of 
+                          satisfying commodities $H_{j}$ \\
+\hline
+\end{tabularx}
+\caption{Variables Appearing in the GFCTP-E Formulation}
+\label{tbl:GFCTP-E-vars}
+\end{table}
+%%%
+
+The examples of the various constraints from the previous section also apply
+here. The only difference is the notion of the binary variables, $y_{i,j}^{h}$,
+which denote a sort of on/off switch as to whether a consumer's entire requested
+amount of material is met by a supplier or not.
+
+It should be noted that this advanced formulation adds significant complexity to
+the resolution method at every time step. However, simple heuristics exist. The
+most common of them is to solve a relaxed version of the problem in the form of
+a linear program, and to round values to form an integer solution. The
+exploration of additional heuristics will be performed based on the outcome of
+the implementation and analysis of this formulation in the \Cyclus simulation
+environment.
 
 \subsection{A Heuristic Solution}
 
@@ -557,4 +718,300 @@ Algorithm \ref{alg::greedy}.
 
 \subsection{Proof of Principle}
 
-physor paper
+In order to demonstrate the correctness of the methodology and implementation,
+two test cases were developed and analyzed. Both scenarios validate the ability
+of the DRE to model preferences, preference adjustment, and unresolved
+markets. The first scenario depicts a simulation including capacity
+constraints. The second scenario illustrates a simulation that involves quality
+constraints.
+
+In the simulations, each requester has a preference associated with each
+commodity. Such preferences are unitless scalars and apply over all agents
+requesting that commodity. Mass flows in the simulations have been normalized to
+unity. This is permissible because the DRE procedure is scale invariant under
+mass. Whether 1 kg or 1000 kg of fuel is exchanged is not relevant to the
+decision making process about \emph{how} to exchange such material.
+
+\subsubsection{2 Sources, 3 Reactors}
+
+As shown in Figure \ref{fig::fc1}, this scenario includes
+three \textit{BatchReactors} and
+two \textit{SourceFacilities}. The \textit{BatchReactors}, denoted
+as \Reactor{1}, \Reactor{2}, and \Reactor{3}, each have a unique fuel
+preference. One \textit{SourceFacility} supplies MOX while the other supplies
+UOX; these are denoted as \MOXSource{} and \UOXSource{}, respectively, whose
+recipes are identical to those used by
+VISION \cite{jacobson_verifiable_2010}. For the purpose of demonstrating DRE
+here, the UOX and MOX fuel forms are considered completely fungible. While this
+is an incorrect assumption in general it is sufficient to show the dynamism of
+the method desired.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{./figs/fc1.pdf}
+    \caption[]{\label{fig::fc1}
+        Schematic illustrating the fuel cycle scenario. The thickness of the
+        arrows represents the preference value and the grey color indicates that
+        a material transfer is possible.}
+  \end{center}
+\end{figure}
+
+In this example case \Reactor{1}, \Reactor{2}, and \Reactor{3} are deployed
+sequentially over 3 time steps. Each of these has a full core when built and
+requires 1 kg of fresh fuel at each subsequent time step. Both source facilities
+have a capacity of 2.5 kg each time step.
+
+The simulation begins with the following facilities: \MOXSource{}, \UOXSource{},
+and \Reactor{1}. At time step 2, \Reactor{2} is deployed, followed
+by \Reactor{3} at time step 3. \Reactor{1} and \Reactor{2} both are given a
+stronger preference for MOX requests than \Reactor{3}. At time step
+4, \Reactor{1}, \Reactor{2}, and \Reactor{3} all request to refuel with MOX. At
+time step 5, \Reactor{1} changes its preference to UOX. Table \ref{table::scen1}
+summarizes the reactor preferences as a function of time.
+
+\FloatBarrier
+\begin{table}[ht]
+  \begin{center}
+    \caption{\label{table::scen1} 
+        Time sequence of reactor preferences and the total MOX requested. The MOX capacity for each time step is 2.5 kg.}
+    \begin{tabular}{m{1cm}|cc|cc|cc|m{2cm}}
+    \toprule
+    Time step & \multicolumn{2}{c|}{\Reactor{1}} & \multicolumn{2}{c|}{\Reactor{2}} & \multicolumn{2}{c|}{\Reactor{3}} & Total MOX Requested [kg]\\
+              & Fuel & Preference & Fuel & Preference & Fuel & Preference  \\
+    \midrule
+    1         & MOX  & 1.0 & none &     & none &     & 0.0 \\
+    2         & MOX  & 1.0 & MOX  & 1.0 & none &     & 1.0 \\
+    3         & MOX  & 1.0 & MOX  & 1.0 & MOX  & 0.5 & 2.0 \\
+    4         & MOX  & 1.0 & MOX  & 1.0 & MOX  & 0.5 & 3.0 \\
+    5         & UOX  & 2.0 & MOX  & 1.0 & MOX  & 0.5 & 2.0 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+\FloatBarrier
+
+\subsubsection{Enrichment, 2 Reactors}
+
+As pictured in Figure \ref{fig::fc2}, this scenario includes
+one \textit{EnrichmentFacility} and
+two \textit{BatchReactors}. The \textit{EnrichmentFacility}, denoted
+as \Enrichment{}, has a designated capacity at each time step. The
+two \textit{BatchReactors}, denoted as \Reactor{1} and \Reactor{2}, request a
+given amount and quality of enriched uranium upon refueling.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{./figs/fc2.pdf}
+    \caption[]{\label{fig::fc2}
+        Schematic illustrating the fuel cycle scenario. The thickness of the arrows represents the preference value.}
+  \end{center}
+\end{figure}
+
+The \Enrichment{} facility is constrained by a constant capacity of 10 SWU per
+time step. For this entire simulation, trade between \Enrichment{}
+and \Reactor{1} is preferred over trade between \Enrichment{} and \Reactor{2}
+with preference values of 1.0 and 0.5, respectively. The preferences are
+assigned to reactors in order to provide a consistent solution using the greedy
+algorithm described in \S \ref{subsect::drep}. Each reactor requests 1 kg of
+enriched uranium at each time step.
+
+Initially, both reactors are present in the simulation and have a full core of
+3\% enriched uranium. On time step 1, \Reactor{1} requests uranium enriched to
+5\% U-235 while \Reactor{2} requests uranium at a 3\% enrichment level. At time
+step 2, \Reactor{1} reduces its enrichment request to
+3\%. Table \ref{table::scen2} summarizes the reactor requests as a function of
+time.
+
+\FloatBarrier
+\begin{table}[ht]
+  \begin{center}
+    \caption{\label{table::scen2}
+        Time sequence of reactor preferences and the total SWU requested. The SWU capacity for each time step is 10.}
+    \begin{tabular}{m{1cm}|cc|cc|m{2cm}}
+    \toprule
+    Time step & \multicolumn{2}{c|}{\Reactor{1}} & \multicolumn{2}{c|}{\Reactor{2}} & Total SWU Requested \\
+              & Recipe & Preference     &     Recipe & Preference \\
+    \midrule
+    0         & 3\% U-235 &     & 3\% U-235 &     &  0   \\
+    1         & 5\% U-235 & 1.0 & 3\% U-235 & 0.5 & 10.6 \\
+    2         & 3\% U-235 & 1.0 & 3\% U-235 & 0.5 &  6.8 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+\FloatBarrier
+
+\subsubsection{Results}
+
+To demonstrate the dynamic resource exchange implemented in \Cyclus{} relatively
+small simulations may be performed. This is in part because market demands may
+be independently varied from time step to time step.  Furthermore, dynamism is
+demonstrated only when market demands change. Integrating results over several
+time steps with the same steady state conditions and constraints does not yield
+new insights into the procedure at hand.
+
+The cases outlined in \S \ref{subsect::fcdesc} have been designed to 
+provide different conditions at each point in time. This maximizes the
+meaningful information produced per unit of computational effort.
+The results for these cases are discussed in \S \ref{subsect::2srcs3rxts} and 
+\ref{subsect::1enr2rxts}.  In each of these cases, the total \Cyclus{} run time
+was $\sim$0.1 seconds and the output database size was $\sim$68 kB.
+
+\subsection{2 Sources, 3 Reactors}
+\label{subsect::2srcs3rxts}
+Initially present are the source facilities and \Reactor{1}.  \Reactor{1} has 
+a preference for accepting MOX fuel over UOX.  The \MOXSource{} capacity of 2.5 kg 
+is more than 
+enough to handle the 1 kg of MOX requested by \Reactor{1}.  This matching may be seen
+in Figure \ref{fig::2srcs3rxts-t1}.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t1.pdf}
+    \caption[]{\label{fig::2srcs3rxts-t1}Time step 1 for the 2 Sources, 3 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+Note that the resource flows in Figures 
+\ref{fig::2srcs3rxts-t1}-\ref{fig::enr2rxts-t3}
+have been generated automatically from \Cyclus{} output using
+Cyan \cite{Carlsen2014}.  Due to this, these figures only show facility agents
+which participated in a resource exchange. Other facilities may exist but are
+not displayed if no resource was traded.  Thus Figure \ref{fig::2srcs3rxts-t1}
+does not show the \UOXSource{} facility, even though it is present in the
+simulation.  Finally in Figure \ref{fig::2srcs3rxts-t1} the \MOXSource{} only
+provides the 1 kg of material requested by \Reactor{1}.  It, correctly, does not
+oversupply.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t2.pdf}
+    \caption[]{\label{fig::2srcs3rxts-t2}Time step 2 for the 2 Sources, 3 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+At time step in 2 in this simulation, \Reactor{2} is deployed and also requests 
+fuel with the preference for MOX.  Figure \ref{fig::2srcs3rxts-t2} displays
+that the \MOXSource{} indeed has the required capacity to meet the requests of 
+both of the reactors.  This may seem trivial at first glance but it is important 
+to emphasize that the resource exchange solver was not altered in any way to handle 
+both time steps 1 and 2.  Furthermore, the solver on time step 1 had no future 
+knowledge that \Reactor{2} would be deployed on time step 2.  This is significantly 
+different than the traditional system dynamics approach.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t3.pdf}
+    \caption[]{\label{fig::2srcs3rxts-t3}Time step 3 for the 2 Sources, 3 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+On time step 3, \Reactor{3} is deployed.  This facility still prefers to accept 
+MOX fuel over UOX fuel.  At this point, 3 kg of MOX are requested (1 kg from 
+each facility) but the \MOXSource{} may only provide 2.5 kg.  Because of this, 
+the \UOXSource{}, which has been present in the simulation since the beginning, 
+now enters the exchange to make up for the missing 0.5 kg of fuel not obtainable 
+from the \MOXSource{}. \Reactor{3} is selected to receive the UOX fuel rather than 
+\Reactor{1} and \Reactor{2}.  These preferences are detailed in Table \ref{tab::pref-t3}.  In time step 3 because all agents tie for UOX, 
+\Reactor{1} and \Reactor{2} tie for MOX, and the \Reactor{3} preference for MOX is 
+less than the others, \Reactor{3} loses its full bid for MOX and must top-up with 
+UOX.  This is precisely the situation displayed in Figure \ref{fig::2srcs3rxts-t3}.
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{\label{tab::pref-t3}Resource exchange preferences for agents on 
+             time steps 3 and 4 for reactors in the 2 sources, 3 reactors case.}
+    \begin{tabular}{lcc|cc}
+    \toprule
+          & \multicolumn{2}{c}{$t=3$} & \multicolumn{2}{c}{$t=4$} \\
+    Agent & UOX & MOX & UOX & MOX\\
+    \midrule
+    \Reactor{1} & 0.0 & 1.0 & 2.0 & 1.0 \\
+    \Reactor{2} & 0.0 & 1.0 & 0.0 & 1.0 \\
+    \Reactor{3} & 0.0 & 0.5 & 0.0 & 0.5 \\
+    \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Finally, on time step 4 the preference of \Reactor{1} for UOX changes from 
+0.0 to 2.0.  This alteration causes the tie previously present 
+for UOX to be broken.  Furthermore, the value of 2.0 makes this the most 
+preferred arc in the system so it is attempted to be satisfied first.  
+As may be seen in Figure \ref{fig::2srcs3rxts-t4}, the \UOXSource{} capacity of
+2.5 kg is more than enough to satisfy the request from \Reactor{1} for 1 kg of UOX.
+Since \Reactor{1} does not diminish the capacity of the \MOXSource{} both \Reactor{2} 
+and \Reactor{3} are able to obtain their first choice fuel.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t4.pdf}
+    \caption[]{\label{fig::2srcs3rxts-t4}Time step 4 for the 2 Sources, 3 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+This simple 2 source, 3 reactor simulation shows how the resource 
+exchange can dynamically and correctly adapt to the both facility deployments and
+the preferences that these agents have for requested resources.
+
+\subsection{Enrichment and 2 Reactors}
+\label{subsect::1enr2rxts}
+
+Initially, \Enrichment{}, \Reactor{1}, and \Reactor{2} are all present. The reactors both begin with cores composed of 3\% enriched uranium. 
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/1_Enrichment_2_Reactor-t1.pdf}
+    \caption[]{\label{fig::enr2rxts-t1}Time step 1 for the Enrichment and 2 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+Figure \ref{fig::enr2rxts-t1} shows the result of the resource exchange for time
+step 1.  Here the SWU capacity of \Enrichment{} is not sufficient to meet the
+requests for 5\% and 3\% enriched fuel simultaneously but is enough to meet
+either of them individually.  Therefore, the bid for at least one of the
+reactors must be partially unmet.  Due to the preferences, the requests
+of \Reactor{1} will be met first.  Thus in
+Figure \ref{fig::enr2rxts-t1} \Reactor{1} receives 1 kg of 5\% enriched fuel.
+However, \Reactor{2} only receives $\sim$80\% of its request for 3\% enriched
+uranium.  This is not enough to run on and so this material is saved for the
+future.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/1_Enrichment_2_Reactor-t2.pdf}
+    \caption[]{\label{fig::enr2rxts-t2}Time step 2 for the Enrichment and 2 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+On time step 2, \Reactor{1} now switches from requesting 5\% enriched fuel to
+requesting 3\% enriched fuel.  However, the reactor archetypes are implemented
+such that if they have stored fuel from a previous time step, they will instead
+only request a mass needed to create 1 kg of fuel.  Therefore, \Reactor{2} only
+requests $\sim$0.2 kg from \Enrichment{}.  \Reactor{1} continues to request 1 kg
+of material and this is met because the SWU capacity constraint is not exceeded.
+These resource flows may be seen in Figure \ref{fig::enr2rxts-t2}.
+
+\begin{figure}[ht!]
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/1_Enrichment_2_Reactor-t3.pdf}
+    \caption[]{\label{fig::enr2rxts-t3}Time step 3 for the Enrichment and 2 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
+No further adjustments of requests were made on time step 3. Thus the results 
+displayed in Figure \ref{fig::enr2rxts-t3} represent the same dynamic resource 
+exchange procedure in time step 2.  The key differences here however are that 
+now the system has returned to a steady state and - unlike in time step 1 - 
+the SWU capacity of \Enrichment{} is enough to meet the 2 kg of 3\% enriched
+fuel coming from both reactors.  Thus \Reactor{1} and \Reactor{2} each receive 
+the kilogram of fuel that they request.  Without further adjustments this 
+system will continue \emph{ad infinitum}.
+
