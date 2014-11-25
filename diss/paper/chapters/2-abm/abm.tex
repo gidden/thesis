@@ -1,5 +1,63 @@
 
-\section{Agents and Agent Based Modeling}\label{abm:abm}
+\section{Agents and Agent Based Modeling in Cyclus}\label{abm:abm}
+
+Deciding how a simulation is structured from an interactions standpoint is a
+delicate balance of known necessity and perceived future needs. There are basic
+decisions to make, such as modeling material transfer as discrete or
+continuous. Discrete transfers more closely match reality and may provide
+insights in that regard, however they require more of their modeling apparatus
+due to messaging needs and other structures. More complex decisions include how
+one wants to determine connections between facilities, and whether such
+connections are assigned statically and incorporated into the simulation
+architecture or determined dynamically. Guerin's comment
+in \S\ref{sec:litrev-benchmarks} stems from this ``freedom''. These
+simulation-engine decisions comprise the art-related portion of fuel cycle
+simulation, but developers have a goal of making these decisions in as informed
+a way as possible using domain-level knowledge with respect to our known and
+perceived requirements. In general, this work tries to minimize the sheer number
+of choices we make in this regard, instead relying on well known and well
+documented practices of computer scientists and systems engineers.
+
+The \Cyclus team is also interested in fostering a user and developer ecosystem.
+Accordingly, such concerns also drive the simulation architecture design. The
+agent-based nature of \Cyclus provides an opportunity to reduce barriers to
+entry into the ecosystem. Given a few basic tenets of agent interaction, other
+developers should be able to create a new agent to ``plug in'' to the
+simulation. Intuitively, a minimal set of behaviors must be defined to
+sufficiently inform the simulation infrastructure to run the simulation. This
+freedom allows the simulation program introduce agents at run time, effectively
+separating the simulation engine's functionality from the agents in the
+simulation.
+
+Such a framework provides many benefits. First, there is a clear separation of
+concerns. The \Cyclus core is concerned with modeling system dynamics whereas
+individual agents are concerned with domain-specific issues. Accordingly,
+developers can focus their attention appropriately, focusing either on the core
+code base or on agent development. Separating agent development from core
+development also allows \Cyclus to remain a viable open-source candidate to
+model nuclear fuel cycle dynamics. Because domain-level information is
+incorporated into agent libraries which are dynamically loaded at runtime, a
+closed-source developer can focus their efforts entirely on developing agent
+libraries. Furthermore, developers could participate both privately and
+publicly, e.g., adding general capability to the \Cyclus core that is needed for
+some functionality without specifying the internals. Such a community paradigm
+is shown in Figure \ref{fig:community}.
+
+\begin{figure}[htbp!]
+  \begin{center}
+    \includegraphics[height=8cm]{./figs/community.png}
+  \end{center}
+  \caption{The Cyclus Participation Paradigm} 
+  \label{fig:community}
+\end{figure}
+
+In order to develop and maintain the core code separate from the agent modules,
+well-defined interactions must be provided between agents and the \Cyclus
+core. The remaining part of the section provides a proposal for such
+interactions that allow for a variety facility deployment and supply-demand
+matching algorithms to be employed. A description of the market resolution
+interface is provided, and basic agent simulation interaction, such as entering
+and leaving the simulation is also described.
 
 Moving from a modeling paradigm that does not differentiate between individual
 facilities to one that does requires a nuanced approach to determine facility
@@ -22,14 +80,81 @@ reactors of the same type (e.g., PWRs), may require different resource qualities
 
 \subsection{Agent Taxonomy}
 
-(Insert section on RIF from prelim/papers here)
-
 The Cyclus kernel implements a basic \code{Agent} class that provides the
 minimal interface for agents to be built within a simualtion. Furthermore, the
 \code{Trader} interface provides a communication layer required for agents to be
 included in the exchange of resources. \code{Facility} agents in Cyclus
 implement both interfaces, while \code{Institution} and \code{Region} agents
 implement only the \code{Agent} interface.
+
+\subsubsection{Facilities}
+
+Facilities in \Cyclus are abstracted to either consumers or suppliers of
+commodities, and some may be both. Supplier agents are provided agency by being
+able to communicate to the market-resolution mechanism a variety of production
+capacity constraints in second phase of the information gathering
+methodology. Consumer agents are provided agency by being able to assign
+preferences among possible suppliers based on the supplier's quality of
+product. Because this agency is encapsulated for each agent, it is possible to
+define strategies that can be attached or detached to the agents at
+run-time. Such strategies are an example of the Strategy design pattern
+\cite{vlissides_design_1995}.
+
+\subsubsection{Institutions}
+
+Institutions in \Cyclus manage a set of facilities. Facility management is
+nominally split into two main categories: the commissioning and decommissioning
+of facilities and supply-demand association. The goal of including a notion of
+institutions is to allow an increased level of detail when investigating
+regional-specific scenarios. For example, a consumer facility may prefer to be
+supplied by a supplier facility in its instution rather than one associated with
+a different institution. Furthermore, there are international governmental
+organizations, such as the IAEA, that have proposed managing large fuel cycle
+facilities that service many countries in a given global region. A fuel bank is
+an example of such a facility. Accordingly, institutions in \Cyclus are able to
+augment the preferences of supplier-consumer pairs that have been established in
+order to simulate a mutual preference to trade material within an
+institution. Of course, situations arise in real life where an institution has
+the capability to service its own facilities, but choose to use an outside
+provider because of either cost or time constraints. Such a situation is allowed
+in this framework as well. It is not clear how such a relationship should be
+instantiated and to what degree institutions should be allowed to affect their
+managed facilities' preferences. This issue lies squarely in the realm of
+simulation design decisions, part of the \textit{art} of
+simulation. Accordingly, through the course of research, the possible design
+space will be analyzed in order to determine best practices for this type of
+design.
+
+\subsubsection{Regions}
+
+Regions in \Cyclus provide the forcing function for simulations by requiring
+that certain parameters be met, e.g., power capacity, fuel cycle service
+capacity, etc. For example, in the case of nuclear power capacity, a region
+knows that it needs additional reactors to be built, but leaves the building of
+those reactors to the institutions that operate in the region. The current
+GrowthRegion model in the \Cycamore \cite{cycamore2013} code base takes the cost
+and nameplate capacity for each facility in a set of acceptable facilities and a
+demand gap, and solves a minimum-cost capacity production problem to determine
+the number and type of facilities to request. It is important to note here that
+this abstraction allows for different deployment algorithms to be tested and
+exchanged in the \Cyclus framework without necessitating changes to the
+simulation engine, as is the case with other simulators described
+in \S\ref{sec:simulators} and is consistent with the types of simulation design
+decisions described in
+\S\ref{sec:simulators-overview}. 
+
+Regions are further provided agency by their ability to affect preferences
+between supplier-consumer facility pairs in the third phase of the market
+information gathering algorithm. The ability to perturb arc preferences between
+a given supplier and a given consumer allows fuel cycle simulation developers to
+model relatively complex interactions at a regional level, such as tariffs and
+sanctions. Constraints to cross-border trading can also be applied to the
+formulation described in \S\ref{sec:gfctp}. For example, a region could place
+constraints on the total amount of a given commodity type that is able to flow
+into it or out of it into a different region. Such constraints could applied not
+only to bulk quantities of a commodity, but also to the quality of each
+commodity. Such a mechanism could be used to model interdiction of
+highly-enriched uranium transport, for example.
 
 \subsection{Methods of Agency}
 
