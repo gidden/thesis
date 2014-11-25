@@ -201,23 +201,135 @@ facility deployment agency is required.
 
 \subsubsection{Benchmark Case}
 
-(Take from ANS Paper)
+An initial benchmark test was performed to confirm expected deployment behavior
+and basic resource routing. The INPRO Business As Usual (BAU) benchmark for the
+once-through fuel cycle was chosen for three reasons. First, it was the simplest
+case that demonstrated deployment behavior. Second, no supply or demand
+constraints were present, so a basic supply-demand framework would
+suffice. Finally, results from two other fuel cycle simulation codes, VISION
+\cite{} and GENIUSv2 \cite{}, the predecessor of Cyclus, were available for
+comparison. The INPRO BAU benchmark identified two cases, high electricity
+demand and moderate electricity demand, as shown in
+Fig. \ref{fig:inpro-demand}. Both cases require that demand met by a composition
+of 94\% Light Water Reactors and 6\% Heavy Water Reactors.
 
-\subsubsection{Agents Developed}
+\begin{figure}
+  \begin{center}
+    \includegraphics[height=8cm]{./figs/inpro-demand.pdf}
+    \caption{The energy demand specification for the INRPO BAU scenarios.}
+    \label{fig:inpro-demand}
+  \end{center}  
+\end{figure}
 
-(fill in from other descriptions)
+The goal of this proof-of-principle benchmark was to showcase the capability for
+a developer to generate the required Facility, Institution, and Region
+archetypes, and that such archetypes could be deployed in the Cyclus simulation
+framework and generate satisfactory results. Metrics including deployment
+patterns, natural uranium consumed, and used fuel produced by all reactors were
+used to compare results between VISION, GENIUS, and Cyclus.
+
+\subsubsection{Agent Archetypes Developed}
 
 \paragraph{GrowthRegion}
 
+The \code{GrowthRegion} was developed to assist in facility deployment
+logic. The \code{GrowthRegion} takes as input a listing of commodities for which
+it has a demand. For example, the The \code{GrowthRegion} agents in this
+benchmark demand electrical power. The demand for commodities is defined by
+symbolic functions. Currently, linear functions, exponential functions, and
+piecewise combinations of both are supported. 
+
+At any time step in which there exists a demand gap, i.e., there exists more
+demand than supply, a build decision is made. This decision is modeled as the
+following integer program:
+%%%
+\begin{subequations} \label{eqs:growth}
+\begin{equation} \label{eq:optBuildObj}
+\begin{aligned}
+& \min
+& & \sum_{i \in I}n_i*c_i
+\end{aligned}
+\end{equation}
+\begin{equation} \label{eq:optBuildConst}
+\begin{aligned}
+& \text{s.t.}
+& & \sum_{i \in I}n_i*\phi_i \ge \Phi
+\end{aligned}
+\end{equation}
+\begin{equation} \label{eq:optBuildBounds}
+\begin{aligned}
+& n_i \in [0,\infty) & \forall \:\: i \in I &
+\end{aligned}
+\end{equation}
+\begin{equation} \label{eq:optBuildInt}
+\begin{aligned}
+& n_i \:\:\: integer & \forall \:\: i \in I &
+\end{aligned}
+\end{equation}
+where $\Phi$ is the unmet demand, $I$ is the set of facilities capable of 
+meeting the demand, and, for each facility in $I$, $c_i$ is the cost of building, 
+and $\phi_i$ is the nameplate capacity.  Finally, $n_i$ is the optimized number of
+facilities to build of type $i$.
+\end{subequations}
+%%%
+
 \paragraph{ManagerInst}
+
+The \code{ManagerInst} was developed to assist in facility deployment as
+well. While the \code{GrowthRegion} determines which facilities \textit{should}
+be built, the \code{ManagerInst} determines the set of all possible facilities
+that \textit{can} be built. In other word, the \code{ManagerInst} determines the
+set of facilities, $I$, shown in in Eqn. \ref{eqs:growth}. Note that the set $I$
+can change over time. Once a deployment decision is made, the
+\code{GrowthRegion} makes a facility deployment request of the
+\code{ManagerInst} which then deploys the chosen facility.
 
 \paragraph{BatchReactor}
 
+While a reactor model existed prior to this work, it did not provide the
+functionality to interchange \textit{batches} of fuel. A batch of fuel is a
+fraction of a full reactor core that is extracted and then replaced when a
+reactor is refuled. While in the extreme, a full core can be replaced, in
+pratice a batch size is generally a set fraction of the full core, especially
+for LWRs.
+
+The \code{BatchReactor} used in this work had configurable properties as
+displayed in Table \ref{tbl:batchrxtr}. The values used based on the defined
+INPRO BAU benchmark are described in Table \ref{tbl:inprorxtr}.
+
+\begin{table}[ch]
+\centering
+\begin{tabular}{cc}
+Parameter      & Description                     \\ \hline
+Process Time   & Active fuel time in the reactor                        \\
+Refuel Time    & Time to refuel the reactor                              \\
+N Batches      & Number of batches in the reactor                         \\
+Batch Size     & Quantity of a batch                                 \\
+Power Capacity & Nameplace Capacity for Power                          \\
+Power Cost     & Cost to build a new reactor      \\ \hline
+\end{tabular}
+\caption{Configurable input for the \code{BatchReactor} archetype.}
+\label{tbl:batchrxtr}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccc}
+Parameter      & LWR Values & HWR Values               \\ \hline
+Process Time   & 10         & 10                       \\
+Refuel Time    & 2          & 2                        \\
+N Batches      & 4          & 4                        \\
+Batch Size     & 7.87E4     & 1.39e5                   \\
+Power Capacity & 1000       & 600                      \\
+Power Cost     & 1000*      & 600* \\ \hline
+\multicolumn{3}{l}{(*) Note that the Cost used is arbitrary and set equal to the
+  capacity so that a minimum capacity is built per Eqn. \ref{eqs:growth}.}
+\end{tabular}
+\caption{Configurable input values for reactors used in the INPRO BAU once-through benchmark..}
+\label{tbl:inprorxtr}
+\end{table}
+
 \paragraph{EnrichmentFacility}
-
-\paragraph{Source}
-
-\paragraph{Sink}
 
 \subsubsection{Results}
 
