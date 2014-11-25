@@ -314,19 +314,24 @@ Power Cost     & Cost to build a new reactor      \\ \hline
 
 \begin{table}[h]
 \centering
+\begin{threeparttable}
 \begin{tabular}{ccc}
-Parameter      & LWR Values & HWR Values               \\ \hline
+Parameter      & LWR Value & HWR Value               \\ \hline
 Process Time   & 10         & 10                       \\
 Refuel Time    & 2          & 2                        \\
 N Batches      & 4          & 4                        \\
 Batch Size     & 7.87E4     & 1.39e5                   \\
 Power Capacity & 1000       & 600                      \\
 Power Cost     & 1000*      & 600* \\ \hline
-\multicolumn{3}{l}{(*) Note that the Cost used is arbitrary and set equal to the
-  capacity so that a minimum capacity is built per Eqn. \ref{eqs:growth}.}
 \end{tabular}
-\caption{Configurable input values for reactors used in the INPRO BAU once-through benchmark..}
+\begin{tablenotes}
+  \small
+  \item (*) Note that the Cost used is arbitrary and set equal to the
+  capacity so that a minimum capacity is built per Eqn. \ref{eqs:growth}.
+\end{tablenotes}
+\caption{Configurable input values for reactors used in the INPRO BAU once-through benchmark.}
 \label{tbl:inprorxtr}
+\end{threeparttable}
 \end{table}
 
 \paragraph{EnrichmentFacility}
