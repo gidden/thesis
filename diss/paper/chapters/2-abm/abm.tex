@@ -206,12 +206,11 @@ and basic resource routing. The INPRO Business As Usual (BAU) benchmark for the
 once-through fuel cycle was chosen for three reasons. First, it was the simplest
 case that demonstrated deployment behavior. Second, no supply or demand
 constraints were present, so a basic supply-demand framework would
-suffice. Finally, results from two other fuel cycle simulation codes, VISION
-\cite{} and GENIUSv2 \cite{}, the predecessor of Cyclus, were available for
-comparison. The INPRO BAU benchmark identified two cases, high electricity
-demand and moderate electricity demand, as shown in
-Fig. \ref{fig:inpro-demand}. Both cases require that demand met by a composition
-of 94\% Light Water Reactors and 6\% Heavy Water Reactors.
+suffice. Finally, results from two other fuel cycle simulation codes,
+specificaly VISION \cite{}, were available for comparison. The INPRO BAU
+benchmark identified two cases, high electricity demand and moderate electricity
+demand, as shown in Fig. \ref{fig:inpro-demand}. Both cases require that demand
+met by a composition of 94\% Light Water Reactors and 6\% Heavy Water Reactors.
 
 \begin{figure}
   \begin{center}
@@ -246,7 +245,7 @@ following integer program:
 \begin{subequations} \label{eqs:growth}
 \begin{equation} \label{eq:optBuildObj}
 \begin{aligned}
-& \min
+& \min_{n}
 & & \sum_{i \in I}n_i*c_i
 \end{aligned}
 \end{equation}
@@ -297,7 +296,7 @@ The \code{BatchReactor} used in this work had configurable properties as
 displayed in Table \ref{tbl:batchrxtr}. The values used based on the defined
 INPRO BAU benchmark are described in Table \ref{tbl:inprorxtr}.
 
-\begin{table}[ch]
+\begin{table}[h]
 \centering
 \begin{tabular}{cc}
 Parameter      & Description                     \\ \hline
@@ -336,15 +335,93 @@ Power Cost     & 1000*      & 600* \\ \hline
 
 \paragraph{EnrichmentFacility}
 
+The \code{EnrichmentFacility} archetype was developed to provide
+enrichment-related output for the simulation, namely the amount of separative
+work units (SWU) and natural uranium used during a given time step. For the
+INPRO BAU cases, it can be defined quite simply using the values shown in Table
+\ref{tbl:inproenr}. The feed assay and product assay, both required for
+determinging output metrics, are defined by the isotopic compositions of
+resource input and resource output. Resource output is determined by the
+requesting reactors.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccc}
+Parameter    & Description                      & Values          \\ \hline
+Input Recipe & A description of input isotopics & Natural Uranium \\
+Tails Assay  & The U-235 assay of tails.        & 0.003          
+\end{tabular}
+\caption{Configurable input values for the \code{EnrichmentFacility} used in the
+  INPRO BAU once-through benchmark.}
+\label{tbl:inproenr}
+\end{table}
+
 \subsubsection{Results}
 
-As designed, facility deployment curves match the required benchmark specification. 
+% c/Cref is cleveref
 
-Further, material transaction quantities match VISION values.
+In aggregate, Cyclus performed well relative to the other benchmark
+codes. Fig. \ref{fig:rxtrs_low} shows the reactor deployment curves for each
+simulator for the moderate growth scenario while Fig. \ref{fig:rxtrs_high} shows
+reactor deployment for the high scenario. The slight differences are attributed
+to VISION's look-ahead functionality which builds the required facilities one
+time step after they are needed, whereas Cyclus builds facilities on the
+timestep in which they are needed. Cumulative natural uranium utilization curves
+for the moderate and high cases are shown in \Cref{fig:nat_u_low,fig:nat_u_high},
+and cumulative used fuel inventory curves are shown in
+\Cref{fig:used_fuel_low,fig:used_fuel_high}. Slight discrepencies are noted
+between Cyclus and VISION. These discrepencies are attributed to the
+implementation of core batch recycling in each of the respective codes. Because
+the curves show cumulative metrics, the discrepencies grow over time, as
+expected.
 
-Enrichment values match VISION for SWU, however, tails values did not match.
+\begin{figure}
+  \begin{center}
+    \includegraphics[height=8cm]{./figs/rxtrs_low.pdf}
+    \caption{The reactor deployment schedule by reactor type for the moderate demand scenario.}
+    \label{fig:rxtrs_low}
+  \end{center}  
+\end{figure}
 
-(add more discussion and result images from ANS talk)
+\begin{figure}
+  \begin{center}
+    \includegraphics[height=8cm]{./figs/rxtrs_high.pdf}
+    \caption{The reactor deployment schedule by reactor type for the high demand scenario.}
+    \label{fig:rxtrs_high}
+  \end{center}  
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[height=8cm]{./figs/nat_u_low.pdf}
+  \caption{The total natural uranium used for the moderate demand scenario.}
+  \label{fig:nat_u_low}
+\end{center}  
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \includegraphics[height=8cm]{./figs/nat_u_high.pdf}
+  \caption{The total natural uranium used for the high demand scenario.}
+  \label{fig:nat_u_high}
+\end{center}  
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[height=8cm]{./figs/used_fuel_low.pdf}
+    \caption{The amount of used fuel produced for the moderate demand scenario.}
+    \label{fig:used_fuel_low}
+  \end{center}  
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[height=8cm]{./figs/used_fuel_high.pdf}
+    \caption{The amount of used fuel produced for the high demand scenario.}
+    \label{fig:used_fuel_high}
+  \end{center}  
+\end{figure}
 
 \subsection{Multiple Market Limitations}\label{abm:abm:limits}
 
