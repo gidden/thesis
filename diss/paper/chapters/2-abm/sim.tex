@@ -1,26 +1,29 @@
 
 \section{Simulation Principles}\label{abm:sim}
 
-As its core functionality, Cyclus seeks to dynamically model the flow of
-resources and deployment of facilities in the Nuclear Fuel Cycle (NFC). As such,
-Cyclus is a \textit{simulator} which models the NFC as a \textit{system}.
+Cyclus is designed to dynamically model the flow of resources and deployment of
+facilities in the Nuclear Fuel Cycle (NFC). As such, Cyclus is a
+\textit{simulator} which models the NFC as a \textit{system}. System simulation
+is a rich field of study, spanning a variety of disciplines, as described in \S
+\ref{intro:sim}.
 
-By Law's definition \cite{Law:1999:SMA:554952}, Cyclus is, broadly, a dynamic,
+By Law's definition \cite{Law:1999:SMA:554952}, Cyclus is a dynamic,
 discrete-event simulation that uses a fixed-increment time advance mechanism. In
-general, fixed-increment time advance scenarios assume a time step ($\Delta t$),
-and assume that all events that would happen during a time occur simultaneously
-at the end of the time step. This situation can be thought of as an event-based
-time advance mechanism, i.e., one that steps from event to event, that executes
-all events simultaneously that were supposed to have occurred in the time step.
+general, fixed-increment time advance simulations assume a time step ($\Delta
+t$). Further they assume that all events that would happen during a time occur
+simultaneously at the end of the time step. This situation can be thought of as
+an event-based time advance mechanism, i.e., one that steps from event to event,
+that executes all events simultaneously that were supposed to have occurred in
+the time step.
 
-Again using Law's definition, Cyclus models a collection of \textit{entities}
-which either trade resources, manage other entities, or perform both
-actions. The most basic \textit{entity} in a Cyclus simulation is a
-Facility. Facilities can be used to model processes with arbitrary levels of
-physical fidelity, and can interact with the simulator and other entities with
-arbitrary levels of behavioral fidelity. As such, Cyclus can also be described
-as an \textit{agent-based model} (ABM). Accordingly, the \textit{entities} in a
-given simulation can be interchangeably referred to as \textit{agents}.
+A Cyclus simulation models a collection of \textit{entities} which either trade
+resources, manage other entities, or perform both actions. The most basic
+\textit{entity} in a Cyclus simulation is a Facility. Facilities can be used to
+model processes with arbitrary levels of physical fidelity, and can interact
+with the simulator and other entities with arbitrary levels of behavioral
+fidelity. As such, Cyclus can also be described as an \textit{agent-based model}
+(ABM). Accordingly, the \textit{entities} in a given simulation can be
+interchangeably referred to as \textit{agents}.
 
 \subsection{Events}
 
@@ -31,37 +34,38 @@ Two key types of events occur in every Cyclus simulation:
 \item the exchange of resources between agents
 \end{itemize}
 
-Agent entry and exit events are scheduled by another managing agent, or
-scheduled as an initial condition to the simulation. Upon entry or exit,
-newly-built or about-to-be-decommissioned agents are informed as are their
-managing agent. The Cyclus simulation kernel treats each agent individually,
-rather than grouping agents by an attribute and treating like-facilities in an
-aggregate manner.
+Agent entry and exit events are scheduled by another managing agent, or are
+scheduled as an initial condition to the simulation. The managing agent and
+managed agent form a parent-child relationship. Upon entering the simulation,
+the child entity is constructed and notified of its entry; the parent is then
+notified. Upon exiting the simulation, the parent is notified; the child entity
+is then notified and desconstructed. Unike many of the simulators described in
+\S \ref{intro:fcs}, the Cyclus simulation kernel naturally treats each agent
+individually, rather than grouping agents by an attribute and treating
+like-facilities in an aggregate manner.
 
 While the determination of supply and demand is complex and described further in
 \S \ref{abm:dre}, the execution of resource exchange is rather straightforward
-and a primary event in a Cyclus simulation. When a agent's demand for a resource
-is matched with another matches's supply of a resource by the Cyclus kernel, a
-transfer is initiated. Each transfer is treated as discrete, individual trade
-between two agents.
-
-Simulation entities can have arbitrarily complex state which is dependent on the
-results of resource exchange and the present status of agents in the simulation
-at a given time step. Accordingly, methods that allow entities to update state
-and schedule new entity entry and exit must occur in response to these events.
+and a primary event in a Cyclus simulation. When an agent's demand for a
+resource is matched with another agent's supply of a resource by the Cyclus
+kernel, a transfer is initiated. Each transfer is treated as discrete,
+individual trade between two agents.
 
 \subsection{Timesteps}
 
-Because there is a key event that defines agent interaction in a given time
-step, it is necessary to involve all agents in that interaction. Accordingly it
-is necessary that there be an ordering between these two key types of events,
-deviating slightly from Law's description of fixed-increment time
-advance. Specifically, the following invariant is preserved: \textit{any agent
-  that exists in a given time step should be included in the resource exchange,
-  or, equivalently, experience the entire time step execution stack}.
+Simulation entities can have arbitrarily complex state which is dependent on the
+results of resource exchange and the present discernable status of other agents
+in the simulation at a given time step. Furthermore, resource exchange
+neccessarily must involve all existing agents in the simulation. Therefore, a
+well-defined timestep, incorporating agent entry, exit, resource exchange, and
+agent response to system state must be defined. Cyclus implements a timestep
+mechanism that deviates slightly from Law's description of fixed-increment time
+advance by preserving a specific ordering of \textit{event
+  triggers}. Importantly, the following invariant is preserved: \textit{any
+  agent that exists in a given time step should experience the entire time step
+  execution stack}.
 
-This leads to the following ordering, or \textit{phases}, of time step
-execution:
+This leads to the following \textit{phases} of time step execution:
 
 \begin{itemize}
 \item agents enter simulation (Building Phase)
@@ -72,33 +76,24 @@ execution:
 \end{itemize}
 
 The Building, Exchange, and Decommissioning phases each include critical,
-core-based events, and will be called \textit{Kernel} phases. The Tick and Tock
+core-based events, and are called \textit{Kernel} phases. The Tick and Tock
 phases do not include core-based events, and instead let agents react to
 previous core-based events and inspect core simulation state. Furthermore, they
 are periods in which agents can update their own state and are accordingly
-considered \textit{Agent} phases. In general, Agent phases \textit{must} bracket
-\textit{critical} Kernel phases, of which only the Exchange Phase exists for
-now. If another critical core phase is added in the future it must provide a
-similar invariant, i.e., that it is bracketed by Agent phases. For example, if a
-new phase is added before Exchange, then the time execution stack would follow
-as: Building, Tick, \textit{New Kernel Phase}, \textit{New Agent Phase},
-Exchange, Tock, Decommission.
+considered \textit{Agent} phases. 
 
 Technically, whether agent entry occurs simultaneously with agent exit or not
 does not matter from a simulation-mechanics point of view, because the two
 phases have a direct ordering. It will, however, from the point of view of
-module development. It is simpler cognitively to think of an agent entering the
-simulation and acting in that time step, rather than entering a simulation at a
-given time and taking its first action in the subsequent time step.
+module development. It is simpler to think of an agent entering the simulation
+and acting in that time step, rather than entering a simulation at a given time
+and taking its first action in the subsequent time step.
 
 In the spirit of Law's definition of a fixed-increment time advance mechanism,
-there is a final important invariant: \textit{there is no guaranteed agent
+there is an addtiional important invariant: \textit{there is no guaranteed agent
   ordering of within-phase execution}. This invariant allows for:
 
 \begin{itemize}
 \item a more cognitively simple process
-\item paralellization
+\item paralellized implementation
 \end{itemize}
-
-Any future addition of phases in the timestep execution stack neccessarily
-guarantee the three invariants described above.

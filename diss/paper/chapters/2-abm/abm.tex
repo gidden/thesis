@@ -1,104 +1,71 @@
 
 \section{Agents and Agent Based Modeling in Cyclus}\label{abm:abm}
 
-Deciding how a simulation is structured from an interactions standpoint is a
-delicate balance of known necessity and perceived future needs. There are basic
-decisions to make, such as modeling material transfer as discrete or
-continuous. Discrete transfers more closely match reality and may provide
-insights in that regard, however they require more of their modeling apparatus
-due to messaging needs and other structures. More complex decisions include how
-one wants to determine connections between facilities, and whether such
-connections are assigned statically and incorporated into the simulation
-architecture or determined dynamically. Guerin's comment
-in \S\ref{sec:litrev-benchmarks} stems from this ``freedom''. These
-simulation-engine decisions comprise the art-related portion of fuel cycle
-simulation, but developers have a goal of making these decisions in as informed
-a way as possible using domain-level knowledge with respect to our known and
-perceived requirements. In general, this work tries to minimize the sheer number
-of choices we make in this regard, instead relying on well known and well
-documented practices of computer scientists and systems engineers.
+As described in \S \ref{intro:cyc}, Cyclus has worked to formally move from a
+modeling paradigm that does not differentiate between individual facilities, as
+has been the case historically in FCS, to one that does. Modeling individual
+facilities in the NFC requires a nuanced approach to determine facility
+behavior, because such behavior can depend on intricate physical parameters of
+resources in the simulation as well as complex social-behavioral models of
+facility interaction. 
 
-The \Cyclus team is also interested in fostering a user and developer ecosystem.
-Accordingly, such concerns also drive the simulation architecture design. The
-agent-based nature of \Cyclus provides an opportunity to reduce barriers to
-entry into the ecosystem. Given a few basic tenets of agent interaction, other
-developers should be able to create a new agent to ``plug in'' to the
-simulation. Intuitively, a minimal set of behaviors must be defined to
-sufficiently inform the simulation infrastructure to run the simulation. This
-freedom allows the simulation program introduce agents at run time, effectively
-separating the simulation engine's functionality from the agents in the
-simulation.
+Agent-based models are defined primarily by two concepts: agents and the
+simulation environment. Agents in Cyclus are designed to be able to incorporate
+arbitrary complexity in both physical process models as well as behvaioral
+models. A three-tiered taxonomy has been developed to achieve this aim,
+specializing agents as either Facilities, Institutions, or Regions. \S
+\ref{abm:abm:tax} fleshes out a discussion of this design.
 
-Such a framework provides many benefits. First, there is a clear separation of
-concerns. The \Cyclus core is concerned with modeling system dynamics whereas
-individual agents are concerned with domain-specific issues. Accordingly,
-developers can focus their attention appropriately, focusing either on the core
-code base or on agent development. Separating agent development from core
-development also allows \Cyclus to remain a viable open-source candidate to
-model nuclear fuel cycle dynamics. Because domain-level information is
-incorporated into agent libraries which are dynamically loaded at runtime, a
-closed-source developer can focus their efforts entirely on developing agent
-libraries. Furthermore, developers could participate both privately and
-publicly, e.g., adding general capability to the \Cyclus core that is needed for
-some functionality without specifying the internals. Such a community paradigm
-is shown in Figure \ref{fig:community}.
+The simulation environment in Cyclus is defined by supply and demand. There is a
+notion of supply and demand for facility capacity. For example, there can be a
+demand for power production which drives the deployment of power producing
+facilities. There is also a notion of supply and demand for resources. 
 
-\begin{figure}[htbp!]
-  \begin{center}
-    \includegraphics[height=8cm]{./figs/community.png}
-  \end{center}
-  \caption{The Cyclus Participation Paradigm} 
-  \label{fig:community}
-\end{figure}
+Sufficiently treating resource supply and demand is the primary argument for
+implementing Cyclus as an ABM simulator. In the NFC, resource supply and demand
+is a function of both resource quantity and quality, that is, the isotopic
+composition of material resources. In the extreme in which a high level of
+detail is required in the notion of resource quality, e.g. tracking an arbitrary
+number of isotopes, adopting techniques that allow decision-making based on that
+level of detail is desireable. Modeling the nuclear fuel cycle represents such a
+level of detail. For example, even in the case of a once-through fuel cycle,
+many reactors of the same type (e.g., PWRs), may require different resource
+qualities (i.e., Uranium enrichment). Because resource supply and demand depends
+on more than the quantity of a resource, moving global management logic becomes
+difficult. As the complexity of a quality metric increases, an aggregate
+approach becomes less desireable as it loses such detail through aggregation.
 
-In order to develop and maintain the core code separate from the agent modules,
-well-defined interactions must be provided between agents and the \Cyclus
-core. The remaining part of the section provides a proposal for such
-interactions that allow for a variety facility deployment and supply-demand
-matching algorithms to be employed. A description of the market resolution
-interface is provided, and basic agent simulation interaction, such as entering
-and leaving the simulation is also described.
+In summary, the arbitrary levels of complexity that can be required for a
+flexible NFC simulator suggests that ABM is a reasonable tool to use. The
+remainder of this section describes how agents are provided agency in Cyclus and
+specifically how agents interact with respsect to supply and demand of facility
+capacity. A proof-of-principle benchmark comparison to a systems dynamics
+simulator is shown in \S \ref{abm:abm:proof}. Agent interaction with respect to
+supply and demand of resources is more complicated and therefore treated
+separately in \S \ref{abm:dre}.
 
-Moving from a modeling paradigm that does not differentiate between individual
-facilities to one that does requires a nuanced approach to determine facility
-behavior. In the absence of supply constraints, aggregated individual facility
-behavior and fleet-based models are equivalent. However, any system in which
-recycling exists will, by definition, have some supply constraints. 
-
-Furthermore, if resource supply and demand depends on more than the quantity of
-a resource, moving global management logic becomes difficult. As the complexity
-of a quality metric increases, an aggregate approach becomes less desireable as
-it loses such detail through aggregation.
-
-In the extreme in which a high level of detail is required in the notion of
-resource quality, e.g. tracking an arbitrary number of isotopes, adopting
-techniques that allow decision-making based on that level of detail is
-desireable. Modeling the nuclear fuel cycle represents such a level of
-detail. For example, even in the case of a once-through fuel cycle, many
-reactors of the same type (e.g., PWRs), may require different resource qualities
-(i.e., Uranium enrichment).
-
-\subsection{Agent Taxonomy}
+\subsection{Agent Taxonomy}\label{abm:abm:tax}
 
 The Cyclus kernel implements a basic \code{Agent} class that provides the
-minimal interface for agents to be built within a simualtion. Furthermore, the
+minimal interface for agents to be instantiated within a simualtion. A
 \code{Trader} interface provides a communication layer required for agents to be
-included in the exchange of resources. \code{Facility} agents in Cyclus
-implement both interfaces, while \code{Institution} and \code{Region} agents
-implement only the \code{Agent} interface.
+included in the exchange of resources. Three useful derived classes are provided
+to be used as basic abstractions of entities in the NFC. \code{Facility} agents
+in Cyclus implement both interfaces, while \code{Institution} and \code{Region}
+agents implement only the \code{Agent} interface.  A summary of the conceptual
+placing of each agent subtype in a Cyclus simulation is provided below.
 
 \subsubsection{Facilities}
 
-Facilities in \Cyclus are abstracted to either consumers or suppliers of
-commodities, and some may be both. Supplier agents are provided agency by being
-able to communicate to the market-resolution mechanism a variety of production
-capacity constraints in second phase of the information gathering
-methodology. Consumer agents are provided agency by being able to assign
-preferences among possible suppliers based on the supplier's quality of
-product. Because this agency is encapsulated for each agent, it is possible to
-define strategies that can be attached or detached to the agents at
-run-time. Such strategies are an example of the Strategy design pattern
-\cite{vlissides_design_1995}.
+Facilities in \Cyclus are either consumers or suppliers of commodities, and some
+may be both. Supplier agents are provided agency by being able to communicate to
+the market-resolution mechanism a variety of production capacity constraints in
+second phase of the information gathering methodology. Consumer agents are
+provided agency by being able to assign preferences among possible suppliers
+based on the supplier's quality of product. Because this agency is encapsulated
+for each agent, it is possible to define strategies that can be attached or
+detached to the agents at run-time. Such strategies are an example of the
+Strategy design pattern \cite{vlissides_design_1995}.
 
 \subsubsection{Institutions}
 
@@ -131,86 +98,71 @@ Regions in \Cyclus provide the forcing function for simulations by requiring
 that certain parameters be met, e.g., power capacity, fuel cycle service
 capacity, etc. For example, in the case of nuclear power capacity, a region
 knows that it needs additional reactors to be built, but leaves the building of
-those reactors to the institutions that operate in the region. The current
-GrowthRegion model in the \Cycamore \cite{cycamore2013} code base takes the cost
-and nameplate capacity for each facility in a set of acceptable facilities and a
-demand gap, and solves a minimum-cost capacity production problem to determine
-the number and type of facilities to request. It is important to note here that
-this abstraction allows for different deployment algorithms to be tested and
-exchanged in the \Cyclus framework without necessitating changes to the
-simulation engine, as is the case with other simulators described
-in \S\ref{sec:simulators} and is consistent with the types of simulation design
-decisions described in
-\S\ref{sec:simulators-overview}. 
+those reactors to the institutions that operate in the region. It is important
+to note here that this abstraction allows for different deployment algorithms to
+be tested and exchanged in the \Cyclus framework without necessitating changes
+to the simulation engine, as is the case with other simulators described in
+\S\ref{intro:nfc}.
 
-Regions are further provided agency by their ability to affect preferences
-between supplier-consumer facility pairs in the third phase of the market
-information gathering algorithm. The ability to perturb arc preferences between
-a given supplier and a given consumer allows fuel cycle simulation developers to
-model relatively complex interactions at a regional level, such as tariffs and
-sanctions. Constraints to cross-border trading can also be applied to the
-formulation described in \S\ref{sec:gfctp}. For example, a region could place
-constraints on the total amount of a given commodity type that is able to flow
-into it or out of it into a different region. Such constraints could applied not
-only to bulk quantities of a commodity, but also to the quality of each
-commodity. Such a mechanism could be used to model interdiction of
-highly-enriched uranium transport, for example.
+Regions, like Institutions, are able to affect preferences between
+supplier-consumer facility pairs in the market information gathering
+process. The ability to perturb arc preferences between a given supplier and a
+given consumer allows fuel cycle simulation developers to model relatively
+complex interactions at a regional level such as tariffs and sanctions.
 
-\subsection{Methods of Agency}
+\subsection{Methods of Agency}\label{abm:abm:agent}
 
 Agency is provided in two primary modes: determining facility deployment and
 informing resource exchange mechanisms. 
 
-Facility deployment has, to date, involved some combination of an
-\code{Institution} agent, a \code{Facility} agent, and a \code{Region}
-agent. \code{Institution} agents represent a simulation entity abstraction that
-can deploy \code{Facility} agents. \code{Region} agents represent a simulation
-entity abstraction that have a demand for certain commodities that
-\code{Facility} agents provide, for example, reactor-like \code{Facility} agents
-provide electrical power.
+Facility deployment involves some combination of an \code{Institution} agent, a
+\code{Facility} agent, and a \code{Region} agent. \code{Institution} agents
+represent a simulation entity abstraction that can deploy \code{Facility}
+agents. \code{Region} agents represent a simulation entity abstraction that have
+a demand for certain commodities that \code{Facility} agents provide, for
+example, reactor-like \code{Facility} agents provide electrical power.
 
 \code{Facility} agents are further provided agency by informing market
-mechanisms of thesupply and demand of resource quantity and quality. Cyclus
-initially used a very crude interface and algorithm for determining resource
-transactions. Individual markets were defined, and initially designed to be
-agents much like \code{Facility}, \code{Institution}, and \code{Region}
-agents. Many limitations were identified at the time, however, and this approach
-was eventually abandoned. An enumeration of the observed limitations is
-described further in \S \ref{abm:abm:limits}.
+mechanisms of the supply and demand of resource quantity and quality. Cyclus
+initially used a simple interface and algorithm for determining resource
+transactions. Individual markets were defined as agents themselves much like
+\code{Facility}, \code{Institution}, and \code{Region} agents. Many limitations
+were identified at the time, however, and the market-as-agent approach was
+eventually abandoned. An enumeration of the observed limitations is described
+further in \S \ref{abm:abm:limits}.
 
-The Dynamic Resource Exchange (DRE), described in detail in \S \ref{abm:dre}, is
-the mechanism eventually developed to drive supply-demand transactions. The
-primary source of agency is provided to \code{Facility} agents in order to
-negotiate the quanity and quality of potential resource
-transactions. \code{Region}, \code{Instituion}, and \code{Facility} agents are
-then provided agency in the negotiation of preferences of potential
-transactions, where preference is a proxy for price.
+Dynamic Resource Exchange (DRE), described in detail in \S \ref{abm:dre}, is the
+mechanism eventually developed to drive supply-demand transactions. The primary
+source of agency is provided to \code{Facility} agents in order to negotiate the
+quanity and quality of potential resource transactions. \code{Region},
+\code{Instituion}, and \code{Facility} agents are then provided agency in the
+negotiation of preferences of potential transactions, where preference is a
+proxy for price.
 
 \subsection{Proof of Principle}\label{abm:abm:proof}
 
 Agents were developed to show an initial proof of principle that fuel cycle
-simulation can be implemented using an agent-based modeling methodology.
+simulation can be implemented using an agent-based modeling methodology. By
+definition, dynamic simulators model the deployment of facilities and measure
+the flow of resources between facilities in the system over time. In the extreme
+case of unconstrained supply and no competition for resources, resource exchange
+decisions can be made arbitrarily. In such cases, therefore, only facility
+deployment agency is required. An initial benchmark case was performed to
+confirm expected deployment behavior and basic resource routing.
 
-Facility deployment decision making is the fundamental building block of any
-dynamic simulator. By definition, dynamic simulators model the deployment of
-facilities and measure the flow of resources in the system over time. 
+\subsubsection{Benchmark Cases}
 
-Furthermore, in the extreme case of unconstrained supply and no competition for
-resources, resource exchange decisions can be made arbitrarily. Therefore, only
-facility deployment agency is required.
-
-\subsubsection{Benchmark Case}
-
-An initial benchmark test was performed to confirm expected deployment behavior
-and basic resource routing. The INPRO Business As Usual (BAU) benchmark for the
+The INPRO Business As Usual (BAU) benchmark \cite{_international_2009} for the
 once-through fuel cycle was chosen for three reasons. First, it was the simplest
-case that demonstrated deployment behavior. Second, no supply or demand
+benchmark that demonstrated deployment behavior. Second, no supply or demand
 constraints were present, so a basic supply-demand framework would
-suffice. Finally, results from two other fuel cycle simulation codes,
-specificaly VISION \cite{}, were available for comparison. The INPRO BAU
-benchmark identified two cases, high electricity demand and moderate electricity
-demand, as shown in Fig. \ref{fig:inpro-demand}. Both cases require that demand
-met by a composition of 94\% Light Water Reactors and 6\% Heavy Water Reactors.
+suffice. Finally, results from another fuel cycle simulation code, specificaly
+VISION \cite{vision2009}, was available for comparison. The INPRO BAU benchmark
+identified two cases, high electricity demand and moderate electricity demand,
+as shown in Fig. \ref{fig:inpro-demand}. Both cases require that demand met by a
+composition of 94\% Light Water Reactors (LWRs) and 6\% Heavy Water Reactors
+(HWRs). LWRs are fueld with 4\% by weight UO$_2$ while HWRs use natural Uranium
+fuel.
 
 \begin{figure}
   \begin{center}
@@ -220,39 +172,41 @@ met by a composition of 94\% Light Water Reactors and 6\% Heavy Water Reactors.
   \end{center}  
 \end{figure}
 
-The goal of this proof-of-principle benchmark was to showcase the capability for
-a developer to generate the required Facility, Institution, and Region
-archetypes, and that such archetypes could be deployed in the Cyclus simulation
-framework and generate satisfactory results. Metrics including deployment
-patterns, natural uranium consumed, and used fuel produced by all reactors were
-used to compare results between VISION, GENIUS, and Cyclus.
+The goal of this proof-of-principle study was to showcase the capability for a
+developer to generate the required Facility, Institution, and Region archetypes,
+and that such archetypes could be deployed in the Cyclus simulation framework
+and generate satisfactory results. Comparison metrics are based off of similar
+metrics used in the origin INPRO benchmarking exercise, including deployment
+patterns, natural uranium consumed, and used fuel produced by all reactors.
 
 \subsubsection{Agent Archetypes Developed}
 
+Each implemented agent is available in the Cycamore repository \cite{cycamore2013}.
+
 \paragraph{GrowthRegion}
 
-The \code{GrowthRegion} was developed to assist in facility deployment
-logic. The \code{GrowthRegion} takes as input a listing of commodities for which
-it has a demand. For example, the The \code{GrowthRegion} agents in this
-benchmark demand electrical power. The demand for commodities is defined by
-symbolic functions. Currently, linear functions, exponential functions, and
-piecewise combinations of both are supported. 
+The \code{GrowthRegion} is a Region archetype developed to assist in
+facility deployment logic. The \code{GrowthRegion} takes as input a listing of
+commodities for which it has a demand. For example, the \code{GrowthRegion}
+agents in this benchmark demand electrical power. The demand curves for
+commodities is defined by symbolic functions. Currently, linear functions,
+exponential functions, and piecewise combinations of both are supported.
 
 At any time step in which there exists a demand gap, i.e., there exists more
 demand than supply, a build decision is made. This decision is modeled as the
-following integer program:
+following minimum cost facility deployment integer program:
 %%%
 \begin{subequations} \label{eqs:growth}
 \begin{equation} \label{eq:optBuildObj}
 \begin{aligned}
 & \min_{n}
-& & \sum_{i \in I}n_i*c_i
+& & \sum_{i \in I} c_i * n_i
 \end{aligned}
 \end{equation}
 \begin{equation} \label{eq:optBuildConst}
 \begin{aligned}
 & \text{s.t.}
-& & \sum_{i \in I}n_i*\phi_i \ge \Phi
+& & \sum_{i \in I} \phi_i * n_i  \ge \Phi
 \end{aligned}
 \end{equation}
 \begin{equation} \label{eq:optBuildBounds}
@@ -274,27 +228,26 @@ facilities to build of type $i$.
 
 \paragraph{ManagerInst}
 
-The \code{ManagerInst} was developed to assist in facility deployment as
-well. While the \code{GrowthRegion} determines which facilities \textit{should}
-be built, the \code{ManagerInst} determines the set of all possible facilities
-that \textit{can} be built. In other word, the \code{ManagerInst} determines the
-set of facilities, $I$, shown in in Eqn. \ref{eqs:growth}. Note that the set $I$
-can change over time. Once a deployment decision is made, the
-\code{GrowthRegion} makes a facility deployment request of the
-\code{ManagerInst} which then deploys the chosen facility.
+The \code{ManagerInst} is an Institution archetype also developed to assist
+in facility deployment. While the \code{GrowthRegion} places a build order, the
+\code{ManagerInst} fulfills the order. Further, the \code{ManagerInst}
+determines the set of facilities, $I$, shown in in Eqn. \ref{eqs:growth}, which
+can be built. Note that the set $I$ can change over time. Once a deployment
+decision is made, the \code{GrowthRegion} makes a facility deployment request of
+the \code{ManagerInst} which then deploys the chosen facility.
 
 \paragraph{BatchReactor}
 
 While a reactor model existed prior to this work, it did not provide the
-functionality to interchange \textit{batches} of fuel. A batch of fuel is a
-fraction of a full reactor core that is extracted and then replaced when a
-reactor is refuled. While in the extreme, a full core can be replaced, in
-pratice a batch size is generally a set fraction of the full core, especially
-for LWRs.
+functionality to interchange \textit{batches} of fuel, as required by the INPRO
+benchmark. A batch of fuel is a fraction of a full reactor core that is
+extracted and replaced when a reactor is refuled. In general, LWRs replace
+between a third and a quarter of their assemblies during refueling based on the
+fuel management scheme used.
 
 The \code{BatchReactor} used in this work had configurable properties as
 displayed in Table \ref{tbl:batchrxtr}. The values used based on the defined
-INPRO BAU benchmark are described in Table \ref{tbl:inprorxtr}.
+INPRO benchmark are described in Table \ref{tbl:inprorxtr}.
 
 \begin{table}[h]
 \centering
@@ -328,9 +281,9 @@ Power Cost     & 1000*      & 600* \\ \hline
   \item (*) Note that the Cost used is arbitrary and set equal to the
   capacity so that a minimum capacity is built per Eqn. \ref{eqs:growth}.
 \end{tablenotes}
-\caption{Configurable input values for reactors used in the INPRO BAU once-through benchmark.}
-\label{tbl:inprorxtr}
 \end{threeparttable}
+\label{tbl:inprorxtr}
+\caption{Configurable input values for reactors used in the INPRO once-through benchmark.}
 \end{table}
 
 \paragraph{EnrichmentFacility}
@@ -338,11 +291,11 @@ Power Cost     & 1000*      & 600* \\ \hline
 The \code{EnrichmentFacility} archetype was developed to provide
 enrichment-related output for the simulation, namely the amount of separative
 work units (SWU) and natural uranium used during a given time step. For the
-INPRO BAU cases, it can be defined quite simply using the values shown in Table
+INPRO cases, it can be defined quite simply using the values shown in Table
 \ref{tbl:inproenr}. The feed assay and product assay, both required for
 determinging output metrics, are defined by the isotopic compositions of
-resource input and resource output. Resource output is determined by the
-requesting reactors.
+resource input, i.e., natural uranium, and resource output, i.e., the isotopic
+composition of requested fuel.
 
 \begin{table}[h]
 \centering
@@ -352,7 +305,7 @@ Input Recipe & A description of input isotopics & Natural Uranium \\
 Tails Assay  & The U-235 assay of tails.        & 0.003          
 \end{tabular}
 \caption{Configurable input values for the \code{EnrichmentFacility} used in the
-  INPRO BAU once-through benchmark.}
+  INPRO once-through benchmark.}
 \label{tbl:inproenr}
 \end{table}
 
@@ -366,14 +319,24 @@ simulator for the moderate growth scenario while Fig. \ref{fig:rxtrs_high} shows
 reactor deployment for the high scenario. The slight differences are attributed
 to VISION's look-ahead functionality which builds the required facilities one
 time step after they are needed, whereas Cyclus builds facilities on the
-timestep in which they are needed. Cumulative natural uranium utilization curves
-for the moderate and high cases are shown in \Cref{fig:nat_u_low,fig:nat_u_high},
-and cumulative used fuel inventory curves are shown in
+timestep in which they are needed. One can observe that a simple one timestep
+translation will result in identical output.
+
+Cumulative natural uranium utilization curves for the moderate and high cases
+are shown in \Cref{fig:nat_u_low,fig:nat_u_high}, and cumulative used fuel
+inventory curves are shown in
 \Cref{fig:used_fuel_low,fig:used_fuel_high}. Slight discrepencies are noted
 between Cyclus and VISION. These discrepencies are attributed to the
-implementation of core batch recycling in each of the respective codes. Because
-the curves show cumulative metrics, the discrepencies grow over time, as
-expected.
+implementation of core batch recycling in each of the respective codes. The
+differences between Cyclus and VISION because the curves show cumulative
+metrics. In other words, results at time $t_1$ are added the results at time
+$t_2$ and so on. Therefore, a series of small discrepencies appears to be
+compounded by using this metric. It is not the metric of choice for general
+comparisons, but has been used because it was the metric of choice of the
+benchmark exercise. It is not immediately obvious why there is a greater
+discrepency regarding output fuel quantities than natural uranium
+utilization. Further benchmarking exercises with support from a VISION developer
+would be required to fully investigate the issue.
 
 \begin{figure}
   \begin{center}
@@ -425,13 +388,19 @@ expected.
 
 \subsection{Multiple Market Limitations}\label{abm:abm:limits}
 
-Cyclus was originally designed to use an addition agent type, the \code{Market}
-agent. The \code{Market} agents were envisioned to represent markets for
-specific commodities. For example, the simulation described in \S
-\ref{abm:abm:proof} used three commodity markets: natural uranium, enriched
-uranium fuel, and used fuel. This approach is valid in the absence of supply or
-demand constraints, competition, and fungibility. However, the inclusion of any
-one of these features requires a much more involved process.
+The proof of principle benchmark described in \S \ref{abm:abm:proof} utilized
+the agency provided for facility deployment rather than the agency provided for
+both deployment and resource exchange. In general informing resource exchange
+regarding quantity and quality of resources as well as socioeconomic effects is
+a hard problem.
+
+Cyclus was originally designed to use an addition agent archetype called a
+\code{Market}. \code{Market}s were envisioned to represent markets for specific
+commodities. For example, the simulation described in \S \ref{abm:abm:proof}
+used three commodity markets: natural uranium, enriched uranium fuel, and used
+fuel. This approach is valid in the absence of supply or demand constraints,
+competition, and fungibility. However, the inclusion of any one of these
+features requires a much more involved process.
 
 If supply or demand constraints are to be modeled, each
 associated \code{Market} agent must have both a corresponding communication
@@ -445,37 +414,40 @@ constraints are more naturally defined by the trader interacting with the
 enrichment facility and fuel fabrication plant, another simulation may wish to
 model facilities that downblend HEU, rather than enrich LEU. Such a process will
 have different constraints. Importantly, those constraints are a function of the
-\code{Facility} agent, not of a \code{Market} agent.
+\code{Facility} archetype, not of a \code{Market} archetype.
 
-Assuming that supply or demand is constrained either quantitatively or
-qualitatively, competition for the resource in question can arise. In fact,
-resources constraints are only interesting in the presence of competition. When
+Assuming that supply or demand is constrained either resource quantity or
+quality, competition for the resource in question can arise. In fact, resources
+constraints are only interesting in the presence of competition. When
 competition for resources exist, there must be some mechanism that determines
 which transactions are to be executed, i.e., which agents should trade which
 resources. Determining supply and demand under competition is a well studied
 problem with many possible formulations and solution frameworks.
 
 Fungibility is the property of a good or commodity to be \textit{capable of
-  being substituted in place of one another} (CITE
-http://www.merriam-webster.com/thesaurus/fungible). For example, a light water
-reactor generates power by fissioning nuclei in the thermal energy
-spectrum. Whether those nuclei are \nucl{239}{Pu}, \nucl{235}{U}, or
-\nucl{233}{U} makes little difference from a power generation perspective. In
+  being substituted in place of one another} \cite{MerriamWebster2014}. For
+example, a light water reactor generates power by fissioning nuclei in the
+thermal energy spectrum. Whether those nuclei are \nucl{239}{Pu}, \nucl{235}{U},
+or \nucl{233}{U} makes little difference from a power generation perspective. In
 other words, those nuclei are \textit{fungible} for light water reactors, given
 some safety and cycle length considerations. A similar issue arises from a
 suppliers perspective. Consider a MOX fuel supplier and two requesters: a fast
 reactor and a thermal reactor. Given the isotopic makeup of Plutonium in the MOX
-fuel, such could be potentially be used in either reactor type. Again, Plutonium
-in this example is a \textit{fungible} resource. Accordingly, a facility may
+fuel, the supplier's fuel could be potentially be used in either reactor
+type. Again, Plutonium in this example is a fungible resource. Importantly, the
+notion of fungibility in a NFC context can refer to both individual isotopes,
+collections of isotopes, or complete fuel forms. Accordingly, a facility may
 demand multiple fungible commodities, which must be accounted for by a given
 market clearing mechanism.
 
 The one-market-per-commodity approach does not treat competition, constrained
 supply and demand, and fungibility particularly well. Constraints are handled
-poorly because constraints are determined by the supplying and demanding
-agents. Because the markets are separated, they must either be solved
-sequentially or in parallel. If solved sequentially, competition and fungibility
-are treated poorly, because information involving multiple commodities is not
-taken into account during the solution of a single market. Accordingly, a
-solution framework and methodology that incorporates agent querying of supply,
-demand, and constraints and resolves markets in parallel is required.
+poorly because constraints are best determined by the supplying and demanding
+agents rather than the market. Because the markets are separate, they must
+either be solved sequentially or in parallel. If solved sequentially,
+competition and fungibility are treated poorly, because information involving
+multiple commodities is not taken into account during the solution of a single
+market. Accordingly, a solution framework and methodology that incorporates
+agent querying of supply, demand, and constraints and resolves markets in
+parallel is required to properly treat resource exchange in the nuclear fuel
+cycle.
