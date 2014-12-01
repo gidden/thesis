@@ -11,7 +11,7 @@ facility interaction.
 
 Agent-based models are defined primarily by two concepts: agents and the
 simulation environment. Agents in Cyclus are designed to be able to incorporate
-arbitrary complexity in both physical process models as well as behvaioral
+arbitrary complexity in both physical process models as well as behavioral
 models. A three-tiered taxonomy has been developed to achieve this aim,
 specializing agents as either Facilities, Institutions, or Regions. \S
 \ref{abm:abm:tax} fleshes out a discussion of this design.
@@ -27,18 +27,18 @@ is a function of both resource quantity and quality, that is, the isotopic
 composition of material resources. In the extreme in which a high level of
 detail is required in the notion of resource quality, e.g. tracking an arbitrary
 number of isotopes, adopting techniques that allow decision-making based on that
-level of detail is desireable. Modeling the nuclear fuel cycle represents such a
+level of detail is desirable. Modeling the nuclear fuel cycle represents such a
 level of detail. For example, even in the case of a once-through fuel cycle,
 many reactors of the same type (e.g., PWRs), may require different resource
 qualities (i.e., Uranium enrichment). Because resource supply and demand depends
 on more than the quantity of a resource, moving global management logic becomes
 difficult. As the complexity of a quality metric increases, an aggregate
-approach becomes less desireable as it loses such detail through aggregation.
+approach becomes less desirable as it loses such detail through aggregation.
 
 In summary, the arbitrary levels of complexity that can be required for a
 flexible NFC simulator suggests that ABM is a reasonable tool to use. The
 remainder of this section describes how agents are provided agency in Cyclus and
-specifically how agents interact with respsect to supply and demand of facility
+specifically how agents interact with respect to supply and demand of facility
 capacity. A proof-of-principle benchmark comparison to a systems dynamics
 simulator is shown in \S \ref{abm:abm:proof}. Agent interaction with respect to
 supply and demand of resources is more complicated and therefore treated
@@ -47,13 +47,13 @@ separately in \S \ref{abm:dre}.
 \subsection{Agent Taxonomy}\label{abm:abm:tax}
 
 The Cyclus kernel implements a basic \code{Agent} class that provides the
-minimal interface for agents to be instantiated within a simualtion. A
+minimal interface for agents to be instantiated within a simulation. A
 \code{Trader} interface provides a communication layer required for agents to be
 included in the exchange of resources. Three useful derived classes are provided
 to be used as basic abstractions of entities in the NFC. \code{Facility} agents
 in Cyclus implement both interfaces, while \code{Institution} and \code{Region}
 agents implement only the \code{Agent} interface.  A summary of the conceptual
-placing of each agent subtype in a Cyclus simulation is provided below.
+placing of each archetype in a Cyclus simulation is provided below.
 
 \subsubsection{Facilities}
 
@@ -74,7 +74,7 @@ nominally split into two main categories: the commissioning and decommissioning
 of facilities and supply-demand association. The goal of including a notion of
 institutions is to allow an increased level of detail when investigating
 regional-specific scenarios. For example, a consumer facility may prefer to be
-supplied by a supplier facility in its instution rather than one associated with
+supplied by a supplier facility in its institution rather than one associated with
 a different institution. Furthermore, there are international governmental
 organizations, such as the IAEA, that have proposed managing large fuel cycle
 facilities that service many countries in a given global region. A fuel bank is
@@ -134,8 +134,8 @@ further in \S \ref{abm:abm:limits}.
 Dynamic Resource Exchange (DRE), described in detail in \S \ref{abm:dre}, is the
 mechanism eventually developed to drive supply-demand transactions. The primary
 source of agency is provided to \code{Facility} agents in order to negotiate the
-quanity and quality of potential resource transactions. \code{Region},
-\code{Instituion}, and \code{Facility} agents are then provided agency in the
+quantity and quality of potential resource transactions. \code{Region},
+\code{Institution}, and \code{Facility} agents are then provided agency in the
 negotiation of preferences of potential transactions, where preference is a
 proxy for price.
 
@@ -156,18 +156,18 @@ The INPRO Business As Usual (BAU) benchmark \cite{_international_2009} for the
 once-through fuel cycle was chosen for three reasons. First, it was the simplest
 benchmark that demonstrated deployment behavior. Second, no supply or demand
 constraints were present, so a basic supply-demand framework would
-suffice. Finally, results from another fuel cycle simulation code, specificaly
+suffice. Finally, results from another fuel cycle simulation code, specifically
 VISION \cite{vision2009}, was available for comparison. The INPRO BAU benchmark
 identified two cases, high electricity demand and moderate electricity demand,
 as shown in Fig. \ref{fig:inpro-demand}. Both cases require that demand met by a
 composition of 94\% Light Water Reactors (LWRs) and 6\% Heavy Water Reactors
-(HWRs). LWRs are fueld with 4\% by weight UO$_2$ while HWRs use natural Uranium
+(HWRs). LWRs are fueled with 4\% by weight UO$_2$ while HWRs use natural Uranium
 fuel.
 
 \begin{figure}
   \begin{center}
     \includegraphics[height=8cm]{./figs/inpro-demand.pdf}
-    \caption{The energy demand specification for the INRPO BAU scenarios.}
+    \caption{The energy demand specification for the INPRO BAU scenarios.}
     \label{fig:inpro-demand}
   \end{center}  
 \end{figure}
@@ -190,7 +190,7 @@ facility deployment logic. The \code{GrowthRegion} takes as input a listing of
 commodities for which it has a demand. For example, the \code{GrowthRegion}
 agents in this benchmark demand electrical power. The demand curves for
 commodities is defined by symbolic functions. Currently, linear functions,
-exponential functions, and piecewise combinations of both are supported.
+exponential functions, and piece-wise combinations of both are supported.
 
 At any time step in which there exists a demand gap, i.e., there exists more
 demand than supply, a build decision is made. This decision is modeled as the
@@ -241,7 +241,7 @@ the \code{ManagerInst} which then deploys the chosen facility.
 While a reactor model existed prior to this work, it did not provide the
 functionality to interchange \textit{batches} of fuel, as required by the INPRO
 benchmark. A batch of fuel is a fraction of a full reactor core that is
-extracted and replaced when a reactor is refuled. In general, LWRs replace
+extracted and replaced when a reactor is refueled. In general, LWRs replace
 between a third and a quarter of their assemblies during refueling based on the
 fuel management scheme used.
 
@@ -257,7 +257,7 @@ Process Time   & Active fuel time in the reactor                        \\
 Refuel Time    & Time to refuel the reactor                              \\
 N Batches      & Number of batches in the reactor                         \\
 Batch Size     & Quantity of a batch                                 \\
-Power Capacity & Nameplace Capacity for Power                          \\
+Power Capacity & Nameplate Capacity for Power                          \\
 Power Cost     & Cost to build a new reactor      \\ \hline
 \end{tabular}
 \caption{Configurable input for the \code{BatchReactor} archetype.}
@@ -293,7 +293,7 @@ enrichment-related output for the simulation, namely the amount of separative
 work units (SWU) and natural uranium used during a given time step. For the
 INPRO cases, it can be defined quite simply using the values shown in Table
 \ref{tbl:inproenr}. The feed assay and product assay, both required for
-determinging output metrics, are defined by the isotopic compositions of
+determining output metrics, are defined by the isotopic compositions of
 resource input, i.e., natural uranium, and resource output, i.e., the isotopic
 composition of requested fuel.
 
@@ -325,16 +325,16 @@ translation will result in identical output.
 Cumulative natural uranium utilization curves for the moderate and high cases
 are shown in \Cref{fig:nat_u_low,fig:nat_u_high}, and cumulative used fuel
 inventory curves are shown in
-\Cref{fig:used_fuel_low,fig:used_fuel_high}. Slight discrepencies are noted
-between Cyclus and VISION. These discrepencies are attributed to the
+\Cref{fig:used_fuel_low,fig:used_fuel_high}. Slight discrepancies are noted
+between Cyclus and VISION. These discrepancies are attributed to the
 implementation of core batch recycling in each of the respective codes. The
 differences between Cyclus and VISION because the curves show cumulative
 metrics. In other words, results at time $t_1$ are added the results at time
-$t_2$ and so on. Therefore, a series of small discrepencies appears to be
+$t_2$ and so on. Therefore, a series of small discrepancies appears to be
 compounded by using this metric. It is not the metric of choice for general
 comparisons, but has been used because it was the metric of choice of the
 benchmark exercise. It is not immediately obvious why there is a greater
-discrepency regarding output fuel quantities than natural uranium
+discrepancy regarding output fuel quantities than natural uranium
 utilization. Further benchmarking exercises with support from a VISION developer
 would be required to fully investigate the issue.
 
