@@ -48,7 +48,16 @@ Supply-demand determination at any given time step begins with three
 chain agent-based modeling work \cite{julka_agent-based_2002}. Importantly, this
 information-gathering step is agnostic as to the supply-demand matching
 algorithm used, it is concerned only with querying the current status of supply
-and demand in the simulation.
+and demand in the simulation. The collective information gathering procedure is
+shown in Figure \ref{fig:procedure}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[]{./figs/procedure.pdf}
+    \caption[]{\label{fig:procedure}
+        Schematic illustrating the DRE's information gathering procedure.}
+  \end{center}
+\end{figure}
 
 The first phase allows consumers of commodities to denote both the quantity of a
 commodity they need to consume as well as the target isotopics, or quality, by
@@ -56,11 +65,14 @@ commodity they need to consume as well as the target isotopics, or quality, by
 producers of commodities what is needed by consumers, and is termed the
 \textit{Request for Bids} (RFB) phase. Consumers are allowed to over-post, i.e.,
 request more quantity than they can actually consume, as long as a corresponding
-capacity constraint accompanies this posting. Further, consumers are allowed to
-post demand for multiple commodities that may serve to meet the same combine
-capacity. For example, consider an LWR that can be filled with MOX or UOX. It
-can post a demand for both, but must define a preference over the set of
-possible commodities it can consume. Another example is that of an advanced fuel
+capacity constraint accompanies this posting. Requests can be denoted as
+\textit{exclusive}. An exclusive request is one that must either be met in full
+or not at all. Exclusive requests allow the modeling of quantized, packaged
+transfers, e.g., fuel assemblies. Further, consumers are allowed to post demand
+for multiple commodities that may serve to meet the same combine capacity. For
+example, consider an LWR that can be filled with MOX or UOX. It can post a
+demand for both, but must define a preference over the set of possible
+commodities that can be consumed. Another example is that of an advanced fuel
 fabrication facility, i.e., one that fabricates fuel partially from separated
 material that has already passed through a reactor. Such a facility can choose
 to fill the remaining space in a certain assembly with various types of fertile
@@ -72,30 +84,31 @@ portfolios. Each each portfolio consists of a set requests. Arbitrary
 constraints over the set of requests can be provided that are functions of
 quantity or quality.  For requests that mutually satisfy a given demand, a
 preference over those requests is required. Finally, each request portfolio has
-a specific quantity associated with it.
+a specific quantity associated with it. 
 
 The second phase allows suppliers to \textit{respond} to the set of request
 portfolios, and is termed the \textit{Response to Request for Bids} (RRFB) phase
 (analogous to Julka's Reply to Request for Quote phase
-\cite{julka_agent-based_2002}). Each request portfolio is comprised of
-requests for some set of commodities. Accordingly, for each request, suppliers
-of that commodity denote production capacities and an isotopic profile of the
-commodity they can provide. Suppliers are allowed to offer the null set of
-isotopics as their profile, effectively providing no information. A supplier may
-have its production constrained by more than one parameter. For example, a
-processing facility may have both a throughput constraint (i.e., it can only
-process material at a certain rate) and an inventory constraint (i.e., it can
-only hold some total material). Further, the facility could have a constraint on
-the quality of material to be processed, e.g., it may be able to handle a
-maximum radiotoxicity for any given time step which is a function of both the
-quantity of material in processes and the isotopic content of that material. The
-formulation provided in \S\ref{sec:gfctp} allows for multiple of such
-constraints as long as they are linear functions of the demanded commodity
-quantity. At the completion of the RRFB phase the possible connections between
-supplier and producer facilities, i.e., the arcs in the graph of the
-transportation problem, have been established with specific capacity constraints
-defined both by the quantity and quality of commodities that will traverse the
-arcs.
+\cite{julka_agent-based_2002}). Each request portfolio is comprised of requests
+for some set of commodities. Accordingly, for each request, suppliers of that
+commodity denote production capacities and an isotopic profile of the commodity
+they can provide. Suppliers are allowed to offer the null set of isotopics as
+their profile, effectively providing no information. Suppliers are also allowed
+to denote responses as \textit{exclusive}, as is done in the RFB phase. An
+exclusive offer must be accepted in its entirety or not at all. Again, exclusive
+offers provides a way to model quantized, packaged resources, such as fuel
+assemblies. A supplier may have its production constrained by more than one
+parameter. For example, a processing facility may have both a throughput
+constraint (i.e., it can only process material at a certain rate) and an
+inventory constraint (i.e., it can only hold some total material). Further, the
+facility could have a constraint on the quality of material to be processed,
+e.g., it may be able to handle a maximum radiotoxicity for any given time step
+which is a function of both the quantity of material in processes and the
+isotopic content of that material. Multiple of such constraints are allowed. At
+the completion of the RRFB phase the possible connections between supplier and
+producer facilities, i.e., the arcs in the graph of the transportation problem,
+have been established with specific capacity constraints defined both by the
+quantity and quality of commodities that will traverse the arcs.
 
 The final phase of the information gathering procedure allows consumer
 facilities to adjust their set of preferences and for managers of consumer
@@ -119,26 +132,6 @@ given rule to 0, effectively eliminating that arc.
 
 \subsection{The Nuclear Fuel Cycle Transportation Problem}\label{abm:dre:fctp}
 
-An instance of supply and demand can be solved in a variety of ways. To solve
-the system optimally, however, a formal investigation and solution structure is
-needed. This section describes the construction of such a formulation.
-
-The formulation is informed by the supply-demand parameters gathered by the
-methodology described in the previous section. The basis for the formulation is
-the Multicommodity Transportation Problem described in \S\ref{intro:mtp} with
-some departures described in detail below. Two separate formulations are
-provided. The first is a strictly linear program (LP) while the second is a
-mixed-integer linear program (MILP).
-
-The LP formulation can be solved quickly, but allows split orders, i.e., orders
-that are not fully filled. The nuclear fuel cycle deals with bundled orders,
-such as nuclear fuel assemblies, thus this modeling paradigm is only an
-approximation. The MILP provides a more realistic exchange, but can take much
-longer to solver. The following sections will describe both formulations,
-starting with the LP formulation and then introducing adaptations required to
-formulate the MILP version. Finally, a heuristic solution is described and
-initial results are described using a proof-of-principle.
-
 Supply and demand in a nuclear fuel cycle context is inherently a multicommodity
 problem. A light water reactor can be fueled by both UOX and MOX fuel, for
 instance. How it is fueled is a result both of fuel availability and associated
@@ -148,6 +141,27 @@ determining exchange preferences is a complicated affair. Determining the
 optimum solution to such a system is even more complicated. Accordingly,
 sophisticated tools in both the operations research and agent based modeling
 realms have been leveraged to accomplish the task.
+
+An instance of supply and demand defined by the DRE information gathering step
+can be solved in a variety of ways. It can be casted to a constrained, bipartite
+network, and any heuristic that provides a feasible solution to such networks
+are valid. To solve the system optimally, however, a formal investigation and
+solution structure is needed. This section describes the construction of such a
+formulation, entitled the \textit{Nuclear Fuel Cycle Transportation Problem}.
+
+The basis for the formulation is the Multicommodity Transportation Problem
+described in \S\ref{intro:mtp} with some departures described in detail
+below. Two separate formulations are provided. The first is a strictly linear
+program (LP) while the second is a mixed-integer linear program (MILP). A
+heuristic is also provided that provides a reasonable solution to most simple
+problems.
+
+The LP formulation can be solved quickly, but allows split orders. In other
+words, the LP formulation solves a relaxation of the defined instance that does
+not take into account \textit{exclusive} requests or bids. The nuclear fuel
+cycle deals with bundled orders, such as nuclear fuel assemblies, thus this
+modeling paradigm is only an approximation. The MILP provides a more realistic
+exchange, but can take much longer to solve. 
 
 \subsubsection{Exchange Graph}
 
@@ -756,7 +770,7 @@ here, the UOX and MOX fuel forms are considered completely fungible. While this
 is an incorrect assumption in general it is sufficient to show the dynamism of
 the method desired.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[width=0.55\textwidth]{./figs/fc1.pdf}
     \caption[]{\label{fig::fc1}
@@ -780,7 +794,7 @@ time step 5, \Reactor{1} changes its preference to UOX. Table \ref{table::scen1}
 summarizes the reactor preferences as a function of time.
 
 \FloatBarrier
-\begin{table}[ht]
+\begin{table}
   \begin{center}
     \caption{\label{table::scen1} 
         Time sequence of reactor preferences and the total MOX requested. The MOX capacity for each time step is 2.5 kg.}
@@ -809,7 +823,7 @@ as \Enrichment{}, has a designated capacity at each time step. The
 two \textit{BatchReactors}, denoted as \Reactor{1} and \Reactor{2}, request a
 given amount and quality of enriched uranium upon refueling.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[width=0.55\textwidth]{./figs/fc2.pdf}
     \caption[]{\label{fig::fc2}
@@ -833,7 +847,7 @@ step 2, \Reactor{1} reduces its enrichment request to
 time.
 
 \FloatBarrier
-\begin{table}[ht]
+\begin{table}
   \begin{center}
     \caption{\label{table::scen2}
         Time sequence of reactor preferences and the total SWU requested. The SWU capacity for each time step is 10.}
@@ -875,7 +889,7 @@ is more than
 enough to handle the 1 kg of MOX requested by \Reactor{1}.  This matching may be seen
 in Figure \ref{fig::2srcs3rxts-t1}.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t1.pdf}
     \caption[]{\label{fig::2srcs3rxts-t1}Time step 1 for the 2 Sources, 3 Reactors 
@@ -894,7 +908,7 @@ simulation.  Finally in Figure \ref{fig::2srcs3rxts-t1} the \MOXSource{} only
 provides the 1 kg of material requested by \Reactor{1}.  It, correctly, does not
 oversupply.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t2.pdf}
     \caption[]{\label{fig::2srcs3rxts-t2}Time step 2 for the 2 Sources, 3 Reactors 
@@ -911,7 +925,7 @@ both time steps 1 and 2.  Furthermore, the solver on time step 1 had no future
 knowledge that \Reactor{2} would be deployed on time step 2.  This is significantly 
 different than the traditional system dynamics approach.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t3.pdf}
     \caption[]{\label{fig::2srcs3rxts-t3}Time step 3 for the 2 Sources, 3 Reactors 
@@ -930,7 +944,7 @@ from the \MOXSource{}. \Reactor{3} is selected to receive the UOX fuel rather th
 less than the others, \Reactor{3} loses its full bid for MOX and must top-up with 
 UOX.  This is precisely the situation displayed in Figure \ref{fig::2srcs3rxts-t3}.
 
-\begin{table}[ht]
+\begin{table}
   \begin{center}
     \caption{\label{tab::pref-t3}Resource exchange preferences for agents on 
              time steps 3 and 4 for reactors in the 2 sources, 3 reactors case.}
@@ -956,7 +970,7 @@ As may be seen in Figure \ref{fig::2srcs3rxts-t4}, the \UOXSource{} capacity of
 Since \Reactor{1} does not diminish the capacity of the \MOXSource{} both \Reactor{2} 
 and \Reactor{3} are able to obtain their first choice fuel.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t4.pdf}
     \caption[]{\label{fig::2srcs3rxts-t4}Time step 4 for the 2 Sources, 3 Reactors 
@@ -973,7 +987,7 @@ the preferences that these agents have for requested resources.
 
 Initially, \Enrichment{}, \Reactor{1}, and \Reactor{2} are all present. The reactors both begin with cores composed of 3\% enriched uranium. 
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/1_Enrichment_2_Reactor-t1.pdf}
     \caption[]{\label{fig::enr2rxts-t1}Time step 1 for the Enrichment and 2 Reactors 
@@ -992,7 +1006,7 @@ However, \Reactor{2} only receives $\sim$80\% of its request for 3\% enriched
 uranium.  This is not enough to run on and so this material is saved for the
 future.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/1_Enrichment_2_Reactor-t2.pdf}
     \caption[]{\label{fig::enr2rxts-t2}Time step 2 for the Enrichment and 2 Reactors 
@@ -1008,7 +1022,7 @@ requests $\sim$0.2 kg from \Enrichment{}.  \Reactor{1} continues to request 1 kg
 of material and this is met because the SWU capacity constraint is not exceeded.
 These resource flows may be seen in Figure \ref{fig::enr2rxts-t2}.
 
-\begin{figure}[ht!]
+\begin{figure}
   \begin{center}
     \includegraphics[height=3cm]{./figs/1_Enrichment_2_Reactor-t3.pdf}
     \caption[]{\label{fig::enr2rxts-t3}Time step 3 for the Enrichment and 2 Reactors 
