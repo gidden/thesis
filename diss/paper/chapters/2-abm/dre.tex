@@ -1,5 +1,15 @@
-
 \section{Dynamic Resource Exchange}\label{abm:dre}
+
+Dynamic Resource Exchange (DRE) is the functional bedrock on which Cyclus
+simulations are built. It defines the interaction mechanisms and methodolgies
+for agents, specifically agents whose archetypes have implemented the
+\code{Trader} interface. This section begins by providing a motivating problem
+statement in \S \ref{abm:dre:prob}. It then details the methodology for querying
+supply and demand during the information gathering phase of the DRE in \S
+\ref{abm:dre:info}. The solution phase, in which the defined DRE is translated
+into a form of the Multicommodity Transportation Problem (MCTP) and solved, is
+then described in \S \ref{abm:dre:fctp}. Finally, two proof of principle
+simulations with novel fuel cycle DREs are presented in \S \ref{abm:dre:proof}.
 
 \subsection{Problem Statement}\label{abm:dre:prob}
 
@@ -107,7 +117,39 @@ must let enough of the fission products decay). A repository could analyze
 possible input fuel isotopics and set the arc preference of any that violate a
 given rule to 0, effectively eliminating that arc.
 
-\subsection{Exchange Structure}
+\subsection{The Nuclear Fuel Cycle Transportation Problem}\label{abm:dre:fctp}
+
+An instance of supply and demand can be solved in a variety of ways. To solve
+the system optimally, however, a formal investigation and solution structure is
+needed. This section describes the construction of such a formulation.
+
+The formulation is informed by the supply-demand parameters gathered by the
+methodology described in the previous section. The basis for the formulation is
+the Multicommodity Transportation Problem described in \S\ref{intro:mtp} with
+some departures described in detail below. Two separate formulations are
+provided. The first is a strictly linear program (LP) while the second is a
+mixed-integer linear program (MILP).
+
+The LP formulation can be solved quickly, but allows split orders, i.e., orders
+that are not fully filled. The nuclear fuel cycle deals with bundled orders,
+such as nuclear fuel assemblies, thus this modeling paradigm is only an
+approximation. The MILP provides a more realistic exchange, but can take much
+longer to solver. The following sections will describe both formulations,
+starting with the LP formulation and then introducing adaptations required to
+formulate the MILP version. Finally, a heuristic solution is described and
+initial results are described using a proof-of-principle.
+
+Supply and demand in a nuclear fuel cycle context is inherently a multicommodity
+problem. A light water reactor can be fueled by both UOX and MOX fuel, for
+instance. How it is fueled is a result both of fuel availability and associated
+preferences. Allowing for complex physical and chemical constraints on both
+processes and inventories, as well as including economics-based approaches for
+determining exchange preferences is a complicated affair. Determining the
+optimum solution to such a system is even more complicated. Accordingly,
+sophisticated tools in both the operations research and agent based modeling
+realms have been leveraged to accomplish the task.
+
+\subsubsection{Exchange Graph}
 
 Upon completion of the information gathering phase, a \textit{bipartite} network
 is formed. The network consists of receiving (request) nodes, $U$, and sending
@@ -154,7 +196,9 @@ represent flows that do not exist in final solutions.
 
 \TODO{Include figure}
 
-\subsubsection{Commodities}
+\subsubsection{Arc Properties}
+
+\paragraph{Commodities}
 
 During the information gathering step in \S \ref{abm:dre:info}, consumers and
 suppliers are queried based on \textit{commodities}. A consumer is allowed to
@@ -181,148 +225,8 @@ compelling when generating the formulation shown in \S
 structure, and preference structure, the notion of commodities is not necessary
 for the exchange graph to be solved.
 
-\subsection{Mathematical Programming Formulation}\label{abm:dre:form}
-
-\subsubsection{Overview}
-
-An instance of supply and demand can be solved in a variety of ways. To solve
-the system optimally, however, a formal investigation and solution structure is
-needed. This section describes the construction of such a formulation.
-
-The formulation is informed by the supply-demand parameters gathered by the
-methodology described in the previous section. The basis for the formulation is
-the Multicommodity Transportation Problem described in \S\ref{intro:mtp} with
-some departures described in detail below. Two separate formulations are
-provided. The first is a strictly linear program (LP) while the second is a
-mixed-integer linear program (MILP).
-
-The LP formulation can be solved quickly, but allows split orders, i.e., orders
-that are not fully filled. The nuclear fuel cycle deals with bundled orders,
-such as nuclear fuel assemblies, thus this modeling paradigm is only an
-approximation. The MILP provides a more realistic exchange, but can take much
-longer to solver. The following sections will describe both formulations,
-starting with the LP formulation and then introducing adaptations required to
-formulate the MILP version. Finally, a heuristic solution is described and
-initial results are described using a proof-of-principle.
-
-\subsubsection{The Nuclear Fuel Cycle Transportation Problem}
-
-Supply and demand in a nuclear fuel cycle context is inherently a multicommodity
-problem. A light water reactor can be fueled by both UOX and MOX fuel, for
-instance. How it is fueled is a result both of fuel availability and associated
-preferences. Allowing for complex physical and chemical constraints on both
-processes and inventories, as well as including economics-based approaches for
-determining exchange preferences is a complicated affair. Determining the
-optimum solution to such a system is even more complicated. Accordingly,
-sophisticated tools in both the operations research and agent based modeling
-realms have been leveraged to accomplish the task.
-
-\paragraph{Terminology}
-
-%%% 
-\begin{table} [h!]
-\centering
-\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
-\hline
-Set         & Description \\
-\hline
-$H$         & all commodities  \\
-$I$         & all producers  \\
-$J$         & all consumers  \\
-$X$         & the feasible set of flows between producers and consumers  \\
-$K_{i}^{h}$  & the set of constraining capacities for 
-            producer $i$ of commodity $h$  \\
-$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
-\hline
-\end{tabularx}
-\caption{Sets Appearing in the GFCTP-LP Formulation}
-\label{tbl:GFCTP-LP-sets}
-\end{table}
-%%% 
-
-%%% 
-\begin{table} [h!]
-\centering
-\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
-\hline
-Variable    & Description \\
-\hline
-$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
-                          for producer $i$ and consumer $j$  \\
-$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
-                          for producer $i$ and consumer $j$  \\
-$q_{j}^{h}$               & the requested quality of commodity $h$ 
-                          by consumer $j$  \\
-$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
-                          constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
-$s_{i,k}^{h}$             & a supply capacity of producer $i$ corresponding to 
-                          capacity constraint $k$ of commodity $h$ \\
-$d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of 
-                          satisfying commodities $H_{j}$ \\
-\hline
-\end{tabularx}
-\caption{Variables Appearing in the GFCTP-LP Formulation}
-\label{tbl:GFCTP-LP-vars}
-\end{table}
-%%%
-
-\paragraph{Objective Function}
-
-In any network flow problem, of which transportation problems are a subset, the
-cost of transporting commodities is what drives the solution. Accordingly, an
-accurate cost function is necessary to determine an accurate solution. Because
-the \Cyclus environment is still a nascent simulation platform, accurate pricing
-metrics, and what such metrics even are in terms of a centuries-long fuel cycle
-simulation, are generally difficult to ascertain, with the current standard source
-being the Advanced Fuel Cycle Cost Basis
-report \cite{shropshire_advanced_2009}. Accordingly, the cost function is
-currently a measure of simulation entity preference, rather than a concrete
-representation of cost.
-
-The notion of preference extends the work of Oliver's affinity metric
-\cite{oliver_geniusv2:_2009}. The preference metric is generally consumer
-centric, i.e., consumers have a preference over the possible commodities that
-could meet their demand. For example, a reactor may be able to use UOX or MOX
-fuel, but may prefer to use MOX fuel. Such a preference differential allows the
-projection of real-world cost into the simulation. Additionally, the managers of
-a given facility, which in the \Cyclus simulation environment include its
-Institution and Region, also exert an influence over its preference. An obvious
-example is the concept of affinities given in \cite{oliver_geniusv2:_2009}. In
-Oliver's work, an affinity or preference existed between facilities in
-``similar'' institutions in order to drive the trading between institutions as a
-simple model of international relations. This idea is expanded upon to cover a
-facility's other managers and the commodities themselves. Additionally, a
-preference can be delineated between the proposed qualities of the same
-commodity from different vendors, e.g. if two vendors of MOX fuel
-exist. Finally, the notion of a preference is a positive one, and we require a
-notion of cost to solve the minimum-cost formulation of the multicommodity
-transportation problem with side constraints. Therefore one must utilize a
-translation function.
-
-Formally, we define a preference function, $\alpha_{i,j}(h)$, which is a
-cardinal preference ordering over a consumer's satisfying commodity set.
-
-\begin{equation}
-\alpha_{i,j}(h) \: \forall i \in I \: \forall h \in H_{j} 
-\end{equation}
-
-This ordering is a function both of the consumer, $j$, and producer, $i$. The
-dependence on producer encapsulates the relationship effects due to managerial
-preferences. We then define a cost translation function, $f$, that operates on
-the commodity preference function to produce an appropriate cost.
-
-\begin{equation}
-f : \alpha_{i,j}(h) \to c_{i,j}^{h}
-\end{equation}
-
-A naive implementation, and perhaps all that is necessary for a
-proof-of-principle, is to define f as an inversion operator.
-
-\begin{equation}
-f(x) = \frac{1}{x}
-\end{equation}
-
 \paragraph{Constraints}
+
 This formulation deviates from the normal MCTP formulation via the expansion of
 capacity constraints (Equation \ref{eqs:GFCTP-LP_sup}) and the inclusion of a
 constraint allowing multiple commodities that are able to meet the demand of a
@@ -362,7 +266,7 @@ but in practice it is generally considered very computationally efficient. If
 the problem can be simplified to a TP, then the Transportation Simplex Method
 can be used \cite{ahuja_network_1993}.
 
-\paragraph{Capacity Translation Function and Constraints Example}
+\subparagraph{Capacity Translation Function and Constraints Example}
 
 The notion of a capacity translation function is something that has been
 introduced out of necessity due to the complexity of the GFCTP. Accordingly, an
@@ -448,7 +352,7 @@ Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 \sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}^{EU} & \leq s_{enr,SWU}
 \end{align}
 
-\paragraph{Satisfying Commodity Set Example}
+\subparagraph{Satisfying Commodity Set Example}
 
 The other departure the GFCTP-LP takes from the normal MCTP formulation is the
 location of its multicommodity dependence. As presented above, the
@@ -471,7 +375,159 @@ set the values for $H_{j}$ for this facility:
   H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
 \end{equation}
 
-\paragraph{LP Formulation}
+\paragraph{Preferences \& Costs}
+
+In any network flow problem, of which transportation problems are a subset, the
+cost of transporting commodities is what drives the solution. Accordingly, an
+accurate cost function is necessary to determine an accurate solution. Because
+the \Cyclus environment is still a nascent simulation platform, accurate pricing
+metrics, and what such metrics even are in terms of a centuries-long fuel cycle
+simulation, are generally difficult to ascertain, with the current standard source
+being the Advanced Fuel Cycle Cost Basis
+report \cite{shropshire_advanced_2009}. Accordingly, the cost function is
+currently a measure of simulation entity preference, rather than a concrete
+representation of cost.
+
+The notion of preference extends the work of Oliver's affinity metric
+\cite{oliver_geniusv2:_2009}. The preference metric is generally consumer
+centric, i.e., consumers have a preference over the possible commodities that
+could meet their demand. For example, a reactor may be able to use UOX or MOX
+fuel, but may prefer to use MOX fuel. Such a preference differential allows the
+projection of real-world cost into the simulation. Additionally, the managers of
+a given facility, which in the \Cyclus simulation environment include its
+Institution and Region, also exert an influence over its preference. An obvious
+example is the concept of affinities given in \cite{oliver_geniusv2:_2009}. In
+Oliver's work, an affinity or preference existed between facilities in
+``similar'' institutions in order to drive the trading between institutions as a
+simple model of international relations. This idea is expanded upon to cover a
+facility's other managers and the commodities themselves. Additionally, a
+preference can be delineated between the proposed qualities of the same
+commodity from different vendors, e.g. if two vendors of MOX fuel
+exist. Finally, the notion of a preference is a positive one, and we require a
+notion of cost to solve the minimum-cost formulation of the multicommodity
+transportation problem with side constraints. Therefore one must utilize a
+translation function.
+
+Formally, we define a preference function, $\alpha_{i,j}(h)$, which is a
+cardinal preference ordering over a consumer's satisfying commodity set.
+
+\begin{equation}
+\alpha_{i,j}(h) \: \forall i \in I \: \forall h \in H_{j} 
+\end{equation}
+
+This ordering is a function both of the consumer, $j$, and producer, $i$. The
+dependence on producer encapsulates the relationship effects due to managerial
+preferences. We then define a cost translation function, $f$, that operates on
+the commodity preference function to produce an appropriate cost.
+
+\begin{equation}
+f : \alpha_{i,j}(h) \to c_{i,j}^{h}
+\end{equation}
+
+A naive implementation, and perhaps all that is necessary for a
+proof-of-principle, is to define f as an inversion operator.
+
+\begin{equation}
+f(x) = \frac{1}{x}
+\end{equation}
+
+\subsubsection{A Heuristic Solution}
+
+With full simluation domain knowledge of supply and demand, including false
+arcs, a feasible solution can be found. By definition a feasible solution is a
+\textit{solution} to the possible flow of resources, but not necessarily an
+\textit{optimal} solution. Many heuristics may be applied to bipartite graphs
+with constrainted flows. A simple \textit{greedy} heuristic is presented here
+and implemented. 
+
+\begin{algorithm}[h!]
+ \SetAlgoLined
+ \KwData{A resource exchange graph.}
+ \KwResult{A valid set of resource flows.}
+ sort request partitions by average preference\;
+ \ForAll{request partitions, $J_r$} {
+   sort requests by average preference\;
+   matched $\leftarrow$ 0\;        
+   \While{matched $\leq q_{J_r}$ and $\exists$ a request} {
+     get next request\;
+     sort incoming arcs by preference\;
+     \While{matched $\leq q_{J_r}$ and $\exists$ an arc} {
+       get next arc\;
+       remaining $\leftarrow q_{J_r}$ - matched\;
+       to\_match $\leftarrow \min \lbrace$remaining, Capacity(arc)$\rbrace$\;
+       AddMatch(arc, to\_match)\;
+       matched $\leftarrow$ matched + to\_match\;
+     }
+   }
+ }
+ \caption{Greedy Exchange Hueristic}\label{alg::greedy}
+\end{algorithm}
+
+The capacity of each arc in question is the most constraining value $s$
+associated with either node on the arc. For a node $i \in I_b$ and $j \in J_r$,
+the constraining value is defined as
+
+\begin{equation}
+  s = \min 
+        \lbrace 
+        \min \lbrace \frac{s_{I_b, k}}{\beta_{i, j, k}} 
+        \: \forall k \in K_{I_b} \rbrace, 
+        \: \min \lbrace \frac{s_{J_r, k}}{\beta_{i, j, k}} 
+        \: \forall k \in K_{J_r} \rbrace
+        \rbrace.
+\end{equation}
+
+The constraining values of each arc are updated upon declaration of a match in
+Algorithm \ref{alg::greedy}.
+
+\subsubsection{Linear Programming Formulation}\label{abm:dre:lp}
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Set         & Description \\
+\hline
+$H$         & all commodities  \\
+$I$         & all producers  \\
+$J$         & all consumers  \\
+$X$         & the feasible set of flows between producers and consumers  \\
+$K_{i}^{h}$  & the set of constraining capacities for 
+            producer $i$ of commodity $h$  \\
+$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
+\hline
+\end{tabularx}
+\caption{Sets Appearing in the GFCTP-LP Formulation}
+\label{tbl:GFCTP-LP-sets}
+\end{table}
+%%% 
+
+%%% 
+\begin{table} [h!]
+\centering
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Variable    & Description \\
+\hline
+$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
+                          for producer $i$ and consumer $j$  \\
+$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
+                          for producer $i$ and consumer $j$  \\
+$q_{j}^{h}$               & the requested quality of commodity $h$ 
+                          by consumer $j$  \\
+$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
+                          constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
+$s_{i,k}^{h}$             & a supply capacity of producer $i$ corresponding to 
+                          capacity constraint $k$ of commodity $h$ \\
+$d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of 
+                          satisfying commodities $H_{j}$ \\
+\hline
+\end{tabularx}
+\caption{Variables Appearing in the GFCTP-LP Formulation}
+\label{tbl:GFCTP-LP-vars}
+\end{table}
+%%%
 
 Combining the previous discussions, the LP Formulation of the NFCTP can be constructed.
 
@@ -503,7 +559,7 @@ Combining the previous discussions, the LP Formulation of the NFCTP can be const
 \end{subequations}
 %%% 
 
-\subsubsection{Adaptation for Fuel Assemblies}
+\subsubsection{Mixed Integer Linear Programming Formulation}\label{abm:dre:milp}
 
 The previous linear program (LP) formulation of the Generic Fuel Cycle
 Transportation Problem fully describes many of the types of transactions that
@@ -668,56 +724,7 @@ exploration of additional heuristics will be performed based on the outcome of
 the implementation and analysis of this formulation in the \Cyclus simulation
 environment.
 
-\subsection{A Heuristic Solution}
-
-With full simluation domain knowledge of supply and demand, including false
-arcs, a feasible solution can be found. By definition a feasible solution is a
-\textit{solution} to the possible flow of resources, but not necessarily an
-\textit{optimal} solution. Many heuristics may be applied to bipartite graphs
-with constrainted flows. A simple \textit{greedy} heuristic is presented here
-and implemented. 
-
-\begin{algorithm}[h!]
- \SetAlgoLined
- \KwData{A resource exchange graph.}
- \KwResult{A valid set of resource flows.}
- sort request partitions by average preference\;
- \ForAll{request partitions, $J_r$} {
-   sort requests by average preference\;
-   matched $\leftarrow$ 0\;        
-   \While{matched $\leq q_{J_r}$ and $\exists$ a request} {
-     get next request\;
-     sort incoming arcs by preference\;
-     \While{matched $\leq q_{J_r}$ and $\exists$ an arc} {
-       get next arc\;
-       remaining $\leftarrow q_{J_r}$ - matched\;
-       to\_match $\leftarrow \min \lbrace$remaining, Capacity(arc)$\rbrace$\;
-       AddMatch(arc, to\_match)\;
-       matched $\leftarrow$ matched + to\_match\;
-     }
-   }
- }
- \caption{Greedy Exchange Hueristic}\label{alg::greedy}
-\end{algorithm}
-
-The capacity of each arc in question is the most constraining value $s$
-associated with either node on the arc. For a node $i \in I_b$ and $j \in J_r$,
-the constraining value is defined as
-
-\begin{equation}
-  s = \min 
-        \lbrace 
-        \min \lbrace \frac{s_{I_b, k}}{\beta_{i, j, k}} 
-        \: \forall k \in K_{I_b} \rbrace, 
-        \: \min \lbrace \frac{s_{J_r, k}}{\beta_{i, j, k}} 
-        \: \forall k \in K_{J_r} \rbrace
-        \rbrace.
-\end{equation}
-
-The constraining values of each arc are updated upon declaration of a match in
-Algorithm \ref{alg::greedy}.
-
-\subsection{Proof of Principle}
+\subsection{Proof of Principle}\label{abm:dre:proof}
 
 In order to demonstrate the correctness of the methodology and implementation,
 two test cases were developed and analyzed. Both scenarios validate the ability
