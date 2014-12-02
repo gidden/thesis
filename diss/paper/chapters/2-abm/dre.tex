@@ -1,23 +1,23 @@
 
 \section{Dynamic Resource Exchange}\label{abm:dre}
 
-\subsection{Problem Statement}
+\subsection{Problem Statement}\label{abm:dre:prob}
 
 As a next-generation nuclear fuel cycle simulation framework, Cyclus maintains a
 primary goal of modeling flexibility. As facility, institutional, and regional
-models are proposed, they should be relatively easily implemented and utilized
-in the Cyclus simulation framework. Furthermore, the level of modeling
+archetypes are proposed, they should be relatively easily implemented and
+utilized in the Cyclus simulation framework. Furthermore, the level of modeling
 abstraction for different facilities in a fuel cycle will be different based on
 the needs of archetype developer. Any supply-demand resolution framework,
 therefore, must be able to support arbitrary facilities. One way to approach
 such a problem is to treat facilities as black boxes, clearly defining a
 supply-demand communication framework.
 
-As stated previously in \S \ref{abm:abm}, a number of considerations must be
-taken into account in such a framework. Supply and demand must be able to be
+As stated previously in \S \ref{abm:abm:limits}, a number of considerations must
+be taken into account in such a framework. Supply and demand must be able to be
 solved globally at any given time step. Resources must be able to be treated in
 a fungible manner. The framework must be able to incorporate arbitrary,
-agent-defined constraints. 
+agent-defined constraints.
 
 In order to address each of these concerns, the concept of a Dynamic Resource
 Exchange (DRE) was developed and implemented. That process was motivated by the
@@ -26,7 +26,7 @@ following problem statement:
 \begin{quote}
     If facilities are treated as individual black boxes and connections between
     facilities are determined dynamically, how does one match suppliers with
-    demanders considering quantity and quality-based supply constraints,
+    consumers considering quantity and quality-based supply constraints,
     quantity and quality-based demand constraints, supply response to
     quality-based demands, and issues of fungibility?
 \end{quote}
@@ -36,9 +36,9 @@ following problem statement:
 Supply-demand determination at any given time step begins with three
 \textit{phases}, the terminology of which is influenced from previous supply
 chain agent-based modeling work \cite{julka_agent-based_2002}. Importantly, this
-information-gathering step is agnostic as to the actual matching algorithm used,
-it is concerned only with querying the current status of supply and demand in
-the simulation.
+information-gathering step is agnostic as to the supply-demand matching
+algorithm used, it is concerned only with querying the current status of supply
+and demand in the simulation.
 
 The first phase allows consumers of commodities to denote both the quantity of a
 commodity they need to consume as well as the target isotopics, or quality, by
@@ -57,16 +57,17 @@ to fill the remaining space in a certain assembly with various types of fertile
 material, including depleted uranium from enrichment or reprocessed uranium from
 separations. Accordingly, it could demand both commodities as long as it
 provides a corresponding constraint with respect to total consumption. At the
-completion of the RFB phase, the market exchange will have a set of consumption
-portfolios, $P$, where each portfolio consists of a set requests, $R$, a
-cardinal preference over the requests, $\alpha_R$, and possibly a set of
-constraints over the requests, $C_R$. Each request consists of a quantity,
-$q_r$, and a target isotopic vector, $I_r$.
+completion of the RFB phase, the market exchange will have a set of request
+portfolios. Each each portfolio consists of a set requests. Arbitrary
+constraints over the set of requests can be provided that are functions of
+quantity or quality.  For requests that mutually satisfy a given demand, a
+preference over those requests is required. Finally, each request portfolio has
+a specific quantity associated with it.
 
-The second phase allows suppliers to \textit{respond} to the set of consumption
+The second phase allows suppliers to \textit{respond} to the set of request
 portfolios, and is termed the \textit{Response to Request for Bids} (RRFB) phase
 (analogous to Julka's Reply to Request for Quote phase
-\cite{julka_agent-based_2002}). Each consumption portfolio is comprised of
+\cite{julka_agent-based_2002}). Each request portfolio is comprised of
 requests for some set of commodities. Accordingly, for each request, suppliers
 of that commodity denote production capacities and an isotopic profile of the
 commodity they can provide. Suppliers are allowed to offer the null set of
