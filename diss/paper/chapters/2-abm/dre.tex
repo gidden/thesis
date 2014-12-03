@@ -299,12 +299,10 @@ for the exchange graph to be solved.
 
 Constraint coefficients are determined for an arc based on the proposed resource
 to be transferred along that arc, the requester's constraint translation
-functions, and the suppliers constraint translation function. 
-
-The notion of a capacity translation function is something that has been
-introduced out of necessity due to the complexity of the GFCTP. Accordingly, an
-example will help clarify its purpose. This time can also be used to provide an
-example of a producer with multiple capacity constraints for a given commodity.
+functions, and the suppliers constraint translation function. The notion of a
+capacity translation function is something that has been introduced out of
+necessity due to the complexity of the NFCTP. Accordingly, an example will help
+clarify its purpose. 
 
 Take, for example, an enrichment facility. Such a facility produces the
 commodity enriched uranium (EU). This facility has two constraints on its
@@ -375,7 +373,7 @@ arguments of this facility's two capacity constraints.
 These constraints correspond to the per-unit requirements for enriched uranium
 of natural uranium feed and SWU. Finally, we can form the set of constraint
 equations for the enrichment facility by combining
-Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
+Equations \ref{eqs:NFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 \ref{eqs:enr-prod-beta}, and \ref{eqs:enr-swu-beta}.
 
 \begin{align}
@@ -384,29 +382,6 @@ Equations \ref{eqs:GFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 \label{eqs:enr-swu-constr}
 \sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}^{EU} & \leq s_{enr,SWU}
 \end{align}
-
-\subparagraph{Satisfying Commodity Set Example}
-
-The other departure the GFCTP-LP takes from the normal MCTP formulation is the
-location of its multicommodity dependence. As presented above, the
-MCTP formulation includes a multicommodity arc capacity constraint, Equation
-\ref{eqs:GFCTP-LP_dem}. This constraint models a
-situation in which different commodities can satisfy a consumer's demand. There
-is no direct analog in the GFCTP, i.e., transportation arcs are assumed separate
-for separate commodities.
-
-Take the enrichment facility example, expanding on the previous discussion. Note
-that an enrichment facility takes feed uranium and then enriches its \nucl{235}{U}
-content. This feed uranium can come from different sources which have different
-feed enrichments. In practice, the most likely sources of feed uranium are
-natural uranium (NU) or recycled uranium (RU), a product of reprocessing light
-water reactor fuel. Recycled uranium may be advantageous to use if it has a
-higher weight percent of \nucl{235}{U} than does natural uranium. We can now state the
-set the values for $H_{j}$ for this facility:
-
-\begin{equation}\label{eqs:enr-dem-commods}
-  H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
-\end{equation}
 
 \paragraph{Preferences \& Costs}
 
@@ -466,14 +441,13 @@ f(x) = \frac{1}{x}
 
 \subsubsection{Depatures from the MCTP}
 
-
 This formulation deviates from the normal MCTP formulation via the expansion of
-capacity constraints (Equation \ref{eqs:GFCTP-LP_sup}) and the inclusion of a
+capacity constraints (Equation \ref{eqs:NFCTP-LP_sup}) and the inclusion of a
 constraint allowing multiple commodities that are able to meet the demand of a
-producer (Equation \ref{eqs:GFCTP-LP_dem}). The former constraint maintains the
+producer (Equation \ref{eqs:NFCTP-LP_dem}). The former constraint maintains the
 multi-commodity nature of the formulation. 
 
-Under certain conditions, the GFCTP-LP will result in a simpler problem. The
+Under certain conditions, the NFCTP-LP will result in a simpler problem. The
 first possible condition is that each consumer could have its demand met by only
 one commodity, i.e.,
 
@@ -481,7 +455,7 @@ one commodity, i.e.,
   \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
 \end{equation}
 
-In such a situation, the GFCTP-LP can be transformed into an analog of the
+In such a situation, the NFCTP-LP can be transformed into an analog of the
 separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
 a condition will effectively allow one to solve $N$ different instances of a
 single-commodity problem, where $N$ is the cardinality of $H$. 
@@ -494,7 +468,7 @@ cardinality of unity, i.e.,
 \end{equation}
 
 If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
-GFCTP-LP is in fact the a normal Transportation Problem, because the quality
+NFCTP-LP is in fact the a normal Transportation Problem, because the quality
 translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
 solution time. 
 
@@ -505,6 +479,29 @@ case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
 but in practice it is generally considered very computationally efficient. If
 the problem can be simplified to a TP, then the Transportation Simplex Method
 can be used \cite{ahuja_network_1993}.
+
+\subparagraph{Satisfying Commodity Set Example}
+
+The other departure the NFCTP-LP takes from the normal MCTP formulation is the
+location of its multicommodity dependence. As presented above, the
+MCTP formulation includes a multicommodity arc capacity constraint, Equation
+\ref{eqs:NFCTP-LP_dem}. This constraint models a
+situation in which different commodities can satisfy a consumer's demand. There
+is no direct analog in the NFCTP, i.e., transportation arcs are assumed separate
+for separate commodities.
+
+Take the enrichment facility example, expanding on the previous discussion. Note
+that an enrichment facility takes feed uranium and then enriches its \nucl{235}{U}
+content. This feed uranium can come from different sources which have different
+feed enrichments. In practice, the most likely sources of feed uranium are
+natural uranium (NU) or recycled uranium (RU), a product of reprocessing light
+water reactor fuel. Recycled uranium may be advantageous to use if it has a
+higher weight percent of \nucl{235}{U} than does natural uranium. We can now state the
+set the values for $H_{j}$ for this facility:
+
+\begin{equation}\label{eqs:enr-dem-commods}
+  H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
+\end{equation}
 
 \subsubsection{A Heuristic Solution}
 
@@ -573,8 +570,8 @@ $K_{i}^{h}$  & the set of constraining capacities for
 $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 \end{tabularx}
-\caption{Sets Appearing in the GFCTP-LP Formulation}
-\label{tbl:GFCTP-LP-sets}
+\caption{Sets Appearing in the NFCTP-LP Formulation}
+\label{tbl:NFCTP-LP-sets}
 \end{table}
 %%% 
 
@@ -599,36 +596,36 @@ $d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of
                           satisfying commodities $H_{j}$ \\
 \hline
 \end{tabularx}
-\caption{Variables Appearing in the GFCTP-LP Formulation}
-\label{tbl:GFCTP-LP-vars}
+\caption{Variables Appearing in the NFCTP-LP Formulation}
+\label{tbl:NFCTP-LP-vars}
 \end{table}
 %%%
 
 Combining the previous discussions, the LP Formulation of the NFCTP can be constructed.
 
 %%% 
-\begin{subequations}\label{eqs:GFCTP-LP}
+\begin{subequations}\label{eqs:NFCTP-LP}
   \begin{align}
     %%
     \min_{z} \:\: & 
     z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}^{h} x_{i,j}^{h} 
-    & \label{eqs:GFCTP-LP_obj} \\
+    & \label{eqs:NFCTP-LP_obj} \\
     %%
     \text{s.t.} \:\: &
     \sum_{j \in J}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h} \leq s_{i,k} 
     &
     \: \forall \: k \in K_{i}^{h},  
-    \forall \: i \in I, \forall \: h \in H \label{eqs:GFCTP-LP_sup} \\
+    \forall \: i \in I, \forall \: h \in H \label{eqs:NFCTP-LP_sup} \\
     %%
     &
     \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j}) 
     & 
-    \forall \: j \in J \label{eqs:GFCTP-LP_dem} \\
+    \forall \: j \in J \label{eqs:NFCTP-LP_dem} \\
     %%
     &
     x^h_{i,j} \geq 0
     &
-    \forall \: x \in X \label{eqs:GFCTP-LP_x}
+    \forall \: x \in X \label{eqs:NFCTP-LP_x}
     %%
   \end{align}
 \end{subequations}
@@ -669,10 +666,10 @@ sets constitute the set of all consumers.
   J = J_{p} \cup J_{e}
 \end{equation}
 
-The Generic Fuel Cycle Transportation Problem with Exclusive Orders (GFCTP-E)
+The Generic Fuel Cycle Transportation Problem with Exclusive Orders (NFCTP-E)
 formulation follows:
 
-\begin{subequations}\label{eqs:GFCTP-E}
+\begin{subequations}\label{eqs:NFCTP-E}
   \begin{align}
     %%
     \label{eq:GRCTP-E_obj}
@@ -724,8 +721,8 @@ formulation follows:
   \end{align}
 \end{subequations}
 
-The sets and variables involved are described in Tables \ref{tbl:GFCTP-E-sets}
-and \ref{tbl:GFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
+The sets and variables involved are described in Tables \ref{tbl:NFCTP-E-sets}
+and \ref{tbl:NFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
 
 \begin{equation}
   H_{j} \subseteq H \: \forall \: j \in J_{p}, \forall \: j \in J_{e}
@@ -750,8 +747,8 @@ $K_{i}^{h}$ & the set of constraining capacities for
 $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 \end{tabularx}
-\caption{Sets Appearing in the GFCTP-E Formulation}
-\label{tbl:GFCTP-E-sets}
+\caption{Sets Appearing in the NFCTP-E Formulation}
+\label{tbl:NFCTP-E-sets}
 \end{table}
 %%% 
 
@@ -781,8 +778,8 @@ $d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of
                           satisfying commodities $H_{j}$ \\
 \hline
 \end{tabularx}
-\caption{Variables Appearing in the GFCTP-E Formulation}
-\label{tbl:GFCTP-E-vars}
+\caption{Variables Appearing in the NFCTP-E Formulation}
+\label{tbl:NFCTP-E-vars}
 \end{table}
 %%%
 
