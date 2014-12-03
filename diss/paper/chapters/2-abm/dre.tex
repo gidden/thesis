@@ -190,13 +190,16 @@ Each portfolio has a set of commodities, $H$, associated with it. These are
 denoted $H_s$ for supply portfolios and $H_r$ for request
 portfolios. Furthermore there is a set of constraints, $K$, for each commodity
 in a portfolio's set. For instance, a specific set of constraints for a given
-commodity, $h$, and supplier, $s$, is denoted $K_{s, h}$; a requster's
-commodity-based constraints is denoted $K_{r, h}$. Additionally, each unique
-combination of portfolio, commodity, and constraint has an associated
-\textit{constraint coefficient conversion function}, denoted $\beta_{s, h, k}$
-for supply portfolios and $\beta_{r, h, k}$ for request portfolios. A clarifying
-example of the relation between portfolios, commodities, constraints, and
-coefficient conversion functions is provided in \S \ref{abm:dre:fctp:arcs}.
+commodity, $h$, and supplier, $s$, is denoted $K_s^h$; a requster's
+commodity-based constraints is denoted $K_r^h$. Each constraint has a
+constraining value, $b_s^{h, k}$ and $b_r^{h, k}$, respectively. Additionally,
+each unique combination of portfolio, commodity, and constraint has an
+associated \textit{constraint coefficient conversion function}, denoted
+$\beta_s^{h, k}$ for supply portfolios and $\beta_r^{h, k}$ for request
+portfolios. Each constraint coefficient conversion function takes as an argument
+a resource \textit{quality}, $q_{i,j}$. A clarifying example of the relation
+between portfolios, commodities, constraints, and coefficient conversion
+functions is provided in \S \ref{abm:dre:fctp:arcs}.
 
 Finally, for each supply-request node pair, there is an associated preference,
 $p_{i, j}$. The set of all preferences is denoted $P$. Similarly, flow between a
@@ -251,7 +254,7 @@ Similarly, the total number of request nodes is
 Finally, the total number of arcs is
 
 \begin{equation}
-  \left|{A_t}\right| = \left|{A}\right| + N_{p, b} + N_{p, r}
+  \left|{A_t}\right| = \left|{A}\right| + \left|{I}\right| + \left|{J}\right|
 \end{equation}
 
 Because preferences are defined as in Equation \ref{eqn:falsepref}, any false
@@ -301,28 +304,29 @@ Constraint coefficients are determined for an arc based on the proposed resource
 to be transferred along that arc, the requester's constraint translation
 functions, and the suppliers constraint translation function. The notion of a
 capacity translation function is something that has been introduced out of
-necessity due to the complexity of the NFCTP. Accordingly, an example will help
-clarify its purpose. 
+necessity due to the complexity of the DRE. An example will help clarify its
+purpose.
 
-Take, for example, an enrichment facility. Such a facility produces the
-commodity enriched uranium (EU). This facility has two constraints on its
-operation for any given time period: the amount of Separative Work Units (SWU)
-that it can process, $s_{enr,SWU}$ and the total natural uranium (NU) feed it
-has on hand, $s_{enr,NU}$. Note that neither of these capacities are measure
-directly in the units of the commodity it produces, i.e., kilograms of enriched
-uranium (EU). The set of values for $K_{i}^{h}$ for this facility are:
-
+Consider an supplier enrichment facility, $s$, which produces the commodity
+enriched uranium (EU). This facility has two constraints on its operation for
+any given time period: the amount of Separative Work Units (SWU) that it can
+process, $b_{s}^{EU,SWU}$, and the total natural uranium (NU) feed it has on hand.,
+$b_{s}^{EU,NU}$. The constraint set for $s$ is then
+ 
 \begin{equation}\label{eqs:enr-constr-commods}
-  K_{enr}^{EU} = \{ \mbox{SWU}, \mbox{NU} \}
+  K_{s}^{EU} = \{ \mbox{SWU}, \mbox{NU} \}.
 \end{equation}
+
+Note that neither of these capacities are measure directly in the units of the
+commodity it produces, i.e., kilograms of EU.
 
 Consider a set of requests for enriched uranium that this facility can possibly
 meet. Such requests have, in general, two parameters: $P_{j}$, the total product
 quantity (in kilograms), and $\varepsilon_{j}$, the product enrichment (in w/o
-\nucl{235}{U}).\footnote{The notation for enrichment, $\varepsilon_{j}$, is chosen over its
-normal form, $x_p$, to limit confusion with the LP notation of material flow,
-$x^h_{i,j}$.}  For the purposes of this constraint set, the quality of material
-in question is its enrichment, i.e.,
+\nucl{235}{U}).\footnote{The notation for enrichment, $\varepsilon_{j}$, is
+  chosen over its normal form, $x_p$, to limit confusion with the notation of
+  material flow, $x^h_{i,j}$.}  For the purposes of this constraint set, the
+quality of material in question is its enrichment, i.e.,
 
 \begin{equation}\label{eqs:enr-q-swu}
   q_{j}^{EU} \equiv \varepsilon_{j}.
@@ -331,18 +335,19 @@ in question is its enrichment, i.e.,
 These values are set during a prior phase of the overall matching algorithm, and
 can therefore be considered constant. Further, let us note that, in general, an
 enrichment facility's operation, or rather its capacity, is governed by two
-parameters: $\varepsilon_{f,enr}$, the fraction of \nucl{235}{U} in its feed material, and
-$\varepsilon_{t,enr}$, the fraction of \nucl{235}{U} in its tails material. These parameters
-determine the amount of SWU required to produce some amount of enriched uranium:
+parameters: $\varepsilon_{f,s}$, the fraction of \nucl{235}{U} in its feed
+material, and $\varepsilon_{t,s}$, the fraction of \nucl{235}{U} in its tails
+material. These parameters determine the amount of SWU required to produce some
+amount of enriched uranium:
 
 \begin{align}
 \begin{split}
 \label{eqs:swu}
 SWU = & \:\: P ( V(\varepsilon_{j}) 
-      + \frac{\varepsilon_{j} - \varepsilon_{f,enr}}
-               {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{t,enr}) \\
-      & - \frac{\varepsilon_{j} - \varepsilon_{t,enr}}
-               {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{f,enr}) )
+      + \frac{\varepsilon_{j} - \varepsilon_{f,s}}
+               {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{t,s}) \\
+      & - \frac{\varepsilon_{j} - \varepsilon_{t,s}}
+               {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{f,s}) )
 \end{split}
 \end{align}
 
@@ -358,15 +363,15 @@ arguments of this facility's two capacity constraints.
 
 \begin{align}
 \label{eqs:enr-prod-beta}
-\beta_{enr,NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t,enr}}
-                                      {\varepsilon_{f,enr} - \varepsilon_{t,enr}} \\
+\beta_{s}^{EU, NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t,s}}
+                                      {\varepsilon_{f,s} - \varepsilon_{t,s}} \\
 \begin{split}
 \label{eqs:enr-swu-beta}
-\beta_{enr,SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
-                         & + \frac{\varepsilon_{j} - \varepsilon_{f,enr}}
-                                  {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{t,enr}) \\
-                         & - \frac{\varepsilon_{j} - \varepsilon_{t,enr}}
-                                  {\varepsilon_{f,enr} - \varepsilon_{t,enr}} V(\varepsilon_{f,enr})
+\beta_{s}^{EU, SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
+                         & + \frac{\varepsilon_{j} - \varepsilon_{f,s}}
+                                  {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{t,s}) \\
+                         & - \frac{\varepsilon_{j} - \varepsilon_{t,s}}
+                                  {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{f,s})
 \end{split}
 \end{align}
 
@@ -378,9 +383,9 @@ Equations \ref{eqs:NFCTP-LP_sup}, \ref{eqs:enr-q-swu},
 
 \begin{align}
 \label{eqs:enr-prod-constr}
-\sum_{j \in J}\beta_{enr,NU}(\varepsilon_{j}) \: x_{enr,j}^{EU}  & \leq s_{enr,NU} \\
+\sum_{j \in J}\beta_{s}^{EU,NU}(\varepsilon_{j}) \: x_{s,j}^{EU}  & \leq b_{s}^{EU,NU} \\
 \label{eqs:enr-swu-constr}
-\sum_{j \in J}\beta_{enr,SWU}(\varepsilon_{j}) \: x_{enr,j}^{EU} & \leq s_{enr,SWU}
+\sum_{j \in J}\beta_{s}^{EU,SWU}(\varepsilon_{j}) \: x_{s,j}^{EU} & \leq b_{s}^{EU,SWU}
 \end{align}
 
 \paragraph{Preferences \& Costs}
