@@ -505,7 +505,7 @@ requested amount defined by each request portfolio, $q_r$, after having sorted
 all arcs. The constraining values of each arc, $b_k$, are updated upon
 declaration of a match in Algorithm \ref{alg::greedy}.
 
-\begin{algorithm}[h!]
+\begin{algorithm}[!h]
  \SetAlgoLined
  \KwData{A resource exchange graph with constraints and preferences.}
  \KwResult{A valid set of resource flows.}
@@ -548,14 +548,14 @@ shown in Equation \ref{eqs:NFCTP-LP}.
     \sum_{j \in J}a^k_{i,j} x_{i,j} \leq b^k_s 
     &
     \: \forall \: k \in K_s,  
-    \forall \: i \in s, 
+    \forall \: i \in I_s, 
     \forall s \: \in S \label{eqs:NFCTP-LP_sup} \\
     %%
     &
-    \sum_{i \in I}a^k_{i,j} x_{i,j} \leq b^k_r 
+    \sum_{i \in I}a^k_{i,j} x_{i,j} \geq b^k_r 
     &
     \: \forall \: k \in K_r,  
-    \forall \: j \in r, 
+    \forall \: j \in J_r, 
     \forall r \: \in R \label{eqs:NFCTP-LP_req} \\
     %%
     &
@@ -579,13 +579,15 @@ variables used is provided in Table \ref{tbl:NFCTP-LP-vars}.
 \hline
 Set         & Description \\
 \hline
-$H$         & all commodities  \\
-$I$         & all producers  \\
-$J$         & all consumers  \\
+$S$     & suppliers \\
+$R$     & requesters \\
+$I$     & all supply nodes \\
+$I_s$   & nodes for a supplier $s$ \\
+$J$     & all request nodes \\
+$J_r$   & nodes for a requester $r$ \\
+$K_s$   & constraints for a supplier $s$ \\
+$K_r$   & constraints for a requester $r$ \\
 $X$         & the feasible set of flows between producers and consumers  \\
-$K_{i}^{h}$  & the set of constraining capacities for 
-            producer $i$ of commodity $h$  \\
-$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 \end{tabularx}
 \caption{Sets Appearing in the NFCTP-LP Formulation}
@@ -600,24 +602,25 @@ $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 Variable    & Description \\
 \hline
-$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
-                          for producer $i$ and consumer $j$  \\
-$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
-                          for producer $i$ and consumer $j$  \\
-$q_{j}^{h}$               & the requested quality of commodity $h$ 
-                          by consumer $j$  \\
-$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
-                          constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
-$s_{i,k}^{h}$             & a supply capacity of producer $i$ corresponding to 
-                          capacity constraint $k$ of commodity $h$ \\
-$d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of 
-                          satisfying commodities $H_{j}$ \\
+$c_{i,j}$             & the unit cost of flow
+                          from producer node $i$ to consumer node $j$  \\
+$x_{i,j}$             & a decision variable, the flow 
+                          from producer node $i$ to consumer node $j$  \\
+$a_{i,j}^k$ & the constraint coeffecient for constraint $k$ 
+                          on flow between nodes $i$ and $j$  \\
+$b_s^k$   & the constraining value for constraint $k$ of supplier $s$ \\
+$b_r^k$   & the constraining value for constraint $k$ of requester $r$ \\
+$\tilde{x_j}$ & the requested quantity associated with request node $j$ \\
 \hline
 \end{tabularx}
 \caption{Variables Appearing in the NFCTP-LP Formulation}
 \label{tbl:NFCTP-LP-vars}
 \end{table}
 %%%
+
+Notably, a feasible solution to the formulation provided in Equation
+\ref{eqs:NFCTP-LP} is guaranteed due to the presence of false arcs. Accordingly,
+the DRE using this formulation will never fail within a simulation.
 
 \subsubsection{Mixed Integer Linear Programming Formulation}\label{abm:dre:milp}
 
