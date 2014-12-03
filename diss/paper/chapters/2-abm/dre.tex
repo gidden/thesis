@@ -72,11 +72,12 @@ transfers, e.g., fuel assemblies. Further, consumers are allowed to post demand
 for multiple commodities that may serve to meet the same combine capacity. For
 example, consider an LWR that can be filled with MOX or UOX. It can post a
 demand for both, but must define a preference over the set of possible
-commodities that can be consumed. Another example is that of an advanced fuel
-fabrication facility, i.e., one that fabricates fuel partially from separated
-material that has already passed through a reactor. Such a facility can choose
-to fill the remaining space in a certain assembly with various types of fertile
-material, including depleted uranium from enrichment or reprocessed uranium from
+commodities that can be consumed. Such requests are termed \textit{mutual
+  requests}. Another example is that of an advanced fuel fabrication facility,
+i.e., one that fabricates fuel partially from separated material that has
+already passed through a reactor. Such a facility can choose to fill the
+remaining space in a certain assembly with various types of fertile material,
+including depleted uranium from enrichment or reprocessed uranium from
 separations. Accordingly, it could demand both commodities as long as it
 provides a corresponding constraint with respect to total consumption. At the
 completion of the RFB phase, the market exchange will have a set of request
@@ -84,7 +85,7 @@ portfolios. Each each portfolio consists of a set requests. Arbitrary
 constraints over the set of requests can be provided that are functions of
 quantity or quality.  For requests that mutually satisfy a given demand, a
 preference over those requests is required. Finally, each request portfolio has
-a specific quantity associated with it. 
+a specific quantity associated with it.
 
 The second phase allows suppliers to \textit{respond} to the set of request
 portfolios, and is termed the \textit{Response to Request for Bids} (RRFB) phase
@@ -188,22 +189,44 @@ and
 
 Each portfolio has a set of commodities, $H$, associated with it. These are
 denoted $H_s$ for supply portfolios and $H_r$ for request
-portfolios. Furthermore there is a set of constraints, $K$, for each commodity
-in a portfolio's set. For instance, a specific set of constraints for a given
-commodity, $h$, and supplier, $s$, is denoted $K_s^h$; a requster's
-commodity-based constraints is denoted $K_r^h$. Each constraint has a
-constraining value, $b_s^{h, k}$ and $b_r^{h, k}$, respectively. Additionally,
-each unique combination of portfolio, commodity, and constraint has an
-associated \textit{constraint coefficient conversion function}, denoted
-$\beta_s^{h, k}$ for supply portfolios and $\beta_r^{h, k}$ for request
-portfolios. Each constraint coefficient conversion function takes as an argument
-a resource \textit{quality}, $q_{i,j}$. A clarifying example of the relation
+portfolios. Furthermore, each portfolio has a set of constraints, $K$,
+associated with it. Each constraint has a constraining value, $b_s^k$ and
+$b_r^k$, respectively. Additionally, each unique combination of portfolio and
+constraint has an associated \textit{constraint coefficient conversion
+  function}, denoted $\beta_s^k$ for supply portfolios and $\beta_r^k$ for
+request portfolios. Each constraint coefficient conversion function takes as an
+argument a proposed resource $q_{i,j}$. A clarifying example of the relation
 between portfolios, commodities, constraints, and coefficient conversion
-functions is provided in \S \ref{abm:dre:fctp:arcs}.
+functions is provided in \S \ref{abm:dre:fctp:arcs}. Request portfolios are
+provided a quantity constraint by default for which coefficients are unity. For
+a set of \textit{mutual requests}, $M$, where each request has a request
+quantity, $x_m$, the coefficient is defined by the ratio between the request and
+the average request quantity over all mutual requests
+
+\begin{equation}
+  \beta_{r, m} = \frac{\bar{x_M}}{x_m}.
+\end{equation}
+
+The constraint conversion functions are utilized in the NFCTP by applying them
+to the proposed resource transfers, creating capacity coefficients.
+
+Coefficients for supply constraints are defined as
+
+\begin{equation}
+  a^k_{i, j} = \beta_s^k(q_{i_j}).
+\end{equation}
+
+Coefficients for request constraints are defined as
+
+\begin{equation}
+  a^k_{j, i} = \beta_r^k(q_{i_j}).
+\end{equation}
 
 Finally, for each supply-request node pair, there is an associated preference,
 $p_{i, j}$. The set of all preferences is denoted $P$. Similarly, flow between a
-node pair is denoted $x_{i, j}$, and the set of all flows is denoted $X$.
+node pair is denoted $x_{i, j}$, and the set of all flows is denoted $X$. The
+possible flow on an arc is provided an upper bound by the request node quantity,
+$\tilde{x_j}$.
 
 \subsubsection{Exchange Graph}
 
@@ -304,17 +327,17 @@ Constraint coefficients are determined for an arc based on the proposed resource
 to be transferred along that arc, the requester's constraint translation
 functions, and the suppliers constraint translation function. The notion of a
 capacity translation function is something that has been introduced out of
-necessity due to the complexity of the DRE. An example will help clarify its
-purpose.
+necessity due to the complexity of the DRE. An example of supply-based
+constraints is provided to help clarify its purpose.
 
 Consider an supplier enrichment facility, $s$, which produces the commodity
 enriched uranium (EU). This facility has two constraints on its operation for
 any given time period: the amount of Separative Work Units (SWU) that it can
-process, $b_{s}^{EU,SWU}$, and the total natural uranium (NU) feed it has on hand.,
-$b_{s}^{EU,NU}$. The constraint set for $s$ is then
+process, $b_{s}^{SWU}$, and the total natural uranium (NU) feed it has on hand.,
+$b_{s}^{NU}$. The constraint set for $s$ is then
  
 \begin{equation}\label{eqs:enr-constr-commods}
-  K_{s}^{EU} = \{ \mbox{SWU}, \mbox{NU} \}.
+  K_{s} = \{ \mbox{SWU}, \mbox{NU} \}.
 \end{equation}
 
 Note that neither of these capacities are measure directly in the units of the
@@ -329,7 +352,7 @@ quantity (in kilograms), and $\varepsilon_{j}$, the product enrichment (in w/o
 quality of material in question is its enrichment, i.e.,
 
 \begin{equation}\label{eqs:enr-q-swu}
-  q_{j}^{EU} \equiv \varepsilon_{j}.
+  q_{j} \equiv \varepsilon_{j}.
 \end{equation}
 
 These values are set during a prior phase of the overall matching algorithm, and
@@ -363,11 +386,11 @@ arguments of this facility's two capacity constraints.
 
 \begin{align}
 \label{eqs:enr-prod-beta}
-\beta_{s}^{EU, NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t,s}}
+\beta_{s}^{NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t,s}}
                                       {\varepsilon_{f,s} - \varepsilon_{t,s}} \\
 \begin{split}
 \label{eqs:enr-swu-beta}
-\beta_{s}^{EU, SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
+\beta_{s}^{SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
                          & + \frac{\varepsilon_{j} - \varepsilon_{f,s}}
                                   {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{t,s}) \\
                          & - \frac{\varepsilon_{j} - \varepsilon_{t,s}}
@@ -377,29 +400,28 @@ arguments of this facility's two capacity constraints.
 
 These constraints correspond to the per-unit requirements for enriched uranium
 of natural uranium feed and SWU. Finally, we can form the set of constraint
-equations for the enrichment facility by combining
-Equations \ref{eqs:NFCTP-LP_sup}, \ref{eqs:enr-q-swu},
-\ref{eqs:enr-prod-beta}, and \ref{eqs:enr-swu-beta}.
+equations for the enrichment facility by combining Equations
+\ref{eqs:enr-q-swu}, \ref{eqs:enr-prod-beta}, and \ref{eqs:enr-swu-beta}.
 
 \begin{align}
 \label{eqs:enr-prod-constr}
-\sum_{j \in J}\beta_{s}^{EU,NU}(\varepsilon_{j}) \: x_{s,j}^{EU}  & \leq b_{s}^{EU,NU} \\
+\sum_{j \in J}\beta_{s}^{NU}(\varepsilon_{j}) \: x_{s,j}  & \leq b_{s}^{NU} \\
 \label{eqs:enr-swu-constr}
-\sum_{j \in J}\beta_{s}^{EU,SWU}(\varepsilon_{j}) \: x_{s,j}^{EU} & \leq b_{s}^{EU,SWU}
+\sum_{j \in J}\beta_{s}^{SWU}(\varepsilon_{j}) \: x_{s,j} & \leq b_{s}^{SWU}
 \end{align}
 
 \paragraph{Preferences \& Costs}
 
 In any network flow problem, of which transportation problems are a subset, the
-cost of transporting commodities is what drives the solution. Accordingly, an
-accurate cost function is necessary to determine an accurate solution. Because
-the \Cyclus environment is still a nascent simulation platform, accurate pricing
-metrics, and what such metrics even are in terms of a centuries-long fuel cycle
-simulation, are generally difficult to ascertain, with the current standard source
-being the Advanced Fuel Cycle Cost Basis
-report \cite{shropshire_advanced_2009}. Accordingly, the cost function is
-currently a measure of simulation entity preference, rather than a concrete
-representation of cost.
+cost of transporting commodities is what drives the solution. Thus, a cost
+function is necessary to determine a solution. Because the \Cyclus environment
+is still a nascent simulation platform, accurate pricing metrics, and what such
+metrics even are in terms of a centuries-long fuel cycle simulation, are
+generally difficult to ascertain, with the current standard source being the
+Advanced Fuel Cycle Cost Basis report
+\cite{shropshire_advanced_2009}. Accordingly, the cost function is currently a
+measure of simulation entity preference, rather than a concrete representation
+of cost.
 
 The notion of preference extends the work of Oliver's affinity metric
 \cite{oliver_geniusv2:_2009}. The preference metric is generally consumer
@@ -421,92 +443,39 @@ notion of cost to solve the minimum-cost formulation of the multicommodity
 transportation problem with side constraints. Therefore one must utilize a
 translation function.
 
-Formally, we define a preference function, $\alpha_{i,j}(h)$, which is a
-cardinal preference ordering over a consumer's satisfying commodity set.
+Formally, a preference function, $p_{i, j}(h)$, is defined which is a cardinal
+preference ordering over a consumer's satisfying commodity set. A preference is
+assigned to each arc in the NFCTP.
 
 \begin{equation}
-\alpha_{i,j}(h) \: \forall i \in I \: \forall h \in H_{j} 
+p_{i, j}(h) \:\: \forall i \in I  \:\: \forall h \in H_{r} 
 \end{equation}
 
-This ordering is a function both of the consumer, $j$, and producer, $i$. The
-dependence on producer encapsulates the relationship effects due to managerial
-preferences. We then define a cost translation function, $f$, that operates on
-the commodity preference function to produce an appropriate cost.
+Preference is a function both of the consumer, $j$, and producer, $i$, and the
+proposed resource transfer from consumer to producer. The dependence on producer
+encapsulates the relationship effects due to managerial preferences, i.e., the
+effects of the Preference Adjustment phase described in \S \ref{abm:dre:info}.
+
+A cost translation function, $f$, is defined that operates on the commodity
+preference function to produce an appropriate cost for the NFCTP.
 
 \begin{equation}
-f : \alpha_{i,j}(h) \to c_{i,j}^{h}
+f : p_{i,j}(h) \to c_{i,j}
 \end{equation}
 
-A naive implementation, and perhaps all that is necessary for a
-proof-of-principle, is to define f as an inversion operator.
+For the purposes of this work, any operator that preserves the preference
+monotonicity and cardinal ordering is suitable.  The inversion operator has been
+chosen because it preserves required features and also allows for easy
+translation from preference to cost as well as translation from cost to
+preference.
 
 \begin{equation}
 f(x) = \frac{1}{x}
 \end{equation}
 
-\subsubsection{Depatures from the MCTP}
-
-This formulation deviates from the normal MCTP formulation via the expansion of
-capacity constraints (Equation \ref{eqs:NFCTP-LP_sup}) and the inclusion of a
-constraint allowing multiple commodities that are able to meet the demand of a
-producer (Equation \ref{eqs:NFCTP-LP_dem}). The former constraint maintains the
-multi-commodity nature of the formulation. 
-
-Under certain conditions, the NFCTP-LP will result in a simpler problem. The
-first possible condition is that each consumer could have its demand met by only
-one commodity, i.e.,
-
-\begin{equation}\label{eqs:1demand}
-  \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
-\end{equation}
-
-In such a situation, the NFCTP-LP can be transformed into an analog of the
-separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
-a condition will effectively allow one to solve $N$ different instances of a
-single-commodity problem, where $N$ is the cardinality of $H$. 
-
-The second simplifying condition is if the constraining capacity set has a
-cardinality of unity, i.e., 
-
-\begin{equation}\label{eqs:1constraint}
-  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H.
-\end{equation}
-
-If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
-NFCTP-LP is in fact the a normal Transportation Problem, because the quality
-translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
-solution time. 
-
-These simplifications are important to the computation time required to solve
-the resulting problem instance. The general solution technique for LPs is the
-Simplex Method, as previously described. Klee and Minty show that in the worst
-case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
-but in practice it is generally considered very computationally efficient. If
-the problem can be simplified to a TP, then the Transportation Simplex Method
-can be used \cite{ahuja_network_1993}.
-
-\subparagraph{Satisfying Commodity Set Example}
-
-The other departure the NFCTP-LP takes from the normal MCTP formulation is the
-location of its multicommodity dependence. As presented above, the
-MCTP formulation includes a multicommodity arc capacity constraint, Equation
-\ref{eqs:NFCTP-LP_dem}. This constraint models a
-situation in which different commodities can satisfy a consumer's demand. There
-is no direct analog in the NFCTP, i.e., transportation arcs are assumed separate
-for separate commodities.
-
-Take the enrichment facility example, expanding on the previous discussion. Note
-that an enrichment facility takes feed uranium and then enriches its \nucl{235}{U}
-content. This feed uranium can come from different sources which have different
-feed enrichments. In practice, the most likely sources of feed uranium are
-natural uranium (NU) or recycled uranium (RU), a product of reprocessing light
-water reactor fuel. Recycled uranium may be advantageous to use if it has a
-higher weight percent of \nucl{235}{U} than does natural uranium. We can now state the
-set the values for $H_{j}$ for this facility:
-
-\begin{equation}\label{eqs:enr-dem-commods}
-  H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
-\end{equation}
+If cost data and a valid cost assignment methodology is developed in the future,
+costs may be used directly, and the preference-to-cost translation may be
+ignored.
 
 \subsubsection{A Heuristic Solution}
 
@@ -517,21 +486,40 @@ arcs, a feasible solution can be found. By definition a feasible solution is a
 with constrainted flows. A simple \textit{greedy} heuristic is presented here
 and implemented. 
 
+The maximum flow along an arc, $x_{max}$, depends on the constraints associated
+with each node on the arc. For nodes $i$ and $j$ belonging to portfolios $s$ and
+$r$, respectively, the maximum allowable flow is defined as
+
+\begin{equation}
+  x_{max} = \min 
+        \lbrace 
+        \min \lbrace \frac{b^k_s}{\beta^k_{i, j}} 
+        \: \forall k \in K_s \rbrace, 
+        \: \min \lbrace \frac{b^k_r}{\beta^k_{i, j}} 
+        \: \forall k \in K_r \rbrace
+        \rbrace.
+\end{equation}
+
+The Greedy Exchange Hueristic matches maximum flow along arcs, up to the
+requested amount defined by each request portfolio, $q_r$, after having sorted
+all arcs. The constraining values of each arc, $b_k$, are updated upon
+declaration of a match in Algorithm \ref{alg::greedy}.
+
 \begin{algorithm}[h!]
  \SetAlgoLined
- \KwData{A resource exchange graph.}
+ \KwData{A resource exchange graph with constraints and preferences.}
  \KwResult{A valid set of resource flows.}
  sort request partitions by average preference\;
- \ForAll{request partitions, $J_r$} {
+ \ForAll{$r \in R$} {
    sort requests by average preference\;
    matched $\leftarrow$ 0\;        
-   \While{matched $\leq q_{J_r}$ and $\exists$ a request} {
+   \While{matched $\leq q_r$ and $\exists$ a request} {
      get next request\;
      sort incoming arcs by preference\;
-     \While{matched $\leq q_{J_r}$ and $\exists$ an arc} {
+     \While{matched $\leq q_r$ and $\exists$ an arc} {
        get next arc\;
-       remaining $\leftarrow q_{J_r}$ - matched\;
-       to\_match $\leftarrow \min \lbrace$remaining, Capacity(arc)$\rbrace$\;
+       remaining $\leftarrow q_r$ - matched\;
+       to\_match $\leftarrow \min \lbrace$remaining, $x_{max} \rbrace$\;
        AddMatch(arc, to\_match)\;
        matched $\leftarrow$ matched + to\_match\;
      }
@@ -540,24 +528,49 @@ and implemented.
  \caption{Greedy Exchange Hueristic}\label{alg::greedy}
 \end{algorithm}
 
-The capacity of each arc in question is the most constraining value $s$
-associated with either node on the arc. For a node $i \in I_b$ and $j \in J_r$,
-the constraining value is defined as
-
-\begin{equation}
-  s = \min 
-        \lbrace 
-        \min \lbrace \frac{s_{I_b, k}}{\beta_{i, j, k}} 
-        \: \forall k \in K_{I_b} \rbrace, 
-        \: \min \lbrace \frac{s_{J_r, k}}{\beta_{i, j, k}} 
-        \: \forall k \in K_{J_r} \rbrace
-        \rbrace.
-\end{equation}
-
-The constraining values of each arc are updated upon declaration of a match in
-Algorithm \ref{alg::greedy}.
-
 \subsubsection{Linear Programming Formulation}\label{abm:dre:lp}
+
+Combining the previous discussions, the LP Formulation of the NFCTP can be
+constructed. In general, the NFCTP is a minimum cost transportation problem that
+includes custom constraints as described in previous sections. Including all of
+the discussion in the previous sections, the formulation is straightforward and
+shown in Equation \ref{eqs:NFCTP-LP}.
+
+%%% 
+\begin{subequations}\label{eqs:NFCTP-LP}
+  \begin{align}
+    %%
+    \min_{z} \:\: & 
+    z = \sum_{i \in I}\sum_{j \in J}c_{i,j} x_{i,j} 
+    & \label{eqs:NFCTP-LP_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j \in J}a^k_{i,j} x_{i,j} \leq b^k_s 
+    &
+    \: \forall \: k \in K_s,  
+    \forall \: i \in s, 
+    \forall s \: \in S \label{eqs:NFCTP-LP_sup} \\
+    %%
+    &
+    \sum_{i \in I}a^k_{i,j} x_{i,j} \leq b^k_r 
+    &
+    \: \forall \: k \in K_r,  
+    \forall \: j \in r, 
+    \forall r \: \in R \label{eqs:NFCTP-LP_req} \\
+    %%
+    &
+    x_{i,j} \in [0, \tilde{x_j}]
+    &
+    \forall \: i \in I \: \forall \: j \in J \label{eqs:NFCTP-LP_x}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
+
+The variables and sets used to define Equation \ref{eqs:NFCTP-LP} have been
+described in detail in previous sections. A short synopsis of the sets used is
+provided in Table \ref{tbl:NFCTP-LP-sets}, and a corresponding synopsis of the
+variables used is provided in Table \ref{tbl:NFCTP-LP-vars}.
 
 %%% 
 \begin{table} [h!]
@@ -605,36 +618,6 @@ $d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of
 \label{tbl:NFCTP-LP-vars}
 \end{table}
 %%%
-
-Combining the previous discussions, the LP Formulation of the NFCTP can be constructed.
-
-%%% 
-\begin{subequations}\label{eqs:NFCTP-LP}
-  \begin{align}
-    %%
-    \min_{z} \:\: & 
-    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J}c_{i,j}^{h} x_{i,j}^{h} 
-    & \label{eqs:NFCTP-LP_obj} \\
-    %%
-    \text{s.t.} \:\: &
-    \sum_{j \in J}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h} \leq s_{i,k} 
-    &
-    \: \forall \: k \in K_{i}^{h},  
-    \forall \: i \in I, \forall \: h \in H \label{eqs:NFCTP-LP_sup} \\
-    %%
-    &
-    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j}) 
-    & 
-    \forall \: j \in J \label{eqs:NFCTP-LP_dem} \\
-    %%
-    &
-    x^h_{i,j} \geq 0
-    &
-    \forall \: x \in X \label{eqs:NFCTP-LP_x}
-    %%
-  \end{align}
-\end{subequations}
-%%% 
 
 \subsubsection{Mixed Integer Linear Programming Formulation}\label{abm:dre:milp}
 
@@ -800,6 +783,70 @@ a linear program, and to round values to form an integer solution. The
 exploration of additional heuristics will be performed based on the outcome of
 the implementation and analysis of this formulation in the \Cyclus simulation
 environment.
+
+\subsubsection{Depatures from the MCTP}
+
+This formulation deviates from the normal MCTP formulation via the expansion of
+capacity constraints (Equation \ref{eqs:NFCTP-LP_sup}) and the inclusion of a
+constraint allowing multiple commodities that are able to meet the demand of a
+producer (Equation \ref{eqs:NFCTP-LP_dem}). The former constraint maintains the
+multi-commodity nature of the formulation. 
+
+Under certain conditions, the NFCTP-LP will result in a simpler problem. The
+first possible condition is that each consumer could have its demand met by only
+one commodity, i.e.,
+
+\begin{equation}\label{eqs:1demand}
+  \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
+\end{equation}
+
+In such a situation, the NFCTP-LP can be transformed into an analog of the
+separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
+a condition will effectively allow one to solve $N$ different instances of a
+single-commodity problem, where $N$ is the cardinality of $H$. 
+
+The second simplifying condition is if the constraining capacity set has a
+cardinality of unity, i.e., 
+
+\begin{equation}\label{eqs:1constraint}
+  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H.
+\end{equation}
+
+If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
+NFCTP-LP is in fact the a normal Transportation Problem, because the quality
+translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
+solution time. 
+
+These simplifications are important to the computation time required to solve
+the resulting problem instance. The general solution technique for LPs is the
+Simplex Method, as previously described. Klee and Minty show that in the worst
+case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
+but in practice it is generally considered very computationally efficient. If
+the problem can be simplified to a TP, then the Transportation Simplex Method
+can be used \cite{ahuja_network_1993}.
+
+\subparagraph{Satisfying Commodity Set Example}
+
+The other departure the NFCTP-LP takes from the normal MCTP formulation is the
+location of its multicommodity dependence. As presented above, the
+MCTP formulation includes a multicommodity arc capacity constraint, Equation
+\ref{eqs:NFCTP-LP_dem}. This constraint models a
+situation in which different commodities can satisfy a consumer's demand. There
+is no direct analog in the NFCTP, i.e., transportation arcs are assumed separate
+for separate commodities.
+
+Take the enrichment facility example, expanding on the previous discussion. Note
+that an enrichment facility takes feed uranium and then enriches its \nucl{235}{U}
+content. This feed uranium can come from different sources which have different
+feed enrichments. In practice, the most likely sources of feed uranium are
+natural uranium (NU) or recycled uranium (RU), a product of reprocessing light
+water reactor fuel. Recycled uranium may be advantageous to use if it has a
+higher weight percent of \nucl{235}{U} than does natural uranium. We can now state the
+set the values for $H_{j}$ for this facility:
+
+\begin{equation}\label{eqs:enr-dem-commods}
+  H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
+\end{equation}
 
 \subsection{Proof of Principle}\label{abm:dre:proof}
 
