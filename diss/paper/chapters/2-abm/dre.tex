@@ -147,7 +147,8 @@ can be solved in a variety of ways. It can be casted to a constrained, bipartite
 network, and any heuristic that provides a feasible solution to such networks
 are valid. To solve the system optimally, however, a formal investigation and
 solution structure is needed. This section describes the construction of such a
-formulation, entitled the \textit{Nuclear Fuel Cycle Transportation Problem}.
+formulation, entitled the \textit{Nuclear Fuel Cycle Transportation Problem}
+(NFCTP).
 
 The basis for the formulation is the Multicommodity Transportation Problem
 described in \S\ref{intro:mtp} with some departures described in detail
@@ -163,11 +164,49 @@ cycle deals with bundled orders, such as nuclear fuel assemblies, thus this
 modeling paradigm is only an approximation. The MILP provides a more realistic
 exchange, but can take much longer to solve. 
 
+\subsubsection{Terminology}
+
+Objects and datastructures generated in the information gathering procedure are
+used in the formal definition of the NFCTP and must be defined.
+
+Each portfolio can be considered separately. The set of supply portfolios is
+denoted as $S$ and the set of request portfolios is denoted as $R$. Each supply
+portfolio is comprsied of $s_M$ supply nodes, and each request portfolio is
+comprised of $r_N$ nodes. The set of supply nodes is denoted $I$, and the set
+of request nodes is denoted $J$. The total number of supply and request nodes is
+then
+
+\begin{equation}
+  \left|{I}\right| = \sum_{s \in S} s_M
+\end{equation}
+
+and
+
+\begin{equation}
+  \left|{J}\right| = \sum_{r \in R} r_N.
+\end{equation}
+
+Each portfolio has a set of commodities, $H$, associated with it. These are
+denoted $H_s$ for supply portfolios and $H_r$ for request
+portfolios. Furthermore there is a set of constraints, $K$, for each commodity
+in a portfolio's set. For instance, a specific set of constraints for a given
+commodity, $h$, and supplier, $s$, is denoted $K_{s, h}$; a requster's
+commodity-based constraints is denoted $K_{r, h}$. Additionally, each unique
+combination of portfolio, commodity, and constraint has an associated
+\textit{constraint coefficient conversion function}, denoted $\beta_{s, h, k}$
+for supply portfolios and $\beta_{r, h, k}$ for request portfolios. A clarifying
+example of the relation between portfolios, commodities, constraints, and
+coefficient conversion functions is provided in \S \ref{abm:dre:fctp:arcs}.
+
+Finally, for each supply-request node pair, there is an associated preference,
+$p_{i, j}$. The set of all preferences is denoted $P$. Similarly, flow between a
+node pair is denoted $x_{i, j}$, and the set of all flows is denoted $X$.
+
 \subsubsection{Exchange Graph}
 
 Upon completion of the information gathering phase, a \textit{bipartite} network
 is formed. This network is called the \textit{exchange graph}. The network
-consists of sending (bid) nodes, $I$ and receiving (request) nodes, $J$. For
+consists of sending (bid) nodes, $I$, and receiving (request) nodes, $J$. For
 each request node, $j$, there may be many bid nodes; however, there is a
 one-to-one mapping between bid nodes and request nodes. In other words, a given
 bid node, $i$, is a unique response to a request node, $j$. An example of a bare
@@ -196,17 +235,17 @@ system, $P$.
   p_{f} < \min P
 \end{equation}
 
-Given the original number of nodes in $I$ and the number of bid portfolios,
-$N_{p, b}$, the total number of bid nodes including false nodes is
+Given the original number of nodes in $I$ and the number of bid portfolios, the
+total number of bid nodes including false nodes is
 
 \begin{equation}
-  \left|{I_t}\right| = \left|{I}\right| + N_{p, b} + 1
+  \left|{I_t}\right| = \left|{I}\right| + \left|{S}\right| + 1
 \end{equation}
 
 Similarly, the total number of request nodes is
 
 \begin{equation}
-  \left|{J_t}\right| = \left|{J}\right| + N_{p, r} + 1
+  \left|{J_t}\right| = \left|{J}\right| + \left|{R}\right| + 1
 \end{equation}
 
 Finally, the total number of arcs is
@@ -223,7 +262,7 @@ fully defined exchange graph.
 
 \TODO{Include figure}
 
-\subsubsection{Arc Properties}
+\subsubsection{Arc Properties}\label{abm:dre:fctp:arcs}
 
 The result of the DRE is flow determined along arcs, where arcs connect supply
 nodes to request nodes. A number of properties are defined on arcs, namely
@@ -256,48 +295,11 @@ generating the formulations shown in \S \ref{abm:dre:lp} and \S
 structure, and preference structure, the notion of commodities is not necessary
 for the exchange graph to be solved.
 
-\paragraph{Constraints}
+\paragraph{Constraint Coefficients}
 
-This formulation deviates from the normal MCTP formulation via the expansion of
-capacity constraints (Equation \ref{eqs:GFCTP-LP_sup}) and the inclusion of a
-constraint allowing multiple commodities that are able to meet the demand of a
-producer (Equation \ref{eqs:GFCTP-LP_dem}). The former constraint maintains the
-multi-commodity nature of the formulation. 
-
-Under certain conditions, the GFCTP-LP will result in a simpler problem. The
-first possible condition is that each consumer could have its demand met by only
-one commodity, i.e.,
-
-\begin{equation}\label{eqs:1demand}
-  \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
-\end{equation}
-
-In such a situation, the GFCTP-LP can be transformed into an analog of the
-separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
-a condition will effectively allow one to solve $N$ different instances of a
-single-commodity problem, where $N$ is the cardinality of $H$. 
-
-The second simplifying condition is if the constraining capacity set has a
-cardinality of unity, i.e., 
-
-\begin{equation}\label{eqs:1constraint}
-  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H.
-\end{equation}
-
-If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
-GFCTP-LP is in fact the a normal Transportation Problem, because the quality
-translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
-solution time. 
-
-These simplifications are important to the computation time required to solve
-the resulting problem instance. The general solution technique for LPs is the
-Simplex Method, as previously described. Klee and Minty show that in the worst
-case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
-but in practice it is generally considered very computationally efficient. If
-the problem can be simplified to a TP, then the Transportation Simplex Method
-can be used \cite{ahuja_network_1993}.
-
-\subparagraph{Capacity Translation Function and Constraints Example}
+Constraint coefficients are determined for an arc based on the proposed resource
+to be transferred along that arc, the requester's constraint translation
+functions, and the suppliers constraint translation function. 
 
 The notion of a capacity translation function is something that has been
 introduced out of necessity due to the complexity of the GFCTP. Accordingly, an
@@ -461,6 +463,48 @@ proof-of-principle, is to define f as an inversion operator.
 \begin{equation}
 f(x) = \frac{1}{x}
 \end{equation}
+
+\subsubsection{Depatures from the MCTP}
+
+
+This formulation deviates from the normal MCTP formulation via the expansion of
+capacity constraints (Equation \ref{eqs:GFCTP-LP_sup}) and the inclusion of a
+constraint allowing multiple commodities that are able to meet the demand of a
+producer (Equation \ref{eqs:GFCTP-LP_dem}). The former constraint maintains the
+multi-commodity nature of the formulation. 
+
+Under certain conditions, the GFCTP-LP will result in a simpler problem. The
+first possible condition is that each consumer could have its demand met by only
+one commodity, i.e.,
+
+\begin{equation}\label{eqs:1demand}
+  \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
+\end{equation}
+
+In such a situation, the GFCTP-LP can be transformed into an analog of the
+separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
+a condition will effectively allow one to solve $N$ different instances of a
+single-commodity problem, where $N$ is the cardinality of $H$. 
+
+The second simplifying condition is if the constraining capacity set has a
+cardinality of unity, i.e., 
+
+\begin{equation}\label{eqs:1constraint}
+  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H.
+\end{equation}
+
+If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
+GFCTP-LP is in fact the a normal Transportation Problem, because the quality
+translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
+solution time. 
+
+These simplifications are important to the computation time required to solve
+the resulting problem instance. The general solution technique for LPs is the
+Simplex Method, as previously described. Klee and Minty show that in the worst
+case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
+but in practice it is generally considered very computationally efficient. If
+the problem can be simplified to a TP, then the Transportation Simplex Method
+can be used \cite{ahuja_network_1993}.
 
 \subsubsection{A Heuristic Solution}
 
