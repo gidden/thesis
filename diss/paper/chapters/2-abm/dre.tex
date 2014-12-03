@@ -166,59 +166,76 @@ exchange, but can take much longer to solve.
 \subsubsection{Exchange Graph}
 
 Upon completion of the information gathering phase, a \textit{bipartite} network
-is formed. The network consists of receiving (request) nodes, $U$, and sending
-(bid) nodes, $V$. For each request node, $u$, there may be many bid nodes;
-however, there is a one-to-one mapping between bid nodes and request nodes. In
-other words, a given bid node, $v$, is a unique response to a request node, $v$.
+is formed. This network is called the \textit{exchange graph}. The network
+consists of sending (bid) nodes, $I$ and receiving (request) nodes, $J$. For
+each request node, $j$, there may be many bid nodes; however, there is a
+one-to-one mapping between bid nodes and request nodes. In other words, a given
+bid node, $i$, is a unique response to a request node, $j$. An example of a bare
+exchange graph graph is shown in Figure \ref{}.
 
 \TODO{Include figure}
 
-There is not a direct analog between the \textit{portfolios} described in \S
-\ref{abm:dre:info} and the bipartite graph structure. The notion of
-\textit{portfolios} does map onto the formulation, however, and will be
-described further in \S \ref{abm:dre:form}.
+In the bipartite graph, portfolios act as partitions that group nodes
+together. Node groups share common constraints, and request node groups share a
+common notion of satisfiable quantity, i.e., a default mass-based constraint. An
+example of a partitioned exchange graph is shown in Figure \ref{}. 
 
-To ensure a feasible solution, additional nodes are added to both $U$
-and $V$. A single bid node is added to $V$ and $N_{p}$ nodes are added to $U$,
-where $N_{p}$ is the number of request portfolios. Thus, the total size of node
-sets and the total number of arcs in the system are
+\TODO{Include figure}
 
-\begin{equation}
-  \left|{U}\right| = \left|{U}\right| + N_{p}
+Because of defined constraints, there may not be sufficient supply or demand in
+the simulated exchange. To ensure a feasible solution, a false supply source and
+a false demand sink are added to the exchange graph. The false source and sink
+are unconstrained. Additionally, false nodes are added to each portfolio. Each
+false node in a request portfolio is connected to the false supply source, and
+each false node in a supply portfolio is connected to the false request
+sink. These arcs are denoted as \textit{false arcs}. The preferences given to
+each false arc, $p_f$, is defined to be lower than the lowest preference in the
+system, $P$.
+
+\begin{equation}\label{eqn:falsepref}
+  p_{f} < \min P
 \end{equation}
 
-\begin{equation}
-  \left|{V}\right| = \left|{V}\right| + 1
-\end{equation}
+Given the original number of nodes in $I$ and the number of bid portfolios,
+$N_{p, b}$, the total number of bid nodes including false nodes is
 
 \begin{equation}
-  \left|{A}\right| = \left|{A}\right| + N_{p}
+  \left|{I_t}\right| = \left|{I}\right| + N_{p, b} + 1
 \end{equation}
 
-Each arc in the additional set, $A'$, is unconstrained (any amount of resource
-flow is allowed) and is given a preference strictly less than the lowest
-preference in the system, i.e.,
+Similarly, the total number of request nodes is
 
 \begin{equation}
-  p' < \min P.
+  \left|{J_t}\right| = \left|{J}\right| + N_{p, r} + 1
 \end{equation}
 
-Accordingly, any additional arc will only be engaged if no other into a request
-node, $u$, have available capacity and if the associated request portfolio is
-not satisfied. Arc in $A'$ are referred to as \textit{false arcs}, because they
-represent flows that do not exist in final solutions.
+Finally, the total number of arcs is
+
+\begin{equation}
+  \left|{A_t}\right| = \left|{A}\right| + N_{p, b} + N_{p, r}
+\end{equation}
+
+Because preferences are defined as in Equation \ref{eqn:falsepref}, any false
+arc will only be engaged if no other possible arc can be engage, due to capacity
+constraints. If any flow is assigned to false arcs after the exchange graph is
+solved, that flow is ignored when initiating transactions. Figure \ref{} shows a
+fully defined exchange graph.
 
 \TODO{Include figure}
 
 \subsubsection{Arc Properties}
+
+The result of the DRE is flow determined along arcs, where arcs connect supply
+nodes to request nodes. A number of properties are defined on arcs, namely
+commodities, constraint coefficients, and preferences.
 
 \paragraph{Commodities}
 
 During the information gathering step in \S \ref{abm:dre:info}, consumers and
 suppliers are queried based on \textit{commodities}. A consumer is allowed to
 request multiple commodities, and a supplier is allowed to supply multiple
-commodities; however, each possible resource transfer is based on a single
-commodity. Accordingly, it is possible to color each arc, given a
+commodities. However, each possible resource transfer, i.e., each arc, is based
+on a single commodity. Accordingly, it is possible to color each arc, given a
 commodity-to-color mapping.
 
 For example, consider an exchange with three fuel commodities ($A$, $B$, $C$),
@@ -232,10 +249,10 @@ graph can be colored:
 
 \TODO{Include figure}
 
-Importantly, the notion of commodities is critical during the information
-gathering step and can be used to group arcs in an exchange graph. It also is
-compelling when generating the formulation shown in \S
-\ref{abm:dre:form}. However, given the constructed network graph, constraint
+The notion of commodities is critical during the information gathering step and
+can be used to partition arcs in an exchange graph. It also is compelling when
+generating the formulations shown in \S \ref{abm:dre:lp} and \S
+\ref{abm:dre:milp}. However, given the constructed network graph, constraint
 structure, and preference structure, the notion of commodities is not necessary
 for the exchange graph to be solved.
 
