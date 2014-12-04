@@ -530,38 +530,47 @@ declaration of a match in Algorithm \ref{alg::greedy}.
 
 \subsubsection{Linear Programming Formulation}\label{abm:dre:lp}
 
-Combining the previous discussions, the LP Formulation of the NFCTP can be
-constructed. In general, the NFCTP is a minimum cost transportation problem that
-includes custom constraints as described in previous sections. Including all of
-the discussion in the previous sections, the formulation is straightforward and
-shown in Equation \ref{eqs:NFCTP-LP}.
+Combining the previous discussions, the LP Formulation of the NFCTP, denoted the
+NFCTP-LP, can be constructed. In general, the NFCTP is a minimum cost
+transportation problem that includes custom constraints as described in previous
+sections. Including all of the discussion in the previous sections, the
+formulation is straightforward and shown in Equation \ref{eqs:NFCTP-LP}.
 
 %%% 
 \begin{subequations}\label{eqs:NFCTP-LP}
   \begin{align}
     %%
-    \min_{z} \:\: & 
+    \min_{z} \:\: 
+    & 
     z = \sum_{i \in I}\sum_{j \in J}c_{i,j} x_{i,j} 
-    & \label{eqs:NFCTP-LP_obj} \\
+    & 
+    \label{eqs:NFCTP-LP_obj} \\
     %%
-    \text{s.t.} \:\: &
+    \text{s.t.} \:\: 
+    &
     \sum_{j \in J}a^k_{i,j} x_{i,j} \leq b^k_s 
     &
-    \: \forall \: k \in K_s,  
+    \: 
+    \forall \: k \in K_s,  
     \forall \: i \in I_s, 
-    \forall s \: \in S \label{eqs:NFCTP-LP_sup} \\
+    \forall \: s \in S 
+    \label{eqs:NFCTP-LP_sup} \\
     %%
     &
     \sum_{i \in I}a^k_{i,j} x_{i,j} \geq b^k_r 
     &
-    \: \forall \: k \in K_r,  
+    \: 
+    \forall \: k \in K_r,  
     \forall \: j \in J_r, 
-    \forall r \: \in R \label{eqs:NFCTP-LP_req} \\
+    \forall \: r \in R 
+    \label{eqs:NFCTP-LP_req} \\
     %%
     &
     x_{i,j} \in [0, \tilde{x_j}]
     &
-    \forall \: i \in I \: \forall \: j \in J \label{eqs:NFCTP-LP_x}
+    \forall \: i \in I, 
+    \forall \: j \in J 
+    \label{eqs:NFCTP-LP_x}
     %%
   \end{align}
 \end{subequations}
