@@ -11,6 +11,12 @@ into a form of the Multicommodity Transportation Problem (MCTP) and solved, is
 then described in \S \ref{abm:dre:fctp}. Finally, two proof of principle
 simulations with novel fuel cycle DREs are presented in \S \ref{abm:dre:proof}.
 
+This section represents the culmination of significant previous effort
+\cite{gidden_agent-based_2013, gidden_agent-based_2014,
+  gidden_agent-based_slc_2013}. What follows constitutes the refinement of
+previous descriptions of the DRE methodology with lessons learned from initial
+implementation and usage.
+
 \subsection{Problem Statement}\label{abm:dre:prob}
 
 As a next-generation nuclear fuel cycle simulation framework, Cyclus maintains a
@@ -477,57 +483,6 @@ If cost data and a valid cost assignment methodology is developed in the future,
 costs may be used directly, and the preference-to-cost translation may be
 ignored.
 
-\subsubsection{A Heuristic Solution}
-
-With full simluation domain knowledge of supply and demand, including false
-arcs, a feasible solution can be found. By definition a feasible solution is a
-\textit{solution} to the possible flow of resources, but not necessarily an
-\textit{optimal} solution. Many heuristics may be applied to bipartite graphs
-with constrainted flows. A simple \textit{greedy} heuristic is presented here
-and implemented. 
-
-The maximum flow along an arc, $x_{max}$, depends on the constraints associated
-with each node on the arc. For nodes $i$ and $j$ belonging to portfolios $s$ and
-$r$, respectively, the maximum allowable flow is defined as
-
-\begin{equation}
-  x_{max} = \min 
-        \lbrace 
-        \min \lbrace \frac{b^k_s}{\beta^k_{i, j}} 
-        \: \forall k \in K_s \rbrace, 
-        \: \min \lbrace \frac{b^k_r}{\beta^k_{i, j}} 
-        \: \forall k \in K_r \rbrace
-        \rbrace.
-\end{equation}
-
-The Greedy Exchange Hueristic matches maximum flow along arcs, up to the
-requested amount defined by each request portfolio, $q_r$, after having sorted
-all arcs. The constraining values of each arc, $b_k$, are updated upon
-declaration of a match in Algorithm \ref{alg::greedy}.
-
-\begin{algorithm}[!h]
- \SetAlgoLined
- \KwData{A resource exchange graph with constraints and preferences.}
- \KwResult{A valid set of resource flows.}
- sort request partitions by average preference\;
- \ForAll{$r \in R$} {
-   sort requests by average preference\;
-   matched $\leftarrow$ 0\;        
-   \While{matched $\leq q_r$ and $\exists$ a request} {
-     get next request\;
-     sort incoming arcs by preference\;
-     \While{matched $\leq q_r$ and $\exists$ an arc} {
-       get next arc\;
-       remaining $\leftarrow q_r$ - matched\;
-       to\_match $\leftarrow \min \lbrace$remaining, $x_{max} \rbrace$\;
-       AddMatch(arc, to\_match)\;
-       matched $\leftarrow$ matched + to\_match\;
-     }
-   }
- }
- \caption{Greedy Exchange Hueristic}\label{alg::greedy}
-\end{algorithm}
-
 \subsubsection{Linear Programming Formulation}\label{abm:dre:lp}
 
 Combining the previous discussions, the LP Formulation of the NFCTP, denoted the
@@ -540,7 +495,7 @@ formulation is straightforward and shown in Equation \ref{eqs:NFCTP-LP}.
 \begin{subequations}\label{eqs:NFCTP-LP}
   \begin{align}
     %%
-    \min_{z} \:\: 
+    \min_{x} \:\: 
     & 
     z = \sum_{i \in I}\sum_{j \in J}c_{i,j} x_{i,j} 
     & 
@@ -548,20 +503,18 @@ formulation is straightforward and shown in Equation \ref{eqs:NFCTP-LP}.
     %%
     \text{s.t.} \:\: 
     &
-    \sum_{j \in J}a^k_{i,j} x_{i,j} \leq b^k_s 
+    \sum_{i \in I_s} \sum_{j \in J} a^k_{i,j} x_{i,j} \leq b^k_s 
     &
     \: 
-    \forall \: k \in K_s,  
-    \forall \: i \in I_s, 
+    \forall \: k \in K_s, 
     \forall \: s \in S 
     \label{eqs:NFCTP-LP_sup} \\
     %%
     &
-    \sum_{i \in I}a^k_{i,j} x_{i,j} \geq b^k_r 
+    \sum_{j \in J_r} \sum_{i \in I} a^k_{i,j} x_{i,j} \geq b^k_r 
     &
     \: 
     \forall \: k \in K_r,  
-    \forall \: j \in J_r, 
     \forall \: r \in R 
     \label{eqs:NFCTP-LP_req} \\
     %%
@@ -635,98 +588,112 @@ the DRE using this formulation will never fail within a simulation.
 
 The previous linear program (LP) formulation of the Generic Fuel Cycle
 Transportation Problem fully describes many of the types of transactions that
-arise at any given time step. However, it importantly glosses over the critical
-case of reactor fuel orders, which comprise a large amount of material orders
-within the simulation context. Specifically, it allows reactor fuel orders to be
-met by more than one supplier with an arbitrary amount of the order met by each
+arise at any given time step. However, it does not allow the critical case of
+reactor fuel orders, which comprise a large amount of material orders within the
+simulation context. Specifically, it allows reactor fuel orders to be met by
+more than one supplier with an arbitrary amount of the order met by each
 supplier. Put another way, the LP formulation does not contain the discrete
-material information required to model the transaction of fuel assemblies. Such
-detail is not necessary in every simulation, but we wish to allow this advanced
-modeling for those that do need it. In order to provide this capability of
-quantizing orders, binary decision variables must be introduced and integer
-programming techniques must be utilized to solve the resulting mixed
-integer-linear program. 
+material information required to model the transaction of fuel assemblies. In
+order to provide this capability of quantizing orders, binary decision variables
+must be introduced and integer programming techniques must be utilized to solve
+the resulting mixed integer-linear program.
 
-It should be noted that the addition of integer variables changes both the
-complexity of the formulation and the complexity of the solution technique. Such
-a change requires a Mixed Integer-Linear Program (MILP) formulation and solution
-via the branch-and-bound method which solves NP-Hard combinatorial optimization
-problems whereas the Linear Program (LP) version requires the simplex method
-which is much more efficient.
+The addition of integer variables changes both the complexity of the formulation
+and the complexity of the solution technique. Such a change requires a Mixed
+Integer-Linear Program (MILP) formulation and solution via the branch-and-bound
+method which solves NP-Hard combinatorial optimization problems. The Linear
+Program (LP) version requires the simplex method which is much more efficient.
 
-The updated formulation is presented below. The key difference is the inclusion
-binary variables $y_{i,j}^{h}$, which are 1 if producer $i$ trades commodity $h$
-with consumer $j$ and constants $\tilde{x}_{j}^{h}$, which denote the quantity
-of a quantized order. Further a new set is introduced, $J_{e}$, the set of
-consumers who require quantized, or exclusive, orders. The original set of
-consumers, i.e., those who allow partial orders, are denoted $J_{p}$. These two
-sets constitute the set of all consumers.
+The primary difference between the LP and MILP formulations is the inclusion
+binary decision variables $y_{i,j}$. A variable $y_{i,j}$ has a value of 1 if
+flow occurs between producer node $i$ and consumer node $j$. If flow occurs, its
+quantity will be equal to the equivalent flow upper bound along that arc,
+$\tilde{x}_{j}$, which denote the quantity of a quantized order.
 
-\begin{equation}\label{eqs:consumer-union}
-  J = J_{p} \cup J_{e}
+Binary variables, representing quantized flow, are directly related to the
+notion of \textit{exclusive} bids and requests discussed in \S
+\ref{abm:dre:info}. In the MILP formulation, an arc $(i, j)$ is considered
+exclusive if either node $i$ or node $j$ was defined as exclusive in the
+information gathering phase of the DRE. Accordingly, it is useful to partition
+all arcs based on this characteristic. Given the set of arcs $A$, a partition
+exists such that $A$ can be separated into exclusive arcs, $A_e$, and
+non-exclusive arcs, or arcs that allow partial flow, $A_p$.
+
+\begin{equation}\label{eqs:arc-union}
+  A = A_{p} \cup A_{e}
 \end{equation}
 
-The Generic Fuel Cycle Transportation Problem with Exclusive Orders (NFCTP-E)
-formulation follows:
+Similarly, each partition can be further subdivided into partitions based on
+supplier and requester. 
 
-\begin{subequations}\label{eqs:NFCTP-E}
+\begin{equation}\label{eqs:arc-union}
+  A = \bigcup_{r \in R} A_{p_r} \cup A_{e_r}
+\end{equation}
+
+\begin{equation}\label{eqs:arc-union}
+  A = \bigcup_{s \in S} A_{p_s} \cup A_{e_s}
+\end{equation}
+
+Using the above arc partition notation allows for a much simpler written
+formulation of the MILP that looks quite close to the related LP formulation
+shown in Equation \ref{eqs:NFCTP-LP}. The full formulation of the NFCTP is shown
+in Equation \ref{eqs:NFCTP}
+
+%%% 
+% this could probably be realigned 
+\begin{subequations}\label{eqs:NFCTP}
   \begin{align}
     %%
-    \label{eq:GRCTP-E_obj}
-    \min_{z} \:\: 
+    \min_{x, y} \:\: 
     & 
-    z = \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{p}}c_{i,j}^{h} x_{i,j}^{h} 
-    + \sum_{h \in H}\sum_{i \in I}\sum_{j \in J_{e}}c_{i,j}^{h} y_{i,j}^{h} \tilde{x}_{j}^{h}
-    && \\
+    z \:\: = 
+    \sum_{(i, j) \in A_p} c_{i,j} x_{i,j} 
+    \: + 
+    \sum_{(i, j) \in A_e} c_{i,j} \tilde{x_j} y_{i,j} 
+    & 
+    \label{eqs:NFCTP_obj} \\
     %%
-    \label{eq:GRCTP-E_sup}
-    &
     \text{s.t.} \:\: 
-    \sum_{j \in J_{p}}\beta_{i,k}(q_{j}^{h}) x_{i,j}^{h}
-    + \sum_{j \in J_{e}}\beta_{i,k}(q_{j}^{h}) y_{i,j}^{h} \tilde{x}_{j}^{h} \leq s_{i,k}^{h} \nonumber \\
     &
-    \qquad\qquad\qquad\qquad
-    \forall \: i \in I, \: \forall \: k \in K_{i}^{h}, \forall \: {h \in H}\\
+    \sum_{(i, j) \in A_{p_s}} a^k_{i,j} x_{i,j}
+    \: + 
+    \sum_{(i, j) \in A_{e_s}} a^k_{i,j} \tilde{x_j} y_{i,j}
+    \leq b^k_s 
+    &
+    \: 
+    \forall \: k \in K_s, 
+    \forall \: s \in S 
+    \label{eqs:NFCTP_sup} \\
     %%
-    \label{eq:GRCTP-E_dem_p}
     &
-    \sum_{i \in I}\sum_{h \in H_{j}} x_{i,j}^{h} \geq d_{j}(H_{j})
+    \sum_{(i, j) \in A_{p_r}} a^k_{i,j} x_{i,j}
+    \: + 
+    \sum_{(i, j) \in A_{e_r}} a^k_{i,j} \tilde{x_j} y_{i,j}
+    \geq b^k_r 
     &
-    \forall \: j \in J_{o} &\\
+    \: 
+    \forall \: k \in K_r,  
+    \forall \: r \in R 
+    \label{eqs:NFCTP_req} \\
     %%
-    \label{eq:GRCTP-E_dem_e}
     &
-    \sum_{i \in I}\sum_{h \in H_{j}} y_{i,j}^{h} \tilde{x}_{j}^{h} \geq d_{j}(H_{j}) 
+    x_{i,j} \in [0, \tilde{x_j}]
     &
-    \forall \: j \in J_{e}  &\\
+    \forall \: (i, j) \in A_p
+    \label{eqs:NFCTP_x} \\
     %%
-    \label{eq:GRCTP-E_sumy}
     &
-    \sum_{h \in H}\sum_{i \in I} y_{i,j}^{h} = 1
+    y_{i,j} \in {0, 1}
     &
-    \forall \: j \in J_{e}  &\\
-    %%
-    \label{eq:GRCTP-E_x}
-    &
-    x_{i,j}^{h} \geq 0
-    &
-    \forall \: x \in X  &\\
-    %%
-    \label{eq:GRCTP-E_y}
-    &
-    y_{i,j}^{h} \in \{0,1\}
-    &
-    \forall \: y \in Y &
+    \forall \: (i, j) \in A_e
+    \label{eqs:NFCTP_y}
     %%
   \end{align}
 \end{subequations}
+%%% 
 
-The sets and variables involved are described in Tables \ref{tbl:NFCTP-E-sets}
-and \ref{tbl:NFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
-
-\begin{equation}
-  H_{j} \subseteq H \: \forall \: j \in J_{p}, \forall \: j \in J_{e}
-\end{equation}
+The sets and variables involved in Equation \ref{eqs:NFCTP} are described in
+Tables \ref{tbl:NFCTP-sets} and \ref{tbl:NFCTP-vars}.
 
 %%% 
 \begin{table} [h!]
@@ -735,20 +702,20 @@ and \ref{tbl:NFCTP-E-vars}. Note that $H_{j}$ is a subset of the commodities:
 \hline
 Set         & Description \\
 \hline
-$H$         & all commodities  \\
-$I$         & all producers  \\
-$J_{p}$     & all consumers who accept partial orders  \\
-$J_{e}$     & all consumers who accept only exclusive orders  \\
+$S$     & suppliers \\
+$R$     & requesters \\
+$A_p$     & arcs that allow \textit{partial} flows \\
+$A_e$     & \textit{exclusive} flow arcs  \\
+$A_{p_s}$     & arcs that allow \textit{partial} flows for supplier $s$ \\
+$A_{e_s}$     & \textit{exclusive} flow arcs for supplier $s$ \\
+$A_{p_p}$     & arcs that allow \textit{partial} flows for requeseter $r$ \\
+$A_{e_p}$     & \textit{exclusive} flow arcs for requeseter $r$ \\
 $X$         & the feasible set of flows between producers and consumers  \\
-$Y$         & the feasible set of exclusive flows between 
-            producers and consumers  \\
-$K_{i}^{h}$ & the set of constraining capacities for 
-            producer $i$ of commodity $h$  \\
-$H_{j}$     & the set of satisfying commodities for consumer $j$  \\
+$Y$         & the binary variable set of flows between producers and consumers  \\
 \hline
 \end{tabularx}
-\caption{Sets Appearing in the NFCTP-E Formulation}
-\label{tbl:NFCTP-E-sets}
+\caption{Sets Appearing in the NFCTP Formulation}
+\label{tbl:NFCTP-sets}
 \end{table}
 %%% 
 
@@ -759,106 +726,177 @@ $H_{j}$     & the set of satisfying commodities for consumer $j$  \\
 \hline
 Variable    & Description \\
 \hline
-$c_{i,j}^{h}$             & the unit cost of commodity $h$ 
-                          for producer $i$ and consumer $j$  \\
-$x_{i,j}^{h}$             & a decision variable, the flow of commodity $h$ 
-                          for producer $i$ and consumer $j$  \\
-$q_{j}^{h}$               & the requested quality of commodity $h$ 
-                          by consumer $j$  \\
-$y_{i,j}^{h}$             & a binary decision variable that is equal to 1 if 
-                          there is flow from producer $i$ to consumer $j$ of 
-                          commodity $h$ \\
-$\tilde{x}_{j}^{h}$       & the amount of commodity $h$ requested by 
-                          consumer $j$ \\
-$\beta_{i,k}(q_{j}^{h})$  & a capacity translation function for capacity 
-                          constraint $k$ of producer $i$ given $q_{j}^{h}$ \\
-$s_{i,k}^{h}$             & a supply capacity of producer $i$ corresponding to 
-                          capacity constraint $k$ of commodity $h$ \\
-$d_{j}(H_{j})$            & the total demand of consumer $j$ over the set of 
-                          satisfying commodities $H_{j}$ \\
+$c_{i,j}$             & the unit cost of flow
+                          from producer node $i$ to consumer node $j$  \\
+$x_{i,j}$             & a decision variable, the flow 
+                          from producer node $i$ to consumer node $j$  \\
+$y_{i,j}$             & a decision variable, whether flow exists 
+                          from producer node $i$ to consumer node $j$  \\
+$a_{i,j}^k$ & the constraint coeffecient for constraint $k$ 
+                          on flow between nodes $i$ and $j$  \\
+$b_s^k$   & the constraining value for constraint $k$ of supplier $s$ \\
+$b_r^k$   & the constraining value for constraint $k$ of requester $r$ \\
+$\tilde{x_j}$ & the requested quantity associated with request node $j$ \\
 \hline
 \end{tabularx}
-\caption{Variables Appearing in the NFCTP-E Formulation}
-\label{tbl:NFCTP-E-vars}
+\caption{Variables Appearing in the NFCTP Formulation}
+\label{tbl:NFCTP-vars}
 \end{table}
 %%%
 
 The examples of the various constraints from the previous section also apply
-here. The only difference is the notion of the binary variables, $y_{i,j}^{h}$,
-which denote a sort of on/off switch as to whether a consumer's entire requested
-amount of material is met by a supplier or not.
+here. The only difference is the notion of the binary variables, $y_{i,j}$,
+which act as on/off switch as to whether a consumer's entire requested amount of
+a resource is met by a supplier or not.
 
 It should be noted that this advanced formulation adds significant complexity to
-the resolution method at every time step. However, simple heuristics exist. The
-most common of them is to solve a relaxed version of the problem in the form of
-a linear program, and to round values to form an integer solution. The
-exploration of additional heuristics will be performed based on the outcome of
-the implementation and analysis of this formulation in the \Cyclus simulation
-environment.
+the resolution method at every time step. However, simple heuristics exist. A
+common heuristic for MILPs is to solve a relaxed version of the problem in the
+form of a linear program, and to round values to form an integer solution. A
+heuristic used in Cyclus is provided in \S \ref{abm:dre:nfctp:heur}.
 
-\subsubsection{Depatures from the MCTP}
+Note that each constraint coefficient for binary variables can be rewritten as 
 
-This formulation deviates from the normal MCTP formulation via the expansion of
-capacity constraints (Equation \ref{eqs:NFCTP-LP_sup}) and the inclusion of a
-constraint allowing multiple commodities that are able to meet the demand of a
-producer (Equation \ref{eqs:NFCTP-LP_dem}). The former constraint maintains the
-multi-commodity nature of the formulation. 
-
-Under certain conditions, the NFCTP-LP will result in a simpler problem. The
-first possible condition is that each consumer could have its demand met by only
-one commodity, i.e.,
-
-\begin{equation}\label{eqs:1demand}
-  \left|{H_{j}}\right| = 1 \: \forall \: j \in J.
+\begin{equation}
+a^{k\prime}_{i,j} = a^k_{i,j} \tilde{x_j}, 
 \end{equation}
 
-In such a situation, the NFCTP-LP can be transformed into an analog of the
-separable transportation problem as shown in \cite{bertsekas_network_1998}. Such
-a condition will effectively allow one to solve $N$ different instances of a
-single-commodity problem, where $N$ is the cardinality of $H$. 
+which results in a simpler formulation shown in Equation \ref{eqs:NFCTP_simp}.
 
-The second simplifying condition is if the constraining capacity set has a
-cardinality of unity, i.e., 
+%%% 
+% this could probably be realigned 
+\begin{subequations}\label{eqs:NFCTP_simp}
+  \begin{align}
+    %%
+    \min_{x, y} \:\: 
+    & 
+    z \:\: = 
+    \sum_{(i, j) \in A_p} c_{i,j} x_{i,j} 
+    \: + 
+    \sum_{(i, j) \in A_e} c_{i,j} \tilde{x_j} y_{i,j} 
+    & 
+    \label{eqs:NFCTP_simp_obj} \\
+    %%
+    \text{s.t.} \:\: 
+    &
+    \sum_{(i, j) \in A_{p_s}} a^k_{i,j} x_{i,j}
+    \: + 
+    \sum_{(i, j) \in A_{e_s}} a^{k\prime}_{i,j} y_{i,j}
+    \leq b^k_s 
+    &
+    \: 
+    \forall \: k \in K_s, 
+    \forall \: s \in S 
+    \label{eqs:NFCTP_simp_sup} \\
+    %%
+    &
+    \sum_{(i, j) \in A_{p_r}} a^k_{i,j} x_{i,j}
+    \: + 
+    \sum_{(i, j) \in A_{e_r}} a^{k\prime}_{i,j} y_{i,j}
+    \geq b^k_r 
+    &
+    \: 
+    \forall \: k \in K_r,  
+    \forall \: r \in R 
+    \label{eqs:NFCTP_simp_req} \\
+    %%
+    &
+    x_{i,j} \in [0, \tilde{x_j}]
+    &
+    \forall \: (i, j) \in A_p
+    \label{eqs:NFCTP_simp_x} \\
+    %%
+    &
+    y_{i,j} \in {0, 1}
+    &
+    \forall \: (i, j) \in A_e
+    \label{eqs:NFCTP_simp_y}
+    %%
+  \end{align}
+\end{subequations}
+%%% 
 
-\begin{equation}\label{eqs:1constraint}
-  \left|{K_{i}^{h}}\right| = 1 \: \forall \: i \in I, \: \forall \: h \in H.
+\subsubsection{A Heuristic Solution}\label{abm:dre:nfctp:heur}
+
+With full simluation domain knowledge of supply and demand, including false
+arcs, a feasible solution can be found. By definition a feasible solution is a
+\textit{solution} to the possible flow of resources, but not necessarily an
+\textit{optimal} solution. Many heuristics may be applied to bipartite graphs
+with constrainted flows. A simple \textit{greedy} heuristic is presented here
+and implemented. 
+
+The maximum flow along an arc, $x_{max}$, depends on the constraints associated
+with each node on the arc. For nodes $i$ and $j$ belonging to portfolios $s$ and
+$r$, respectively, the maximum allowable flow is defined as
+
+\begin{equation}
+  x_{max} = \min 
+        \lbrace 
+        \min \lbrace \frac{b^k_s}{a^k_{i, j}} 
+        \: \forall k \in K_s \rbrace, 
+        \: \min \lbrace \frac{b^k_r}{a^k_{i, j}} 
+        \: \forall k \in K_r \rbrace
+        \rbrace.
 \end{equation}
 
-If both Equation \ref{eqs:1constraint} and \ref{eqs:1demand} hold, then the
-NFCTP-LP is in fact the a normal Transportation Problem, because the quality
-translation function ($\beta_{i,k}(q_{j}^{h})$) translates to a constant at
-solution time. 
+The Greedy Exchange Hueristic matches maximum flow along arcs, up to the
+requested amount defined by each request portfolio, $q_r$, after having sorted
+all arcs. The constraining values of each arc, $b_k$, are updated upon
+declaration of a match in Algorithm \ref{alg::greedy}.
 
-These simplifications are important to the computation time required to solve
-the resulting problem instance. The general solution technique for LPs is the
-Simplex Method, as previously described. Klee and Minty show that in the worst
-case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
-but in practice it is generally considered very computationally efficient. If
-the problem can be simplified to a TP, then the Transportation Simplex Method
-can be used \cite{ahuja_network_1993}.
+\begin{algorithm}[!h]
+ \SetAlgoLined
+ \KwData{A resource exchange graph with constraints and preferences.}
+ \KwResult{A valid set of resource flows.}
+ sort request partitions by average preference\;
+ \ForAll{$r \in R$} {
+   sort requests by average preference\;
+   matched $\leftarrow$ 0\;        
+   \While{matched $\leq q_r$ and $\exists$ a request} {
+     get next request\;
+     sort incoming arcs by preference\;
+     \While{matched $\leq q_r$ and $\exists$ an arc} {
+       get next arc\;
+       remaining $\leftarrow q_r$ - matched\;
+       to\_match $\leftarrow \min \lbrace$remaining, $x_{max} \rbrace$\;
+       AddMatch(arc, to\_match)\;
+       matched $\leftarrow$ matched + to\_match\;
+     }
+   }
+ }
+ \caption{Greedy Exchange Hueristic}\label{alg::greedy}
+\end{algorithm}
 
-\subparagraph{Satisfying Commodity Set Example}
+\subsubsection{Depature from the MCTP}
 
-The other departure the NFCTP-LP takes from the normal MCTP formulation is the
-location of its multicommodity dependence. As presented above, the
-MCTP formulation includes a multicommodity arc capacity constraint, Equation
-\ref{eqs:NFCTP-LP_dem}. This constraint models a
-situation in which different commodities can satisfy a consumer's demand. There
-is no direct analog in the NFCTP, i.e., transportation arcs are assumed separate
-for separate commodities.
+The classic MCTP includes the coloring of flows based on commodity type. For
+example, for a commodity, $h$, the unit cost of flow would be $c^h_{i,j}$ rather
+than $c_{i, j}$. This is included because multiple commodities can flow along
+the same arc in the MCTP. In other words, the node-arc incidence matrix includes
+an extra commodity dimension. 
+
+The multicommodity nature of the NFCTP is included in constraints, rather than
+arcs. Because each node pairing, $(i, j)$, corresponds to a specific, proposed
+resource transfer, it can only have one commodity associated with it. Instead,
+the constraint set, $K$, is applied over multiple arcs, where each arc is
+assigned its own commodity. 
 
 Take the enrichment facility example, expanding on the previous discussion. Note
-that an enrichment facility takes feed uranium and then enriches its \nucl{235}{U}
-content. This feed uranium can come from different sources which have different
-feed enrichments. In practice, the most likely sources of feed uranium are
-natural uranium (NU) or recycled uranium (RU), a product of reprocessing light
-water reactor fuel. Recycled uranium may be advantageous to use if it has a
-higher weight percent of \nucl{235}{U} than does natural uranium. We can now state the
-set the values for $H_{j}$ for this facility:
+that an enrichment facility takes feed uranium and then enriches its
+\nucl{235}{U} content. This feed uranium can come from different sources which
+have different feed enrichments. In practice, the most likely sources of feed
+uranium are natural uranium (NU) or recycled uranium (RU), a product of
+reprocessing light water reactor fuel. Recycled uranium may be advantageous to
+use if it has a higher weight percent of \nucl{235}{U} than does natural
+uranium. We can now state the set the values for $H_{r}$ for this facility:
 
 \begin{equation}\label{eqs:enr-dem-commods}
-  H_{enr} = \{ \mbox{NU}, \mbox{RU} \}
+  H_{r} = \{ \mbox{NU}, \mbox{RU} \}
 \end{equation}
+
+One or more constraints would then accompany any requests. For example, one
+could constraint total \nucl{235}{U} content needed, which would include both NU
+and RU flows.
 
 \subsection{Proof of Principle}\label{abm:dre:proof}
 

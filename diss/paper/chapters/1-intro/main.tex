@@ -54,6 +54,14 @@ The order of phases is:
 
 \subsection{Mathematical Programming}
 
+These simplifications are important to the computation time required to solve
+the resulting problem instance. The general solution technique for LPs is the
+Simplex Method, as previously described. Klee and Minty show that in the worst
+case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
+but in practice it is generally considered very computationally efficient. If
+the problem can be simplified to a TP, then the Transportation Simplex Method
+can be used \cite{ahuja_network_1993}.
+
 \subsection{Multicommodity Transportation Problem}\label{intro:mtp}
 
 \section{Motivation}
