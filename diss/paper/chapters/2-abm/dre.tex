@@ -963,49 +963,53 @@ and RU flows.
 \subsection{Proof of Principle}\label{abm:dre:proof}
 
 In order to demonstrate the correctness of the methodology and implementation,
-two test cases were developed and analyzed. Both scenarios validate the ability
-of the DRE to model preferences, preference adjustment, and unresolved
-markets. The first scenario depicts a simulation including capacity
-constraints. The second scenario illustrates a simulation that involves quality
-constraints.
+two test cases were developed and analyzed. These test cases are entire Cyclus
+simulations in which the full DRE procedure is executed at each time step. Both
+scenarios validate the ability of the DRE to model preferences, preference
+adjustment, and unresolved markets. The first scenario is a simulation including
+quantity-based constraints and dynamic commodity-based preferences. The second
+scenario illustrates a simulation that involves quality constraints and dynamic
+quality-based requests. In each scenario, fuel quantities are treated using
+arbitrary units without loss of generality. For the purposes of the enrichment
+example, a unit of fuel is equivalent to a kilogram.
 
-In the simulations, each requester has a preference associated with each
-commodity. Such preferences are unitless scalars and apply over all agents
-requesting that commodity. Mass flows in the simulations have been normalized to
-unity. This is permissible because the DRE procedure is scale invariant under
-mass. Whether 1 kg or 1000 kg of fuel is exchanged is not relevant to the
-decision making process about \emph{how} to exchange such material.
+Each scenario is comprised of archetypes defined in Cycamore
+\cite{cycamore2013}. The minimal Institution and Region archetypes are used
+because no complicated facility deployment logic is needed. The facility
+archetypes used include the \textit{SourceFacility}, \textit{BatchReactor}, and
+\textit{EnrichmentFacility}.
 
-\subsubsection{Test Cases}
+Finally, each instance of the DRE is solved using the greedy heuristic described
+in \S \ref{abm:dre:nfctp:heur}. In each case, requests and supplies are
+\textit{not} exclusive, and thus multiple sources of supply may be matched to a
+request. In general, these exchanges are very small and have a unique objective
+solution which corresponds to the solution determined by the greedy heuristic.
+
+\subsubsection{Test Cases}\label{abm:dre:proof:cases}
 
 \paragraph{2 Sources, 3 Reactors}
 
-As shown in Figure \ref{fig::fc1}, this scenario includes
-three \textit{BatchReactors} and
-two \textit{SourceFacilities}. The \textit{BatchReactors}, denoted
-as \Reactor{1}, \Reactor{2}, and \Reactor{3}, each have a unique fuel
-preference. One \textit{SourceFacility} supplies MOX while the other supplies
-UOX; these are denoted as \MOXSource{} and \UOXSource{}, respectively, whose
-recipes are identical to those used by
-VISION \cite{jacobson_verifiable_2010}. For the purpose of demonstrating DRE
-here, the UOX and MOX fuel forms are considered completely fungible. While this
-is an incorrect assumption in general it is sufficient to show the dynamism of
-the method desired.
+As shown in Figure \ref{fig::fc1}, this scenario includes three
+\textit{BatchReactors} and two \textit{SourceFacilities}. The
+\textit{BatchReactors}, denoted as \Reactor{1}, \Reactor{2}, and \Reactor{3},
+each have a unique fuel preference. One \textit{SourceFacility} supplies MOX
+while the other supplies UOX; these are denoted as \MOXSource{} and
+\UOXSource{}, respectively. Any reactor may be fueled from MOX or UOX fuel; both
+fuel types are \textit{fungible} in this scenario.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.55\textwidth]{./figs/fc1.pdf}
-    \caption[]{\label{fig::fc1}
-        Schematic illustrating the fuel cycle scenario. The thickness of the
-        arrows represents the preference value and the grey color indicates that
-        a material transfer is possible.}
+    \caption[]{\label{fig::fc1} Schematic illustrating the first fuel cycle
+      scenario. The thickness of the arrows represents the preference value and
+      the grey color indicates that a material transfer is possible.}
   \end{center}
 \end{figure}
 
 In this example case \Reactor{1}, \Reactor{2}, and \Reactor{3} are deployed
 sequentially over 3 time steps. Each of these has a full core when built and
-requires 1 kg of fresh fuel at each subsequent time step. Both source facilities
-have a capacity of 2.5 kg each time step.
+requires 1 unit of fresh fuel at each subsequent time step. Both source facilities
+have a capacity of 2.5 units each time step.
 
 The simulation begins with the following facilities: \MOXSource{}, \UOXSource{},
 and \Reactor{1}. At time step 2, \Reactor{2} is deployed, followed
@@ -1019,10 +1023,10 @@ summarizes the reactor preferences as a function of time.
 \begin{table}
   \begin{center}
     \caption{\label{table::scen1} 
-        Time sequence of reactor preferences and the total MOX requested. The MOX capacity for each time step is 2.5 kg.}
+        Time sequence of reactor preferences and the total MOX requested. The MOX capacity for each time step is 2.5 units.}
     \begin{tabular}{m{1cm}|cc|cc|cc|m{2cm}}
     \toprule
-    Time step & \multicolumn{2}{c|}{\Reactor{1}} & \multicolumn{2}{c|}{\Reactor{2}} & \multicolumn{2}{c|}{\Reactor{3}} & Total MOX Requested [kg]\\
+    Time step & \multicolumn{2}{c|}{\Reactor{1}} & \multicolumn{2}{c|}{\Reactor{2}} & \multicolumn{2}{c|}{\Reactor{3}} & Total MOX Requested [units]\\
               & Fuel & Preference & Fuel & Preference & Fuel & Preference  \\
     \midrule
     1         & MOX  & 1.0 & none &     & none &     & 0.0 \\
@@ -1048,17 +1052,15 @@ given amount and quality of enriched uranium upon refueling.
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.55\textwidth]{./figs/fc2.pdf}
-    \caption[]{\label{fig::fc2}
-        Schematic illustrating the fuel cycle scenario. The thickness of the arrows represents the preference value.}
+    \caption[]{\label{fig::fc2} Schematic illustrating the second fuel cycle
+      scenario. The thickness of the arrows represents the preference value.}
   \end{center}
 \end{figure}
 
 The \Enrichment{} facility is constrained by a constant capacity of 10 SWU per
-time step. For this entire simulation, trade between \Enrichment{}
-and \Reactor{1} is preferred over trade between \Enrichment{} and \Reactor{2}
-with preference values of 1.0 and 0.5, respectively. The preferences are
-assigned to reactors in order to provide a consistent solution using the greedy
-algorithm described in \S \ref{subsect::drep}. Each reactor requests 1 kg of
+time step. For this entire simulation, trade between \Enrichment{} and
+\Reactor{1} is preferred over trade between \Enrichment{} and \Reactor{2} with
+preference values of 1.0 and 0.5, respectively. Each reactor requests 1 unit of
 enriched uranium at each time step.
 
 Initially, both reactors are present in the simulation and have a full core of
@@ -1089,27 +1091,26 @@ time.
 
 \subsubsection{Results}
 
-To demonstrate the dynamic resource exchange implemented in \Cyclus{} relatively
-small simulations may be performed. This is in part because market demands may
-be independently varied from time step to time step.  Furthermore, dynamism is
-demonstrated only when market demands change. Integrating results over several
-time steps with the same steady state conditions and constraints does not yield
-new insights into the procedure at hand.
+The cases outlined in \S \ref{abm:dre:proof:cases} have been designed to provide
+different conditions at each point in time.  The results for these cases are
+discussed below. In each of these cases, the total \Cyclus{} run time was
+$\sim$0.1 seconds and the output database size was $\sim$68 kB.
 
-The cases outlined in \S \ref{subsect::fcdesc} have been designed to 
-provide different conditions at each point in time. This maximizes the
-meaningful information produced per unit of computational effort.
-The results for these cases are discussed in \S \ref{subsect::2srcs3rxts} and 
-\ref{subsect::1enr2rxts}.  In each of these cases, the total \Cyclus{} run time
-was $\sim$0.1 seconds and the output database size was $\sim$68 kB.
+Note that the resource flows in Figures
+\ref{fig::2srcs3rxts-t1}-\ref{fig::enr2rxts-t3} have been generated
+automatically from \Cyclus{} output using Cyan \cite{Carlsen2014}.  Due to this,
+these figures only show facility agents which participated in a resource
+exchange. For instance, Figure \ref{fig::2srcs3rxts-t1} does not show the
+\UOXSource{} facility, even though it is present in the simulation.
 
 \paragraph{2 Sources, 3 Reactors}
-\label{subsect::2srcs3rxts}
-Initially present are the source facilities and \Reactor{1}.  \Reactor{1} has 
-a preference for accepting MOX fuel over UOX.  The \MOXSource{} capacity of 2.5 kg 
-is more than 
-enough to handle the 1 kg of MOX requested by \Reactor{1}.  This matching may be seen
-in Figure \ref{fig::2srcs3rxts-t1}.
+
+Initially present are the source facilities and \Reactor{1}.  \Reactor{1} has a
+preference for accepting MOX fuel over UOX.  The \MOXSource{} capacity of 2.5
+units is more than enough to handle the 1 unit of MOX requested by \Reactor{1}.
+This matching may be seen in Figure \ref{fig::2srcs3rxts-t1}. The \MOXSource{}
+only provides the 1 unit of material requested by \Reactor{1}.  It, correctly,
+does not oversupply.
 
 \begin{figure}
   \begin{center}
@@ -1119,16 +1120,14 @@ in Figure \ref{fig::2srcs3rxts-t1}.
   \end{center}
 \end{figure}
 
-Note that the resource flows in Figures 
-\ref{fig::2srcs3rxts-t1}-\ref{fig::enr2rxts-t3}
-have been generated automatically from \Cyclus{} output using
-Cyan \cite{Carlsen2014}.  Due to this, these figures only show facility agents
-which participated in a resource exchange. Other facilities may exist but are
-not displayed if no resource was traded.  Thus Figure \ref{fig::2srcs3rxts-t1}
-does not show the \UOXSource{} facility, even though it is present in the
-simulation.  Finally in Figure \ref{fig::2srcs3rxts-t1} the \MOXSource{} only
-provides the 1 kg of material requested by \Reactor{1}.  It, correctly, does not
-oversupply.
+At time step 2 in this simulation, \Reactor{2} is deployed and also requests
+fuel with the preference for MOX.  Figure \ref{fig::2srcs3rxts-t2} displays that
+the \MOXSource{} indeed has the required capacity to meet the requests of both
+of the reactors.  This may seem trivial at first glance but it is important to
+emphasize that the resource exchange solver was not altered in any way to handle
+both time steps 1 and 2.  Furthermore, the solver on time step 1 had no future
+knowledge that \Reactor{2} would be deployed on time step 2.  This is
+significantly different than the traditional system dynamics approach.
 
 \begin{figure}
   \begin{center}
@@ -1138,33 +1137,18 @@ oversupply.
   \end{center}
 \end{figure}
 
-At time step in 2 in this simulation, \Reactor{2} is deployed and also requests 
-fuel with the preference for MOX.  Figure \ref{fig::2srcs3rxts-t2} displays
-that the \MOXSource{} indeed has the required capacity to meet the requests of 
-both of the reactors.  This may seem trivial at first glance but it is important 
-to emphasize that the resource exchange solver was not altered in any way to handle 
-both time steps 1 and 2.  Furthermore, the solver on time step 1 had no future 
-knowledge that \Reactor{2} would be deployed on time step 2.  This is significantly 
-different than the traditional system dynamics approach.
-
-\begin{figure}
-  \begin{center}
-    \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t3.pdf}
-    \caption[]{\label{fig::2srcs3rxts-t3}Time step 3 for the 2 Sources, 3 Reactors 
-        case.}
-  \end{center}
-\end{figure}
-
-On time step 3, \Reactor{3} is deployed.  This facility still prefers to accept 
-MOX fuel over UOX fuel.  At this point, 3 kg of MOX are requested (1 kg from 
-each facility) but the \MOXSource{} may only provide 2.5 kg.  Because of this, 
-the \UOXSource{}, which has been present in the simulation since the beginning, 
-now enters the exchange to make up for the missing 0.5 kg of fuel not obtainable 
-from the \MOXSource{}. \Reactor{3} is selected to receive the UOX fuel rather than 
-\Reactor{1} and \Reactor{2}.  These preferences are detailed in Table \ref{tab::pref-t3}.  In time step 3 because all agents tie for UOX, 
-\Reactor{1} and \Reactor{2} tie for MOX, and the \Reactor{3} preference for MOX is 
-less than the others, \Reactor{3} loses its full bid for MOX and must top-up with 
-UOX.  This is precisely the situation displayed in Figure \ref{fig::2srcs3rxts-t3}.
+On time step 3, \Reactor{3} is deployed.  This facility still prefers to accept
+MOX fuel over UOX fuel.  At this point, 3 units of MOX are requested (1 unit from
+each facility) but the \MOXSource{} may only provide 2.5 units.  Because of
+this, the \UOXSource{}, which has been present in the simulation since the
+beginning, now enters the exchange to make up for the missing 0.5 units of fuel not
+obtainable from the \MOXSource{}. \Reactor{3} is selected to receive the UOX
+fuel rather than \Reactor{1} and \Reactor{2}.  These preferences are detailed in
+Table \ref{tab::pref-t3}.  In time step, 3 because all agents tie for UOX,
+\Reactor{1} and \Reactor{2} tie for MOX, and the \Reactor{3} preference for MOX
+is less than the others, \Reactor{3}'s full request for MOX is not met and it
+must top-up with UOX.  This situation is displayed in Figure
+\ref{fig::2srcs3rxts-t3}.
 
 \begin{table}
   \begin{center}
@@ -1183,12 +1167,20 @@ UOX.  This is precisely the situation displayed in Figure \ref{fig::2srcs3rxts-t
   \end{center}
 \end{table}
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[height=3cm]{./figs/2_Sources_3_Reactors-t3.pdf}
+    \caption[]{\label{fig::2srcs3rxts-t3}Time step 3 for the 2 Sources, 3 Reactors 
+        case.}
+  \end{center}
+\end{figure}
+
 Finally, on time step 4 the preference of \Reactor{1} for UOX changes from 
 0.0 to 2.0.  This alteration causes the tie previously present 
 for UOX to be broken.  Furthermore, the value of 2.0 makes this the most 
 preferred arc in the system so it is attempted to be satisfied first.  
 As may be seen in Figure \ref{fig::2srcs3rxts-t4}, the \UOXSource{} capacity of
-2.5 kg is more than enough to satisfy the request from \Reactor{1} for 1 kg of UOX.
+2.5 units is more than enough to satisfy the request from \Reactor{1} for 1 unit of UOX.
 Since \Reactor{1} does not diminish the capacity of the \MOXSource{} both \Reactor{2} 
 and \Reactor{3} are able to obtain their first choice fuel.
 
@@ -1223,7 +1215,7 @@ requests for 5\% and 3\% enriched fuel simultaneously but is enough to meet
 either of them individually.  Therefore, the bid for at least one of the
 reactors must be partially unmet.  Due to the preferences, the requests
 of \Reactor{1} will be met first.  Thus in
-Figure \ref{fig::enr2rxts-t1} \Reactor{1} receives 1 kg of 5\% enriched fuel.
+Figure \ref{fig::enr2rxts-t1} \Reactor{1} receives 1 unit of 5\% enriched fuel.
 However, \Reactor{2} only receives $\sim$80\% of its request for 3\% enriched
 uranium.  This is not enough to run on and so this material is saved for the
 future.
@@ -1239,8 +1231,8 @@ future.
 On time step 2, \Reactor{1} now switches from requesting 5\% enriched fuel to
 requesting 3\% enriched fuel.  However, the reactor archetypes are implemented
 such that if they have stored fuel from a previous time step, they will instead
-only request a mass needed to create 1 kg of fuel.  Therefore, \Reactor{2} only
-requests $\sim$0.2 kg from \Enrichment{}.  \Reactor{1} continues to request 1 kg
+only request a mass needed to create 1 unit of fuel.  Therefore, \Reactor{2} only
+requests $\sim$0.2 units from \Enrichment{}.  \Reactor{1} continues to request 1 unit
 of material and this is met because the SWU capacity constraint is not exceeded.
 These resource flows may be seen in Figure \ref{fig::enr2rxts-t2}.
 
@@ -1252,12 +1244,11 @@ These resource flows may be seen in Figure \ref{fig::enr2rxts-t2}.
   \end{center}
 \end{figure}
 
-No further adjustments of requests were made on time step 3. Thus the results 
-displayed in Figure \ref{fig::enr2rxts-t3} represent the same dynamic resource 
-exchange procedure in time step 2.  The key differences here however are that 
-now the system has returned to a steady state and - unlike in time step 1 - 
-the SWU capacity of \Enrichment{} is enough to meet the 2 kg of 3\% enriched
-fuel coming from both reactors.  Thus \Reactor{1} and \Reactor{2} each receive 
-the kilogram of fuel that they request.  Without further adjustments this 
-system will continue \emph{ad infinitum}.
-
+No further adjustments of requests were made on time step 3. Thus the results
+displayed in Figure \ref{fig::enr2rxts-t3} represent the same dynamic resource
+exchange procedure in time step 2.  The key differences here however are that
+now the system has returned to a steady state and - unlike in time step 1 - the
+SWU capacity of \Enrichment{} is enough to meet the 2 units of 3\% enriched fuel
+coming from both reactors.  Thus \Reactor{1} and \Reactor{2} each receive the
+kilogram of fuel that they request.  Without further adjustments this system
+will continue \emph{ad infinitum}.
