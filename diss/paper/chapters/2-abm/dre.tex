@@ -1,7 +1,7 @@
 \section{Dynamic Resource Exchange}\label{abm:dre}
 
 Dynamic Resource Exchange (DRE) is the functional bedrock on which Cyclus
-simulations are built. It defines the interaction mechanisms and methodolgies
+simulations are built. It defines the interaction mechanisms and methodologies
 for agents, specifically agents whose archetypes have implemented the
 \code{Trader} interface. This section begins by providing a motivating problem
 statement in \S \ref{abm:dre:prob}. It then details the methodology for querying
@@ -150,7 +150,7 @@ sophisticated tools in both the operations research and agent based modeling
 realms have been leveraged to accomplish the task.
 
 An instance of supply and demand defined by the DRE information gathering step
-can be solved in a variety of ways. It can be casted to a constrained, bipartite
+can be solved in a variety of ways. It can be cast to a constrained, bipartite
 network, and any heuristic that provides a feasible solution to such networks
 are valid. To solve the system optimally, however, a formal investigation and
 solution structure is needed. This section describes the construction of such a
@@ -173,12 +173,12 @@ exchange, but can take much longer to solve.
 
 \subsubsection{Terminology}
 
-Objects and datastructures generated in the information gathering procedure are
+Objects and data structures generated in the information gathering procedure are
 used in the formal definition of the NFCTP and must be defined.
 
 Each portfolio can be considered separately. The set of supply portfolios is
 denoted as $S$ and the set of request portfolios is denoted as $R$. Each supply
-portfolio is comprsied of $s_M$ supply nodes, and each request portfolio is
+portfolio is comprised of $s_M$ supply nodes, and each request portfolio is
 comprised of $r_N$ nodes. The set of supply nodes is denoted $I$, and the set
 of request nodes is denoted $J$. The total number of supply and request nodes is
 then
@@ -630,7 +630,7 @@ $c_{i,j}$             & the unit cost of flow
                           from producer node $i$ to consumer node $j$  \\
 $x_{i,j}$             & a decision variable, the flow 
                           from producer node $i$ to consumer node $j$  \\
-$a_{i,j}^k$ & the constraint coeffecient for constraint $k$ 
+$a_{i,j}^k$ & the constraint coefficient for constraint $k$ 
                           on flow between nodes $i$ and $j$  \\
 $b_s^k$   & the constraining value for constraint $k$ of supplier $s$ \\
 $b_r^k$   & the constraining value for constraint $k$ of requester $r$ \\
@@ -770,8 +770,8 @@ $A_p$     & arcs that allow \textit{partial} flows \\
 $A_e$     & \textit{exclusive} flow arcs  \\
 $A_{p_s}$     & arcs that allow \textit{partial} flows for supplier $s$ \\
 $A_{e_s}$     & \textit{exclusive} flow arcs for supplier $s$ \\
-$A_{p_p}$     & arcs that allow \textit{partial} flows for requeseter $r$ \\
-$A_{e_p}$     & \textit{exclusive} flow arcs for requeseter $r$ \\
+$A_{p_p}$     & arcs that allow \textit{partial} flows for requester $r$ \\
+$A_{e_p}$     & \textit{exclusive} flow arcs for requester $r$ \\
 $X$         & the feasible set of flows between producers and consumers  \\
 $Y$         & the binary variable set of flows between producers and consumers  \\
 \hline
@@ -794,7 +794,7 @@ $x_{i,j}$             & a decision variable, the flow
                           from producer node $i$ to consumer node $j$  \\
 $y_{i,j}$             & a decision variable, whether flow exists 
                           from producer node $i$ to consumer node $j$  \\
-$a_{i,j}^k$ & the constraint coeffecient for constraint $k$ 
+$a_{i,j}^k$ & the constraint coefficient for constraint $k$ 
                           on flow between nodes $i$ and $j$  \\
 $b_s^k$   & the constraining value for constraint $k$ of supplier $s$ \\
 $b_r^k$   & the constraining value for constraint $k$ of requester $r$ \\
@@ -880,11 +880,11 @@ which results in a simpler formulation shown in Equation \ref{eqs:NFCTP_simp}.
 
 \subsubsection{A Heuristic Solution}\label{abm:dre:nfctp:heur}
 
-With full simluation domain knowledge of supply and demand, including false
+With full simulation domain knowledge of supply and demand, including false
 arcs, a feasible solution can be found. By definition a feasible solution is a
 \textit{solution} to the possible flow of resources, but not necessarily an
 \textit{optimal} solution. Many heuristics may be applied to bipartite graphs
-with constrainted flows. A simple \textit{greedy} heuristic is presented here
+with constrained flows. A simple \textit{greedy} heuristic is presented here
 and implemented. 
 
 The maximum flow along an arc, $x_{max}$, depends on the constraints associated
@@ -901,10 +901,11 @@ $r$, respectively, the maximum allowable flow is defined as
         \rbrace.
 \end{equation}
 
-The Greedy Exchange Hueristic matches maximum flow along arcs, up to the
+The Greedy Exchange Heuristic matches maximum flow along arcs, up to the
 requested amount defined by each request portfolio, $q_r$, after having sorted
 all arcs. The constraining values of each arc, $b_k$, are updated upon
-declaration of a match in Algorithm \ref{alg::greedy}.
+declaration of a match (via an \code{AddMatch} function) in Algorithm
+\ref{alg::greedy}.
 
 \begin{algorithm}[!h]
  \SetAlgoLined
@@ -921,15 +922,15 @@ declaration of a match in Algorithm \ref{alg::greedy}.
        get next arc\;
        remaining $\leftarrow q_r$ - matched\;
        to\_match $\leftarrow \min \lbrace$remaining, $x_{max} \rbrace$\;
-       AddMatch(arc, to\_match)\;
+       \code{AddMatch}(arc, to\_match)\;
        matched $\leftarrow$ matched + to\_match\;
      }
    }
  }
- \caption{Greedy Exchange Hueristic}\label{alg::greedy}
+ \caption{Greedy Exchange Heuristic}\label{alg::greedy}
 \end{algorithm}
 
-\subsubsection{Depature from the MCTP}
+\subsubsection{Departure from the MCTP}
 
 The classic MCTP includes the coloring of flows based on commodity type. For
 example, for a commodity, $h$, the unit cost of flow would be $c^h_{i,j}$ rather
