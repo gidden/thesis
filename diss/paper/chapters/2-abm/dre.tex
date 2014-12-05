@@ -242,16 +242,36 @@ consists of sending (bid) nodes, $I$, and receiving (request) nodes, $J$. For
 each request node, $j$, there may be many bid nodes; however, there is a
 one-to-one mapping between bid nodes and request nodes. In other words, a given
 bid node, $i$, is a unique response to a request node, $j$. An example of a bare
-exchange graph graph is shown in Figure \ref{}.
+exchange graph graph is shown in Figure \ref{fig:ex_bare}.
 
-\TODO{Include figure}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{./figs/exchange_bare.pdf}
+    \caption{A bare example exchange with supply nodes colored orange on left
+      and request nodes colored blue on right. As shown, there can be multiple
+      supply nodes connected to a request node, but each supply node corresponds
+      uniquely to one request node. It is a specific response to that request,
+      as outlined in the RRFB phase.}
+    \label{fig:ex_bare}
+  \end{center}
+\end{figure}
 
 In the bipartite graph, portfolios act as partitions that group nodes
 together. Node groups share common constraints, and request node groups share a
 common notion of satisfiable quantity, i.e., a default mass-based constraint. An
-example of a partitioned exchange graph is shown in Figure \ref{}. 
+example of a partitioned exchange graph is shown in Figure \ref{fig:ex_groups}.
 
-\TODO{Include figure}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{./figs/exchange_groups.pdf}
+    \caption{The same exchange shown in Figure \ref{fig:ex_bare} with the
+      inclusion of portfolio partitions. In this example, there are three
+      suppliers and two consumers. The second consumer has two requests which
+      may satisfy its demand. The second supplier can supply the commodities
+      requested by both consumers and has provided two bids accordingly.}
+    \label{fig:ex_groups}
+  \end{center}
+\end{figure}
 
 Because of defined constraints, there may not be sufficient supply or demand in
 the simulated exchange. To ensure a feasible solution, a false supply source and
@@ -289,10 +309,21 @@ Finally, the total number of arcs is
 Because preferences are defined as in Equation \ref{eqn:falsepref}, any false
 arc will only be engaged if no other possible arc can be engage, due to capacity
 constraints. If any flow is assigned to false arcs after the exchange graph is
-solved, that flow is ignored when initiating transactions. Figure \ref{} shows a
-fully defined exchange graph.
+solved, that flow is ignored when initiating transactions. Figure
+\ref{fig:ex_false} shows a fully defined exchange graph.
 
-\TODO{Include figure}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{./figs/exchange_false.pdf}
+    \caption{The same exchange shown in Figure \ref{fig:ex_groups} with the
+      inclusion of false arcs. The false supplier and consumer nodes are shown
+      with a dashed outline. Similarly, false arcs are dashed. Note that the
+      false nodes have no associated portfolio structure -- there are no
+      constraints associated with false nodes and arcs. The inclusion of a false
+      supplier and consumer guarantees a feasible solution.}
+    \label{fig:ex_false}
+  \end{center}
+\end{figure}
 
 \subsubsection{Arc Properties}\label{abm:dre:fctp:arcs}
 
@@ -309,16 +340,47 @@ commodities. However, each possible resource transfer, i.e., each arc, is based
 on a single commodity. Accordingly, it is possible to color each arc, given a
 commodity-to-color mapping.
 
-For example, consider an exchange with three fuel commodities ($A$, $B$, $C$),
-two requesters ($R_1$, $R_2$), and two suppliers ($S_1$, $S_2$) in the following
-configuration:
+For example, consider an exchange similar to that shown in Figure
+\ref{fig:ex_groups} with two fuel commodities ($A$, $B$), two requesters ($R_1$,
+$R_2$), and two suppliers ($S_1$, $S_2$, $S_3$) in the configuration described
+by Tables \ref{tbl:ex_sup} and \ref{tbl:ex_req}.
 
-\TODO{Include table}
+\begin{table}[h]
+\centering
+\begin{tabular}{c|c}
+Supplier & Commodities \\ \hline
+$S_1$             & $A$         \\
+$S_2$             & $A$, $B$    \\
+$S_3$             & $B$         \\
+\end{tabular}
+\caption{A mapping from suppliers to commodities supplied.}
+\label{tbl:ex_sup}
+\end{table}
 
-Given the color map $A$: red, $B$: green, $C$: blue, the resulting exchange
-graph can be colored:
+\begin{table}[h]
+\centering
+\begin{tabular}{c|c}
+Consumer & Commodities \\ \hline
+$R_1$             & $A$         \\
+$R_2$             & $B$        
+\end{tabular}
+\caption{A mapping from requesters to commodities requested.}
+\label{tbl:ex_req}
+\end{table}
 
-\TODO{Include figure}
+Given the color map $A$: red, $B$: green, the resulting exchange
+graph can be colored as shown in Figure \ref{fig:ex_groups_color}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{./figs/exchange_groups_color.pdf}
+    \caption{The same exchange shown in Figure \ref{fig:ex_groups} arcs colored
+      by commodity based on Tables \ref{tbl:ex_sup} and \ref{tbl:ex_req}. A red
+      arc corresponds to commodity $A$; a green arc corresponds to commodity
+      $B$.}
+    \label{fig:ex_groups_color}
+  \end{center}
+\end{figure}
 
 The notion of commodities is critical during the information gathering step and
 can be used to partition arcs in an exchange graph. It also is compelling when
