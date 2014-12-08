@@ -104,6 +104,10 @@ their profile, effectively providing no information. Suppliers are also allowed
 to denote responses as \textit{exclusive}, as is done in the RFB phase. An
 exclusive offer must be accepted in its entirety or not at all. Again, exclusive
 offers provides a way to model quantized, packaged resources, such as fuel
+assemblies. As with requests, supply responses can be grouped into
+\textit{mutual} responses. Every response in a mutual set is, by definition,
+exclusive. Of the set of responses, only one may be met. This functionality
+again supports the notion of quantized orders, e.g., in the case of fuel
 assemblies. A supplier may have its production constrained by more than one
 parameter. For example, a processing facility may have both a throughput
 constraint (i.e., it can only process material at a certain rate) and an
@@ -666,6 +670,8 @@ Integer-Linear Program (MILP) formulation and solution via the branch-and-bound
 method which solves NP-Hard combinatorial optimization problems. The Linear
 Program (LP) version requires the simplex method which is much more efficient.
 
+\paragraph{Binary Variables}
+
 The primary difference between the LP and MILP formulations is the inclusion
 binary decision variables $y_{i,j}$. A variable $y_{i,j}$ has a value of 1 if
 flow occurs between producer node $i$ and consumer node $j$. If flow occurs, its
@@ -695,6 +701,29 @@ supplier and requester.
 \begin{equation}\label{eqs:arc-union}
   A = \bigcup_{s \in S} A_{p_s} \cup A_{e_s}
 \end{equation}
+
+\paragraph{Mutually Exclusive Constraints}
+
+\textit{Mutual} requests and responses were described in \S \ref{}. These are
+defined as a set of requests or responses, of which only one may be
+satisfied. This is represented in the formulation as a constraint on the
+associated variables. Again, if a variable $y_{i,j}$ is set to $1$, flow is sent
+along arc $(i, j)$. If it is $0$, no flow occurs. A \textit{mutually exclusive}
+constraint simply says that only one arc in a mutual set may have a value of 1.
+
+The set of mutually satisfying arcs is denoted $M_s$ and $M_r$ for suppliers and
+requesters, respectively. The associated constraints are then defined by
+Equations \ref{eqs:mutual_sup} and \ref{eqs:mutual_req}.
+
+\begin{equation}\label{eqs:mutual_sup}
+  \sum_{(i, j) \in M_{s}} y_{i,j} \leq 1 \: \forall \: s \in S 
+\end{equation}
+
+\begin{equation}\label{eqs:mutual_req}
+  \sum_{(i, j) \in M_{r}} y_{i,j} \leq 1 \: \forall \: r \in R 
+\end{equation}
+
+\paragraph{Formulation}
 
 Using the above arc partition notation allows for a much simpler written
 formulation of the MILP that looks quite close to the related LP formulation
@@ -728,6 +757,12 @@ in Equation \ref{eqs:NFCTP}
     \label{eqs:NFCTP_sup} \\
     %%
     &
+    \sum_{(i, j) \in M_{s}} y_{i,j} \leq 1 
+    &
+    \forall \: s \in S 
+    \label{eqs:NFCTP_mut_sup} \\
+    %%
+    &
     \sum_{(i, j) \in A_{p_r}} a^k_{i,j} x_{i,j}
     \: + 
     \sum_{(i, j) \in A_{e_r}} a^k_{i,j} \tilde{x_j} y_{i,j}
@@ -737,6 +772,12 @@ in Equation \ref{eqs:NFCTP}
     \forall \: k \in K_r,  
     \forall \: r \in R 
     \label{eqs:NFCTP_req} \\
+    %%
+    &
+    \sum_{(i, j) \in M_{r}} y_{i,j} \leq 1 
+    &
+    \forall \: r \in R 
+    \label{eqs:NFCTP_mut_req} \\
     %%
     &
     x_{i,j} \in [0, \tilde{x_j}]
@@ -772,6 +813,8 @@ $A_{p_s}$     & arcs that allow \textit{partial} flows for supplier $s$ \\
 $A_{e_s}$     & \textit{exclusive} flow arcs for supplier $s$ \\
 $A_{p_p}$     & arcs that allow \textit{partial} flows for requester $r$ \\
 $A_{e_p}$     & \textit{exclusive} flow arcs for requester $r$ \\
+$M_s$     & arcs $(i, j)$ associated with \textit{mutually exclusive} supply for supplier $s$ \\
+$M_r$     & arcs $(i, j)$ associated with \textit{mutually exclusive} requests for requester $r$ \\
 $X$         & the feasible set of flows between producers and consumers  \\
 $Y$         & the binary variable set of flows between producers and consumers  \\
 \hline
@@ -852,6 +895,12 @@ which results in a simpler formulation shown in Equation \ref{eqs:NFCTP_simp}.
     \label{eqs:NFCTP_simp_sup} \\
     %%
     &
+    \sum_{(i, j) \in M_{s}} y_{i,j} \leq 1 
+    &
+    \forall \: s \in S 
+    \label{eqs:NFCTP_simp_mut_sup} \\
+    %%
+    &
     \sum_{(i, j) \in A_{p_r}} a^k_{i,j} x_{i,j}
     \: + 
     \sum_{(i, j) \in A_{e_r}} a^{k\prime}_{i,j} y_{i,j}
@@ -861,6 +910,12 @@ which results in a simpler formulation shown in Equation \ref{eqs:NFCTP_simp}.
     \forall \: k \in K_r,  
     \forall \: r \in R 
     \label{eqs:NFCTP_simp_req} \\
+    %%
+    &
+    \sum_{(i, j) \in M_{r}} y_{i,j} \leq 1 
+    &
+    \forall \: r \in R 
+    \label{eqs:NFCTP_simp_mut_req} \\
     %%
     &
     x_{i,j} \in [0, \tilde{x_j}]
