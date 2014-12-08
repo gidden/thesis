@@ -860,13 +860,20 @@ common heuristic for MILPs is to solve a relaxed version of the problem in the
 form of a linear program, and to round values to form an integer solution. A
 heuristic used in Cyclus is provided in \S \ref{abm:dre:nfctp:heur}.
 
-Note that each constraint coefficient for binary variables can be rewritten as 
+Note that each constraint coefficient for binary variables can be rewritten as
+Equation \ref{eqs:constr_simple} and each objective coefficient can be rewritten
+as Equation \ref{eqs:obj_simple}.
 
-\begin{equation}
-a^{k\prime}_{i,j} = a^k_{i,j} \tilde{x_j}, 
+\begin{equation}\label{eqs:constr_simple}
+a^{k\prime}_{i,j} = a^k_{i,j} \tilde{x_j}
 \end{equation}
 
-which results in a simpler formulation shown in Equation \ref{eqs:NFCTP_simp}.
+\begin{equation}\label{eqs:obj_simple}
+c^{\prime}_{i,j} = c_{i,j} \tilde{x_j}
+\end{equation}
+
+Using both updated efinitions, a simpler formulation can be written and is shown
+in Equation \ref{eqs:NFCTP_simp}.
 
 %%% 
 % this could probably be realigned 
@@ -878,7 +885,7 @@ which results in a simpler formulation shown in Equation \ref{eqs:NFCTP_simp}.
     z \:\: = 
     \sum_{(i, j) \in A_p} c_{i,j} x_{i,j} 
     \: + 
-    \sum_{(i, j) \in A_e} c_{i,j} \tilde{x_j} y_{i,j} 
+    \sum_{(i, j) \in A_e} c^{\prime}_{i,j} y_{i,j} 
     & 
     \label{eqs:NFCTP_simp_obj} \\
     %%
