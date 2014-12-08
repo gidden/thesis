@@ -2,16 +2,52 @@
 
 \section{Overview}
 
-\section{Experimental Setup}
+The NFCTP is the first attempt at solving the supply and demand of the nuclear
+fuel cycle in a dynamic manner within a NFC simulation. Accordingly, there is no
+precedent for either generating exchanges to be solved outside of simulations or
+exploring the resulting performance. A novel methodology for exploring the
+performance of a general NFCTP solver is described.
 
-\subsection{Front-End Exchanges}
+The chapter begins with a discussion of the generation of exchanges in \S
+\ref{method:setup}. Two types of exchanges are included: one in which reactors
+are requesting fuel, and one in which reactors are supplying used fuel. In NFC
+parlance, these are called the \textit{Front End} of the fuel cycle and
+\textit{Back End} of the fuel cycle. Notably, both of these exchanges can occur
+in the same time step. \S \ref{method:setup:split} describes how a full exchange
+may be split into multiple exchanges for any given time step. The solvers used
+to determine solutions to the DRE instances are then described in \S
+\ref{method:setup:solve}.
 
-\subsection{Back-End Exchanges}
+Generating instances and solving them at a large scale is a difficult
+problem. The Cyclopts (Cyclus Optimization Studies) framework was implemented
+for this purpose. Cyclopts has both a Python and C layer. The Python layer is
+largely responsible for generating exchanges and interfacing with an associated
+persistence mechanism. The C layer is linked agaisnt the Cyclus kernel shared
+object library and is responsible for calling directly into the kernel's
+resource exchange API. \S \ref{method:tools} describes the implementation of
+Cyclopts and its varied modes of operation. The structure and design is
+described in \S \ref{method:tools:struc}. A persistence mechnism using a
+Hierarchical Database Format-5 (HDF5) \cite{hdf5} and associated design studies
+is discussed in \S \ref{method:tools:hdf5}. Finally, the use of High Throughput
+Computing (HTC), specifically HTCondor \cite{condor-practice}, is addressed in
+\S \ref{method:tools:htc}.
 
-\section{Experimental Tools}
+\section{Experimental Setup}\label{method:setup}
 
-\subsection{Structure}
+\subsection{Splitting Exchanges}\label{method:setup:split}
 
-\subsection{Persistence Mechanisms}
+\subsection{Front-End Exchanges}\label{method:setup:front}
 
-\subsection{High Throughput Computing}
+\subsection{Back-End Exchanges}\label{method:setup:back}
+
+\subsection{Solvers}\label{method:setup:solve}
+
+\section{Experimental Tools}\label{method:tools}
+
+\subsection{Structure}\label{method:tools:struc}
+
+\subsection{Persistence Mechanisms}\label{method:tools:hdf5}
+
+\subsection{High Throughput Computing}\label{method:tools:htc}
+
+Things \cite{bui_work_2011}.
