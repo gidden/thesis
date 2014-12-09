@@ -48,6 +48,81 @@ generating both species of exchanges.
 
 \subsection{Splitting Exchanges}\label{method:setup:split}
 
+A well known simplification of the Multicommodity Transportation Problem occurs
+when supply and demand is separate for separate commodities. The large
+multicommodity problem can then be decomposed into $n$ subproblems, where $n$ is
+the number of commodities. Each subproblem can be solved separately from the
+others.
+
+An analog exists in the NFCTP when the Exchange Graph is \textit{separable}. A
+bipartite graph with directed arcs, $A$, consisting of sending nodes, $U$, and
+receiving nodes, $V$, is separable if there a partition
+
+\begin{equation}
+  A = A_{1} \cup A_{2}
+\end{equation}
+
+\begin{equation}
+  U = U_{1} \cup U_{2}
+\end{equation}
+
+\begin{equation}
+  V = V_{1} \cup V_{2}
+\end{equation}
+
+such that no node in $U_1$ is connected to a node in $V_2$ and no node in $U_2$
+is connected to a node in $V_1$. The graph shown in Figure \ref{fig:basic_part} is an
+example of a separable bipartite graph.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{exchange_part_supreq.pdf}
+    \caption[]{
+      \label{fig:basic_part}
+      A separable bipartite graph with the partition shown as a red 
+      dashed line.}
+  \end{center}
+\end{figure}
+
+The Exchange Graph of the NFCTP, however, has additional structure in the form
+of portfolios and thus has a stricter notion of separability. Specifically, the
+partition must also separate the set of supplier portfolios, $S$, and requester
+portfolios, $R$, as in Equations \ref{eqn:sup_part} and \ref{eqn:req_part},
+respectively.
+
+\begin{equation}\label{eqn:sup_part}
+  S = S_{1} \cup S_{2}
+\end{equation}
+
+\begin{equation}\label{eqn:req_part}
+  R = R_{1} \cup R_{2}
+\end{equation}
+
+Figure \ref{fig:port_part} depicts a separable Exchange Graph, for example,
+while Figure \ref{fig:port_no_part} shows an Exchange Graph that is not
+separable, even though the underlying bipartite graph is, due to the lack of a
+fully separable portfolio partition.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{exchange_part_port.pdf}
+    \caption[]{
+      \label{fig:port_part}
+      A separable Exchange Graph with nodes grouped by portfolio and the
+      separating partition shown as a red dashed line.}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{exchange_no_part_port.pdf}
+    \caption[]{
+      \label{fig:port_no_part}
+      An Exchange Graph with nodes grouped by portfolio that is \textit{not}
+      separable because a portfolio crosses the node partition.}
+  \end{center}
+\end{figure}
+
 \subsection{Exchange Parameters}\label{method:setup:params}
 
 \subsection{Front-End Exchanges}\label{method:setup:front}
