@@ -1,52 +1,66 @@
-\chapter{Methodolgy of Experimentation}\label{ch:method}
-
-\section{Overview}
+\chapter{Experimentation Methodolgy}\label{ch:method}
 
 The NFCTP is the first attempt at solving the supply and demand of the nuclear
 fuel cycle in a dynamic manner within a NFC simulation. Accordingly, there is no
-precedent for either generating exchanges to be solved outside of simulations or
-exploring the resulting performance. A novel methodology for exploring the
-performance of a general NFCTP solver is described.
+precedent for investigating the performance and efficacy of a given
+approach. This chapter describes one such novel approach in which rules for
+generating instances of exchanges are defined, exchanges are generated,
+exchanges are executed, and results are analyzed. 
 
-The chapter begins with a discussion of the generation of exchanges in \S
+The chapter begins with a discussion of the generation of exchanges, in \S
 \ref{method:setup}. Two types of exchanges are included: one in which reactors
 are requesting fuel, and one in which reactors are supplying used fuel. In NFC
 parlance, these are called the \textit{Front End} of the fuel cycle and
 \textit{Back End} of the fuel cycle. Notably, both of these exchanges can occur
 in the same time step. \S \ref{method:setup:split} describes how a full exchange
-may be split into multiple exchanges for any given time step. The solvers used
-to determine solutions to the DRE instances are then described in \S
-\ref{method:setup:solve}.
+may be split into multiple exchanges for any given time step. 
 
-Generating instances and solving them at a large scale is a difficult
+Generating and solving instances of exchanges at a large scale is a difficult
 problem. The Cyclopts (Cyclus Optimization Studies) framework was implemented
 for this purpose. Cyclopts has both a Python and C layer. The Python layer is
 largely responsible for generating exchanges and interfacing with an associated
 persistence mechanism. The C layer is linked agaisnt the Cyclus kernel shared
 object library and is responsible for calling directly into the kernel's
 resource exchange API. \S \ref{method:tools} describes the implementation of
-Cyclopts and its varied modes of operation. The structure and design is
-described in \S \ref{method:tools:struc}. A persistence mechnism using a
-Hierarchical Database Format-5 (HDF5) \cite{hdf5} and associated design studies
-is discussed in \S \ref{method:tools:hdf5}. Finally, the use of High Throughput
-Computing (HTC), specifically HTCondor \cite{condor-practice}, is addressed in
-\S \ref{method:tools:htc}.
+Cyclopts and its varied modes of operation. 
 
-\section{Experimental Setup}\label{method:setup}
+\section{Generating Exchanges}\label{method:setup}
+
+This section focuses on two distinct \textit{species} of exchanges, those
+related to the \textit{front end} of the nuclear fuel cycle and those related to
+the \textit{back end} of the nuclear fuel cycle. Broadly, the front end of the
+fuel cycle is concerned with fueling reactors, and the back end is concerned
+with either recycling or disposing of used fuel exiting reactors. 
+
+\S \ref{abm:dre}, however, only discusseses the methodology for solving a single
+exchange. Therefore, an argument must be made for why it is possible to split a
+single exchange into multiple exchanges, and specifically why that is valid in
+the case of the front and back ends of the NFC. Such an argument is made in \S
+\ref{method:setup:split}.
+
+Exchange generation is defined by two types parameters, \textit{exchange} and
+\textit{species} parameters. Exchange parameters apply to any species of
+exchange, and species parameters apply to a specific species. \S
+\ref{method:setup:params} provides a discussion of exchange parameters. \S
+\ref{method:setup:front} and \ref{method:setup:back} then follow with a full
+description of modeling assumptions and species parameters included for
+generating both species of exchanges.
 
 \subsection{Splitting Exchanges}\label{method:setup:split}
+
+\subsection{Exchange Parameters}\label{method:setup:params}
 
 \subsection{Front-End Exchanges}\label{method:setup:front}
 
 \subsection{Back-End Exchanges}\label{method:setup:back}
-
-\subsection{Solvers}\label{method:setup:solve}
 
 \section{Experimental Tools}\label{method:tools}
 
 \subsection{Structure}\label{method:tools:struc}
 
 \subsection{Persistence Mechanisms}\label{method:tools:hdf5}
+
+what gets recorded
 
 \subsection{High Throughput Computing}\label{method:tools:htc}
 
