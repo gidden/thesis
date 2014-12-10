@@ -704,12 +704,13 @@ supplier and requester.
 
 \paragraph{Mutually Exclusive Constraints}
 
-\textit{Mutual} requests and responses were described in \S \ref{}. These are
-defined as a set of requests or responses, of which only one may be
-satisfied. This is represented in the formulation as a constraint on the
-associated variables. Again, if a variable $y_{i,j}$ is set to $1$, flow is sent
-along arc $(i, j)$. If it is $0$, no flow occurs. A \textit{mutually exclusive}
-constraint simply says that only one arc in a mutual set may have a value of 1.
+\textit{Mutual} requests and responses were described in \S
+\ref{abm:dre:info}. These are defined as a set of requests or responses, of
+which only one may be satisfied. This is represented in the formulation as a
+constraint on the associated variables. Again, if a variable $y_{i,j}$ is set to
+$1$, flow is sent along arc $(i, j)$. If it is $0$, no flow occurs. A
+\textit{mutually exclusive} constraint simply says that only one arc in a mutual
+set may have a value of 1.
 
 The set of mutually satisfying arcs is denoted $M_s$ and $M_r$ for suppliers and
 requesters, respectively. The associated constraints are then defined by
