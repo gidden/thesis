@@ -302,9 +302,54 @@ where reactors are supplying used fuel.
 
 \subsection{Exchange Parameters}\label{method:setup:params}
 
-Exchange generation has three primary parameters
+The generation of exchanges is naturally a parameterized process. For instance,
+a fundamental parameter is the number of reactors in an exchange. Exchange
+generation parameters can be divided into two classifications, fundamental
+parameters and instance parameters. All exchange species share fundmental
+parameters, but some species have species-specific instance parameters.
 
-\subsubsection{Preferences}
+\subsubsection{Fundamental Parameters}
+
+The fundamental parameters are related to the common features of all species
+described in \S \ref{method:setup:features}. Each parameter is a switch that
+sets the level of fidelity of a given exchange. As such, they are each denoted
+as $f_x$, where the $x$ subscript describes the parameter.
+
+The most critical parameter is related to the fidelity of the fuel cycle being
+modeled, $f_{fc}$. A value of zero indicates modeling the OT fuel cycle, one is
+used for the MOX fuel cycle, and two the ThOX fuel cycle. As fuel cycle fidelity
+increases, the number of commodities increases, and thus the number of possible
+connections between suppliers and consumers that exist increases as some
+entities trade in multiple commodities.
+
+The second parameter is reactor fidelity, $f_{rxtr}$. Reactors can either make
+requests or provide supply based either on their entire batch or for each
+assembly in a batch. A value of zero indicates reactors trading full batches; a
+value of one indicates reactors trading individual assemblies. Trading
+individual assemblies is of higher fidelity because the number of trades
+increases by nearly an order of magnitude.
+
+Finally, the fidelity with with objective value coefficients are generated can
+be varied. This parameter is denoted $f_{loc}$ because it is related to the
+degree to which location is taken into account in Equation
+\ref{eqn:loc_proxy}. The mapping between $f_{loc}$ and parameters in Equation
+\ref{eqn:loc_proxy} is shown in Table \ref{tbl:floc}. As $f_{loc}$ increases,
+the size of the distribution of possible objective coefficent values increases.
+
+\begin{table}[h]
+\centering
+\caption{$f_{loc}$ Effects on Objective Coefficient Values}
+\label{tbl:floc}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$f_{loc}$ & $\delta_{reg}$ & $\delta_{loc}$ \\ \hline
+0  & 0          & 0 \\ \hline
+1   & 1          & 0 \\ \hline
+2   & 1          & 0 \\ \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Instance Parameters}
 
 \subsection{Front-End Exchanges}\label{method:setup:front}
 
