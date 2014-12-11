@@ -130,7 +130,64 @@ AP1000  & 17.6          & 39 \\ \hline
 BN600   & 1.41          & 92 \\ \hline
 \end{tabular}
 \end{table}
- 
+
+The reactors that operate in a given exchange is also a function of the fuel
+cycle being modeled. In a OT fuel cycle, only thermal reactors exist. In the MOX
+case, fast reactors that prefer MOX-based fuel are added and denoted as FMOX
+reactors. Finally, in the MOX-ThOX case, an additional class of fast reactor is
+added that prefers ThOX-based fuels and is denoted as FThOX. A summary of
+available types of reactors as a function of the fuel cycle being modeled is
+shown in Table \ref{tbl:fc_to_rxtrs}. 
+
+\begin{table}[h]
+\centering
+\caption{A mapping between fuel cycles to the reactor types that exist in exchange instances.}
+\label{tbl:fc_to_rxtrs}
+\begin{tabular}{|c|c|}
+\hline
+Fuel Cycle            & Reactor Types \\ \hline
+OT                    & Thermal         \\ \hline
+\multirow{3}{*}{MOX}  & Thermal         \\  
+                      & FMOX        \\ \hline
+\multirow{4}{*}{ThOX} & Thermal         \\  
+                      & FMOX        \\  
+                      & FThOX       \\ \hline
+\end{tabular}
+\end{table}
+
+Reactors may be fueled by different commodities. In other words, reactors have a
+set of commodities that they either supply or demand, based on the exchange
+species being modeled. The set of commodities that reactors can use is a
+modeling assumption and a proxy for how reactors may behave in simulations; this
+particular reactor-to-commodity mapping may not be true for other analysts' fuel
+cycle models. However, it is appropriate to make certain broad assumptions for
+such an exploratory study. A mapping of reactors to acceptable commodities is
+provided in Table \ref{tbl:rxtr_to_commods}. Note that there is still a
+preference distribution associated with each reactor-commodity pair as well as
+constraint coefficient effects. Accordingly, each reactor-commodity pair
+provides a unique effect on an exchange instance.
+
+\begin{table}[h]
+\centering
+\caption{A mapping between reactor types and the commodities allowed to fuel each reactor type.}
+\label{tbl:rxtr_to_commods}
+\begin{tabular}{|c|c|}
+\hline
+Reactor Types            & Fuel Commodities \\ \hline
+\multirow{3}{*}{Thermal}                    & EUOX         \\ 
+                      & TMOX        \\  
+                      & FMOX       \\ \hline
+\multirow{4}{*}{FMOX}  & EUOX         \\  
+                      & TMOX        \\ 
+                      & TMOX        \\  
+                      & FThOX        \\ \hline 
+\multirow{4}{*}{FThOX} & EUOX         \\  
+                     & TMOX        \\ 
+                      & TMOX        \\  
+                      & FThOX        \\ \hline 
+\end{tabular}
+\end{table}
+
 \subsubsection{Preferences}
 
 Preferences for all transactions have a default value, $p_{c}(i, j)$, based on
@@ -350,6 +407,67 @@ $f_{loc}$ & $\delta_{reg}$ & $\delta_{loc}$ \\ \hline
 \end{table}
 
 \subsubsection{Instance Parameters}
+
+While fundamental parameters represent switches that change the notion of the
+exchange being generated, for example the difference between a once-through fuel
+cycle and a fuel cycle with recycling, instance parameters change the
+\textit{shape} and \textit{size} of instances in a given population. Given an
+instance's shape and size, instance parameters can also affect
+\textit{coefficient generation}. In other words, fundamental parameters are
+related basic modeling assumptions while instance parameters are related to a
+instance, given those basic modeling assumptions.
+
+Both speices of exchange instances share some instance parameters, namely those
+related to the population of reactors in a given exchange as well as coefficient
+generation parameters related to objective coefficients. 
+
+Instances are broadly defined by a parameter representing the number of reactors
+that exist in an exchange instance, $n_{rxtr}$. Next, the split between thermal
+and fast reactors is defined by a ratio, $r_{t, f}$. If $f_{fc}$ is set to zero,
+$r_{t, f}$ and all other fast reactor parameters are ignored. If $f_{fc}$ is set
+to two, fast reactors must be further subdivided into ThOX or MOX based. Thus
+another ratio parameter is introduced, $r_{th, pu}$. Combining these three
+parameters for a given value of $f_{fc}$ provides a breakdown of of the number
+and types of reactors in a given exchange. In the event that the determined
+number of reactors is non integral, the value is rounded to the nearest integer,
+with an imposed minimum value of unity. 
+
+\subsubsection{Summary}
+
+A summary of species-independent parameters is provided in Table
+\ref{tbl:global_params}.
+
+\begin{table}[h]
+\centering
+\caption{Parameter Description Summary for Species-Independent Parameters.}
+\label{tbl:global_params}
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Parameter    & 
+Description
+\\ \hline
+$f_{fc}$     & 
+The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
+\\ \hline
+$f_{rxtr}$   & 
+The reactor fidelity of an instance (whether individual assemblies are modeled
+or whole batches are modeled).  
+\\ \hline
+$f_{loc}$    & 
+The location fidelity of an instance (to what degree is facility location
+included in objective coefficients).
+\\ \hline
+$n_{rxtr}$   & 
+The number of reactors in an instance.
+\\ \hline
+$r_{t, f}$   & 
+The ratio of thermal to fast reactors in an instance, if appropriate.
+\\ \hline
+$r_{th, pu}$ & 
+The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+\\ \hline
+\end{tabularx}
+\end{table}
 
 \subsection{Front-End Exchanges}\label{method:setup:front}
 
