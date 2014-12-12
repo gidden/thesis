@@ -464,19 +464,24 @@ is rounded to the nearest integer, with an imposed minimum value of unity.
 
 \subsubsection{Support Facility Population}
 
-In a front-end exchange, fuel suppliers exchange material with reactors. It is
-assumed that there is a single type of supplier for each type of commodity used
-in the fuel cycle described in Table \ref{tbl:fc_to_commods}. Therefore there
-are four types of suppliers, directly mapping to commodities as shown in Table
-\ref{tbl:commod_to_sup}.
+In a front-end exchange, fuel suppliers exchange material with reactors. In a
+back-end exchange, reprocessing and storage facilities exchange material with
+reactors. In either case, facilities that are \text{not} reactors are referred
+to as \textit{support} facilities, or \textit{supporters}, as they support
+the reactos which generate power.
+
+It is assumed that there is a single type of supporter for each type of commodity
+used in the fuel cycle described in Table \ref{tbl:fc_to_commods}. Therefore
+there are four types of supporters, directly mapping to commodities as shown in
+Table \ref{tbl:commod_to_sup}.
 
 \begin{table}[h]
 \centering
-\caption{A mapping between commodities and the supplier type of that commodity.}
-\label{tbl:fc_to_commods}
+\caption{A mapping between commodities and the supporter type of that commodity.}
+\label{tbl:commod_to_sup}
 \begin{tabular}{|c|c|}
 \hline
-Commodities            & Supplier \\ \hline
+Commodities            & Supporter \\ \hline
 UOX                    & UOX         \\ \hline
 TMOX                    & TMOX         \\ \hline
 FMOX                    & FMOX         \\ \hline
@@ -484,21 +489,21 @@ FThOX                    & FThOX         \\ \hline
 \end{tabular}
 \end{table}
 
-The number of each type of supplier in a front-end exchange instance is a
+The number of each type of supporter in a front-end exchange instance is a
 function of of the number of type of reactor as well as configurable
-parameters. Suppliers types are divided into two groups: those who primarily
-supply thermal reactors and those who primarily supply fast reactors. The number
-of thermal fuel suppliers is determined to be the product of the number of
-thermal reactors and a ratio parameter, $r_{s, th}$, such that the number of
-thermal suppliers is
+parameters. Supporter types are divided into two groups: those who primarily
+support thermal reactors and those who primarily support fast reactors. The
+number of thermal fuel supporters is determined to be the product of the number
+of thermal reactors and a ratio parameter, $r_{s, th}$, such that the number of
+thermal supporters is
 
 \begin{equation}
 n_{s, th} = r_{s, th} * n_{rx, th}.
 \end{equation}
 
-The number of TMOX suppliers, assuming $f_{fc} > 0$ is then determined by a
+The number of TMOX supporters, assuming $f_{fc} > 0$ is then determined by a
 similar ratio parameter, $r_{s, tmox, uox}$, such that the number of UOX and
-TMOX suppliers is
+TMOX supporters is
 
 \begin{equation}
 n_{s, tmox} = r_{s, tmox, uox} * n_{s, th}
@@ -510,16 +515,16 @@ and
 n_{s, uox} = n_{s, th} - n_{s, tmox}.
 \end{equation}
 
-The number of fast reactor fuel suppliers is determined directly from the number
+The number of fast reactor fuel supporters is determined directly from the number
 of associated fast reactors in the exchange using similar ratio parameters,
 $r_{s, fmox}$ and $r_{s, fthox}$. Assuming $f_{fc} > 0$, the number of FMOX
-suppliers is given as
+supporters is given as
 
 \begin{equation}
 n_{s, fmox} = r_{s, fmox} * n_{rx, fmox}.
 \end{equation}
 
-Similarly, assuming $f_{fc} > 1$, the number of FThOX suppliers is given as  
+Similarly, assuming $f_{fc} > 1$, the number of FThOX supporters is given as  
 
 \begin{equation}
 n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
@@ -562,11 +567,26 @@ included in objective coefficients).
 $n_{rx}$   & 
 The number of reactors in an instance.
 \\ \hline
-$r_{t, f}$   & 
+$r_{rx, t, f}$   & 
 The ratio of thermal to fast reactors in an instance, if appropriate.
 \\ \hline
-$r_{th, pu}$ & 
+$r_{rx, th, pu}$ & 
 The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+\\ \hline
+$r_{rx, th, pu}$ & 
+The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+\\ \hline
+$r_{s, th}$ & 
+The ratio of thermal support facilities to thermal reactors.  
+\\ \hline
+$r_{s, tmox, uox}$ & 
+The ratio of TMOX to UOX support facilities.
+\\ \hline
+$r_{s, fmox}$ & 
+The ratio of FMOX support facilities to FMOX reators.
+\\ \hline
+$r_{s, fthox}$ & 
+The ratio of FThOX support facilities to FThOX reators.
 \\ \hline
 $r_{l, c}$ & 
 The weight given to location preference with respect to commodity preference.
