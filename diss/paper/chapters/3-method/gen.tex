@@ -421,8 +421,9 @@ related basic modeling assumptions while instance parameters are related to a
 instance, given those basic modeling assumptions.
 
 Both speices of exchange instances share some instance parameters, namely those
-related to the population of reactors in a given exchange as well as coefficient
-generation parameters related to objective coefficients. 
+related to the population of reactors in a given exchange, the number of
+supporting facilities in the exchange, and coefficient generation parameters
+related to objective coefficients.
 
 \paragraph{Reactor Population}
 
@@ -461,58 +462,7 @@ n_{rx, fmox} = n_{rx, f} - n_{rx, fthox}.
 In the event that the determined number of reactors is non integral, the value
 is rounded to the nearest integer, with an imposed minimum value of unity.
 
-\paragraph{Objective Coefficients}
-
-As shown in Equation \ref{eqn:total_pref}, the value of an objective coefficient
-has two components, preference due to a commodity transfer, $p_c$, and
-preference due to the relative location between two entities, $p_l$. It is not
-obvious to what degree, if any, the relative values of the two components affect
-formulation performance. Accordingly, a ratio parameter, $r_{l, c}$ is
-introduced to allow for investigating such effects.
-
-\subsubsection{Summary}
-
-A summary of species-independent parameters is provided in Table
-\ref{tbl:global_params}.
-
-\begin{table}[h]
-\centering
-\caption{Parameter Description Summary for Species-Independent Parameters.}
-\label{tbl:global_params}
-\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
-\hline
-Parameter    & 
-Description
-\\ \hline
-$f_{fc}$     & 
-The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
-\\ \hline
-$f_{rx}$   & 
-The reactor fidelity of an instance (whether individual assemblies are modeled
-or whole batches are modeled).  
-\\ \hline
-$f_{loc}$    & 
-The location fidelity of an instance (to what degree is facility location
-included in objective coefficients).
-\\ \hline
-$n_{rx}$   & 
-The number of reactors in an instance.
-\\ \hline
-$r_{t, f}$   & 
-The ratio of thermal to fast reactors in an instance, if appropriate.
-\\ \hline
-$r_{th, pu}$ & 
-The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
-\\ \hline
-$r_{l, c}$ & 
-The weight given to location preference with respect to commodity preference.
-\\ \hline
-\end{tabularx}
-\end{table}
-
-\subsection{Front-End Exchanges}\label{method:setup:front}
-
-\subsubsection{Supplier Population}
+\subsubsection{Support Facility Population}
 
 In a front-end exchange, fuel suppliers exchange material with reactors. It is
 assumed that there is a single type of supplier for each type of commodity used
@@ -574,6 +524,57 @@ Similarly, assuming $f_{fc} > 1$, the number of FThOX suppliers is given as
 \begin{equation}
 n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
 \end{equation}
+
+\paragraph{Objective Coefficients}
+
+As shown in Equation \ref{eqn:total_pref}, the value of an objective coefficient
+has two components, preference due to a commodity transfer, $p_c$, and
+preference due to the relative location between two entities, $p_l$. It is not
+obvious to what degree, if any, the relative values of the two components affect
+formulation performance. Accordingly, a ratio parameter, $r_{l, c}$ is
+introduced to allow for investigating such effects.
+
+\subsubsection{Summary}
+
+A summary of species-independent parameters is provided in Table
+\ref{tbl:global_params}.
+
+\begin{table}[h]
+\centering
+\caption{Parameter Description Summary for Species-Independent Parameters.}
+\label{tbl:global_params}
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Parameter    & 
+Description
+\\ \hline
+$f_{fc}$     & 
+The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
+\\ \hline
+$f_{rx}$   & 
+The reactor fidelity of an instance (whether individual assemblies are modeled
+or whole batches are modeled).  
+\\ \hline
+$f_{loc}$    & 
+The location fidelity of an instance (to what degree is facility location
+included in objective coefficients).
+\\ \hline
+$n_{rx}$   & 
+The number of reactors in an instance.
+\\ \hline
+$r_{t, f}$   & 
+The ratio of thermal to fast reactors in an instance, if appropriate.
+\\ \hline
+$r_{th, pu}$ & 
+The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+\\ \hline
+$r_{l, c}$ & 
+The weight given to location preference with respect to commodity preference.
+\\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{Front-End Exchanges}\label{method:setup:front}
 
 \subsubsection{Request Generation}
 
