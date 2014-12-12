@@ -62,13 +62,13 @@ OT                    & UOX         \\ \hline
 All reactors are modeled as either thermal or fast reactors. Thermal reactors
 are simplified models of AP-1000 reactors \cite{ARIS}, and fast reactors are
 simplified models of BN-600 reactors \cite{reactors2007experience}. Using the
-dimensions in Table \ref{tbl:rxtr_params}, one can estimate that the AP-1000 core
+dimensions in Table \ref{tbl:rx_params}, one can estimate that the AP-1000 core
 volume is approximately 12.5 times larger than the BN-600 core. 
 
 \begin{table}[h]
 \centering
 \caption{Primary Reactor Parameters}
-\label{tbl:rxtr_params}
+\label{tbl:rx_params}
 \begin{tabular}{|c|c|c|c|}
 \hline
 Reactor & Core Height (m) & Core Diameter (m) & Number of Assemblies \\ \hline
@@ -89,7 +89,7 @@ batch of thermal reactor fuel is assumed to be
 \end{equation}
 
 The amount of fuel required and number of assemblies by each reactor type is
-shown in Table \ref{tbl:rxtr_batch}. The number of assemblies is taken as the
+shown in Table \ref{tbl:rx_batch}. The number of assemblies is taken as the
 ratio of total number of assemblies and number of batches per core rounded to
 the nearest integer. The batch size for the BN600 reactor is estimated by
 dividing the AP1000 batch size by the relative core volume.
@@ -97,7 +97,7 @@ dividing the AP1000 batch size by the relative core volume.
 \begin{table}[h]
 \centering
 \caption{Reactor Batch Size}
-\label{tbl:rxtr_batch}
+\label{tbl:rx_batch}
 \begin{tabular}{|c|c|c|c|}
 \hline
 Reactor & Quantity (t) & Number of Assemblies \\ \hline
@@ -112,12 +112,12 @@ case, fast reactors that prefer MOX-based fuel are added and denoted as FMOX
 reactors. Finally, in the MOX-ThOX case, an additional class of fast reactor is
 added that prefers ThOX-based fuels and is denoted as FThOX. A summary of
 available types of reactors as a function of the fuel cycle being modeled is
-shown in Table \ref{tbl:fc_to_rxtrs}. 
+shown in Table \ref{tbl:fc_to_rxs}. 
 
 \begin{table}[h]
 \centering
 \caption{A mapping between fuel cycles to the reactor types that exist in exchange instances.}
-\label{tbl:fc_to_rxtrs}
+\label{tbl:fc_to_rxs}
 \begin{tabular}{|c|c|}
 \hline
 Fuel Cycle            & Reactor Types \\ \hline
@@ -137,7 +137,7 @@ modeling assumption and a proxy for how reactors may behave in simulations; this
 particular reactor-to-commodity mapping may not be true for other analysts' fuel
 cycle models. However, it is appropriate to make certain broad assumptions for
 such an exploratory study. A mapping of reactors to acceptable commodities is
-provided in Table \ref{tbl:rxtr_to_commods}. Note that there is still a
+provided in Table \ref{tbl:rx_to_commods}. Note that there is still a
 preference distribution associated with each reactor-commodity pair as well as
 constraint coefficient effects. Accordingly, each reactor-commodity pair
 provides a unique effect on an exchange instance.
@@ -145,7 +145,7 @@ provides a unique effect on an exchange instance.
 \begin{table}[h]
 \centering
 \caption{A mapping between reactor types and the commodities allowed to fuel each reactor type.}
-\label{tbl:rxtr_to_commods}
+\label{tbl:rx_to_commods}
 \begin{tabular}{|c|c|}
 \hline
 Reactor Types            & Fuel Commodities \\ \hline
@@ -368,7 +368,7 @@ ThOX                    & 2         \\ \hline
 \end{tabular}
 \end{table}
 
-The second parameter is reactor fidelity, $f_{rxtr}$. Reactors can either make
+The second parameter is reactor fidelity, $f_{rx}$. Reactors can either make
 requests or provide supply based either on their entire batch or for each
 assembly in a batch. A value of zero indicates reactors trading full batches; a
 value of one indicates reactors trading individual assemblies. Trading
@@ -427,7 +427,7 @@ generation parameters related to objective coefficients.
 \paragraph{Reactor Population}
 
 Instances are broadly defined by a parameter representing the number of reactors
-that exist in an exchange instance, $n_{rxtr}$. Next, the split between thermal
+that exist in an exchange instance, $n_{rx}$. Next, the split between thermal
 and fast reactors is defined by a ratio, $r_{th, f}$. Assuming $f_{fc} > 0$, the
 number of thermal and fast reactors is given by
 
@@ -487,7 +487,7 @@ Description
 $f_{fc}$     & 
 The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
 \\ \hline
-$f_{rxtr}$   & 
+$f_{rx}$   & 
 The reactor fidelity of an instance (whether individual assemblies are modeled
 or whole batches are modeled).  
 \\ \hline
@@ -495,7 +495,7 @@ $f_{loc}$    &
 The location fidelity of an instance (to what degree is facility location
 included in objective coefficients).
 \\ \hline
-$n_{rxtr}$   & 
+$n_{rx}$   & 
 The number of reactors in an instance.
 \\ \hline
 $r_{t, f}$   & 
@@ -543,7 +543,7 @@ thermal reactors and a ratio parameter, $r_{s, th}$, such that the number of
 thermal suppliers is
 
 \begin{equation}
-n_{s, th} = r_{s, th} * n_{rxtr, th}.
+n_{s, th} = r_{s, th} * n_{rx, th}.
 \end{equation}
 
 The number of TMOX suppliers, assuming $f_{fc} > 0$ is then determined by a
@@ -566,13 +566,13 @@ $r_{s, fmox}$ and $r_{s, fthox}$. Assuming $f_{fc} > 0$, the number of FMOX
 suppliers is given as
 
 \begin{equation}
-n_{s, fmox} = r_{s, fmox} * n_{rxtr, fmox}.
+n_{s, fmox} = r_{s, fmox} * n_{rx, fmox}.
 \end{equation}
 
 Similarly, assuming $f_{fc} > 1$, the number of FThOX suppliers is given as  
 
 \begin{equation}
-n_{s, fthox} = r_{s, fthox} * n_{rxtr, fthox}.
+n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
 \end{equation}
 
 \subsubsection{Request Generation}
