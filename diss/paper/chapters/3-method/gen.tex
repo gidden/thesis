@@ -352,14 +352,42 @@ modeled, $f_{fc}$. A value of zero indicates modeling the OT fuel cycle, one is
 used for the MOX fuel cycle, and two the ThOX fuel cycle. As fuel cycle fidelity
 increases, the number of commodities increases, and thus the number of possible
 connections between suppliers and consumers that exist increases as some
-entities trade in multiple commodities.
+entities trade in multiple commodities. The fuel cycle parameter has an integer
+mapping to the modeled fuel cycle for conveniance as shown in Table \ref{}.
+
+\begin{table}[h]
+\centering
+\caption{A mapping between fuel cycles and $f_{rx}$ values.}
+\label{tbl:ffc}
+\begin{tabular}{|c|c|}
+\hline
+Fidelity (Fuel Cycle)            & $f_{fc}$ \\ \hline
+UOX                    & 0         \\ \hline
+MOX                    & 1         \\ \hline
+ThOX                    & 2         \\ \hline
+\end{tabular}
+\end{table}
 
 The second parameter is reactor fidelity, $f_{rxtr}$. Reactors can either make
 requests or provide supply based either on their entire batch or for each
 assembly in a batch. A value of zero indicates reactors trading full batches; a
 value of one indicates reactors trading individual assemblies. Trading
 individual assemblies is of higher fidelity because the number of trades
-increases by nearly an order of magnitude.
+increases by nearly an order of magnitude. Again, there is a mapping between the
+meaning of the reactor fidelity parameter and integer values as shown in Table
+\ref{tbl:frx}.
+
+\begin{table}[h]
+\centering
+\caption{A mapping between reactor fidelity and $f_{rx}$ values.}
+\label{tbl:frx}
+\begin{tabular}{|c|c|}
+\hline
+Fidelity            & $f_{rx}$ \\ \hline
+Batches                    & 0         \\ \hline
+Assemblies                    & 1         \\ \hline
+\end{tabular}
+\end{table}
 
 Finally, the fidelity with with objective value coefficients are generated can
 be varied. This parameter is denoted $f_{loc}$ because it is related to the
@@ -374,10 +402,10 @@ the size of the distribution of possible objective coefficent values increases.
 \label{tbl:floc}
 \begin{tabular}{|c|c|c|c|}
 \hline
-$f_{loc}$ & $\delta_{reg}$ & $\delta_{loc}$ \\ \hline
-0  & 0          & 0 \\ \hline
-1   & 1          & 0 \\ \hline
-2   & 1          & 0 \\ \hline
+Fidelity & $f_{loc}$ &$\delta_{reg}$ & $\delta_{loc}$ \\ \hline
+No location data & 0  & 0          & 0 \\ \hline
+Region location data & 1   & 1          & 0 \\ \hline
+Region and actual location data & 2   & 1          & 0 \\ \hline
 \end{tabular}
 \end{table}
 
