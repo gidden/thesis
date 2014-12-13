@@ -163,7 +163,7 @@ Reactor Types            & Fuel Commodities \\ \hline
 \end{tabular}
 \end{table}
 
-\subsubsection{Preferences}
+\subsubsection{Preferences}\label{method:setup:features:prefs}
 
 Preferences for all transactions have a default value, $p_{c}(i, j)$, based on
 the proposed commodity to be transferred which are defined in species-specific
@@ -596,11 +596,250 @@ The weight given to location preference with respect to commodity preference.
 
 \subsection{Front-End Exchanges}\label{method:setup:front}
 
+A front-end exchange is one in which reactors request fuel and supporting
+facilities supply fuel material. Conceptually, the information gathering
+procedure for this exchange begins with the RFB phase where reactors make
+requests for commodities with a given quantity and enrichment. Enrichment in
+this case is a simple proxy for an isotopic vector. Supporting facilities are
+then polled to provide a response to these requests during the RRFB
+phase. Managers of reactors would then adjust preferences based on implemented
+strategies. The remainder of this section describes how front-end exchange
+generation models the information gathering procedure, starting with the
+generation of requests and following with the generation of supply
+responses. The PA phase is modeled using the location proxy described in \S
+\ref{method:setup:features:prefs}.
+
 \subsubsection{Request Generation}
+
+Reactors make \textit{mutual} requests for all commodities that they can consume
+as described in Table \ref{}. In batch mode, i.e., when $f_{rx}$ equals zero, a
+single request is made per commodity. In assmebly mode, a request is made per
+assembly per commodity, with the number of assemblies denoted previously in
+Table \ref{}. A single request portfolio encompasses all requests, with a
+portfolio quantity equal to the reactor's batch size.
+
+It is assumed that fuel is requested at some enrichment level dependent on the
+reactor type. Each reactor in an exchange will choose a batch enrichment level
+given a uniform distribution. Further, it is assumed that all recycled fuel is
+composed of a target element oxide and topped up with natural uranium oxide. The
+mixing ratios is again based on reactor type. For recycled fuel, the associated
+enrichment level describes the enrichment of the fissile isotope in the
+\textit{target} element. For example, MOX fuel with 45\% enrichment implies that
+of the elemental Plutonium in the mixture, 45\% is comprised of isotopic
+\nucl{239}{Pu}. Finally, each reactor has a preference assignment over its set
+of consumable commodities.
+
+Thermal reactors can consume UOX fuel as well as both MOX variants. It is
+assumed that thermal reactors would prefer to consume thermal MOX fuel in order
+to maintain any equilibrium status of the cycle. UOX fuel is next perferred, and
+finally fast MOX, a fuel type usable by but not meant for thermal reactors. A
+preference distribution is assumed to be ${1, 0.5, 0.1}$, respectively. A normal
+operating enrichment range of $[3.5, 5.5]$ is used for UOX fuel. MOX-based fuels
+are assumed to be comprised of 7\% Plutonium with 93\% Uranium top up
+\cite{bertel2007management} with an enrichment range of $[55, 65]$
+\cite{bairiot2003status}. In practice, many reactor concepts restrict the
+fraction of an LWR's core that can be made up of MOX fuel rather than UOX fuel
+due to a reduced safety margin. Accordingly, a tuneable parameter is added to
+the model, $f_{mox}$, which denotes the fraction of a request that can be made
+up of MOX-based fuel. This fraction is only relevant if reactors are operating
+in assembly mode, i.e., if $f_{rx}$ is unity.
+
+MOX and ThOX fast reactors utilize the same governing request parameters but
+have a different preference distribution over commodities. It is assumed that a
+Thorium-based fast reactor prefers Thorium-based fast reactor fuel over
+MOX-based fast reactor fuel. Finally, such a reactor can utilize thermal MOX
+fuel or medium-enriched UOX, but prefers fast reactor-based fuels. Accordingly,
+a preference distribution of ${1, 0.5, 0.25, 0.1}$ is assigned to each
+commodity, respectively. A MOX-based fast reactor is assumed to operate
+differently, preferring fast and thermal MOX fuel over ThOX fuel. Medium
+enriched UOX is again a viable fuel commodity but least preferred. The same
+preference value distribution is used. For both fast reactors, a UOX enrichment
+range of $[15, 20]$ is used, having an upper limit set by LEU legal enrichment
+limits. All recycled fuels commodities are assigned an enrichment range of $[55,
+  65]$ \cite{bairiot2003status} and using a composition of 20\% of the target
+element (Plutonium or Thorium) and 80\% Uranium top up \cite{bairiot2003status}.
+
+A summary of chosen chosen request parameters based on reactor and commodity
+types is shown in Table \ref{tbl:rx_req}.
+
+\begin{table}[h]
+\centering
+\caption{A summary of reactor request parameters.}
+\label{tbl:rx_req}
+\begin{tabularx}{\columnwidth-10pt}{@{} *5{|>{\centering\arraybackslash}X}| @{}}
+% line wraps second column if too long
+\hline
+Reactor Type             & Commodity & Enrichment Range & 
+Target Element Fraction (\%) & Commodity Preference, $p_c$
+\\ \hline
+\multirow{3}{*}{Thermal} & 
+UOX   & $[3.5, 5.5]$         & N/A & 0.5        \\ \cline{2-5} 
+& 
+TMOX  & $[55, 65]$         & 7 & 1      \\ \cline{2-5} 
+& 
+FMOX  & $[55, 65]$         & 7 & 0.1      \\ \hline
+\multirow{4}{*}{FMOX}    & 
+UOX & $[15, 20]$         & N/A  & 0.1     \\ \cline{2-5} 
+& 
+TMOX & $[55, 65]$         & 20 & 0.5      \\ \cline{2-5} 
+& 
+FMOX & $[55, 65]$         & 20 & 1      \\ \cline{2-5} 
+& 
+FThOX & $[55, 65]$         & 20 & 0.25      \\ \hline
+\multirow{4}{*}{FThOX}   & 
+UOX & $[15, 20]$         & N/A & 0.1      \\ \cline{2-5} 
+& 
+TMOX & $[55, 65]$         & 20 & 0.25      \\ \cline{2-5} 
+& 
+FMOX & $[55, 65]$         & 20 & 0.5      \\ \cline{2-5} 
+& 
+FThOX & $[55, 65]$         & 20 & 1      \\ \hline
+\end{tabularx}
+\end{table}
 
 \subsubsection{Supply Generation}
 
+With all requests known, each supporting supply facility responds to all
+requests for their assigned commodity, creating an associated supply node and an
+arc between the supply node and request node. Constraint coefficients are
+supplied for each arc based on the requested enrichment associated with that
+arc. Furthermore, a right-hand side (RHS), $\beta^k_s$, is provided for each
+constraint in addition to a coefficient conversion function.
+
+Each supplier has two types of constraints for which coefficients must be
+calculated: a \textit{process} constraint and an \textit{inventory} constraint. A
+process constraint models a situation in which the amount of supplied fuel is
+constrained physically; only so much fuel can be made in one time step. An
+inventory constraint models a situation in which a supplier is constrained by
+the available material inventory on hand. Both constraints are a function of
+requested quantity and fuel enrichment.
+
+\paragraph{UOX Constraints}
+
+A UOX supplying facility is assumed to be constrained by a SWU process
+constraint and a natural Uranium inventory constraint. Assuming general
+operating parameters, including a tails assay of $0.3$ and a feed assay of
+natural Uranium, $0.711$, constraint coefficents can be applied to arcs. The SWU
+coefficient conversion function is previously described in Equation
+\ref{eqs:enr-swu-beta} while the natural Uranium conversion function is
+described in Equation \ref{eqs:enr-prod-beta}. Therefore, for UOX supplying
+facilities,
+
+\begin{equation}
+\beta^{\text{proc}}_s(\epsilon) = \beta^{\text{SWU}}_s(\epsilon) 
+\end{equation}
+
+and
+
+\begin{equation}
+\beta^{\text{inv}}_s(\epsilon) = \beta^{\text{NU}}_s(\epsilon). 
+\end{equation}
+
+In order to determine a constraining RHS, the proposed Eagle Rock Enrichment
+Plant is chosen as a model. It purports to have a possible yearly SWU capacity
+of $3.3E6$ Million SWU per year. Accordingly, the process constraint RHS is
+chosen to be the appropriate monthly value,
+
+\begin{equation}
+b^{\text{SWU}}_s = \sim 2.75E5 \frac{\text{SWU}}{\text{month}}.
+\end{equation}
+
+An inventory constraint will be based on the present state of a facility and at
+given time step in the simulation. Therefore, a sufficiently reasonable value
+must be provided without actual simulation data. Accordingly, the process RHS is
+multiplied by a translation constant to achieve an equivalent value for an
+inventory constraint. The translation constant is taken to be a ratio of
+constraint coefficients for the average enrichment of a primary requester. Thus,
+a UOX supplying facility uses a average enrichment, $\bar{\epsilon}$, of $4.5$
+because that is the median of the thermal reactor enrichment range. Further, a
+ratio coefficient parameter, $r_{inv, proc}$, is added in order to investigate
+interesting cases from a formulation point of view. If $r_{inv, proc} > 1$, then
+the process constraint RHS is smaller and thus the process constraint is more
+likely to be engaged in an feasible solution than the inventory constraint. On
+the other hand, if $r_{inv, proc} < 1$, the inventory constraint is more likely
+to be engaged. Including all of the above conversation, the inventory constraint RHS is chosen to be,
+
+\begin{equation}
+b^{\text{inv}}_s = 
+r_{inv, proc} 
+\frac{\beta^{\text{inv}}_s(\bar{\epsilon})}{\beta^{\text{proc}}_s(\bar{\epsilon})} 
+b^{\text{proc}}_s.
+\end{equation}
+
+The determination of the inventory RHS is identical for all supporting
+facilities.
+
+\paragraph{Recycled Commodity Constraints}
+
+Due to the lack of commercially viable, well documented fast reactor fuel
+suppliers, a simple linear surrogate model is assumed for an inventory
+constraint. Thus, the coefficient function conversion function is simply 
+
+\begin{equation}
+\beta^{\text{inv}}_s(\epsilon) = \epsilon. 
+\end{equation}
+
+There are many possible process surrogate models that could be used, such as
+heat production or radiotoxicity; however, each of these requires a detailed
+isotopic composition to be relevant. Per the current IAEA practice
+\cite{heinonen2010}, and extrapolating the same effect for reprocessing
+\nucl{233}{U}, a factor, $f_{\text{commod}}$, of 100 is added for for Plutonium
+and Thorium-based commodities, defined in Equation \ref{eqn:fissfactor}.
+
+\begin{equation}\label{eqn:fissfactor}
+    f_{\text{commod}} =
+    \begin{cases}
+    1,& \text{if UOX}\\
+    100,              & \text{otherwise}
+    \end{cases}
+\end{equation}
+
+The process constraint coefficient function is then defined as
+
+\begin{equation}
+\beta^{\text{proc}}_s(\epsilon) = f_{\text{commod}} \epsilon. 
+\end{equation}
+
+In any front-end exchange, one supplier supplies only one commodity, therefore
+$f_{\text{commod}}$ will always equal 100.
+
+From previous conversations with industry representatives \cite{murraycomm}, a
+reasonable size for a processing plant is 800 tonnes per year, which is similar
+to the Rokkassho plant in Japan \cite{heinonen2010}. With $f_{\text{commod}}$
+equal to 100 as discussed above, an 800 t Uranium / 8 t Plutonium facility could
+service on the order of 2-3 fast reactors or $\sim$2 thermal reactors with
+$\frac{1}{3}$ a request as MOX. The yearly process limit is again translated to
+a monthly limit, resulting in a constraint RHS value of
+
+\begin{equation}
+b^{\text{proc}}_s = \sim 66.7 \frac{\text{t}}{\text{month}}.
+\end{equation}
+
+The inventory constraint RHS is determined identically to the UOX case.
+
 \subsubsection{Parameter Summary}
+
+A summary of front-end exchange species-depedent parameters is provided in Table
+\ref{tbl:front_params}.
+
+\begin{table}[h]
+\centering
+\caption{Parameter Description Summary for Front-End Exchange Parameters.}
+\label{tbl:front_params}
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Parameter    & 
+Description
+\\ \hline
+$f_{mox}$     & 
+The fraction of thermal reactor requests that can be met with mox fuel.
+\\ \hline
+$r_{inv, proc}$   & 
+The ratio of the inventory RHS to the process RHS.
+or whole batches are modeled).  
+\\ \hline
+\end{tabularx}
+\end{table}
 
 \subsection{Back-End Exchanges}\label{method:setup:back}
 
