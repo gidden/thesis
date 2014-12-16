@@ -879,8 +879,6 @@ n_{s, \text{repo}} = r_{s, \text{repo}} ( n_{s, th} + n_{s, fmox} +n_{s, fthox} 
 
 \subsubsection{Request Generation}
 
-\TODO{start here, fill in tables, explain b for mass and b/beta for fissile}
-
 It is assumed that any recycling facility will accept UOX fuel. However, MOX
 recycling facilities can not process ThOX-based fuels, and ThOX facilities can
 not process MOX-based fuels. Additionally, fast MOX facilities prefer fast MOX
@@ -890,29 +888,34 @@ assigned preference distribution as a function of commodity type and supporting
 facility type is shown in Table \ref{}.
 
 A single request for the facility's processing capacity is made for each
-commodity. A mass-based constraint is provided for each requesting
-facility. Recycling facilities use the same 800 ton per year limit discussed in
-\S \ref{method:setup:front}. Repostories, however, use a limit based on the
-Yucca Mountain statutory limit of 17,000 tons and assuming a 30-year operating
-lifetime, i.e., period of time in which fuel can enter the facility. Thus, a
-monthly limit is determined to be
+commodity. Recycling facilities define their request quantity using the same 800
+ton per year limit discussed in \S \ref{method:setup:front}. Repostories,
+however, use a limit based on the Yucca Mountain statutory limit of 17,000 tons
+and assuming a 30-year operating lifetime, i.e., period of time in which fuel
+can enter the facility. Thus, a repostiory's request quantity is determined to
+be $\sim 48 \frac{\text{t}}{\text{month}}$.
 
-\begin{equation}
-b^{\text{proc}}_r = \sim 48 \frac{\text{t}}{\text{month}}.
+A fissile quantity constraint is added for each recycling facility. A fissile
+constraint is \textit{not} added for reprocessing facilities. The fissile
+constraint is used to model a situation in which recycling facilities have a
+demand for fissile material. The amount of fissile material required by
+recycling facilities is based on their primary consumer. It is determined to be
+the product of the facility's mass constraint and the mean amount of fissile
+material in a primary consumer's request per unit mass, as shown in Equation
+\ref{eqn:bfiss}. This constraint can be translated as ``recycling facilities
+request fissile material quantities as if its capacity was completely met by
+average primary reactors''.
+
+\begin{equation}\label{eqn:bfiss}
+b^{\text{fiss}}_r = \bar{\epsilon} f_{el} b^{\text{mass}}_r.
 \end{equation}
 
-\paragraph{Fissile Content Constraint}
+The fissile constraint coefficient is simply the amount of fissile material for
+a given supply, as described in Equation \ref{eqn:betafiss}.
 
-In addition to the mass-based processing constraint, an additional fissile
-quantity constraint is added for each recycling facility. The constraining value
-for the fissile quantity constraint is determined based on the primary reactor
-each supporting facility supports. The value is determined based on the average
-fissile enrichment for primary reactors as well as the target elemental
-composition of reactor fuel, as shown in Equation \ref {}. Applying this to each
-recycling facility type, the values for $b^{\text{fiss}}_r$ are shown in Table
-\ref{}. The associated constraint coefficient values, $\beta_r$, are based on
-the fissile content of the proposed material transfer, as shown in Equation \ref
-{}.
+\begin{equation}\label{eqn:betafiss}
+\beta^{\text{fiss}}_r(\epsilon) = \epsilon f_{el}.
+\end{equation}
 
 \subsubsection{Supply Generation}
 
