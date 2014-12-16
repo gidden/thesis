@@ -25,10 +25,6 @@ generating both species of exchanges.
 
 \subsection{Common Features}\label{method:setup:features}
 
-Both species of exchanges include reactors and supporting facilities. In a front
-end exchange, supporting facilties are fuel suppliers. In a back end exchange,
-supporting facilities are fuel recycling or storage facilities. 
-
 \subsubsection{Fuel Cycles and Commodities}
 
 Three types of fuel cycles can be generated: a once-through fuel cycle (OT), a
@@ -162,6 +158,16 @@ Reactor Types            & Fuel Commodities \\ \hline
                       & FThOX        \\ \hline 
 \end{tabular}
 \end{table}
+
+\subsubsection{Support Facilities}
+
+In a front-end exchange, fuel suppliers exchange material with reactors. In a
+back-end exchange, reprocessing and storage facilities exchange material with
+reactors. In either case, facilities that are \text{not} reactors are referred
+to as \textit{support} facilities, or \textit{supporters}, as they support the
+reactos which generate power. Support facilities for front-end exchanges are
+described in \S \ref{method:setup:front:sup}, and support facilities for
+back-end exchanges are described in \S \ref{method:setup:back:sup}.
 
 \subsubsection{Preferences}\label{method:setup:features:prefs}
 
@@ -335,10 +341,12 @@ where reactors are supplying used fuel.
 \subsection{Exchange Parameters}\label{method:setup:params}
 
 The generation of exchanges is naturally a parameterized process. For instance,
-a fundamental parameter is the number of reactors in an exchange. Exchange
+a critical parameter is the number of reactors in an exchange. Exchange
 generation parameters can be divided into two classifications, fundamental
-parameters and instance parameters. All exchange species share fundmental
-parameters, but some species have species-specific instance parameters.
+parameters and instance parameters. All exchange species share some fundmental
+parameters and instance parameters. Species also define their own set of
+instance parameters to complete the full set of parameters needed to define and
+instance of an exchange.
 
 \subsubsection{Fundamental Parameters}
 
@@ -417,13 +425,11 @@ cycle and a fuel cycle with recycling, instance parameters change the
 \textit{shape} and \textit{size} of instances in a given population. Given an
 instance's shape and size, instance parameters can also affect
 \textit{coefficient generation}. In other words, fundamental parameters are
-related basic modeling assumptions while instance parameters are related to a
-instance, given those basic modeling assumptions.
-
-Both speices of exchange instances share some instance parameters, namely those
-related to the population of reactors in a given exchange, the number of
-supporting facilities in the exchange, and coefficient generation parameters
-related to objective coefficients.
+related basic modeling assumptions while instance parameters are related to the
+specifics of an instance, given those basic modeling assumptions. Both speices
+of exchange instances share some instance parameters, namely those related to
+the population of reactors in a given exchange and coefficient generation
+parameters related to objective coefficients.
 
 \paragraph{Reactor Population}
 
@@ -462,13 +468,79 @@ n_{rx, fmox} = n_{rx, f} - n_{rx, fthox}.
 In the event that the determined number of reactors is non integral, the value
 is rounded to the nearest integer, with an imposed minimum value of unity.
 
-\paragraph{Support Facility Population}
+\paragraph{Objective Coefficients}
 
-In a front-end exchange, fuel suppliers exchange material with reactors. In a
-back-end exchange, reprocessing and storage facilities exchange material with
-reactors. In either case, facilities that are \text{not} reactors are referred
-to as \textit{support} facilities, or \textit{supporters}, as they support
-the reactos which generate power.
+As shown in Equation \ref{eqn:total_pref}, the value of an objective coefficient
+has two components, preference due to a commodity transfer, $p_c$, and
+preference due to the relative location between two entities, $p_l$. It is not
+obvious to what degree, if any, the relative values of the two components affect
+formulation performance. Accordingly, a ratio parameter, $r_{l, c}$ is
+introduced to allow for investigating such effects.
+
+\subsubsection{Parameter Summary}
+
+A summary of species-independent parameters is provided in Table
+\ref{tbl:global_params}.
+
+\begin{table}[h]
+\centering
+\caption{Parameter Description Summary for Species-Independent Parameters.}
+\label{tbl:global_params}
+\begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
+\hline
+Parameter    & Type &
+Description
+\\ \hline
+$f_{fc}$     & Fundamental &
+The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
+\\ \hline
+$f_{rx}$   & Fundamental &
+The reactor fidelity of an instance (whether individual assemblies are modeled
+or whole batches are modeled).  
+\\ \hline
+$f_{loc}$    & Fundamental &
+The location fidelity of an instance (to what degree is facility location
+included in objective coefficients).
+\\ \hline
+$n_{rx}$   & Instance &
+The number of reactors in an instance.
+\\ \hline
+$r_{rx, t, f}$   & Instance &
+The ratio of thermal to fast reactors in an instance, if appropriate.
+\\ \hline
+$r_{rx, th, pu}$ & Instance &
+The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+\\ \hline
+$r_{rx, th, pu}$ & Instance &
+The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+\\ \hline
+$r_{l, c}$ & Instance &
+The weight given to location preference with respect to commodity preference.
+\\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{Front-End Exchanges}\label{method:setup:front}
+
+A front-end exchange is one in which reactors request fuel and supporting
+facilities supply fuel material. \S \ref{method:setup:front:sup} describes how
+the population of supporting facilities is determined. Conceptually, the
+information gathering procedure for this exchange begins with the RFB phase
+where reactors make requests for commodities with a given quantity and
+enrichment. Enrichment in this case is a simple proxy for an isotopic
+vector. Supporting facilities are then polled to provide a response to these
+requests during the RRFB phase. Managers of reactors would then adjust
+preferences based on implemented strategies. The remainder of this section
+describes how front-end exchange generation models the information gathering
+procedure, starting with the generation of requests in \S
+\ref{method:setup:front:reqgen}, followed by the generation of supply responses
+in \S \ref{method:setup:front:subgen}. The PA phase is modeled using the
+location proxy described in \S \ref{method:setup:features:prefs}. Throughout the
+discussion on generating front-end exchanges, instance parameters are defined. A
+summary of all front-end specific instance parameters is described in \S
+\ref{method:setup:front:sum}.
+
+\subsubsection{Support Facility Population} \label{method:setup:front:sup}
 
 It is assumed that there is a single type of supporter for each type of commodity
 used in the fuel cycle described in Table \ref{tbl:fc_to_commods}. Therefore
@@ -530,86 +602,7 @@ Similarly, assuming $f_{fc} > 1$, the number of FThOX supporters is given as
 n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
 \end{equation}
 
-\paragraph{Objective Coefficients}
-
-As shown in Equation \ref{eqn:total_pref}, the value of an objective coefficient
-has two components, preference due to a commodity transfer, $p_c$, and
-preference due to the relative location between two entities, $p_l$. It is not
-obvious to what degree, if any, the relative values of the two components affect
-formulation performance. Accordingly, a ratio parameter, $r_{l, c}$ is
-introduced to allow for investigating such effects.
-
-\subsubsection{Summary}
-
-A summary of species-independent parameters is provided in Table
-\ref{tbl:global_params}.
-
-\begin{table}[h]
-\centering
-\caption{Parameter Description Summary for Species-Independent Parameters.}
-\label{tbl:global_params}
-\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
-\hline
-Parameter    & 
-Description
-\\ \hline
-$f_{fc}$     & 
-The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
-\\ \hline
-$f_{rx}$   & 
-The reactor fidelity of an instance (whether individual assemblies are modeled
-or whole batches are modeled).  
-\\ \hline
-$f_{loc}$    & 
-The location fidelity of an instance (to what degree is facility location
-included in objective coefficients).
-\\ \hline
-$n_{rx}$   & 
-The number of reactors in an instance.
-\\ \hline
-$r_{rx, t, f}$   & 
-The ratio of thermal to fast reactors in an instance, if appropriate.
-\\ \hline
-$r_{rx, th, pu}$ & 
-The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
-\\ \hline
-$r_{rx, th, pu}$ & 
-The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
-\\ \hline
-$r_{s, th}$ & 
-The ratio of thermal support facilities to thermal reactors.  
-\\ \hline
-$r_{s, tmox, uox}$ & 
-The ratio of TMOX to UOX support facilities.
-\\ \hline
-$r_{s, fmox}$ & 
-The ratio of FMOX support facilities to FMOX reators.
-\\ \hline
-$r_{s, fthox}$ & 
-The ratio of FThOX support facilities to FThOX reators.
-\\ \hline
-$r_{l, c}$ & 
-The weight given to location preference with respect to commodity preference.
-\\ \hline
-\end{tabularx}
-\end{table}
-
-\subsection{Front-End Exchanges}\label{method:setup:front}
-
-A front-end exchange is one in which reactors request fuel and supporting
-facilities supply fuel material. Conceptually, the information gathering
-procedure for this exchange begins with the RFB phase where reactors make
-requests for commodities with a given quantity and enrichment. Enrichment in
-this case is a simple proxy for an isotopic vector. Supporting facilities are
-then polled to provide a response to these requests during the RRFB
-phase. Managers of reactors would then adjust preferences based on implemented
-strategies. The remainder of this section describes how front-end exchange
-generation models the information gathering procedure, starting with the
-generation of requests and following with the generation of supply
-responses. The PA phase is modeled using the location proxy described in \S
-\ref{method:setup:features:prefs}.
-
-\subsubsection{Request Generation}
+\subsubsection{Request Generation}\label{method:setup:front:reqgen}
 
 Reactors make \textit{mutual} requests for all commodities that they can consume
 as described in Table \ref{}. In batch mode, i.e., when $f_{rx}$ equals zero, a
@@ -670,16 +663,16 @@ types is shown in Table \ref{tbl:rx_req}.
 % line wraps second column if too long
 \hline
 Reactor Type             & Commodity & Enrichment Range & 
-Target Element Fraction (\%) & Commodity Preference, $p_c$
+Target Element Fraction (\%), $f_{el}$ & Commodity Preference, $p_c$
 \\ \hline
 \multirow{3}{*}{Thermal} & 
-UOX   & $[3.5, 5.5]$         & N/A & 0.5        \\ \cline{2-5} 
+UOX   & $[3.5, 5.5]$         & 100 & 0.5        \\ \cline{2-5} 
 & 
 TMOX  & $[55, 65]$         & 7 & 1      \\ \cline{2-5} 
 & 
 FMOX  & $[55, 65]$         & 7 & 0.1      \\ \hline
 \multirow{4}{*}{FMOX}    & 
-UOX & $[15, 20]$         & N/A  & 0.1     \\ \cline{2-5} 
+UOX & $[15, 20]$         & 100  & 0.1     \\ \cline{2-5} 
 & 
 TMOX & $[55, 65]$         & 20 & 0.5      \\ \cline{2-5} 
 & 
@@ -687,7 +680,7 @@ FMOX & $[55, 65]$         & 20 & 1      \\ \cline{2-5}
 & 
 FThOX & $[55, 65]$         & 20 & 0.25      \\ \hline
 \multirow{4}{*}{FThOX}   & 
-UOX & $[15, 20]$         & N/A & 0.1      \\ \cline{2-5} 
+UOX & $[15, 20]$         & 100 & 0.1      \\ \cline{2-5} 
 & 
 TMOX & $[55, 65]$         & 20 & 0.25      \\ \cline{2-5} 
 & 
@@ -697,7 +690,7 @@ FThOX & $[55, 65]$         & 20 & 1      \\ \hline
 \end{tabularx}
 \end{table}
 
-\subsubsection{Supply Generation}
+\subsubsection{Supply Generation}\label{method:setup:front:subgen}
 
 With all requests known, each supporting supply facility responds to all
 requests for their assigned commodity, creating an associated supply node and an
@@ -776,32 +769,22 @@ suppliers, a simple linear surrogate model is assumed for an inventory
 constraint. Thus, the coefficient function conversion function is simply 
 
 \begin{equation}
-\beta^{\text{inv}}_s(\epsilon) = \epsilon. 
+\beta^{\text{inv}}_s(\epsilon) = f_{el} \epsilon. 
 \end{equation}
 
 There are many possible process surrogate models that could be used, such as
 heat production or radiotoxicity; however, each of these requires a detailed
 isotopic composition to be relevant. Per the current IAEA practice
 \cite{heinonen2010}, and extrapolating the same effect for reprocessing
-\nucl{233}{U}, a factor, $f_{\text{commod}}$, of 100 is added for for Plutonium
-and Thorium-based commodities, defined in Equation \ref{eqn:fissfactor}.
+\nucl{233}{U}, a factor of 100 is added for for Plutonium and Thorium-based
+commodities.
 
-\begin{equation}\label{eqn:fissfactor}
-    f_{\text{commod}} =
-    \begin{cases}
-    1,& \text{if UOX}\\
-    100,              & \text{otherwise}
-    \end{cases}
-\end{equation}
-
-The process constraint coefficient function is then defined as
+The process constraint coefficient function is then as the mass-based processing
+factor
 
 \begin{equation}
-\beta^{\text{proc}}_s(\epsilon) = f_{\text{commod}} \epsilon. 
+\beta^{\text{proc}}_s = 100 f_{el}. 
 \end{equation}
-
-In any front-end exchange, one supplier supplies only one commodity, therefore
-$f_{\text{commod}}$ will always equal 100.
 
 From previous conversations with industry representatives \cite{murraycomm}, a
 reasonable size for a processing plant is 800 tonnes per year, which is similar
@@ -817,14 +800,14 @@ b^{\text{proc}}_s = \sim 66.7 \frac{\text{t}}{\text{month}}.
 
 The inventory constraint RHS is determined identically to the UOX case.
 
-\subsubsection{Parameter Summary}
+\subsubsection{Parameter Summary}\label{method:setup:front:sum}
 
-A summary of front-end exchange species-depedent parameters is provided in Table
-\ref{tbl:front_params}.
+A summary of front-end exchange species-depedent instance parameters is provided
+in Table \ref{tbl:front_params}.
 
 \begin{table}[h]
 \centering
-\caption{Parameter Description Summary for Front-End Exchange Parameters.}
+\caption{Parameter Description Summary for Front-End Exchange Instance Parameters.}
 \label{tbl:front_params}
 \begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
 \hline
@@ -833,6 +816,18 @@ Description
 \\ \hline
 $f_{mox}$     & 
 The fraction of thermal reactor requests that can be met with mox fuel.
+\\ \hline
+$r_{s, th}$ & 
+The ratio of thermal support facilities to thermal reactors.  
+\\ \hline
+$r_{s, tmox, uox}$ & 
+The ratio of TMOX to UOX support facilities.
+\\ \hline
+$r_{s, fmox}$ & 
+The ratio of FMOX support facilities to FMOX reators.
+\\ \hline
+$r_{s, fthox}$ & 
+The ratio of FThOX support facilities to FThOX reators.
 \\ \hline
 $r_{inv, proc}$   & 
 The ratio of the inventory RHS to the process RHS.
@@ -843,8 +838,100 @@ or whole batches are modeled).
 
 \subsection{Back-End Exchanges}\label{method:setup:back}
 
+A back-end exchange models the transfer of used fuel from reactors to supporting
+facilities, such as reprocessing facilities and repositories. During the
+information gathering process, supporting facilities make requests for
+commodities that can either be used directly in the recycling process or need to
+be stored, temporarily or permanently. Reactors then respond based on output
+fuel to each request during the RRFB phase. Throughout the discussion on
+generating back-end exchanges, instance parameters are defined. A summary of all
+back-end specific instance parameters is shown in Table \ref{tbl:back_params}.
+
+\subsubsection{Support Facility Population}\label{method:setup:back:sup}
+
+Four classes of supporting facilities are modeled in back-end exchanges: thermal
+fuel recycling facilities, a facility that recycles fast MOX fuel, a facility
+that recycles fast ThOX fuel, and a repository. Because a single thermal supplier type exists, the 
+
+As thermal fuel recycling facilities are the only thermal supporting facilities,
+the number of such facilities in a given back-end exchange is trivially $n_{s,
+  th}$. As is the case with front-end exchanges, there is a class of supporting
+facility for each fast fuel commodity. Accordingly, the population of each
+facility type is identical:
+
+\begin{equation}
+n_{s, fmox} = r_{s, fmox} * n_{rx, fmox}
+\end{equation}
+
+and
+
+\begin{equation}
+n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
+\end{equation}
+
+Back-end exchanges include repositories, a facility type not present in
+front-end exchanges. A simple ratio parameter, $r_{\text{repo}}$ is applied
+based on the total number of other supporting facilities, i.e.,
+
+\begin{equation}
+n_{s, \text{repo}} = r_{s, \text{repo}} ( n_{s, th} + n_{s, fmox} +n_{s, fthox} ).
+\end{equation}
+
 \subsubsection{Request Generation}
+
+\TODO{start here, fill in tables, explain b for mass and b/beta for fissile}
+
+It is assumed that any recycling facility will accept UOX fuel. However, MOX
+recycling facilities can not process ThOX-based fuels, and ThOX facilities can
+not process MOX-based fuels. Additionally, fast MOX facilities prefer fast MOX
+fuel, while thermal facilities prefer thermal MOX fuel. Finally, repositories
+can accept all commodities; however, it is a consumer of last resort. The
+assigned preference distribution as a function of commodity type and supporting
+facility type is shown in Table \ref{}.
+
+A single request for the facility's processing capacity is made for each
+commodity. A mass-based constraint is provided for each requesting
+facility. Recycling facilities use the same 800 ton per year limit discussed in
+\S \ref{method:setup:front}. Repostories, however, use a limit based on the
+Yucca Mountain statutory limit of 17,000 tons and assuming a 30-year operating
+lifetime, i.e., period of time in which fuel can enter the facility. Thus, a
+monthly limit is determined to be
+
+\begin{equation}
+b^{\text{proc}}_r = \sim 48 \frac{\text{t}}{\text{month}}.
+\end{equation}
+
+\paragraph{Fissile Content Constraint}
+
+In addition to the mass-based processing constraint, an additional fissile
+quantity constraint is added for each recycling facility. The constraining value
+for the fissile quantity constraint is determined based on the primary reactor
+each supporting facility supports. The value is determined based on the average
+fissile enrichment for primary reactors as well as the target elemental
+composition of reactor fuel, as shown in Equation \ref {}. Applying this to each
+recycling facility type, the values for $b^{\text{fiss}}_r$ are shown in Table
+\ref{}. The associated constraint coefficient values, $\beta_r$, are based on
+the fissile content of the proposed material transfer, as shown in Equation \ref
+{}.
 
 \subsubsection{Supply Generation}
 
+mutual supply!
+
 \subsubsection{Parameter Summary}
+
+A summary of back-end exchange species-depedent instance parameters is provided
+in Table \ref{tbl:back_params}.
+
+\begin{table}[h]
+\centering
+\caption{Parameter Description Summary for Back-End Exchange Instance
+  Parameters.}
+\label{tbl:back_params}
+\begin{tabularx}{\columnwidth-10pt}{|c|X|} % line wraps second column if too long
+\hline
+Parameter    & 
+Description
+\\ \hline
+\end{tabularx}
+\end{table}
