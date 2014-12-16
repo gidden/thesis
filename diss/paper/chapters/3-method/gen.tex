@@ -361,7 +361,8 @@ used for the MOX fuel cycle, and two the ThOX fuel cycle. As fuel cycle fidelity
 increases, the number of commodities increases, and thus the number of possible
 connections between suppliers and consumers that exist increases as some
 entities trade in multiple commodities. The fuel cycle parameter has an integer
-mapping to the modeled fuel cycle for conveniance as shown in Table \ref{}.
+mapping to the modeled fuel cycle for conveniance as shown in Table
+\ref{tbl:ffc}.
 
 \begin{table}[h]
 \centering
@@ -605,11 +606,11 @@ n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
 \subsubsection{Request Generation}\label{method:setup:front:reqgen}
 
 Reactors make \textit{mutual} requests for all commodities that they can consume
-as described in Table \ref{}. In batch mode, i.e., when $f_{rx}$ equals zero, a
-single request is made per commodity. In assmebly mode, a request is made per
-assembly per commodity, with the number of assemblies denoted previously in
-Table \ref{}. A single request portfolio encompasses all requests, with a
-portfolio quantity equal to the reactor's batch size.
+as described in Table \ref{tbl:rx_req}. In batch mode, i.e., when $f_{rx}$
+equals zero, a single request is made per commodity. In assmebly mode, a request
+is made per assembly per commodity, with the number of assemblies denoted
+previously in Table \ref{tbl:rx_params}. A single request portfolio encompasses
+all requests, with a portfolio quantity equal to the reactor's batch size.
 
 It is assumed that fuel is requested at some enrichment level dependent on the
 reactor type. Each reactor in an exchange will choose a batch enrichment level
