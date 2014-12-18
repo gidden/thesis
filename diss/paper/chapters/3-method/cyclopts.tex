@@ -210,6 +210,34 @@ species are included, is shown in Figure \ref{}.
 
 \subsubsection{Performance Studies}\label{method:tools:hdf5:study}
 
+\textit{Chunk size} is a critical parameter of HDF5 datasets that affects I/O
+performance.
+
+In PyTables, the \textit{compresison level} is also a tuneable parameter that
+affects I/O performance.
+
+\TODO{Fix} Originally, all Cyclopts datasets used a UUID-as-primary-key
+layout. However, upon the need to post process data, extremely long read times
+were encountered. Originally, a chunk size of ___ was used because ___. A
+compression level of four was selected per suggestions from the PyTables
+documentation \cite{}.
+
+The basic procedure for performing a post-process operation included reading all
+rows associated with a UUID in an input exchange family dataset, reading all
+rows associated with the same UUID in an output exchange species dataset,
+selecting a value from each row, and performing a dot product of the resulting
+vectors. The pseudocode for the operation is shown in Listing \ref{}.
+\TODO{Make listing}
+
+In order to investigate possible chunk size and compression optimizations, a
+small ($\sim$ MBs) dataset and a large ($\sim$ GBs) dataset were created. The
+postprocessing step was then run on 25 instances in each dataset. The operation
+was timed using the UNIX \code{time} command.
+
+\TODO{Discuss results}
+
+\TODO{Discuss node v grp}
+
 \subsection{Implementation}
 
 Cyclopts defines abstract application programming interfaces (APIs) for both
