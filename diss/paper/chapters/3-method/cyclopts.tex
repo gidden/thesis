@@ -211,32 +211,107 @@ species are included, is shown in Figure \ref{}.
 \subsubsection{Performance Studies}\label{method:tools:hdf5:study}
 
 \textit{Chunk size} is a critical parameter of HDF5 datasets that affects I/O
-performance.
+performance. HDF5's storage layout is not contiguous, rather, data is separated
+into equal-sized \textit{chunks}. Any reading or writing occurs on a chunk of
+data, rather than accesing an entire dataset. Accordingly, choosing a reasonable
+chunk size can greatly increase performance for known data access operations. In
+PyTables, the \textit{compresison level} of a dataset is also a tuneable
+parameter that affects I/O performance. Compression, of course, reduces overall
+database size. Therefore, an ideal compression is the largest possible that
+retains acceptable performance.
 
-In PyTables, the \textit{compresison level} is also a tuneable parameter that
-affects I/O performance.
-
-\TODO{Fix} Originally, all Cyclopts datasets used a UUID-as-primary-key
-layout. However, upon the need to post process data, extremely long read times
-were encountered. Originally, a chunk size of ___ was used because ___. A
-compression level of four was selected per suggestions from the PyTables
-documentation \cite{}.
-
-The basic procedure for performing a post-process operation included reading all
-rows associated with a UUID in an input exchange family dataset, reading all
-rows associated with the same UUID in an output exchange species dataset,
-selecting a value from each row, and performing a dot product of the resulting
-vectors. The pseudocode for the operation is shown in Listing \ref{}.
-\TODO{Make listing}
+Originally, all Cyclopts datasets used a UUID-as-primary-key layout. For
+instance, rather than many tables with a layout described in Table
+\ref{tbl:sp_inst_arc}, all related tables were combined and included an extra
+column naming the instance UUID. However, extremely long read times were
+encountered when post processing data. The basic procedure for performing a
+post-process operation included reading all rows associated with a UUID in an
+input exchange family dataset, reading all rows associated with the same UUID in
+an output exchange species dataset, selecting a value from each row, and
+performing a dot product of the resulting vectors. 
 
 In order to investigate possible chunk size and compression optimizations, a
 small ($\sim$ MBs) dataset and a large ($\sim$ GBs) dataset were created. The
 postprocessing step was then run on 25 instances in each dataset. The operation
-was timed using the UNIX \code{time} command.
+was timed using the UNIX \code{time} command. Poor performance was experience
+with an initial chunksize proportional to the ratio of a normal L2 cache to row
+size was used for each dataset and a compression level of four was selected per
+suggestions from the PyTables documentation \cite{tablesopt}. Accordingly, chunk
+size and compression level were varied around these recommended values in order
+to determine if any tuning was available. The results of the study on the small
+dataset is shown in Figure \ref{fig:small_db}. The large dataset results is
+shown in Figure \ref{fig:large_db}.
 
-\TODO{Discuss results}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{small_all.pdf}
+    \caption[]{
+      \label{fig:small_db}
+      Postprocessing performance for 25 entries of a small-sized database for a 
+      variety of compression levels and chunk sizes.}
+  \end{center}
+\end{figure}
 
-\TODO{Discuss node v grp}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{large_all.pdf}
+    \caption[]{
+      \label{fig:large_db}
+      Postprocessing performance for 25 entries of a large-sized database for a
+      variety of compression levels and chunk sizes.}
+  \end{center}
+\end{figure}
+
+Assuming some level of compression, an ideal chunksize range is identified for
+the small database of between $\sim 10^3 - 10^5$ bytes. Further the small
+database example confirms that the study's methodology is well founded: an ideal
+chunksize range is established. A similar optimal chunk size range is found for
+the large database. However, note that in this exercise, only $\sim 0.25\%$ of
+instances are postprocessed. An optimal performance of $> 80$ seconds per
+instance is unacceptable.
+
+A number of strategies exist for trying to increase performance. A classic
+strategy is pivoting the group-dataset structure such that data queries are made
+upon a group rather than rows in a dataset. In this example, such a pivot
+involves dividing the single, large dataset into $n$ datasets, where $n$ is the
+number of unique primary keys (UUIDs in this case). 
+
+Accordingly, an additional test was conducted such that all datasets on which
+queries are made were pivoted such that new group nodes were added for each
+UUID, and all data for that UUID was appended to a dataset under the associated
+group. The post processing step was divided into the read operations associated
+with the exchange family and the the read operations associated with a
+species. The exact same operations were then tested on a large database with the
+column-based layout and a large database with the group-based layout. Specific
+instances, increasing in size, were identified to be postprocessed. The
+group-based results were compared with the column-based results and are shown in
+Figure \ref{}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{grp_v_col_ratio.pdf}
+    \caption[]{
+      \label{fig:col_grp}
+      The ratio of group-base d queries to column-based queries as a function of
+      problem size. A lower ratio indicates a faster process time for the group
+      strategy over the column strategy.}
+  \end{center}
+\end{figure}
+
+As can be seen, the group-based strategy performs quite well, almost an order of
+magnitude better than the column-based strategy. Furthermore, species operations
+are shown to have a much larger speedup relative to family operations. This is
+due to the fact that at the time of this analysis, solution values were stored
+\textit{only if} they were nonzero. When read, a datastructure must be allocated
+and populated for each non-zero index rather than simply copying a block on data
+on disc. The writing of family-based solution values has since been updated to
+also write zero values to avoid this issue.
+
+For the purposes of this study, the dataset-group pivot served the required
+purpose. Postprocessing now performs satisfactorily for the operations needed
+and the database sizes experienced. However, if future performance issues arise,
+other strategies may be investigated. Perhaps the most fruitful of these will be
+returning to the single datatset layout and using PyTable's indexing feature. 
 
 \subsection{Implementation}
 
@@ -254,8 +329,26 @@ Problem families are responsible for reading instances from a database, executin
  
 \subsubsection{Exchange Family and Species}
 
+%% 00023 static inline double CoinCpuTime()
+%% 00024 {
+%% 00025   double cpu_temp;
+%% 00026 #if defined(_MSC_VER)
+%% 00027   unsigned int ticksnow;        /* clock_t is same as int */
+%% 00028   
+%% 00029   ticksnow = (unsigned int)clock();
+%% 00030   
+%% 00031   cpu_temp = (double)((double)ticksnow/CLOCKS_PER_SEC);
+%% 00032 #else
+%% 00033   struct rusage usage;
+%% 00034   getrusage(RUSAGE_SELF,&usage);
+%% 00035   cpu_temp = usage.ru_utime.tv_sec;
+%% 00036   cpu_temp += 1.0e-6*((double) usage.ru_utime.tv_usec);
+%% 00037 #endif
+%% 00038   return cpu_temp;
+%% 00039 }
+
 \subsection{High Throughput Computing}\label{method:tools:htc}
 
-Things \cite{bui_work_2011}.
+Things \cite{bui_work_2011} \cite{cde} \cite{condor-practice}.
 
 \subsection{Command Line Interface}
