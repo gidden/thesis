@@ -1,0 +1,24 @@
+usage: Cyclopts condor-collect [-h] [--cycrc CYCRC] [--profile]
+                               [--proffile PROFFILE] [--outdb OUTDB] [-u USER]
+                               [-t HOST] [--keyfile KEYFILE] [-l LOCALDIR]
+                               [-d REMOTEDIR] [--clean]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --cycrc CYCRC         A global run control file, defaults to
+                        $HOME/.cyclopts.rc useful for declaring global
+                        family/species information.
+  --profile             Enable profiling.
+  --proffile PROFFILE   Name of profiling filename if profile is set.
+  --outdb OUTDB         An HDF5 Cyclopts output database (e.g., the result of
+                        'cyclopts exec').
+  -u USER, --user USER  The condor user name.
+  -t HOST, --host HOST  The remote condor submit host.
+  --keyfile KEYFILE     An ssh public key file.
+  -l LOCALDIR, --localdir LOCALDIR
+                        The local directory in which to place resulting files.
+  -d REMOTEDIR, --remotedir REMOTEDIR
+                        The remote directory (relative to the users home
+                        directory) in which output files from a run are
+                        located.
+  --clean               Clean up the submit node after.

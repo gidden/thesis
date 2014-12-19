@@ -1,0 +1,23 @@
+usage: Cyclopts cde [-h] [--cycrc CYCRC] [--profile] [--proffile PROFFILE]
+                    [--family_module FAMILY_MODULE]
+                    [--family_class FAMILY_CLASS] [--source-path PREFIX]
+                    [-u USER] [-t HOST] [--no-clean] [--keyfile KEYFILE]
+                    [--fname FNAME]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --cycrc CYCRC         A global run control file, defaults to
+                        $HOME/.cyclopts.rc useful for declaring global
+                        family/species information.
+  --profile             Enable profiling.
+  --proffile PROFFILE   Name of profiling filename if profile is set.
+  --family_module FAMILY_MODULE
+                        The module for the problem family
+  --family_class FAMILY_CLASS
+                        The problem family class
+  --source-path PREFIX  The path to cyclopts source.
+  -u USER, --user USER  The cde user name.
+  -t HOST, --host HOST  The remote cde submit host.
+  --no-clean            Do not clean up files.
+  --keyfile KEYFILE     An ssh public key file.
+  --fname FNAME         The function to wrap with cde.

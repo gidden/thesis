@@ -1,0 +1,43 @@
+usage: Cyclopts condor-submit [-h] [--cycrc CYCRC] [--profile]
+                              [--proffile PROFFILE]
+                              [--family_module FAMILY_MODULE]
+                              [--family_class FAMILY_CLASS] [--rc RC]
+                              [--db DB] [--instids [INSTIDS [INSTIDS ...]]]
+                              [--solvers [SOLVERS [SOLVERS ...]]] [--count]
+                              [-u USER] [-t HOST] [--keyfile KEYFILE]
+                              [-d REMOTEDIR] [-k {dag,queue}] [--log]
+                              [-p PORT] [--nodes [NODES [NODES ...]]] [-v]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --cycrc CYCRC         A global run control file, defaults to
+                        $HOME/.cyclopts.rc useful for declaring global
+                        family/species information.
+  --profile             Enable profiling.
+  --proffile PROFFILE   Name of profiling filename if profile is set.
+  --family_module FAMILY_MODULE
+                        The module for the problem family
+  --family_class FAMILY_CLASS
+                        The problem family class
+  --rc RC               The run control file, which allows idetification of a
+                        subset of input to run.
+  --db DB               An HDF5 Cyclopts database (e.g., the result of
+                        'cyclopts convert').
+  --instids [INSTIDS [INSTIDS ...]]
+                        A list of instids (as UUID hex strings) to run.
+  --solvers [SOLVERS [SOLVERS ...]]
+                        A list of which solvers to use.
+  --count               Only count instances to be run.
+  -u USER, --user USER  The condor user name.
+  -t HOST, --host HOST  The remote condor submit host.
+  --keyfile KEYFILE     An ssh public key file.
+  -d REMOTEDIR, --remotedir REMOTEDIR
+                        The remote directory (relative to ~/cyclopts-runs) on
+                        the submit node in which to run cyclopts jobs.
+  -k {dag,queue}, --kind {dag,queue}
+                        The kind of condor submission to use.
+  --log                 Whether to keep a log of worker queue data.
+  -p PORT, --port PORT  The port to use for a condor queue submission.
+  --nodes [NODES [NODES ...]]
+                        The execute nodes to target.
+  -v, --verbose         Print output during the submisison process.

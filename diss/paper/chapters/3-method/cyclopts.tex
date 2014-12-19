@@ -318,32 +318,174 @@ returning to the single datatset layout and using PyTable's indexing feature.
 Cyclopts defines abstract application programming interfaces (APIs) for both
 families and species in the \code{ProblemFamily} and \code{ProblemSpecies}
 classes, respectively. While many parts of an API are related to the workflow
-discussed in \S \ref{method:tools:struc:des}, others are related to the
-persistence mechanisms discussed in \S \ref{method:tools:hdf5}. The full API is
-described in detail in the Cyclopts documentation \cite{cyclopts}.
+discussed in \S \ref{method:tools:struc}, others are related to the persistence
+mechanisms discussed in \S \ref{method:tools:hdf5}. The full API is described in
+detail in the Cyclopts documentation \cite{cyclopts}. The \code{ExchangeFamily}
+class implements a concrete, resource-exchange-specific \code{ProblemFamily}
+interface. The \code{StructuredRequest} class implements a concrete,
+front-end-exchange interface of the \code{ProblemSpecies} class. Similarly, the
+\code{StructuredSupply} implements a back-end interface to the class.
 
-Problem families are responsible for reading instances from a database, executing instances given a solver configuration, and writing solution 
+Given a point in parameter space, both the \code{StructuredSupply} and
+\code{StructuredRequest} generate an instance of an \code{ExchangeGraph} per the
+rules described in \S \ref{method:setup}. Cyclopts is nominally written in
+Python and Cyclus is written in C++. In order to construct objects that can
+interact with Cyclus, an interoperability layer is required. 
 
-%% 00023 static inline double CoinCpuTime()
-%% 00024 {
-%% 00025   double cpu_temp;
-%% 00026 #if defined(_MSC_VER)
-%% 00027   unsigned int ticksnow;        /* clock_t is same as int */
-%% 00028   
-%% 00029   ticksnow = (unsigned int)clock();
-%% 00030   
-%% 00031   cpu_temp = (double)((double)ticksnow/CLOCKS_PER_SEC);
-%% 00032 #else
-%% 00033   struct rusage usage;
-%% 00034   getrusage(RUSAGE_SELF,&usage);
-%% 00035   cpu_temp = usage.ru_utime.tv_sec;
-%% 00036   cpu_temp += 1.0e-6*((double) usage.ru_utime.tv_usec);
-%% 00037 #endif
-%% 00038   return cpu_temp;
-%% 00039 }
+A series of C++ wrapper objects, namely arc, node, and group objects, are
+defined which mirror the constituents of an \code{ExchangeGraph}, as described
+in \S \ref{abm:dre:impl}. These objects are then translated into Cython \cite{}
+by use of the XDress software package \cite{xdress}. Python can directly call
+into Cython libraries, similarly, Cython can directly call C and C++
+libraries. Therefore, a interoperability layer is established.
+
+\subsubsection{Solvers and Performance Timing}
+
+Once an instance of an \code{ExchangeGraph} has been generated, it can be
+solved. Cyclopts supports three types of solvers: CoinCLP, CoinCBC, and the
+\code{GreedySolver}, an implementation of the Greedy Hueristic in Cyclus. If
+either the Greedy or CBC solvers are invoked, an appropriate instance of a
+\code{ExchangeSolver} is constructed with the \textit{exclusive orders} flag
+turned on. If the CLP solve is invoked, an associated \code{ExchangeSolver}
+instance is constructed with the \textit{exclusive orders} flag turned off. In
+short, CBC and Greedy solvers solves the MILP formulation of the NFCTP, and the
+CLP solver solves the LP formulation.
+
+Given an instance of an \code{ExchangeGraph} and \code{ExchangeSolver}, the
+\code{Solve} method of the \code{ExchangeSolver} is invoked. Before and after
+the \code{Solve} function call, the \code{CoinCpuTime} function is called and
+the result is stored. The difference between the two resulting values is
+recorded as the time required to determing a solution. The implementation of the
+\code{CoinCpuTime} function is open and easily available \cite{}. It simply adds
+the seconds and microseconds fields of the \code{ru_utime} structure populated
+by the standard UNIX \code{getrusage} function.
 
 \subsection{High Throughput Computing}\label{method:tools:htc}
 
-Things \cite{bui_work_2011} \cite{cde} \cite{condor-practice}.
+Cyclopts can be executed locally using the \code{cyclopts exec} CLI described
+in \label{method:tools:cli}. When exploring a large parameter space, of which
+each point can generate a large number of unique instances, local execution on a
+single machine is insufficient. In order to overcome this limitation, support
+for Condor-based systems has been implemented in Cyclopts and available using
+the \code{cyclopts condor-submit} CLI. Condor \cite{condor-practice} is a high
+throughput computing (HTC) framework that supports sophisticated job scheduling
+over a very large, distributed network of individual and clustered computers.
 
-\subsection{Command Line Interface}
+HPC systems are ideal for analysis in which many independent executions may be
+performed independently. Upon completion, the resulsts may be aggregated and
+analyzed. The resource exchange use case fits such a design specification with a
+single caveat: because it is a first-of-a-kind, performance analysis, timing
+results are crucial. Therefore, the systems on which instances are executed must
+be equivalent in order to compare different timing results. Support is provided
+in Cyclopts for identifying execute nodes that conform to a series of
+architecture and relate constraints in order to enforce this limitation.
+
+\subsubsection{Remote Execution and Operation}
+
+In order to efficiently schedule a large number of optimization problems, the
+WorkQueue framework \cite{bui_work_2011} is utilized. WorkQueue is a
+Condor-aware master-worker implementation. A master process exists at some
+location and is schedules jobs to be run. Workers, in the form of persistent
+Condor jobs, ask the master for the next job to be run after a previous job has
+been completed.
+
+Cyclopts launches a master process that requires a series of execute nodes to
+target, a problem instance database, and a list of solvers to execute on each
+instance. A copy of the instance database is sent to every targeted execute
+node. Note that an execute node may have many execution threads, each of which
+can be used to execute instances individually. The master manages an instance
+queue. Each worker is given an initial instance to execute. Upon completion, a
+worker will request a new instance of the master. The full set of instances in a
+database are thusly efficiently executed.
+
+\subsubsection{Packaging and Environment}
+
+A common issue in remote execution envrionments is package dependency. When
+access to an execution node is provided, a user must assume that only the barest
+of environments exist. For example, if a user is provided an Ubuntu-based
+execution node, the user generally must assume that it is a fresh Ubuntu
+installation. Accordingly, package management in a highly distributed,
+heterogenous envrionment is a difficult problem.
+
+Luckily, solutions exist for distributed package management. Cyclopts utilizes
+the Code, Data, and Environment (CDE) \cite{cde} tool to manage its execution
+environment. CDE provides a virtualized environment based on the local execution
+of a command. Using CDE with the given command, all libraries and utilies used
+during the execution of the command process are monitored. Upon process exit,
+every object in the filesystem that was invoked is copied into a virtual
+environment. That virtual environment can then be packaged and distributed. Upon
+landing on a foreign system, a user can enter the CDE enviornment and execute
+the supported command.
+
+Cyclopts provides a CLI, \code{cyclopts cde}, that will package Cyclopts itself
+into a virtual environment and ship the environment to a Condor submit node. As
+part of the Cyclopts Condor job execution, the CDE environment is copied to each
+submit node. It is thus easy to incorporate changes in a local copy of Cyclopts
+to the corresponding remote execution.
+
+\subsection{Command Line Interface}\label{method:tools:cli}
+
+Cyclopts provides a rich command line interface (CLI) for instance generation,
+local execution, and remote execution. The CLI includes a number of useful
+utilities, however this section will only present those required for running the
+full Cyclopts workflow, both local and remote. The full set of CLI options is
+presented in Listing \ref{lst:loptshlep}.
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={All available Cyclopts CLI options (the result of \code{cyclopts -h}).}, 
+  label=lst:loptshlep]{./chapters/3-method/listings/help}
+
+When working locally, the primary workflow is \code{cyclopts convert}, followed
+by \code{cyclopts exec}, finishing with \code{cyclopts pp}. \code{cyclopts
+  convert} converts a user-provided definition of a parameter space into an
+instance database. \code{cyclopts exec} then executes some of all of those
+instances, resulting in a solution database. Finally, \code{cyclopts pp} post
+processes the instance and solution data. The options for each are described in
+Listings \ref{lst:loptsconvert}, \ref{lst:loptsexec}, and \ref{lst:loptspp},
+respectively.
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={CLI options for \code{cyclopts convert}.}, 
+  label=lst:loptsconvert]{./chapters/3-method/listings/convert}
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={CLI options for \code{cyclopts exec}.}, 
+  label=lst:loptsexec]{./chapters/3-method/listings/exec}
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={CLI options for \code{cyclopts pp}.}, 
+  label=lst:loptspp]{./chapters/3-method/listings/pp}
+
+In order to execute Cyclopts on a Condor system, the submit node must contain
+the Cyclopts environment. That operation is supported by the \code{cyclopts cde}
+CLI, presented in Listing \ref{lst:loptscde}. A job, the input of which is an
+instance database, can be submitted using \code{cyclopts condor-submit}. Upon
+completion, results can be collected with \code{cyclopts condor-collect}. The
+arguments for both are shown in Listings \ref{lst:loptscondor-submit} and
+\ref{lst:loptscondor-collect}.
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={CLI options for \code{cyclopts cde}.}, 
+  label=lst:loptscde]{./chapters/3-method/listings/cde}
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={CLI options for \code{cyclopts condor-submit}.}, 
+  label=lst:loptscondor-submit]{./chapters/3-method/listings/condor-submit}
+
+\lstinputlisting[
+  style=BashOutputStyle,
+  keywordstyle=\ttfamily,
+  caption={CLI options for \code{cyclopts condor-collect}.}, 
+  label=lst:loptscondor-collect]{./chapters/3-method/listings/condor-collect}

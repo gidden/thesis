@@ -1,0 +1,26 @@
+usage: Cyclopts [-h]
+                {convert,exec,pp,condor-submit,condor-collect,condor-rm,cde,combine,col2grp,dump}
+                ...
+
+positional arguments:
+  {convert,exec,pp,condor-submit,condor-collect,condor-rm,cde,combine,col2grp,dump}
+    convert             Convert a parameter space defined by an input run
+                        control file into an HDF5 database for a Cyclopts
+                        execution run.
+    exec                Executes a parameter sweep as defined by the input
+                        database and other command line arguments.
+    pp                  Post process input and output.
+    condor-submit       Submits a job to condor, retrieves output when it has
+                        completed, and cleans up the condor user space after.
+    condor-collect      Collects a condor submissions output.
+    condor-rm           Removes processes on condor for a user.
+    cde                 Updates the Cyclopts CDE tarfile on a Condor submit
+                        node.
+    combine             Combines a collection of databases, merging their
+                        content.
+    col2grp             Moves input and output databases from id-column form
+                        to id-group form.
+    dump                Dumps information about an instance database.
+
+optional arguments:
+  -h, --help            show this help message and exit

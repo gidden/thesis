@@ -1,0 +1,34 @@
+usage: Cyclopts pp [-h] [--cycrc CYCRC] [--profile] [--proffile PROFFILE]
+                   [--family_module FAMILY_MODULE]
+                   [--family_class FAMILY_CLASS]
+                   [--species_module SPECIES_MODULE]
+                   [--species_class SPECIES_CLASS] [--indb INDB]
+                   [--outdb OUTDB] [--ppdb PPDB] [--verbose_freq VERBOSE_FREQ]
+                   [--limit LIMIT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --cycrc CYCRC         A global run control file, defaults to
+                        $HOME/.cyclopts.rc useful for declaring global
+                        family/species information.
+  --profile             Enable profiling.
+  --proffile PROFFILE   Name of profiling filename if profile is set.
+  --family_module FAMILY_MODULE
+                        The module for the problem family
+  --family_class FAMILY_CLASS
+                        The problem family class
+  --species_module SPECIES_MODULE
+                        The module for the problem species
+  --species_class SPECIES_CLASS
+                        The problem species class
+  --indb INDB           An HDF5 Cyclopts input database (e.g., the result of
+                        'cyclopts convert').
+  --outdb OUTDB         An HDF5 Cyclopts output database (e.g., the result of
+                        'cyclopts exec').
+  --ppdb PPDB           An HDF5 Cyclopts post processed database (can be
+                        combined with others via 'cyclopts combine'.
+  --verbose_freq VERBOSE_FREQ
+                        Stdout is informed of progress at the given processed
+                        instance frequency.
+  --limit LIMIT         Post process only X instances (used for
+                        profiling/testing).

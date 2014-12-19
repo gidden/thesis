@@ -1,0 +1,30 @@
+usage: Cyclopts convert [-h] [--cycrc CYCRC] [--profile] [--proffile PROFFILE]
+                        [--species_module SPECIES_MODULE]
+                        [--species_class SPECIES_CLASS] [--rc RC] [--db DB]
+                        [-n NINST] [--count] [-v] [--debug] [-u UPDATE_FREQ]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --cycrc CYCRC         A global run control file, defaults to
+                        $HOME/.cyclopts.rc useful for declaring global
+                        family/species information.
+  --profile             Enable profiling.
+  --proffile PROFFILE   Name of profiling filename if profile is set.
+  --species_module SPECIES_MODULE
+                        The module for the problem species
+  --species_class SPECIES_CLASS
+                        The problem species class
+  --rc RC               The run control file to use that defines a continguous
+                        parameter space.
+  --db DB               The HDF5 file to dump converted parameter space points
+                        to. This file can later be used an input to an execute
+                        run.
+  -n NINST, --ninstances NINST
+                        The number of problem instances to generate per point
+                        in parameter space.
+  --count               Only read in the run control file and count the number
+                        of possible samplers that will be created.
+  -v, --verbose         Print verbose output during the conversion process.
+  --debug               Use objgraph and pdb to debug the conversion process.
+  -u UPDATE_FREQ, --update-freq UPDATE_FREQ
+                        The instance frequency with which to update stdout.

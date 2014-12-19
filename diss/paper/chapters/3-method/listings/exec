@@ -1,0 +1,32 @@
+usage: Cyclopts exec [-h] [--cycrc CYCRC] [--profile] [--proffile PROFFILE]
+                     [--family_module FAMILY_MODULE]
+                     [--family_class FAMILY_CLASS] [--db DB]
+                     [--solvers [SOLVERS [SOLVERS ...]]]
+                     [--instids [INSTIDS [INSTIDS ...]]] [--rc RC]
+                     [--outdb OUTDB] [--conds CONDS] [-v]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --cycrc CYCRC         A global run control file, defaults to
+                        $HOME/.cyclopts.rc useful for declaring global
+                        family/species information.
+  --profile             Enable profiling.
+  --proffile PROFFILE   Name of profiling filename if profile is set.
+  --family_module FAMILY_MODULE
+                        The module for the problem family
+  --family_class FAMILY_CLASS
+                        The problem family class
+  --db DB               An HDF5 Cyclopts database (e.g., the result of
+                        'cyclopts convert').
+  --solvers [SOLVERS [SOLVERS ...]]
+                        A list of which solvers to use.
+  --instids [INSTIDS [INSTIDS ...]]
+                        A list of instids (as UUID hex strings) to run.
+  --rc RC               The run control file, which allows idetification of a
+                        subset of input to run.
+  --outdb OUTDB         An optional database to write results to. By default,
+                        the database given by the --db flag is use.
+  --conds CONDS         A dictionary representation of execution conditions.
+                        This CLI argument can be used instead of placing them
+                        in an RC file.
+  -v, --verbose         Print verbose output during execution.
