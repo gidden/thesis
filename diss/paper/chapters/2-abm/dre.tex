@@ -1026,7 +1026,65 @@ and RU flows.
 
 \subsection{Implementation}\label{abm:dre:impl}
 
-\TODO{do}
+The DRE and its solution framework are implemented in three layers. The first
+layer includes information for specific \code{Resource} types. For example, a
+\code{Material}-based exchange is used for agents to communicate supply and
+demand information regarding \code{Material} objects. The \textit{resource
+  layer} is the point of entry and exit of the DRE framework. It is agent-facing
+interface of the DRE: supply and demand is provided to the DRE as input, and
+trades to be executed are provided to agents as output. 
+
+The second layer, called the \textit{exchange layer}, is a
+\code{Resource}-agnostic implementation of a specialized bipartite
+graph. Supply/demand constructs in the first layer are translated into stateful
+objects representing nodes, arcs, constructs that carry constraint information,
+\textit{et cetera}. The collection of objects and structures combine to create
+an \code{Exchange Graph}. Any custom, Cyclus-aware solver can be applied to an
+\code{Exchange Graph} to determine a feasible solution to the DRE.
+
+In order to use sophisticated, 3\textsuperscript{rd} party LP and MILP solving
+libraries, the \code{Exchange Graph} must be translated into an appropriate data
+structure, resulting in a final layer called the \textit{formulation layer}. The
+Open Solver Interface (OSI) is used to create the neccessary formulation
+structures, including a constraint matrix and objective coefficient vector. The
+NFCTP instance is then solved.
+
+After a feasible, perhaps optimal, solution to the NFCTP is found, whether in
+the exchange or formulation layer, the solution is backtranslated to the
+resource layer. The agents associated with succsessful supply-demand connections
+are informed, and trades of resources between agents are executed. A graphic of
+the entire workflow is shown in Figure \ref{fig:dre_impl}.
+
+\TODO{update fig}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.55\textwidth]{exchange_part_supreq.pdf}
+    \caption[]{
+      \label{fig:dre_impl}
+      Foo.}
+  \end{center}
+\end{figure}
+
+\subsubsection{Resource Layer}
+
+The resource layer utilizes \textit{templated} objects in order to reduce the
+amount of code required for implementation. Each object is templeted on the
+concrete \code{Resource} type, e.g., the \code{Material} and \code{Product}
+classes. The fundamental data structures in the resource layer reflect the
+constructs of the information gathering procedure described in \S
+\ref{abm:dre:info}.
+
+
+
+Resources, Bid/Request, Portfolios, Constraint, 
+
+\subsubsection{Exchange Layer} 
+
+Node, Group, Arc
+
+\subsubsection{Formulation Layer}
+
+OSI, Flow Bounds, Constraint Matrix, RHS vector, Objective Coefficients,
 
 \subsection{Proof of Principle}\label{abm:dre:proof}
 
