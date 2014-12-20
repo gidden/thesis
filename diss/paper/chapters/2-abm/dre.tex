@@ -1067,24 +1067,89 @@ the entire workflow is shown in Figure \ref{fig:dre_impl}.
 
 \subsubsection{Resource Layer}
 
-The resource layer utilizes \textit{templated} objects in order to reduce the
+The resource layer utilizes \textit{templated} classes in order to reduce the
 amount of code required for implementation. Each object is templeted on the
 concrete \code{Resource} type, e.g., the \code{Material} and \code{Product}
 classes. The fundamental data structures in the resource layer reflect the
 constructs of the information gathering procedure described in \S
 \ref{abm:dre:info}.
 
+In the RFB phase of the DRE, agents populate \code{RequestPortfolio<T>}s with
+\code{Request<T>}s and \code{CapacityConstraint<T>}s. A \code{Request<T>}
+defines a desired \code{Resource<T>}, communicating quantity, quality, and
+preference. Any number of \code{CapacityConstraint<T>}s may be added to a
+\code{RequestPortfolio<T>}. A \code{CapacityConstraint<T>} defines a
+capacitating value and a conversion function that takes as an argument a
+\code{Request<T>} and returns a value in units of the conversion function. For
+\code{RequestPortfolio<T>}s, constraints are assumed to be demand constraints,
+i.e., take the form of a greater-than constraint. Future work can implement an
+option for less-than constraints.
 
+In the RRFB phase of the DRE, agents populate \code{BidPortfolio<T>}s with
+\code{Bid<T>}s and \code{CapacityConstraint<T>}s. Agents can inspect the
+population of \code{Request<T>}s and associated \code{Resource<T>}s. A
+\code{Bid<T>} targets a specific \code{Request<T>}, responding with a proposed
+\code{Resource<T>} to trasnfer to the requester. \code{CapacityConstraint<T>}s
+are applied to all \code{Bid<T>}s in a portfolio. For bidders, constraints are
+assumed to be less-than constraints. Again, future work can implement flexible
+greater or less-than constraints for bidders.
 
-Resources, Bid/Request, Portfolios, Constraint, 
+In the PA phase, agents review the set of \code{Request<T>}s and
+\code{Bid<T>}s. Requesting agents and their managers are allowed to alter the
+preference associated with each \code{Request<T>}-\code{Bid<T>} pair. Future
+work may target this phase in order to implement a negotiation model that
+results in a final set of preferences.
+
+When a solution to the DRE is found, bidders associated with successful
+\code{Request<T>}-\code{Bid<T>} pairs are informed, and a trade of the bidder's
+\code{Resource<T>} is initiated.
 
 \subsubsection{Exchange Layer} 
 
-Node, Group, Arc
+Transitioning to the exchange layer, an \code{ExchangeContext} object translates
+the defined resource layer objects into an instance of an
+\code{ExchangeGraph}. Request and bid objects are translated to
+\code{ExchangeNode}s, and portfolio objects are translated to
+\code{ExchangeGroup}s. Constraint coefficient and preference information is
+recorded on \code{ExchangeArc}s, which store a reference to a supply
+\code{ExchangeNode} and a demand \code{ExchangeNode}. Finally, constraint values
+are stored on the appropriate \code{ExchangeGroup} object.
+
+The \code{ExchangeContext} is tasked with storing a mapping from
+\code{Request<T>} and \code{Bid<T>} objects to their associated
+\code{ExchangeNode}. Importantly, the exchange layer does \textit{not} depend on
+resource type, i.e., the resource type is abstracted away during
+translation. Finally, a general solver can be implemented that operates on the
+\code{ExchangeGraph}. A solution to the \code{ExchangeGraph} instance is a
+mapping from \code{ExchangeArc}s to flow quantities that does not violate the
+provided constraints. After a solution is found, it is back-translated to the
+resource layer.
 
 \subsubsection{Formulation Layer}
 
-OSI, Flow Bounds, Constraint Matrix, RHS vector, Objective Coefficients,
+While a solver may operate on the exchange layer, an instance of an
+\code{ExchangeGraph} can be translated fully into the NFCTP. Once in an LP or
+MILP form, the DRE instance can be solved by sophisticated 3\textsuperscript{rd}
+party libraries. In order to interface with a large number of the possible
+solvers, including COIN and CPLEX, the COIN-OR Open Solver Interface API
+\cite{coinosi} is utilized.
+
+The translation from the exchange layer to formulation layer is managed by the
+\code{ProgTranslator} class. A variable in the NFCTP is associated with each
+\code{ExchangeArc}, with variable bounds set by request values on
+\code{ExchangeNode}s; a binary variable is used if the arc is exclusive,
+otherwise a linear variable is used. Capacity coefficients and preference values
+defined for \code{ExchangeArc}s are translated into an objective coefficint
+vector and constraint matrix. The right-hand-side $b$ constraint vector is
+determined by \code{ExchangeGroup} constraining values.
+
+A solution to the NFCTP instance is determined by the identified solver,
+assigning values to linear and integer variables. Linear variable values map
+directly to assigned resource flow quantity. If a binary variable is set to
+unity in a solution, the maximum possible flow value is assigned, analogous to
+$\tilde{x_j}$ in the NFCTP formulation. The variable-flow value assignment is
+then backtranslated into an equivalent \code{ExchangeArc}-flow value assignment
+by the \code{ProgTranslator}.
 
 \subsection{Proof of Principle}\label{abm:dre:proof}
 
