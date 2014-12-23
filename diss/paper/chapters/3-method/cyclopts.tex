@@ -69,15 +69,60 @@ A summary of the high-level Cyclopts workflow and entities is presented in
 Figure \ref{fig:lopts_desgin}. Note that objects generated as the workflow moves
 from parameter space to instance solution form a tree structure.
 
-\TODO{update fig}
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.55\textwidth]{exchange_part_supreq.pdf}
+    \includegraphics[width=\textwidth]{cyclopts_tree_flow.pdf}
     \caption[]{
       \label{fig:lopts_desgin}
-      Foo.}
+      A graphical representation of the Cyclopts object tree-structure. For any
+      parent node, there is a one-to-many mapping of children nodes. The node
+      types in the tree structure are defined in Table
+      \ref{tbl:lopts_nodes}. The actions associated with moving between each
+      level are explained in Table \ref{tbl:lopts_actions}.}
   \end{center}
 \end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Cyclopts object tree structure node types as shown in Figure \ref{fig:lopts_desgin}.}
+\label{tbl:lopts_nodes}
+\begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
+\hline
+Label    & Type & Description
+\\ \hline
+A & Root & A definition of the full parameter space as provided by a user.
+\\ \hline
+B & Parameter & A fully defined point in the parameter space.
+\\ \hline
+C & Instance & A fully defined instance of a given problem.
+\\ \hline
+D & Solution & A solution to an instance of a problem determined by an appropriate solver.
+\\ \hline
+E & Post-process & Post-processed information, given all parent nodes.
+\\ \hline
+\end{tabularx}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Cyclopts actions generating child nodes as shown in Figure
+  \ref{fig:lopts_desgin}. The Cyclopts entity, e.g., the family or species,
+  associated with each action is also listed.}
+\label{tbl:lopts_actions}
+\begin{tabularx}{\columnwidth-10pt}{|c|X|c|} % line wraps second column if too long
+\hline
+Label & Action & Entity Responsible
+\\ \hline
+1 & Translate a parameter space into all possible points. & Cyclopts Core
+\\ \hline
+2 & Convert a parameter point into a number of problem instances. & Problem Species
+\\ \hline
+3 & Execute a problem instance given a solver and record the solution. & Problem Family
+\\ \hline
+4 & Post-process a solution and instance, recording relevant information. & Problem Family \& Species
+\\ \hline
+\end{tabularx}
+\end{table}
 
 \subsection{Persistence Mechanisms}\label{method:tools:hdf5}
 
@@ -331,70 +376,3 @@ into a virtual environment and ship the environment to a Condor submit node. As
 part of the Cyclopts Condor job execution, the CDE environment is copied to each
 submit node. It is thus easy to incorporate changes in a local copy of Cyclopts
 to the corresponding remote execution.
-
-\subsection{Command Line Interface}\label{method:tools:cli}
-
-Cyclopts provides a rich command line interface (CLI) for instance generation,
-local execution, and remote execution. The CLI includes a number of useful
-utilities, however this section will only present those required for running the
-full Cyclopts workflow, both local and remote. The full set of CLI options is
-presented in Listing \ref{lst:loptshlep}.
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={All available Cyclopts CLI options (the result of \code{cyclopts -h}).}, 
-  label=lst:loptshlep]{./chapters/3-method/listings/help}
-
-When working locally, the primary workflow is \code{cyclopts convert}, followed
-by \code{cyclopts exec}, finishing with \code{cyclopts pp}. \code{cyclopts
-  convert} converts a user-provided definition of a parameter space into an
-instance database. \code{cyclopts exec} then executes some of all of those
-instances, resulting in a solution database. Finally, \code{cyclopts pp} post
-processes the instance and solution data. The options for each are described in
-Listings \ref{lst:loptsconvert}, \ref{lst:loptsexec}, and \ref{lst:loptspp},
-respectively.
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={CLI options for \code{cyclopts convert}.}, 
-  label=lst:loptsconvert]{./chapters/3-method/listings/convert}
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={CLI options for \code{cyclopts exec}.}, 
-  label=lst:loptsexec]{./chapters/3-method/listings/exec}
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={CLI options for \code{cyclopts pp}.}, 
-  label=lst:loptspp]{./chapters/3-method/listings/pp}
-
-In order to execute Cyclopts on a Condor system, the submit node must contain
-the Cyclopts environment. That operation is supported by the \code{cyclopts cde}
-CLI, presented in Listing \ref{lst:loptscde}. A job, the input of which is an
-instance database, can be submitted using \code{cyclopts condor-submit}. Upon
-completion, results can be collected with \code{cyclopts condor-collect}. The
-arguments for both are shown in Listings \ref{lst:loptscondor-submit} and
-\ref{lst:loptscondor-collect}.
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={CLI options for \code{cyclopts cde}.}, 
-  label=lst:loptscde]{./chapters/3-method/listings/cde}
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={CLI options for \code{cyclopts condor-submit}.}, 
-  label=lst:loptscondor-submit]{./chapters/3-method/listings/condor-submit}
-
-\lstinputlisting[
-  style=BashOutputStyle,
-  keywordstyle=\ttfamily,
-  caption={CLI options for \code{cyclopts condor-collect}.}, 
-  label=lst:loptscondor-collect]{./chapters/3-method/listings/condor-collect}

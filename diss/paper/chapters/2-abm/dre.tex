@@ -1055,13 +1055,20 @@ resource layer. The agents associated with succsessful supply-demand connections
 are informed, and trades of resources between agents are executed. A graphic of
 the entire workflow is shown in Figure \ref{fig:dre_impl}.
 
-\TODO{update fig}
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.55\textwidth]{exchange_part_supreq.pdf}
+    \includegraphics[width=\textwidth]{exchange_xlation.pdf}
     \caption[]{
       \label{fig:dre_impl}
-      Foo.}
+      The full DRE workflow is shown. The information gathering phase results in
+      the resource layer. The resource layer is translated to the exchange
+      layer; a decision is made whether to continue translation or to directly
+      solve, marked by the number $1$. If the exchange is not solved, it is
+      translated into an instance of the NFCTP resulting in the formulation
+      layer. A choice of solver is made, marked by the number $2$, and the
+      instance is solved.  The solution is back-translated through the exchange
+      and resource layers. The result is a series of resource trades to be
+      executed in the simulation.}
   \end{center}
 \end{figure}
 
