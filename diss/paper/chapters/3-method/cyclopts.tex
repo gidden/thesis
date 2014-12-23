@@ -14,9 +14,9 @@ The section begins with a short discussion on terminology in \S
 \ref{method:tools:term}.  \S \ref{method:tools:struc} describes the general
 Cyclopts workflow and specific features used in the DRE experimental
 campaign. \S \ref{method:tools:hdf5} discusses Cyclopts persistence mechanisms,
-including database design and layout. The section concludes with \S \ref{},
-describing Cyclopts' high throughput computing (HTC) capability, which enables
-scalable, concurrent execution.
+including database design and layout. The section concludes with \S
+\ref{method:tools:htc}, describing Cyclopts' high throughput computing (HTC)
+capability, which enables scalable, concurrent execution.
 
 \subsection{Terminology}\label{method:tools:term}
 
@@ -130,13 +130,14 @@ retains acceptable performance.
 
 Originally, all Cyclopts datasets used a UUID-as-primary-key layout. For
 instance, rather than many tables with a layout described in Table
-\ref{tbl:sp_inst_arc}, all related tables were combined and included an extra
-column naming the instance UUID. However, extremely long read times were
-encountered when post processing data. The basic procedure for performing a
-post-process operation included reading all rows associated with a UUID in an
-input exchange family dataset, reading all rows associated with the same UUID in
-an output exchange species dataset, selecting a value from each row, and
-performing a dot product of the resulting vectors. 
+\ref{tbl:/Family/ResourceExchange/ExchangeArcs},
+all related tables were combined and included an extra column naming the
+instance UUID. However, extremely long read times were encountered when post
+processing data. The basic procedure for performing a post-process operation
+included reading all rows associated with a UUID in an input exchange family
+dataset, reading all rows associated with the same UUID in an output exchange
+species dataset, selecting a value from each row, and performing a dot product
+of the resulting vectors.
 
 In order to investigate possible chunk size and compression optimizations, a
 small ($\sim$ MBs) dataset and a large ($\sim$ GBs) dataset were created. The
@@ -193,7 +194,7 @@ species. The exact same operations were then tested on a large database with the
 column-based layout and a large database with the group-based layout. Specific
 instances, increasing in size, were identified to be postprocessed. The
 group-based results were compared with the column-based results and are shown in
-Figure \ref{}.
+Figure \ref{fig:col_grp}.
 
 \begin{figure}
   \begin{center}
