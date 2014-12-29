@@ -1,9 +1,11 @@
 usage: Cyclopts [-h]
-                {convert,exec,pp,condor-submit,condor-collect,condor-rm,cde,combine,col2grp,dump}
+                {convert,exec,pp,condor-submit,condor-collect,
+                condor-rm,cde,combine,col2grp,dump}
                 ...
 
 positional arguments:
-  {convert,exec,pp,condor-submit,condor-collect,condor-rm,cde,combine,col2grp,dump}
+  {convert,exec,pp,condor-submit,condor-collect,condor-rm,cde,
+   combine,col2grp,dump}
     convert             Convert a parameter space defined by an input run
                         control file into an HDF5 database for a Cyclopts
                         execution run.
