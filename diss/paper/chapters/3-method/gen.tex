@@ -201,14 +201,14 @@ provided for preferences, as shown in Equation \ref{eqn:loc_proxy}, in order to
 simulate both location-based preferences and non-degenerate exchange instances.
 
 Preferences can also be a function of facility location. Each facility is
-assigned a location value, $\text{\text{loc}}_i \in [0, 1)$. The domain is then
+assigned a location value, $\text{loc}_i \in [0, 1)$. The domain is then
   divided evenly into ten regions, where the first region comprises all location
   values in $[0, 0.1)$, \textit{et cetera}. For example, a facility at location
-    of $4.6$ is in the fifth region. $\delta_{\text{reg}}$ and
-    $\delta_{\text{loc}}$ are binary variables which are activated based on the
+    of $4.6$ is in the fifth region. \dreg and
+    \dloc are binary variables which are activated based on the
     parameters described in \S \ref{method:setup:params}. If
-    $\delta_{\text{reg}}$ is zero, no location-based preference is used. If
-    $\delta_{\text{loc}}$ is zero, only coarse, region-based preference is
+    \dreg is zero, no location-based preference is used. If
+    \dloc is zero, only coarse, region-based preference is
     used. In both cases, preference is a function of the euclidean distance
     between regional and location values. The inverse exponential functional
     form was chosen in order to model a preference gradient that decays as
@@ -398,7 +398,7 @@ because some entities trade in multiple commodities.
 \label{tbl:ffc}
 \begin{tabular}{|c|c|}
 \hline
-Fidelity (Fuel Cycle)            & \ffc \\ \hline
+\textbf{Fidelity (Fuel Cycle)}            & \textbf{\ffc} \\ \hline
 UOX                    & 0         \\ \hline
 MOX                    & 1         \\ \hline
 ThOX                    & 2         \\ \hline
@@ -420,30 +420,35 @@ shown in Table \ref{tbl:frx}.
 \label{tbl:frx}
 \begin{tabular}{|c|c|}
 \hline
-Fidelity (Reactor)            & \frx \\ \hline
+\textbf{Fidelity (Reactor)}            & \textbf{\frx} \\ \hline
 Batches                    & 0         \\ \hline
 Assemblies                    & 1         \\ \hline
 \end{tabular}
 \end{table}
 
 Finally, the fidelity with with objective value coefficients are generated can
-be varied. This parameter is denoted \floc because it governs the
-degree to which location is taken into account in Equation
-\ref{eqn:loc_proxy}. The mapping between \floc and parameters in
-Equation \ref{eqn:loc_proxy} is shown in Table \ref{tbl:floc}. As
-\floc increases, the size of the distribution of possible objective
-coefficent values increases. if 
+be varied. This parameter is denoted \floc because it governs the degree to
+which location is taken into account in Equation \ref{eqn:loc_proxy}. The
+mapping between \floc and parameters in Equation \ref{eqn:loc_proxy} is shown in
+Table \ref{tbl:floc}. As \floc increases, the size of the distribution of
+possible objective coefficent values increases. When \floc is zero, the number
+of possible objective coefficient values is equal to the product of the number
+of requester types and the number of commodities. Increasing \floc by one, the
+total possible values increases by a factor of ten, because there are ten
+possible regional-preference values. Finally, when \floc is two, the number of
+possible objective values is uncountably infinite \cite{cantor1890ueber}.
 
 \begin{table}[h!]
 \centering
-\caption{\floc Effects on Objective Coefficient Values}
+\caption{\floc Effects on Objective Coefficient Values in Equation \ref{eqn:loc_proxy}.}
 \label{tbl:floc}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Fidelity (Location) & \floc &$\delta_{reg}$ & $\delta_{\text{loc}}$ \\ \hline
-No location data & 0  & 0          & 0 \\ \hline
-Region location data & 1   & 1          & 0 \\ \hline
-Region and actual location data & 2   & 1          & 0 \\ \hline
+\textbf{Fidelity (Location)} & \textbf{\floc} & \textbf{\dreg} 
+& \textbf{\dloc} \\ \hline
+No region or location data & 0  & 0          & 0 \\ \hline
+Region data & 1   & 1          & 0 \\ \hline
+Region and location data & 2   & 1          & 0 \\ \hline
 \end{tabular}
 \end{table}
 
