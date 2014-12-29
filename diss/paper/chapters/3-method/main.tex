@@ -3,26 +3,29 @@
 The NFCTP is the first attempt at solving the supply and demand of the nuclear
 fuel cycle in a dynamic manner within a NFC simulation. Accordingly, there is no
 precedent for investigating the performance and efficacy of a given
-approach. This chapter describes one such novel approach in which rules for
-generating instances of exchanges are defined, exchanges are generated,
-exchanges are executed, and results are analyzed. 
+approach. This chapter describes an experimental methodology to assess the NFCTP
+in which rules for generating instances of exchanges are defined, exchanges are
+generated, exchanges are executed, and results are analyzed. The goal of this
+work is twofold: demonstrate the generation of a large number of exchange
+instances under reasonable assumptions, and analyze the effects and performance
+of different solvers applied to those exchange instances.
 
 The chapter begins with a discussion of the generation of exchanges, in \S
-\ref{method:setup}. Two types of exchanges are included: one in which reactors
+\ref{method:setup}. Two species of exchanges are included: one in which reactors
 are requesting fuel, and one in which reactors are supplying used fuel. In NFC
-parlance, these are called the \textit{Front End} of the fuel cycle and
-\textit{Back End} of the fuel cycle. Notably, both of these exchanges can occur
-in the same time step. \S \ref{method:setup:split} describes how a full exchange
-may be split into multiple exchanges for any given time step. 
+parlance, these are called the \textit{front end} of the fuel cycle and
+\textit{back end} of the fuel cycle. Notably, both of these exchanges occur
+in the same time step. 
 
 Generating and solving instances of exchanges at a large scale is a difficult
-problem. The Cyclopts (Cyclus Optimization Studies) framework was implemented
-for this purpose. Cyclopts has both a Python and C layer. The Python layer is
-largely responsible for generating exchanges and interfacing with an associated
-persistence mechanism. The C layer is linked against the Cyclus kernel shared
-object library and is responsible for calling directly into the kernel's
-resource exchange API. \S \ref{method:tools} describes the implementation of
-Cyclopts and its varied modes of operation. 
+problem. The Cyclopts (\underline{Cycl}us \underline{Opt}imization
+\underline{S}tudies) framework was implemented for this purpose, consisting of
+both a Python and C++ layer. The Python layer is largely responsible for
+generating exchanges and interfacing with an associated persistence
+mechanism. The C++ layer is compiled and linked against the Cyclus kernel shared
+object library, \texttt{libcyclus}, and is responsible for calling directly into
+the kernel's resource exchange API. \S \ref{method:tools} describes the
+implementation of Cyclopts and its varied modes of operation.
 
 \input{./chapters/3-method/gen}
 

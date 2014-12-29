@@ -1,47 +1,52 @@
 
 \section{Generating Exchanges}\label{method:setup}
 
-This section focuses on two distinct \textit{species} of exchanges, those
-related to the \textit{front end} of the nuclear fuel cycle and those related to
-the \textit{back end} of the nuclear fuel cycle. Broadly, the front end of the
-fuel cycle is concerned with fueling reactors, and the back end is concerned
-with either recycling or disposing of used fuel exiting reactors. Common
-features to both types of exchange generation are described in \S
-\ref{method:setup:features}.
+Instances of resource exchanges are required to analyze the effects and
+performance of the NFCTP formulation and its solvers. In the absence of large
+Cyclus simulations with interesting facility and relationship models, instances
+must be generated given some set of rules and parameters. Two distinct
+\textit{species} of exchanges are generated, those related to the \textit{front
+  end} of the nuclear fuel cycle and those related to the \textit{back end} of
+the nuclear fuel cycle. Broadly, the front end of the fuel cycle is concerned
+with fueling reactors, and the back end is concerned with either recycling or
+disposing of used fuel exiting reactors. Common features to both types of
+exchange generation are described in \S \ref{method:setup:features}.
 
-\S \ref{abm:dre}, however, only describes the methodology for solving a single
-exchange. Therefore, an argument must be made for why it is possible to split a
-single exchange into multiple exchanges, and specifically why that is valid in
-the case of the front and back ends of the NFC. Such an argument is made in \S
-\ref{method:setup:split}.
+Previously, \S \ref{abm:dre}, described the methodology for solving a single
+exchange. If a large exchange is separable, i.e., it can be completely separated
+into two or more smaller exchanges, sub-exchanges can be solved
+independently. \S \ref{method:setup:split} provides an argument for why it is
+valid to split exchange instances into, at minimum, the front and back ends of
+the NFC.
 
-Exchange generation is defined by two types parameters, \textit{exchange} and
-\textit{species} parameters. Exchange parameters apply to any species of
-exchange, and species parameters apply to a specific species. \S
-\ref{method:setup:params} provides a discussion of exchange parameters. \S
-\ref{method:setup:front} and \ref{method:setup:back} then follow with a full
-description of modeling assumptions and species parameters included for
-generating both species of exchanges.
+Exchange generation, absent full-scale simulation, is a naturally parameterized
+process. Some generation parameters are common to any NFCTP instance, and are
+described in \S \ref{method:setup:params}. Specific species may additionally
+define their own set of parameters. \S \ref{method:setup:front} describes the
+parameters generation methodology associated with front-end exchanges. \S
+\ref{method:setup:back} follows with a similar discussion for back-end
+exchanges.
 
 \subsection{Common Features}\label{method:setup:features}
 
 \subsubsection{Fuel Cycles and Commodities}
 
-Three types of fuel cycles can be generated: a once-through fuel cycle (OT), a
-plutonium-recycle fuel cycle (MOX), and a plutonium and thorium-recycle fuel
-cycle (MOX-ThOX). As fuel cycles increase in complexity, the number of
-commodities that exist increases, as shown in Table \ref{tbl:fc_to_commods}. The
-commodities are referred to by abbreviation: Enriched Uranium Oxide (UOX), Mixed
-Plutonium Oxide for Thermal Reactors (TMOX), Mixed Plutonium Oxide for Fast
-Reactors (FMOX), Thorium Oxide for Fast Reactors (FThOX).
+Three types of fuel cycles can be generated: a once-through fuel cycle , labeled
+OT; a plutonium-recycle fuel cycle, labeled MOX; and a plutonium and
+thorium-recycle fuel cycle, labeled MOX-ThOX. As fuel cycles increase in
+complexity, the number of commodities that exist increases, as shown in Table
+\ref{tbl:fc_to_commods}. The commodities are referred to by abbreviation:
+Uranium Oxide (UOX), Mixed Plutonium Oxide for Thermal Reactors (TMOX), Mixed
+Plutonium Oxide for Fast Reactors (FMOX), Thorium Oxide for Fast Reactors
+(FThOX).
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
-\caption{A mapping between fuel cycles to their associated commodities.}
+\caption{A mapping between fuel cycles to the commodities that exist in each one.}
 \label{tbl:fc_to_commods}
 \begin{tabular}{|c|c|}
 \hline
-Fuel Cycle            & Commodities \\ \hline
+\textbf{Fuel Cycle}            & \textbf{Commodities} \\ \hline
 OT                    & UOX         \\ \hline
 \multirow{3}{*}{MOX}  & UOX         \\  
                       & TMOX        \\  
@@ -55,27 +60,30 @@ OT                    & UOX         \\ \hline
 
 \subsubsection{Reactors}
 
-All reactors are modeled as either thermal or fast reactors. Thermal reactors
-are simplified models of AP-1000 reactors \cite{ARIS}, and fast reactors are
-simplified models of BN-600 reactors \cite{reactors2007experience}. Using the
-dimensions in Table \ref{tbl:rx_params}, one can estimate that the AP-1000 core
-volume is approximately 12.5 times larger than the BN-600 core. 
+All reactors are modeled as either thermal or fast reactors. It is necessary to
+estimate the amount of fuel exchanged by reactors each time step. Accordingly,
+thermal reactors are simplified models of AP-1000 reactors \cite{ARIS}, and fast
+reactors are simplified models of BN-600 reactors
+\cite{reactors2007experience}. Using the dimensions in Table
+\ref{tbl:rx_params}, one can estimate that the AP-1000 core volume is
+approximately 12.5 times larger than the BN-600 core.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{Primary Reactor Parameters}
 \label{tbl:rx_params}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Reactor & Core Height (m) & Core Diameter (m) & Number of Assemblies \\ \hline
+\textbf{Reactor} & \textbf{Core Height (m)} & \textbf{Core Diameter (m)}
+& \textbf{Number of Assemblies} \\ \hline
 AP1000  & 4.27            & 3.04              & 157 \\ \hline
 BN600   & 0.75            & 2.05              & 369 \\ \hline
 \end{tabular}
 \end{table}
 
-Reactors are assumed to to operate in a batch mode, where each batch is
-approximately one quarter of the reactor core, similar to other analyses
-\cite{rineiski2011reactivity}. Additionaly, a single AP-1000 fuel assembly is
+Reactors operate in a batch mode, where each batch is approximately one quarter
+of the reactor core, an assumption which similar to other analyses
+\cite{rineiski2011reactivity}. Additionally, a single AP-1000 fuel assembly is
 assumed to contain 450 kg of material \cite{kok2009nuclear}. Therefore, a single
 batch of thermal reactor fuel is assumed to be
 
@@ -84,21 +92,21 @@ batch of thermal reactor fuel is assumed to be
    * \frac{1}{4} core = \: \sim 17.6 t.
 \end{equation}
 
+\noindent
 The amount of fuel required and number of assemblies by each reactor type is
 shown in Table \ref{tbl:rx_batch}. The number of assemblies is taken as the
 ratio of total number of assemblies and number of batches per core rounded to
 the nearest integer. The batch size for the BN600 reactor is estimated by
 dividing the AP1000 batch size by the relative core volume.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{Reactor Batch Size}
 \label{tbl:rx_batch}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Reactor & Quantity (t) & Number of Assemblies \\ \hline
-AP1000  & 17.6          & 39 \\ \hline
-BN600   & 1.41          & 92 \\ \hline
+\textbf{Reactor Type} & \textbf{Quantity (t)} & \textbf{Number of Assemblies}
+\\ \hline AP1000 & 17.6 & 39 \\ \hline BN600 & 1.41 & 92 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -108,15 +116,16 @@ case, fast reactors that prefer MOX-based fuel are added and denoted as FMOX
 reactors. Finally, in the MOX-ThOX case, an additional class of fast reactor is
 added that prefers ThOX-based fuels and is denoted as FThOX. A summary of
 available types of reactors as a function of the fuel cycle being modeled is
-shown in Table \ref{tbl:fc_to_rxs}. 
+shown in Table \ref{tbl:fc_to_rxs}, and a summary of the reactor models used for
+each reactor type is shown in Table \ref{tbl:model_to_rxs}. 
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{A mapping between fuel cycles to the reactor types that exist in exchange instances.}
 \label{tbl:fc_to_rxs}
 \begin{tabular}{|c|c|}
 \hline
-Fuel Cycle            & Reactor Types \\ \hline
+\textbf{Fuel Cycle}            & \textbf{Reactor Types} \\ \hline
 OT                    & Thermal         \\ \hline
 \multirow{3}{*}{MOX}  & Thermal         \\  
                       & FMOX        \\ \hline
@@ -126,33 +135,45 @@ OT                    & Thermal         \\ \hline
 \end{tabular}
 \end{table}
 
-Reactors may be fueled by different commodities. In other words, reactors have a
-set of commodities that they either supply or demand, based on the exchange
-species being modeled. The set of commodities that reactors can use is a
-modeling assumption and a proxy for how reactors may behave in simulations; this
-particular reactor-to-commodity mapping may not be true for other analysts' fuel
-cycle models. However, it is appropriate to make certain broad assumptions for
-such an exploratory study. A mapping of reactors to acceptable commodities is
-provided in Table \ref{tbl:rx_to_commods}. Note that there is still a
-preference distribution associated with each reactor-commodity pair as well as
-constraint coefficient effects. Accordingly, each reactor-commodity pair
-provides a unique effect on an exchange instance.
+\begin{table}[h!]
+\centering
+\caption{A mapping between surrogate reactor models and reactor types.}
+\label{tbl:model_to_rxs}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Reactor Model}            & \textbf{Reactor Types} \\ \hline
+AP1000                    & Thermal         \\ \hline
+\multirow{2}{*}{BN600}  & FMOX         \\  
+                      & FThOX        \\ \hline
+\end{tabular}
+\end{table}
 
-\begin{table}[h]
+Reactors may be fueled by different fuel types, i.e., fuel commodities. The set
+of commodities that reactors can use is a modeling assumption and a proxy for
+how reactors may behave in simulations; this particular reactor-to-commodity
+mapping may not be true for other analysts' fuel cycle models. However, it is
+appropriate to make certain broad assumptions for such an exploratory study. A
+mapping of reactors to acceptable commodities is provided in Table
+\ref{tbl:rx_to_commods}. Note that there is still a preference distribution
+associated with each reactor-commodity pair as well as constraint coefficient
+effects. Accordingly, each reactor-commodity pair provides a unique effect on an
+exchange instance.
+
+\begin{table}[h!]
 \centering
 \caption{A mapping between reactor types and the commodities allowed to fuel each reactor type.}
 \label{tbl:rx_to_commods}
 \begin{tabular}{|c|c|}
 \hline
-Reactor Types            & Fuel Commodities \\ \hline
-\multirow{3}{*}{Thermal}                    & EUOX         \\ 
+\textbf{Reactor Types}            & \textbf{Fuel Commodities} \\ \hline
+\multirow{3}{*}{Thermal}                    & UOX         \\ 
                       & TMOX        \\  
                       & FMOX       \\ \hline
-\multirow{4}{*}{FMOX}  & EUOX         \\  
+\multirow{4}{*}{FMOX}  & UOX         \\  
                       & TMOX        \\ 
                       & TMOX        \\  
                       & FThOX        \\ \hline 
-\multirow{4}{*}{FThOX} & EUOX         \\  
+\multirow{4}{*}{FThOX} & UOX         \\  
                      & TMOX        \\ 
                       & TMOX        \\  
                       & FThOX        \\ \hline 
@@ -164,38 +185,46 @@ Reactor Types            & Fuel Commodities \\ \hline
 In a front-end exchange, fuel suppliers exchange material with reactors. In a
 back-end exchange, reprocessing and storage facilities exchange material with
 reactors. In either case, facilities that are \text{not} reactors are referred
-to as \textit{support} facilities, or \textit{supporters}, as they support the
-reactos which generate power. Support facilities for front-end exchanges are
-described in \S \ref{method:setup:front:sup}, and support facilities for
-back-end exchanges are described in \S \ref{method:setup:back:sup}.
+to as \textit{support} facilities, as they support the reactors which generate
+power. Support facilities for front-end exchanges are described in \S
+\ref{method:setup:front:sup}, and support facilities for back-end exchanges are
+described in \S \ref{method:setup:back:sup}.
 
 \subsubsection{Preferences}\label{method:setup:features:prefs}
 
 Preferences for all transactions have a default value, $p_{c}(i, j)$, based on
-the proposed commodity to be transferred which are defined in species-specific
-sections, \S \ref{method:setup:front} and \ref{method:setup:back}. However, a
-large exchange with a small preference distribution can lead to problem
-degeneracy. Further, a primary application for Cyclus is the modeling of
+the proposed commodity to be transferred between a supplier, $i$, and consumer,
+$j$. However, a large exchange with a small preference distribution results in
+problem degeneracy. Further, a primary application for Cyclus is the modeling of
 regional and location effects on fuel cycles. Accordingly, a location proxy is
-provided for preferences, as shown in Equation \ref{eqn:loc_proxy}.
+provided for preferences, as shown in Equation \ref{eqn:loc_proxy}, in order to
+simulate both location-based preferences and non-degenerate exchange instances.
 
-Each facility is assigned a location value, $loc_i \in [0, 1)$. The domain is
-  then divided evenly into ten regions, where the first region comprises all
-  location values in $[0, 0.1)$, and so on. $\delta_{reg}$ and $\delta_{loc}$
-    are binary variables which are activated based on the parameters described
-    in \S \ref{method:setup:params}. The exponential of the negative absolute
-    difference between two regions or locations was chosen as the preference
-    function in order to model having higher preferences for closer entities.
+Preferences can also be a function of facility location. Each facility is
+assigned a location value, $\text{\text{loc}}_i \in [0, 1)$. The domain is then
+  divided evenly into ten regions, where the first region comprises all location
+  values in $[0, 0.1)$, \textit{et cetera}. For example, a facility at location
+    of $4.6$ is in the fifth region. $\delta_{\text{reg}}$ and
+    $\delta_{\text{loc}}$ are binary variables which are activated based on the
+    parameters described in \S \ref{method:setup:params}. If
+    $\delta_{\text{reg}}$ is zero, no location-based preference is used. If
+    $\delta_{\text{loc}}$ is zero, only coarse, region-based preference is
+    used. In both cases, preference is a function of the euclidean distance
+    between regional and location values. The inverse exponential functional
+    form was chosen in order to model a preference gradient that decays as
+    distance increases.
 
 \begin{equation}\label{eqn:loc_proxy}
-p_{l}(i, j) = \delta_{reg} \frac{\exp(- | reg_{i} - reg_{j} | ) + \delta_{loc}
-  \exp(- \| loc_{i} - loc_{j} \| )}{1 + \delta_{loc}}
+p_{l}(i, j) = \delta_{\text{reg}} 
+\frac{\exp(- \lvert \text{reg}_{i} - \text{reg}_{j} \rvert ) + \delta_{\text{loc}}
+  \exp(- \lvert \text{loc}_{i} - \text{loc}_{j} \rvert )}
+     {1 + \delta_{\text{loc}}}
 \end{equation}
 
-The preference for a given arc is then a weighted combination of location and
-commodity preferences as shown in Equation \ref{eqn:total_pref}. The weighting
-factor, $r_{l, c}$, is a parameter of exchange generation and described further
-in \S \ref{method:setup:params}.
+The preference for a given arc is then a weighted, linear combination of
+location and commodity preferences as shown in Equation
+\ref{eqn:total_pref}. The weighting factor, $r_{l, c}$, is a parameter of
+exchange generation and described further in \S \ref{method:setup:params}.
 
 \begin{equation}\label{eqn:total_pref}
 p(i, j) = p_{c}(i, j) + r_{l, c} p_{l}(i, j)
@@ -364,7 +393,7 @@ entities trade in multiple commodities. The fuel cycle parameter has an integer
 mapping to the modeled fuel cycle for conveniance as shown in Table
 \ref{tbl:ffc}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{A mapping between fuel cycles and $f_{rx}$ values.}
 \label{tbl:ffc}
@@ -386,7 +415,7 @@ increases by nearly an order of magnitude. Again, there is a mapping between the
 meaning of the reactor fidelity parameter and integer values as shown in Table
 \ref{tbl:frx}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{A mapping between reactor fidelity and $f_{rx}$ values.}
 \label{tbl:frx}
@@ -405,7 +434,7 @@ degree to which location is taken into account in Equation
 \ref{eqn:loc_proxy} is shown in Table \ref{tbl:floc}. As $f_{loc}$ increases,
 the size of the distribution of possible objective coefficent values increases.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{$f_{loc}$ Effects on Objective Coefficient Values}
 \label{tbl:floc}
@@ -483,7 +512,7 @@ introduced to allow for investigating such effects.
 A summary of species-independent parameters is provided in Table
 \ref{tbl:global_params}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{Parameter Description Summary for Species-Independent Parameters.}
 \label{tbl:global_params}
@@ -548,7 +577,7 @@ used in the fuel cycle described in Table \ref{tbl:fc_to_commods}. Therefore
 there are four types of supporters, directly mapping to commodities as shown in
 Table \ref{tbl:commod_to_sup}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{A mapping between commodities and the supporter type of that commodity.}
 \label{tbl:commod_to_sup}
@@ -656,7 +685,7 @@ element (Plutonium or Thorium) and 80\% Uranium top up \cite{bairiot2003status}.
 A summary of chosen chosen request parameters based on reactor and commodity
 types is shown in Table \ref{tbl:rx_req}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{A summary of reactor request parameters.}
 \label{tbl:rx_req}
@@ -806,7 +835,7 @@ The inventory constraint RHS is determined identically to the UOX case.
 A summary of front-end exchange species-depedent instance parameters is provided
 in Table \ref{tbl:front_params}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{Parameter Description Summary for Front-End Exchange Instance Parameters.}
 \label{tbl:front_params}
@@ -886,7 +915,7 @@ can accept all commodities; however, it is a consumer of last resort. The
 assigned preference distribution as a function of commodity type and supporting
 facility type is shown in Table \ref{tbl:sup_to_pref}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{Preference Mapping between Back-End Supporting Facilities and Commodities.}
 \label{tbl:sup_to_pref}
@@ -997,7 +1026,7 @@ to a single assembly that should not be split amongst supporting facilites.
 A summary of back-end exchange species-depedent instance parameters is provided
 in Table \ref{tbl:back_params}.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \caption{Parameter Description Summary for Back-End Exchange Instance
   Parameters.}
