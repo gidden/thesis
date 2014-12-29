@@ -1,7 +1,8 @@
 \chapter{Cyclopts HDF5 Database Layout}\label{app:hdf5}
 
 This appendix details the exact database layout used by Cyclopts for the
-ExchangeFamily, StructuredRequest species, and StructuredSupply species.
+\texttt{ExchangeFamily}, \texttt{StructuredRequest} species, and
+\texttt{StructuredSupply} species.
 
 \section{Parameter Space}
 
@@ -10,12 +11,13 @@ parameter space in a data set called \code{/Species/<species type>/Points},
 where \code{<species type>} is either \code{StructuredRequest} or
 \code{StructuredSupply}. Each point incorporates both fundamental and instance
 parameters as described in \S \ref{method:setup}. The tables associated with
-parameter spaces are described below.
+parameter spaces are described in Tables
+\ref{tbl:/Species/StructuredRequest/Points}-\ref{tbl:/Species/StructuredSupply/Points}.
 
 \begin{table}[h!]
 \centering
-\label{tbl:/Species/StructuredRequest/Points}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredRequest/Points| dataset.}
+\caption{\label{tbl:/Species/StructuredRequest/Points}
+Data-type description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredRequest/Points| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -42,8 +44,8 @@ seed & 8-byte integer & The random seed used to generate an instance. \\ \hline
 
 \begin{table}[h!]
 \centering
-\label{tbl:/Species/StructuredSupply/Points}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredSupply/Points| dataset.}
+\caption{\label{tbl:/Species/StructuredSupply/Points}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredSupply/Points| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -86,18 +88,20 @@ information is also recorded.
 
 The exchange family records information regarding all major constructs in an
 exchange: nodes, groups, and arcs. A summary table is written to
-\code{/Family/ResourceExchange/ExchangeInstProperties}. Nodes and group data are
-recorded in an aggregate dataset located at
-\code{/Family/ResourceExchange/ExchangeNodes}; node group data is located at
-\code{/Family/ResourceExchange/ExchangeGroups}; and arc data is collected in the
-\code{/Family/ResourceExchange/ExchangeArcs} group. A dataset per instance UUID
-is used because it has been found to be useful in the postprocessing phase. A
-summary of family-specific instance data are detailed below.
+\texttt{/Family/ResourceExchange/ExchangeInstProperties}. Nodes and group data
+are recorded in an aggregate dataset located at
+\texttt{/Family/ResourceExchange/ExchangeNodes}, node group data is located at
+\texttt{/Family/ResourceExchange/ExchangeGroups}, and arc data is collected in
+the \texttt{/Family/ResourceExchange/ExchangeArcs} group. A dataset per instance
+UUID is used because it has been found to have better performance in the
+post-processing phase. A summary of family-specific instance data are detailed in
+Tables
+\ref{tbl:/Family/ResourceExchange/ExchangeInstProperties}-\ref{tbl:/Family/ResourceExchange/ExchangeArcs}.
 
 \begin{table}[h!]
 \centering
-\label{tbl:/Family/ResourceExchange/ExchangeInstProperties}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Family/ResourceExchange/ExchangeInstProperties| dataset.}
+\caption{\label{tbl:/Family/ResourceExchange/ExchangeInstProperties}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Family/ResourceExchange/ExchangeInstProperties| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -172,15 +176,16 @@ group for each instance, whose name is the hex string of the UUID, is defined
 under the associated arc group. Finally, arc information associated with each
 instance is stored as a dataset in that instance's group. For example, the arc
 data for a given UUID of a front-end exchange is located as a dataset in the
-group \code{/Species/StructuredRequest/Arcs/<UUID hex>}. Summary information
+group \texttt{/Species/StructuredRequest/Arcs/<UUID hex>}. Summary information
 related to each species is also recorded in a data set for each species type
-located in the group \code{/Species/<species type>/Summary}. Tables describing
-species-specific instance data are detailed below.
+located in the group \texttt{/Species/<species type>/Summary}. Tables describing
+species-specific instance data are detailed in Tables
+\ref{tbl:/Species/StructuredRequest/Arcs/id_8017b48888ac424fb991527195a831b6}-\ref{tbl:/Species/StructuredSupply/Summary}.
 
 \begin{table}[h!]
 \centering
-\label{tbl:/Species/StructuredRequest/Arcs/id_8017b48888ac424fb991527195a831b6}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/<Species Type>/Arcs/<Instance UUID>| dataset.}
+\caption{\label{tbl:/Species/StructuredRequest/Arcs/id_8017b48888ac424fb991527195a831b6}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/<Species Type>/Arcs/<Instance UUID>| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -212,8 +217,9 @@ n\_s\_f\_thox & 4-byte unsigned integer & As described in \S \ref{method:setup} 
 
 \begin{table}[h!]
 \centering
+\caption{
 \label{tbl:/Species/StructuredSupply/Summary}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredSupply/Summary| dataset.}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredSupply/Summary| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -232,18 +238,20 @@ n\_s\_repo & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ 
 
 \section{Solutions}
 
-For every solution, data is added to the Cyclopts Results dataset. Problem
-solutions are constructed from problem instances, and are thus managed by a
-problem family. Aggregate solution information is provided in a family dataset
-\code{/Family/ResourceExchange/ExchangeSolutionProperties}. The full results of
-each solve, i.e., the amount of resources flowing across each arc, are recorded
-in a group specific to each solution UUID. Tables related to instance solutions
-are described below.
+For every solution, data is added to the Cyclopts \texttt{/Results}
+dataset. Problem solutions are determined from problem instances, and are thus
+managed by a problem family. Aggregate solution information is provided in a
+family dataset \code{/Family/ResourceExchange/ExchangeSolutionProperties}. The
+full results of each solve, i.e., the amount of resources flowing across each
+arc, are recorded in a group specific to each solution UUID. Tables related to
+instance solutions are described in Tables
+\ref{tbl:/Results}-\ref{tbl:/Family/ResourceExchange/ExchangeInstSolutions/id_2fa2ee6eb9654baf8780a99713dd5e69}.
 
 \begin{table}[h!]
 \centering
+\caption{
 \label{tbl:/Results}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Results| dataset.}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Results| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -274,8 +282,8 @@ cyclus\_version & 20-character string & The version of Cyclus used to generate a
 
 \begin{table}[h!]
 \centering
-\label{tbl:/Family/ResourceExchange/ExchangeInstSolutions/id_2fa2ee6eb9654baf8780a99713dd5e69}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Family/ResourceExchange/ExchangeInstSolutions/<Solution UUID>| dataset.}
+\caption{\label{tbl:/Family/ResourceExchange/ExchangeInstSolutions/id_2fa2ee6eb9654baf8780a99713dd5e69}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Family/ResourceExchange/ExchangeInstSolutions/<Solution UUID>| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -284,17 +292,18 @@ flow & 8-byte float &  \\ \hline
 \end{tabularx}
 \end{table}
 
-\section{Post Processing}
+\section{Post-Processing}
 
-Given a full set of parameter, instance, and solution data, postprocessing may
-be applied to family and species data. The exchange family, front-end species,
-and back-end species each contain a \code{PostProcess} dataset. Tables
-associated with post processing are described below.
+Post-processing may be applied parameter, instance, and solution data. The
+exchange family, front-end species, and back-end species each contain a
+\code{PostProcess} dataset. Dataset layouts associated with post processing are
+described Tables
+\ref{tbl:/Family/ResourceExchange/PostProcess}-\ref{tbl:/Species/StructuredSupply/PostProcess}.
 
 \begin{table}[h!]
 \centering
-\label{tbl:/Family/ResourceExchange/PostProcess}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Family/ResourceExchange/PostProcess| dataset.}
+\caption{\label{tbl:/Family/ResourceExchange/PostProcess}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Family/ResourceExchange/PostProcess| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
@@ -318,8 +327,9 @@ l\_pref\_flow & 8-byte float & The value of the product of location-based prefer
 
 \begin{table}[h!]
 \centering
+\caption{
 \label{tbl:/Species/StructuredSupply/PostProcess}
-\caption{Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredSupply/PostProcess| dataset.}
+Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Species/StructuredSupply/PostProcess| dataset.}
 \begin{tabularx}{\columnwidth-10pt}{|c|c|X|} % line wraps second column if too long
 \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
