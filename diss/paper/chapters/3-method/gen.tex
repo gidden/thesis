@@ -283,9 +283,9 @@ respectively.
 \end{equation}
 
 Figure \ref{fig:port_part} depicts a separable Exchange Graph, for example,
-while Figure \ref{fig:port_no_part} shows an Exchange Graph that is not
-separable, even though the underlying bipartite graph is, due to the lack of a
-fully separable portfolio partition.
+while Figure \ref{fig:port_no_part} shows an Exchange Graph where the underlying
+bipartite graph is separable, but full separability is broken by the overlayed
+portfolio structure.
 
 \begin{figure}
   \begin{center}
@@ -308,11 +308,11 @@ fully separable portfolio partition.
 \end{figure}
 
 The Exchange Graph resulting from the information gathering phase of the DRE
-specifically from a NFC application will be minimally separable into front-end
-and back-end exchanges if two conditions are met:
+will be minimally separable into front-end and back-end exchanges if two
+conditions are true:
 
 \begin{enumerate}
-  \item Reactors output commodities can \textit{not} be sent to both other
+  \item Reactor output commodities can \textit{not} be sent to both other
     reactors and supporting facilities.
 
   \item Supporting facility output commodities can \textit{not} be sent to both
@@ -320,127 +320,127 @@ and back-end exchanges if two conditions are met:
 \end{enumerate}
 
 In the first case, separability is broken by a supplier providing bids across a
-separating partition. An minimal example is shown in Figure
+separating partition. A minimal example is shown in Figure
 \ref{fig:no_part_front}. This case can arise if reactors can somehow directly
-refuel other reactors. In the NFC domain, such an arrangement only occurs in a
-self-recycling system implemented in such a way that a reactor resupplies
-itself, which is an abstraction of reality. It is reasonable for a
-self-recycling reactor to be implemented in such a way that it does not
-participate in the DRE for self-refueling purposes. Accordingly, this condition
-is expected to be met in most usage of the DRE.
+refuel other reactors. In the NFC domain, such an arrangement only occurs in an
+abstraction of a self-recycling system in which there is a dedicated recycling
+complex assocated with a fast reactor. It is reasonable for a self-recycling
+reactor system to be implemented in such a way that it does not participate in
+the DRE for self-refueling purposes. Accordingly, this condition is expected to
+be met in most use cases of the DRE.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.55\textwidth]{exchange_no_part_front.pdf}
     \caption[]{
       \label{fig:no_part_front}
-      An Exchange Graph separability broken by a supplier. This occurs in NFC
-      modeling if assumption $1$ is broken.}
+      An Exchange Graph where separability broken by a supplier. This occurs in
+      NFC modeling if assumption $1$ is broken.}
   \end{center}
 \end{figure}
 
 In the second case, separability is broken by a requester requesting commodities
 across a separating partition. Again, a minimal example is shown in Figure
 \ref{fig:no_part_back}. This case can arise in practice when modeling an NFC
-system if both a reactor and a repository compete for some commodity. While this
-is a valid modeling case under certain assumptions and simplifications, it is
-not very realistic. In general fuel that can be used by a reactor has been
-processed differently than material to be sent to a repository. Accordingly,
-while some analyzed fuel cycles will not meet this requirement, it is assumed
-that the vast majority will. If an instance of a DRE does not meet this
-requirement, it will not be able to be subdivided into smaller instances.
+system where both a reactor and a repository compete for some commodity. While
+this is a valid modeling case under certain assumptions and simplifications, it
+is not very realistic. In general fuel that can be used by a reactor has been
+processed differently than material to be sent to a repository. If an instance
+of a DRE does not meet this requirement, it will not be able to be subdivided
+into smaller instances.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.55\textwidth]{exchange_no_part_back.pdf}
     \caption[]{
       \label{fig:no_part_back}
-      An Exchange Graph separability broken by a requester. This occurs in NFC
-      modeling if assumption $2$ is broken.}
+      An Exchange Graph where separability broken by a requester. This occurs in
+      NFC modeling if assumption $2$ is broken.}
   \end{center}
 \end{figure}
 
-Because the majority of fuel cycles analyzed will meet both conditions, the
-majority of DRE instances will be able to be separated into two distinct
-instances which can solved independently of one another. One instance will be
-associated with the front end of the fuel cycle where reactors are requesting
-fuel. The other instance will be associated with the back end of the fuel cycle,
-where reactors are supplying used fuel.
+Because the majority of fuel cycles analyzed will meet both conditions, most of
+DRE instances will be able to be separated into at least two distinct instances
+which can solved independently of one another. One instance will be associated
+with the front end of the fuel cycle where reactors are requesting fuel. The
+other instance will be associated with the back end of the fuel cycle, where
+reactors are supplying used fuel.
 
 \subsection{Exchange Parameters}\label{method:setup:params}
 
 The generation of exchanges is naturally a parameterized process. For instance,
 a critical parameter is the number of reactors in an exchange. Exchange
-generation parameters can be divided into two classifications, fundamental
-parameters and instance parameters. All exchange species share some fundmental
-parameters and instance parameters. Species also define their own set of
-instance parameters to complete the full set of parameters needed to define and
+generation parameters can be divided into two classifications,
+\textit{fundamental} parameters and \textit{instance} parameters. All exchange
+species share some fundmental parameters and instance parameters, a discussion
+of which is the focus of this section. Species also define their own set of
+instance parameters to complete the full set of parameters needed to define an
 instance of an exchange.
 
 \subsubsection{Fundamental Parameters}
 
-The fundamental parameters are related to the common features of all species
-described in \S \ref{method:setup:features}. Each parameter is a switch that
-sets the level of fidelity of a given exchange. As such, they are each denoted
-as $f_x$, where the $x$ subscript describes the parameter.
+The fundamental parameters are related to the common features of all instances
+described in \S \ref{method:setup:features}. Each fundamental parameter is a
+switch that sets the level of \textit{fidelity} of a given exchange. As such,
+they are each denoted as $f_x$, where the $x$ subscript describes the parameter.
 
 The most critical parameter is related to the fidelity of the fuel cycle being
-modeled, $f_{fc}$. A value of zero indicates modeling the OT fuel cycle, one is
-used for the MOX fuel cycle, and two the ThOX fuel cycle. As fuel cycle fidelity
-increases, the number of commodities increases, and thus the number of possible
-connections between suppliers and consumers that exist increases as some
-entities trade in multiple commodities. The fuel cycle parameter has an integer
-mapping to the modeled fuel cycle for conveniance as shown in Table
-\ref{tbl:ffc}.
+modeled, \ffc. A value of zero indicates modeling the OT fuel cycle, one is
+used for the MOX fuel cycle, and two the ThOX fuel cycle. The
+parameter-to-fuel-cycle is summarized in Table \ref{tbl:ffc}. As fuel cycle
+fidelity increases, the number of commodities increases, and thus the number of
+possible connections between suppliers and consumers that exist increases,
+because some entities trade in multiple commodities.
 
 \begin{table}[h!]
 \centering
-\caption{A mapping between fuel cycles and $f_{rx}$ values.}
+\caption{A mapping between fuel cycles and \ffc values.}
 \label{tbl:ffc}
 \begin{tabular}{|c|c|}
 \hline
-Fidelity (Fuel Cycle)            & $f_{fc}$ \\ \hline
+Fidelity (Fuel Cycle)            & \ffc \\ \hline
 UOX                    & 0         \\ \hline
 MOX                    & 1         \\ \hline
 ThOX                    & 2         \\ \hline
 \end{tabular}
 \end{table}
 
-The second parameter is reactor fidelity, $f_{rx}$. Reactors can either make
+The second parameter is reactor fidelity, \frx. Reactors can make
 requests or provide supply based either on their entire batch or for each
-assembly in a batch. A value of zero indicates reactors trading full batches; a
-value of one indicates reactors trading individual assemblies. Trading
-individual assemblies is of higher fidelity because the number of trades
-increases by nearly an order of magnitude. Again, there is a mapping between the
-meaning of the reactor fidelity parameter and integer values as shown in Table
-\ref{tbl:frx}.
+assembly in a batch. An $f{\text{rx}}$ value of zero indicates reactors trading
+full batches, and a value of one indicates reactors trading individual
+assemblies. Trading individual assemblies is of higher fidelity because the
+number of possible trades, and thus variables in the NFCTP formulation,
+increases by an order of magnitude. The parameter-to-reactor-fidelity mapping is
+shown in Table \ref{tbl:frx}.
 
 \begin{table}[h!]
 \centering
-\caption{A mapping between reactor fidelity and $f_{rx}$ values.}
+\caption{A mapping between reactor fidelity and \frx values.}
 \label{tbl:frx}
 \begin{tabular}{|c|c|}
 \hline
-Fidelity            & $f_{rx}$ \\ \hline
+Fidelity (Reactor)            & \frx \\ \hline
 Batches                    & 0         \\ \hline
 Assemblies                    & 1         \\ \hline
 \end{tabular}
 \end{table}
 
 Finally, the fidelity with with objective value coefficients are generated can
-be varied. This parameter is denoted $f_{loc}$ because it is related to the
+be varied. This parameter is denoted \floc because it governs the
 degree to which location is taken into account in Equation
-\ref{eqn:loc_proxy}. The mapping between $f_{loc}$ and parameters in Equation
-\ref{eqn:loc_proxy} is shown in Table \ref{tbl:floc}. As $f_{loc}$ increases,
-the size of the distribution of possible objective coefficent values increases.
+\ref{eqn:loc_proxy}. The mapping between \floc and parameters in
+Equation \ref{eqn:loc_proxy} is shown in Table \ref{tbl:floc}. As
+\floc increases, the size of the distribution of possible objective
+coefficent values increases. if 
 
 \begin{table}[h!]
 \centering
-\caption{$f_{loc}$ Effects on Objective Coefficient Values}
+\caption{\floc Effects on Objective Coefficient Values}
 \label{tbl:floc}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Fidelity & $f_{loc}$ &$\delta_{reg}$ & $\delta_{loc}$ \\ \hline
+Fidelity (Location) & \floc &$\delta_{reg}$ & $\delta_{\text{loc}}$ \\ \hline
 No location data & 0  & 0          & 0 \\ \hline
 Region location data & 1   & 1          & 0 \\ \hline
 Region and actual location data & 2   & 1          & 0 \\ \hline
@@ -465,7 +465,7 @@ parameters related to objective coefficients.
 
 Instances are broadly defined by a parameter representing the number of reactors
 that exist in an exchange instance, $n_{rx}$. Next, the split between thermal
-and fast reactors is defined by a ratio, $r_{th, f}$. Assuming $f_{fc} > 0$, the
+and fast reactors is defined by a ratio, $r_{th, f}$. Assuming $f_{\text{fc}} > 0$, the
 number of thermal and fast reactors is given by
 
 \begin{equation}
@@ -481,7 +481,7 @@ n_{rx, f} = n_{rx} - n_{rx, th},
 otherwise, a OT fuel cycle is modeled, thus $n_{rx}$ is equal to $n_{rx, th}$ as
 there are only thermal reactors in the exchange. If a MOX fuel cycle is modeled,
 the number of FMOX reactors, $n_{rx, fmox}$ is trivially equal to the number of
-fast reactors. However, for a ThOX fuel cycle, i.e., $f_{fc} > 1$, the number of
+fast reactors. However, for a ThOX fuel cycle, i.e., $f_{\text{fc}} > 1$, the number of
 FMOX and FThOX reactors is determined by a ratio parameter $r_{rx, fthox, fmox}$
 such that 
 
@@ -521,14 +521,14 @@ A summary of species-independent parameters is provided in Table
 Parameter    & Type &
 Description
 \\ \hline
-$f_{fc}$     & Fundamental &
+\ffc     & Fundamental &
 The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
 \\ \hline
-$f_{rx}$   & Fundamental &
+\frx   & Fundamental &
 The reactor fidelity of an instance (whether individual assemblies are modeled
 or whole batches are modeled).  
 \\ \hline
-$f_{loc}$    & Fundamental &
+\floc    & Fundamental &
 The location fidelity of an instance (to what degree is facility location
 included in objective coefficients).
 \\ \hline
@@ -603,7 +603,7 @@ thermal supporters is
 n_{s, th} = r_{s, th} * n_{rx, th}.
 \end{equation}
 
-The number of TMOX supporters, assuming $f_{fc} > 0$ is then determined by a
+The number of TMOX supporters, assuming $f_{\text{fc}} > 0$ is then determined by a
 similar ratio parameter, $r_{s, tmox, uox}$, such that the number of UOX and
 TMOX supporters is
 
@@ -619,14 +619,14 @@ n_{s, uox} = n_{s, th} - n_{s, tmox}.
 
 The number of fast reactor fuel supporters is determined directly from the number
 of associated fast reactors in the exchange using similar ratio parameters,
-$r_{s, fmox}$ and $r_{s, fthox}$. Assuming $f_{fc} > 0$, the number of FMOX
+$r_{s, fmox}$ and $r_{s, fthox}$. Assuming $f_{\text{fc}} > 0$, the number of FMOX
 supporters is given as
 
 \begin{equation}
 n_{s, fmox} = r_{s, fmox} * n_{rx, fmox}.
 \end{equation}
 
-Similarly, assuming $f_{fc} > 1$, the number of FThOX supporters is given as  
+Similarly, assuming $f_{\text{fc}} > 1$, the number of FThOX supporters is given as  
 
 \begin{equation}
 n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
@@ -635,7 +635,7 @@ n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
 \subsubsection{Request Generation}\label{method:setup:front:reqgen}
 
 Reactors make \textit{mutual} requests for all commodities that they can consume
-as described in Table \ref{tbl:rx_req}. In batch mode, i.e., when $f_{rx}$
+as described in Table \ref{tbl:rx_req}. In batch mode, i.e., when \frx
 equals zero, a single request is made per commodity. In assmebly mode, a request
 is made per assembly per commodity, with the number of assemblies denoted
 previously in Table \ref{tbl:rx_params}. A single request portfolio encompasses
@@ -665,7 +665,7 @@ fraction of an LWR's core that can be made up of MOX fuel rather than UOX fuel
 due to a reduced safety margin. Accordingly, a tuneable parameter is added to
 the model, $f_{mox}$, which denotes the fraction of a request that can be made
 up of MOX-based fuel. This fraction is only relevant if reactors are operating
-in assembly mode, i.e., if $f_{rx}$ is unity.
+in assembly mode, i.e., if \frx is unity.
 
 MOX and ThOX fast reactors utilize the same governing request parameters but
 have a different preference distribution over commodities. It is assumed that a
@@ -981,7 +981,7 @@ d_{\text{FThOX}} = & \:
 \end{split}
 \end{equation}
 
-If an exchange is in batch mode, i.e., $f_{rx}$ is zero, then this distrbution
+If an exchange is in batch mode, i.e., \frx is zero, then this distrbution
 acts as a selection distribution, where each $x_i$ represents a probability that
 the batch will be of that commodity. If in assembly mode, then commodities are
 assigned to each assembly given the relative $x_i$ values.  The assignment of
@@ -1003,8 +1003,8 @@ n_{\text{UOX}} = n_a - n_{\text{TMOX}} - n_{\text{FMOX}} = 26.
 Once a commodity is assigned either to a single batch or a selection of
 assemblies, the remaining methodology is identical. Accordingly, the following
 discussion uses the term assembly to mean either an individual assembly or a
-batch. That is, a reactor in a back-end exchange with $f_{rx}$ equal to zero has
-a single assembly to supply. If $f_{rx}$ is one, then it has $n_a$ assemblies to
+batch. That is, a reactor in a back-end exchange with \frx equal to zero has
+a single assembly to supply. If \frx is one, then it has $n_a$ assemblies to
 supply.
 
 In order to assign enrichment values to each assembly, a single random value is
