@@ -900,22 +900,23 @@ back-end specific instance parameters is shown in Table \ref{tbl:back_params}.
 
 \subsubsection{Support Facility Population}\label{method:setup:back:sup}
 
-Four classes of supporting facilities are modeled in back-end exchanges: thermal
-fuel recycling facilities, a facility that recycles fast MOX fuel, a facility
-that recycles fast ThOX fuel, and a repository. As thermal fuel recycling
-facilities are the only thermal supporting facilities, the number of such
-facilities in a given back-end exchange is trivially $n_{s, th}$. As is the case
-with front-end exchanges, there is a class of supporting facility for each fast
-fuel commodity. Accordingly, the population of each facility type is identical:
+Four classes of supporting facilities are modeled in back-end exchanges: a
+thermal fuel recycling facility, a facility that recycles fast MOX fuel, a
+facility that recycles fast ThOX fuel, and a repository. As thermal fuel
+recycling facilities are the only thermal supporting facilities, the number of
+such facilities in a given back-end exchange is trivially $n_{s, th}$. As is the
+case with front-end exchanges, there is a class of supporting facility for each
+fast fuel commodity. The methodology for determining the population of each
+facility type is identical to front-end exchanges:
 
 \begin{equation}
-n_{s, fmox} = r_{s, fmox} * n_{rx, fmox}
+n_{s, fmox} = r_{s, fmox} n_{rx, fmox}
 \end{equation}
 
 and
 
 \begin{equation}
-n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
+n_{s, fthox} = r_{s, fthox} n_{rx, fthox}.
 \end{equation}
 
 Back-end exchanges include repositories, a facility type not present in
@@ -933,12 +934,12 @@ recycling facilities can not process ThOX-based fuels, and ThOX facilities can
 not process MOX-based fuels. Additionally, fast MOX facilities prefer fast MOX
 fuel, while thermal facilities prefer thermal MOX fuel. Finally, repositories
 can accept all commodities; however, it is a consumer of last resort. The
-assigned preference distribution as a function of commodity type and supporting
-facility type is shown in Table \ref{tbl:sup_to_pref}.
+assigned preference value as a function of commodity type and supporting
+facility type, $p_c$ is shown in Table \ref{tbl:sup_to_pref}.
 
 \begin{table}[h!]
 \centering
-\caption{Preference Mapping between Back-End Supporting Facilities and Commodities.}
+\caption{$p_c$ Value Mapping between Back-End Supporting Facilities and Commodities.}
 \label{tbl:sup_to_pref}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
@@ -955,24 +956,24 @@ commodity. Recycling facilities define their request quantity using the same 800
 ton per year limit discussed in \S \ref{method:setup:front}. Repostories,
 however, use a limit based on the Yucca Mountain statutory limit of 17,000 tons
 and assuming a 30-year operating lifetime, i.e., period of time in which fuel
-can enter the facility. Thus, a repostiory's request quantity is determined to
-be $\sim 48 \frac{\text{t}}{\text{month}}$.
+can enter the facility. Thus, a repostiory's monthly request quantity is
+determined to be $\sim 48$t.
 
-A fissile quantity constraint is added for each recycling facility. A fissile
-constraint is \textit{not} added for reprocessing facilities. The fissile
-constraint is used to model a situation in which recycling facilities have a
-demand for fissile material. The amount of fissile material required by
-recycling facilities is based on their primary consumer. It is determined to be
-the product of the facility's mass constraint and the mean amount of fissile
-material in a primary consumer's request per unit mass, as shown in Equation
-\ref{eqn:bfiss}. This constraint can be translated as ``recycling facilities
-request fissile material quantities as if its capacity was completely met by
-average primary reactors''.
+A fissile quantity constraint is added for each recycling facility (\textit{not}
+added for reprocessing facilities). The fissile constraint models a situation in
+which recycling facilities have a demand for fissile material. The amount of
+fissile material required by recycling facilities is based on their primary
+consumer. It is determined to be the product of the facility's mass constraint
+and the mean amount of fissile material in a primary consumer's request per unit
+mass, as shown in Equation \ref{eqn:bfiss}. This constraint can be considered as
+``recycling facilities request fissile material quantities as if its capacity
+was completely met by average primary reactors''.
 
 \begin{equation}\label{eqn:bfiss}
 b^{\text{fiss}}_r = \bar{\epsilon} f_{el} b^{\text{mass}}_r.
 \end{equation}
 
+\noindent
 The fissile constraint coefficient is simply the amount of fissile material for
 a given supply, as described in Equation \ref{eqn:betafiss}.
 
@@ -984,12 +985,11 @@ a given supply, as described in Equation \ref{eqn:betafiss}.
 
 A key difference between the front-end and back-end exchanges is that in
 front-end exchanges, reactors request fuel, and thus can make a single request
-per commodity per assembly modeled. In back-end exchanges, the commodity
-assigned to each assembly must be assigned. Accordingly, a key parameter in
-back-end exchanges is the commodity distribution for assemblies. A normalized
-uniform distribution parameter exists for each reactor type with a value for
-each commodity type that reactor can consume as defined in Equation
-\ref{eqn:assemdist}.
+per commodity per assembly. In back-end exchanges, commodities must be assigned
+to each assembly. Accordingly, a key parameter in back-end exchanges is the
+commodity distribution for assemblies. A normalized uniform distribution
+parameter is provided for each reactor type with a value for each commodity type
+that reactor can consume as defined in Equation \ref{eqn:assemdist}.
 
 \begin{equation}\label{eqn:assemdist}
 \begin{split}
@@ -1013,26 +1013,30 @@ between the total number of assmblies and the previously assigne values.
 
 For example, consider a thermal reactor with a distribution $d_{\text{Th}} =
 [\frac{2}{3}, \frac{1}{3}, 0]$ and number of assemblies $n_a = 39$. The
-following assembly breakdown would be calulated as
+assembly-commodity breakdown would be calulated as
 
 \begin{gather*}
 n_{\text{FMOX}} = \text{round}(x_{\text{FMOX}} n_a) = 0 \\
-n_{\text{TMOX}} = \text{round}(x_{\text{TMOX}} n_a) = 0 \\
+n_{\text{TMOX}} = \text{round}(x_{\text{TMOX}} n_a) = 13 \\
 n_{\text{UOX}} = n_a - n_{\text{TMOX}} - n_{\text{FMOX}} = 26.
 \end{gather*}
 
 Once a commodity is assigned either to a single batch or a selection of
-assemblies, the remaining methodology is identical. Accordingly, the following
-discussion uses the term assembly to mean either an individual assembly or a
-batch. That is, a reactor in a back-end exchange with \frx equal to zero has
-a single assembly to supply. If \frx is one, then it has $n_a$ assemblies to
-supply.
+assemblies, the remaining supply generation methodology is identical. If \ffx is
+zero, the following discussion uses the term assembly to mean either an
+individual assembly or a batch. That is, a reactor in a back-end exchange has a
+single assembly to supply. If \frx is one, then it has $n_a$ assemblies to
+supply, where $n_a$ is defined in Table \ref{tbl:rx_batch} for each reactor
+type.
 
 In order to assign enrichment values to each assembly, a single random value is
 chosen, $x \in [0, 1)$. Each assembly is then assigned an enrichment based on
   the assembly's commodity and enrichment range, as defined in Table
   \ref{tbl:rx_req}. This modeling assumption supports a situation in which, for
-  a given batch, equivalent fissile enrichments were used across commodities.
+  a given batch, equivalent fissile enrichments were used across
+  commodities. For example, consider a Thermal reactor with $x$ chosen to be
+  $0.55$. All UOX assemblies would be assigned an enrichment value of $4.6$, and
+  each MOX-based assembly would be assigned an enrichment value of $60.5$.
 
 A bid portfolio is assigned to each assembly. Given the commodity of each
 assembly, a supply response is provided to each supporting facility that requsts
@@ -1040,7 +1044,7 @@ that commodity. For example, given a UOX assembly, a reply is sent to each
 supporting facility, as all supporting facilities accept UOX, shown in Table
 \ref{tbl:sup_to_pref}. The set of supply responses associated with a single
 assembly is denoted a \textit{mutual} set. That is, each supply node corresponds
-to a single assembly that should not be split amongst supporting facilites.
+to a single assembly that should not be split between supporting facilites.
 
 \subsubsection{Parameter Summary}
 
