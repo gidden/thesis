@@ -470,30 +470,32 @@ objective coefficient generation.
 
 Instances are broadly defined by a parameter representing the number of reactors
 that exist in an exchange instance, $n_{rx}$. Next, the split between thermal
-and fast reactors is defined by a ratio parameter, $r_{th, f}$. Assuming
-$f_{\text{fc}} > 0$, the number of thermal and fast reactors is given by
+and fast reactors is defined by a parameter defining the ratio of thermal
+reactors to all reactors in the system, $r_{rx, th}$. Assuming $f_{\text{fc}} >
+0$, the number of thermal and fast reactors is given by
 
 \begin{equation}
-n_{rx, th} = r_{th, f} n_{rx},
+n_{rx, th} = r_{rx, th} n_{rx},
 \end{equation}
 
 \noindent
 and 
 
 \begin{equation}
-n_{rx, f} = n_{rx} - n_{rx, th},
+n_{rx, f} = n_{rx} - n_{rx, th}.
 \end{equation}
 
 \noindent
-otherwise, a OT fuel cycle is modeled, thus $n_{rx}$ is equal to $n_{rx, th}$ as
-there are only thermal reactors in the exchange. If a MOX fuel cycle is modeled,
-the number of FMOX reactors, $n_{rx, fmox}$, is trivially equal to the number of
-fast reactors. However, for a ThOX fuel cycle, i.e., $f_{\text{fc}} > 1$, the
-number of FMOX and FThOX reactors is determined by a ratio parameter, $r_{rx,
-  fthox, fmox}$, such that
+If \ffc is zero, a OT fuel cycle is modeled, thus $n_{rx}$ is equal to $n_{rx,
+  th}$ as there are only thermal reactors in the exchange. If a MOX fuel cycle
+is modeled, the number of FMOX reactors, $n_{rx, fmox}$, is trivially equal to
+the number of fast reactors. However, for a ThOX fuel cycle, i.e.,
+$f_{\text{fc}} > 1$, the number of FMOX and FThOX reactors is determined by a
+parameter defining the ratio of Thorium-fueled fast reactors to the total
+population of fast reactors, $r_{rx, fthox}$, such that
 
 \begin{equation}
-n_{rx, fthox} = r_{rx, fthox, fmox} n_{rx, f}
+n_{rx, fthox} = r_{rx, fthox} n_{rx, f}
 \end{equation}
 
 \noindent
@@ -504,7 +506,7 @@ n_{rx, fmox} = n_{rx, f} - n_{rx, fthox}.
 \end{equation}
 
 \noindent
-In the event that the determined number of reactors is non integral, the value
+In the event that the determined number of reactors is non-integral, the value
 is rounded to the nearest integer, with an imposed minimum value of unity.
 
 \paragraph{Objective Coefficients}
@@ -544,14 +546,11 @@ included in objective coefficients).
 $n_{rx}$   & Instance &
 The number of reactors in an instance.
 \\ \hline
-$r_{rx, t, f}$   & Instance &
-The ratio of thermal to fast reactors in an instance, if appropriate.
+$r_{rx, th}$   & Instance &
+The ratio of thermal reactors to all reactors in an instance, if appropriate.
 \\ \hline
-$r_{rx, th, pu}$ & Instance &
-The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
-\\ \hline
-$r_{rx, th, pu}$ & Instance &
-The ratio of ThOX-based fast reactors to MOX-based fast reactors, if appropriate.
+$r_{rx, fthox}$ & Instance &
+The ratio of ThOX-based fast reactors to all fast reactors, if appropriate.
 \\ \hline
 $r_{l, c}$ & Instance &
 The weight given to location preference with respect to commodity preference.
@@ -562,134 +561,139 @@ The weight given to location preference with respect to commodity preference.
 \subsection{Front-End Exchanges}\label{method:setup:front}
 
 A front-end exchange is one in which reactors request fuel and supporting
-facilities supply fuel material. \S \ref{method:setup:front:sup} describes how
-the population of supporting facilities is determined. Conceptually, the
-information gathering procedure for this exchange begins with the RFB phase
-where reactors make requests for commodities with a given quantity and
-enrichment. Enrichment in this case is a simple proxy for an isotopic
-vector. Supporting facilities are then polled to provide a response to these
-requests during the RRFB phase. Managers of reactors would then adjust
-preferences based on implemented strategies. The remainder of this section
-describes how front-end exchange generation models the information gathering
-procedure, starting with the generation of requests in \S
-\ref{method:setup:front:reqgen}, followed by the generation of supply responses
-in \S \ref{method:setup:front:subgen}. The PA phase is modeled using the
-location proxy described in \S \ref{method:setup:features:prefs}. Throughout the
-discussion on generating front-end exchanges, instance parameters are defined. A
-summary of all front-end specific instance parameters is described in \S
-\ref{method:setup:front:sum}.
+facilities supply fuel resources. Given a specified reactor population, a
+supporting facility population is determined, as described in \S
+\ref{method:setup:front:sup}. Conceptually, the information gathering procedure
+for this exchange begins with the RFB phase where reactors make requests for
+commodities with a given quantity and enrichment. Enrichment in this case is a
+simple resource quality proxy for an isotopic vector. Supporting facilities are
+then polled to provide a response to these requests during the RRFB
+phase. Managers of reactors would then adjust preferences based on implemented
+strategies. The remainder of this section describes how front-end exchange
+generation models the information gathering procedure, starting with the
+generation of requests in \S \ref{method:setup:front:reqgen}, followed by the
+generation of supply responses in \S \ref{method:setup:front:subgen}. The PA
+phase is modeled using the location proxy described in \S
+\ref{method:setup:features:prefs}. Throughout the discussion on generating
+front-end exchanges, instance parameters are defined. A summary of all front-end
+specific instance parameters is described in \S \ref{method:setup:front:sum}.
 
 \subsubsection{Support Facility Population} \label{method:setup:front:sup}
 
-It is assumed that there is a single type of supporter for each type of commodity
-used in the fuel cycle described in Table \ref{tbl:fc_to_commods}. Therefore
-there are four types of supporters, directly mapping to commodities as shown in
-Table \ref{tbl:commod_to_sup}.
+It is assumed that there is a single type of support facility, or supporter, for
+each type of commodity used in the fuel cycle. Further, each supporter is paired
+with a reactor type, i.e., there a reactor type which is the \textit{primary
+  consumer} of each supporter type. The primary consumer-supplier relationship
+is modeled wihtin the formulation by choosing preferences such that there is a
+maximum preference for the provided relationship (described in the following
+sections). A summary of these relationships is provided in Table
+\ref{tbl:commod_to_sup}.
 
 \begin{table}[h!]
 \centering
 \caption{A mapping between commodities and the supporter type of that commodity.}
 \label{tbl:commod_to_sup}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c|c|c|}
 \hline
-Commodities            & Supporter \\ \hline
-UOX                    & UOX         \\ \hline
-TMOX                    & TMOX         \\ \hline
-FMOX                    & FMOX         \\ \hline
-FThOX                    & FThOX         \\ \hline
+\textbf{Commodities}            & \textbf{Supporter} & \textbf{Primary Consumer} \\ \hline
+UOX                    & UOX  & Thermal       \\ \hline
+TMOX                    & TMOX & Thermal        \\ \hline
+FMOX                    & FMOX & FMOX        \\ \hline
+FThOX                    & FThOX & FThOX        \\ \hline
 \end{tabular}
 \end{table}
 
 The number of each type of supporter in a front-end exchange instance is a
-function of of the number of type of reactor as well as configurable
+function of of the number of primary consumers as well as configurable
 parameters. Supporter types are divided into two groups: those who primarily
 support thermal reactors and those who primarily support fast reactors. The
 number of thermal fuel supporters is determined to be the product of the number
-of thermal reactors and a ratio parameter, $r_{s, th}$, such that the number of
-thermal supporters is
+of thermal reactors and a ratio parameter, $r_{s, th}$, i.e.,
 
 \begin{equation}
-n_{s, th} = r_{s, th} * n_{rx, th}.
+n_{s, th} = r_{s, th} n_{rx, th}.
 \end{equation}
 
-The number of TMOX supporters, assuming $f_{\text{fc}} > 0$ is then determined by a
-similar ratio parameter, $r_{s, tmox, uox}$, such that the number of UOX and
-TMOX supporters is
+The number of TMOX supporters, assuming $f_{\text{fc}} > 0$, is then determined
+by a parameter defined as the ratio of TMOX to UOX supporters, $r_{s,
+  tmox, uox}$, such that the number of UOX and TMOX supporters is
 
 \begin{equation}
-n_{s, tmox} = r_{s, tmox, uox} * n_{s, th}
+n_{s, uox} = \frac{n_{s, th}}{1 + r_{s, tmox, uox}}
 \end{equation}
 
+\noindent
 and
 
 \begin{equation}
-n_{s, uox} = n_{s, th} - n_{s, tmox}.
+n_{s, tmox} = n_{s, th} - n_{s, uox}.
 \end{equation}
 
 The number of fast reactor fuel supporters is determined directly from the number
-of associated fast reactors in the exchange using similar ratio parameters,
+of associated fast reactors in the exchange using ratio parameters,
 $r_{s, fmox}$ and $r_{s, fthox}$. Assuming $f_{\text{fc}} > 0$, the number of FMOX
 supporters is given as
 
 \begin{equation}
-n_{s, fmox} = r_{s, fmox} * n_{rx, fmox}.
+n_{s, fmox} = r_{s, fmox} n_{rx, fmox}.
 \end{equation}
 
+\noindent
 Similarly, assuming $f_{\text{fc}} > 1$, the number of FThOX supporters is given as  
 
 \begin{equation}
-n_{s, fthox} = r_{s, fthox} * n_{rx, fthox}.
+n_{s, fthox} = r_{s, fthox} n_{rx, fthox}.
 \end{equation}
 
 \subsubsection{Request Generation}\label{method:setup:front:reqgen}
 
 Reactors make \textit{mutual} requests for all commodities that they can consume
-as described in Table \ref{tbl:rx_req}. In batch mode, i.e., when \frx
-equals zero, a single request is made per commodity. In assmebly mode, a request
-is made per assembly per commodity, with the number of assemblies denoted
-previously in Table \ref{tbl:rx_params}. A single request portfolio encompasses
-all requests, with a portfolio quantity equal to the reactor's batch size.
+as described in Table \ref{tbl:rx_req}. Again, a mutual request set is a group
+of requests of which any single request will meet a given demand. When reactors
+request a single batch, i.e., when \frx is zero, a single request is made
+per commodity. When requesting $n_a$ assemblies, a request is made per assembly
+per commodity, with the number of assemblies denoted previously in Table
+\ref{tbl:rx_params}. A single request portfolio encompasses all requests, with a
+portfolio quantity equal to the reactor's batch size.
 
 It is assumed that fuel is requested at some enrichment level dependent on the
 reactor type. Each reactor in an exchange will choose a batch enrichment level
-given a uniform distribution. Further, it is assumed that all recycled fuel is
-composed of a target element oxide and topped up with natural uranium oxide. The
-mixing ratios is again based on reactor type. For recycled fuel, the associated
-enrichment level describes the enrichment of the fissile isotope in the
-\textit{target} element. For example, MOX fuel with 45\% enrichment implies that
-of the elemental Plutonium in the mixture, 45\% is comprised of isotopic
+given a uniform distribution. Recycled fuel is modeled as being composed of a
+target element oxide and topped up with natural uranium oxide; the mixing ratio
+is again based on reactor type. For recycled fuel, the associated enrichment
+level describes the enrichment of the fissile isotope in the \textit{target}
+element. For example, MOX fuel with 45\% enrichment implies that of the
+elemental Plutonium in the mixture, 45\% is comprised of isotopic
 \nucl{239}{Pu}. Finally, each reactor has a preference assignment over its set
 of consumable commodities.
 
 Thermal reactors can consume UOX fuel as well as both MOX variants. It is
 assumed that thermal reactors would prefer to consume thermal MOX fuel in order
 to maintain any equilibrium status of the cycle. UOX fuel is next perferred, and
-finally fast MOX, a fuel type usable by but not meant for thermal reactors. A
-preference distribution is assumed to be ${1, 0.5, 0.1}$, respectively. A normal
-operating enrichment range of $[3.5, 5.5]$ is used for UOX fuel. MOX-based fuels
-are assumed to be comprised of 7\% Plutonium with 93\% Uranium top up
-\cite{bertel2007management} with an enrichment range of $[55, 65]$
-\cite{bairiot2003status}. In practice, many reactor concepts restrict the
-fraction of an LWR's core that can be made up of MOX fuel rather than UOX fuel
-due to a reduced safety margin. Accordingly, a tuneable parameter is added to
-the model, $f_{mox}$, which denotes the fraction of a request that can be made
-up of MOX-based fuel. This fraction is only relevant if reactors are operating
-in assembly mode, i.e., if \frx is unity.
+finally fast MOX, a fuel type usable by but not meant for thermal
+reactors. Preference values for each commodity are summarized in Table
+\ref{tbl:rx_req}. A normal operating enrichment range of $[3.5, 5.5]$ is used
+for UOX fuel. MOX-based fuels are assumed to be comprised of 7\% Plutonium-oxide
+with 93\% Uranium-oxide top up \cite{bertel2007management} and an enrichment
+range of $[55, 65]$ \cite{bairiot2003status}. In practice, many reactor concepts
+restrict the fraction of an LWR's core that can be made up of MOX fuel rather
+than UOX fuel due to a reduced safety margin. Accordingly, a tuneable parameter
+is added to the model, $f_{mox}$, which denotes the fraction of a request that
+can be made up of MOX-based fuel. This fraction is only relevant if reactors are
+operating in assembly mode, i.e., if \frx is unity.
 
 MOX and ThOX fast reactors utilize the same governing request parameters but
 have a different preference distribution over commodities. It is assumed that a
 Thorium-based fast reactor prefers Thorium-based fast reactor fuel over
-MOX-based fast reactor fuel. Finally, such a reactor can utilize thermal MOX
-fuel or medium-enriched UOX, but prefers fast reactor-based fuels. Accordingly,
-a preference distribution of ${1, 0.5, 0.25, 0.1}$ is assigned to each
-commodity, respectively. A MOX-based fast reactor is assumed to operate
-differently, preferring fast and thermal MOX fuel over ThOX fuel. Medium
-enriched UOX is again a viable fuel commodity but least preferred. The same
-preference value distribution is used. For both fast reactors, a UOX enrichment
-range of $[15, 20]$ is used, having an upper limit set by LEU legal enrichment
-limits. All recycled fuels commodities are assigned an enrichment range of $[55,
-  65]$ \cite{bairiot2003status} and using a composition of 20\% of the target
-element (Plutonium or Thorium) and 80\% Uranium top up \cite{bairiot2003status}.
+MOX-based fast reactor fuel and \textit{vice versa}. Additionally, both fast
+reactor types can utilize thermal MOX fuel or medium-enriched UOX, but prefer
+fast reactor-based fuels. Preference values for each commodity type and reactor
+are summarized in Table \ref{tbl:rx_req}. Both fast reactor types select a UOX
+enrichment in $[15, 20]$\cite{bairiot2003status}, with an upper limit set by LEU
+legal enrichment limits. All recycled fuels commodities are assigned an
+enrichment range of $[55, 65]$ \cite{bairiot2003status} and have a composition
+of 20\% of the target element (Plutonium or Thorium) and 80\% Uranium top up
+\cite{bairiot2003status}.
 
 A summary of chosen chosen request parameters based on reactor and commodity
 types is shown in Table \ref{tbl:rx_req}.
@@ -734,8 +738,8 @@ FThOX & $[55, 65]$         & 20 & 1      \\ \hline
 With all requests known, each supporting supply facility responds to all
 requests for their assigned commodity, creating an associated supply node and an
 arc between the supply node and request node. Constraint coefficients are
-supplied for each arc based on the requested enrichment associated with that
-arc. Furthermore, a right-hand side (RHS), $\beta^k_s$, is provided for each
+determined for each arc based on the requested enrichment associated with that
+arc. Furthermore, a right-hand side (RHS), $b^k_s$, is provided for each
 constraint in addition to a coefficient conversion function.
 
 Each supplier has two types of constraints for which coefficients must be
@@ -768,58 +772,67 @@ and
 \end{equation}
 
 In order to determine a constraining RHS, the proposed Eagle Rock Enrichment
-Plant is chosen as a model. It purports to have a possible yearly SWU capacity
-of $3.3E6$ Million SWU per year. Accordingly, the process constraint RHS is
-chosen to be the appropriate monthly value,
+Plant is chosen as a model. It purports to have a SWU capacity of $3.3E6$
+Million SWU per year. Accordingly, the process constraint RHS is chosen to be an
+approximate monthly value,
 
 \begin{equation}
 b^{\text{SWU}}_s = \sim 2.75E5 \frac{\text{SWU}}{\text{month}}.
 \end{equation}
 
-An inventory constraint will be based on the present state of a facility and at
-given time step in the simulation. Therefore, a sufficiently reasonable value
-must be provided without actual simulation data. Accordingly, the process RHS is
-multiplied by a translation constant to achieve an equivalent value for an
-inventory constraint. The translation constant is taken to be a ratio of
-constraint coefficients for the average enrichment of a primary requester. Thus,
-a UOX supplying facility uses a average enrichment, $\bar{\epsilon}$, of $4.5$
-because that is the median of the thermal reactor enrichment range. Further, a
-ratio coefficient parameter, $r_{inv, proc}$, is added in order to investigate
-interesting cases from a formulation point of view. If $r_{inv, proc} > 1$, then
-the process constraint RHS is smaller and thus the process constraint is more
-likely to be engaged in an feasible solution than the inventory constraint. On
-the other hand, if $r_{inv, proc} < 1$, the inventory constraint is more likely
-to be engaged. Including all of the above conversation, the inventory constraint RHS is chosen to be,
+Any inventory constraint will be based on the present state of a facility at a
+given simulation time step. Therefore, a sufficiently reasonable value must be
+provided without actual simulation data. Because two constraints are added,
+investigating their relative effects is of interest, which leads to a strategy
+for generating an inventory constrainting value by deriving it from the process
+constraining value. In order to make such comparisons, the two RHS values must
+be equivalent in both units and with respect to the expected coefficient values
+associated with each constraint. Accordingly, a translation constant is defined
+to achieve both aims. The translation , $\tau_s$, constant is taken to be a
+ratio of constraint coefficients for the average enrichment of a support
+facility's primary consumer, i.e.,
 
 \begin{equation}
-b^{\text{inv}}_s = 
-r_{inv, proc} 
-\frac{\beta^{\text{inv}}_s(\bar{\epsilon})}{\beta^{\text{proc}}_s(\bar{\epsilon})} 
-b^{\text{proc}}_s.
+\tau_s = \frac{\beta^{\text{inv}}_s(\bar{\epsilon_r})}{\beta^{\text{proc}}_s(\bar{\epsilon_r})}.
 \end{equation}
 
-The determination of the inventory RHS is identical for all supporting
-facilities.
+\noindent
+Thus, a UOX supporting facility uses a average enrichment, $\bar{\epsilon_r}$,
+of $4.5$ because that is the median of the thermal reactor enrichment
+range. Further, a ratio coefficient parameter, $r_{inv, proc}$, is added in
+order to investigate interesting cases from a formulation point of view. If
+$r_{inv, proc} > 1$, then the process constraint RHS is smaller and thus the
+process constraint is more likely to be engaged in an feasible solution than the
+inventory constraint. On the other hand, if $r_{inv, proc} < 1$, the inventory
+constraint is more likely to be engaged. The determination of the inventory RHS
+is identical for all supporting facilities and is defined in Equation
+\ref{eqn:b_inv_sup}.
+
+\begin{equation}\label{eqn:b_inv_sup}
+b^{\text{inv}}_s = 
+r_{inv, proc} \tau_s b^{\text{proc}}_s.
+\end{equation}
+
 
 \paragraph{Recycled Commodity Constraints}
 
 Due to the lack of commercially viable, well documented fast reactor fuel
 suppliers, a simple linear surrogate model is assumed for an inventory
-constraint. Thus, the coefficient function conversion function is simply 
+constraint. The primary inventory of any recycling facility is the amount of
+fissile material it has on hand. Therefore, using constants defined in Table
+\ref{tbl:rx_req}, the coefficient function conversion function is chosen to be
 
 \begin{equation}
 \beta^{\text{inv}}_s(\epsilon) = f_{el} \epsilon. 
 \end{equation}
 
-There are many possible process surrogate models that could be used, such as
-heat production or radiotoxicity; however, each of these requires a detailed
-isotopic composition to be relevant. Per the current IAEA practice
-\cite{heinonen2010}, and extrapolating the same effect for reprocessing
-\nucl{233}{U}, a factor of 100 is added for for Plutonium and Thorium-based
-commodities.
-
-The process constraint coefficient function is then as the mass-based processing
-factor
+There are many possible process constraints that could be used, such as heat
+production or radiotoxicity; however, each of these requires a detailed isotopic
+composition to be relevant. Accordingly, a commodity-informed mass throughput
+constraint is used. Per the current IAEA practice \cite{heinonen2010}, and
+extrapolating the same effect for reprocessing \nucl{233}{U}, a factor of 100 is
+added for for Plutonium and Thorium-based commodities. The process constraint
+coefficient function is defined as
 
 \begin{equation}
 \beta^{\text{proc}}_s = 100 f_{el}. 
@@ -827,11 +840,11 @@ factor
 
 From previous conversations with industry representatives \cite{murraycomm}, a
 reasonable size for a processing plant is 800 tonnes per year, which is similar
-to the Rokkassho plant in Japan \cite{heinonen2010}. With $f_{\text{commod}}$
-equal to 100 as discussed above, an 800 t Uranium / 8 t Plutonium facility could
-service on the order of 2-3 fast reactors or $\sim$2 thermal reactors with
-$\frac{1}{3}$ a request as MOX. The yearly process limit is again translated to
-a monthly limit, resulting in a constraint RHS value of
+to the Rokkassho plant in Japan \cite{heinonen2010}. Given the request
+parameters defined in Table \ref{tbl:rx_req}, an 800 t Uranium / 8 t Plutonium
+facility could service on the order of 2-3 fast reactors or $\sim$2 thermal
+reactors with $\frac{1}{3}$ a request as MOX. The yearly process limit is again
+translated to a monthly limit, resulting in a constraint RHS value of
 
 \begin{equation}
 b^{\text{proc}}_s = \sim 66.7 \frac{\text{t}}{\text{month}}.
@@ -870,7 +883,6 @@ The ratio of FThOX support facilities to FThOX reators.
 \\ \hline
 $r_{inv, proc}$   & 
 The ratio of the inventory RHS to the process RHS.
-or whole batches are modeled).  
 \\ \hline
 \end{tabularx}
 \end{table}
