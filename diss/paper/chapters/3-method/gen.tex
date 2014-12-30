@@ -454,62 +454,66 @@ Region and location data & 2   & 1          & 0 \\ \hline
 
 \subsubsection{Instance Parameters}
 
-While fundamental parameters represent switches that change the notion of the
-exchange being generated, for example the difference between a once-through fuel
-cycle and a fuel cycle with recycling, instance parameters change the
-\textit{shape} and \textit{size} of instances in a given population. Given an
-instance's shape and size, instance parameters can also affect
-\textit{coefficient generation}. In other words, fundamental parameters are
-related basic modeling assumptions while instance parameters are related to the
-specifics of an instance, given those basic modeling assumptions. Both speices
-of exchange instances share some instance parameters, namely those related to
-the population of reactors in a given exchange and coefficient generation
-parameters related to objective coefficients.
+Fundamental parameters represent switches that change the notion of the fidelity
+of the exchange being generated, for example the difference between a
+once-through fuel cycle and a fuel cycle with recycling. Instance parameters, on
+the other hand, change the \textit{shape} and \textit{size} of instances in a
+given population. In addition to an instance's shape and size, instance
+parameters can also affect \textit{coefficient generation}. While fundamental
+parameters are related basic modeling assumptions, instance parameters are
+related to the specifics of an instance, given those basic modeling
+assumptions. Both speices of exchange instances share some instance parameters,
+namely those related to the population of reactors in a given exchange and
+objective coefficient generation.
 
 \paragraph{Reactor Population}
 
 Instances are broadly defined by a parameter representing the number of reactors
 that exist in an exchange instance, $n_{rx}$. Next, the split between thermal
-and fast reactors is defined by a ratio, $r_{th, f}$. Assuming $f_{\text{fc}} > 0$, the
-number of thermal and fast reactors is given by
+and fast reactors is defined by a ratio parameter, $r_{th, f}$. Assuming
+$f_{\text{fc}} > 0$, the number of thermal and fast reactors is given by
 
 \begin{equation}
-n_{rx, th} = r_{th, f} * n_{rx},
+n_{rx, th} = r_{th, f} n_{rx},
 \end{equation}
 
+\noindent
 and 
 
 \begin{equation}
 n_{rx, f} = n_{rx} - n_{rx, th},
 \end{equation}
 
+\noindent
 otherwise, a OT fuel cycle is modeled, thus $n_{rx}$ is equal to $n_{rx, th}$ as
 there are only thermal reactors in the exchange. If a MOX fuel cycle is modeled,
-the number of FMOX reactors, $n_{rx, fmox}$ is trivially equal to the number of
-fast reactors. However, for a ThOX fuel cycle, i.e., $f_{\text{fc}} > 1$, the number of
-FMOX and FThOX reactors is determined by a ratio parameter $r_{rx, fthox, fmox}$
-such that 
+the number of FMOX reactors, $n_{rx, fmox}$, is trivially equal to the number of
+fast reactors. However, for a ThOX fuel cycle, i.e., $f_{\text{fc}} > 1$, the
+number of FMOX and FThOX reactors is determined by a ratio parameter, $r_{rx,
+  fthox, fmox}$, such that
 
 \begin{equation}
-n_{rx, fthox} = r_{rx, fthox, fmox} * n_{rx, f}
+n_{rx, fthox} = r_{rx, fthox, fmox} n_{rx, f}
 \end{equation}
 
+\noindent
 and
 
 \begin{equation}
 n_{rx, fmox} = n_{rx, f} - n_{rx, fthox}.
 \end{equation}
 
+\noindent
 In the event that the determined number of reactors is non integral, the value
 is rounded to the nearest integer, with an imposed minimum value of unity.
 
 \paragraph{Objective Coefficients}
 
 As shown in Equation \ref{eqn:total_pref}, the value of an objective coefficient
-has two components, preference due to a commodity transfer, $p_c$, and
+has two components, preference due to a commodity, $p_c$, and
 preference due to the relative location between two entities, $p_l$. It is not
 obvious to what degree, if any, the relative values of the two components affect
-formulation performance. Accordingly, a ratio parameter, $r_{l, c}$ is
+formulation performance. Accordingly, a ratio parameter, $r_{l, c}$, is
 introduced to allow for investigating such effects.
 
 \subsubsection{Parameter Summary}
