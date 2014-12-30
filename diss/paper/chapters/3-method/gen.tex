@@ -616,17 +616,17 @@ n_{s, th} = r_{s, th} n_{rx, th}.
 
 The number of TMOX supporters, assuming $f_{\text{fc}} > 0$, is then determined
 by a parameter defined as the ratio of TMOX to UOX supporters, $r_{s,
-  tmox, uox}$, such that the number of UOX and TMOX supporters is
+  \text{TMOX}, \text{UOX}}$, such that the number of UOX and TMOX supporters is
 
 \begin{equation}
-n_{s, uox} = \frac{n_{s, th}}{1 + r_{s, tmox, uox}}
+n_{s, \text{UOX}} = \frac{n_{s, th}}{1 + r_{s, \text{TMOX}, \text{UOX}}}
 \end{equation}
 
 \noindent
 and
 
 \begin{equation}
-n_{s, tmox} = n_{s, th} - n_{s, uox}.
+n_{s, \text{TMOX}} = n_{s, th} - n_{s, \text{UOX}}.
 \end{equation}
 
 The number of fast reactor fuel supporters is determined directly from the number
@@ -872,7 +872,7 @@ The fraction of thermal reactor requests that can be met with mox fuel.
 $r_{s, th}$ & 
 The ratio of thermal support facilities to thermal reactors.  
 \\ \hline
-$r_{s, tmox, uox}$ & 
+$r_{s, \text{TMOX}, \text{UOX}}$ & 
 The ratio of TMOX to UOX support facilities.
 \\ \hline
 $r_{s, fmox}$ & 
@@ -1022,7 +1022,7 @@ n_{\text{UOX}} = n_a - n_{\text{TMOX}} - n_{\text{FMOX}} = 26.
 \end{gather*}
 
 Once a commodity is assigned either to a single batch or a selection of
-assemblies, the remaining supply generation methodology is identical. If \ffx is
+assemblies, the remaining supply generation methodology is identical. If \fx is
 zero, the following discussion uses the term assembly to mean either an
 individual assembly or a batch. That is, a reactor in a back-end exchange has a
 single assembly to supply. If \frx is one, then it has $n_a$ assemblies to
