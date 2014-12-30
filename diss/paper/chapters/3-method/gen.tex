@@ -471,18 +471,18 @@ objective coefficient generation.
 Instances are broadly defined by a parameter representing the number of reactors
 that exist in an exchange instance, $n_{rx}$. Next, the split between thermal
 and fast reactors is defined by a parameter defining the ratio of thermal
-reactors to all reactors in the system, $r_{rx, th}$. Assuming $f_{\text{fc}} >
+reactors to all reactors in the system, $r_{rx, \text{Th}}$. Assuming $f_{\text{fc}} >
 0$, the number of thermal and fast reactors is given by
 
 \begin{equation}
-n_{rx, th} = r_{rx, th} n_{rx},
+n_{rx, \text{Th}} = r_{rx, \text{Th}} n_{rx},
 \end{equation}
 
 \noindent
 and 
 
 \begin{equation}
-n_{rx, f} = n_{rx} - n_{rx, th}.
+n_{rx, f} = n_{rx} - n_{rx, \text{Th}}.
 \end{equation}
 
 \noindent
@@ -546,7 +546,7 @@ included in objective coefficients).
 $n_{rx}$   & Instance &
 The number of reactors in an instance.
 \\ \hline
-$r_{rx, th}$   & Instance &
+$r_{rx, \text{Th}}$   & Instance &
 The ratio of thermal reactors to all reactors in an instance, if appropriate.
 \\ \hline
 $r_{rx, \text{FThOX}}$ & Instance &
@@ -608,10 +608,10 @@ function of of the number of primary consumers as well as configurable
 parameters. Supporter types are divided into two groups: those who primarily
 support thermal reactors and those who primarily support fast reactors. The
 number of thermal fuel supporters is determined to be the product of the number
-of thermal reactors and a ratio parameter, $r_{s, th}$, i.e.,
+of thermal reactors and a ratio parameter, $r_{s, \text{Th}}$, i.e.,
 
 \begin{equation}
-n_{s, th} = r_{s, th} n_{rx, th}.
+n_{s, \text{Th}} = r_{s, \text{Th}} n_{rx, \text{Th}}.
 \end{equation}
 
 The number of TMOX supporters, assuming $f_{\text{fc}} > 0$, is then determined
@@ -619,14 +619,14 @@ by a parameter defined as the ratio of TMOX to UOX supporters, $r_{s,
   \text{TMOX}, \text{UOX}}$, such that the number of UOX and TMOX supporters is
 
 \begin{equation}
-n_{s, \text{UOX}} = \frac{n_{s, th}}{1 + r_{s, \text{TMOX}, \text{UOX}}}
+n_{s, \text{UOX}} = \frac{n_{s, \text{Th}}}{1 + r_{s, \text{TMOX}, \text{UOX}}}
 \end{equation}
 
 \noindent
 and
 
 \begin{equation}
-n_{s, \text{TMOX}} = n_{s, th} - n_{s, \text{UOX}}.
+n_{s, \text{TMOX}} = n_{s, \text{Th}} - n_{s, \text{UOX}}.
 \end{equation}
 
 The number of fast reactor fuel supporters is determined directly from the number
@@ -869,7 +869,7 @@ Description
 $f_{mox}$     & 
 The fraction of thermal reactor requests that can be met with mox fuel.
 \\ \hline
-$r_{s, th}$ & 
+$r_{s, \text{Th}}$ & 
 The ratio of thermal support facilities to thermal reactors.  
 \\ \hline
 $r_{s, \text{TMOX}, \text{UOX}}$ & 
@@ -904,7 +904,7 @@ Four classes of supporting facilities are modeled in back-end exchanges: a
 thermal fuel recycling facility, a facility that recycles fast MOX fuel, a
 facility that recycles fast ThOX fuel, and a repository. As thermal fuel
 recycling facilities are the only thermal supporting facilities, the number of
-such facilities in a given back-end exchange is trivially $n_{s, th}$. As is the
+such facilities in a given back-end exchange is trivially $n_{s, \text{Th}}$. As is the
 case with front-end exchanges, there is a class of supporting facility for each
 fast fuel commodity. The methodology for determining the population of each
 facility type is identical to front-end exchanges:
@@ -924,7 +924,7 @@ front-end exchanges. A simple ratio parameter, $r_{\text{repo}}$ is applied
 based on the total number of other supporting facilities, i.e.,
 
 \begin{equation}
-n_{s, \text{repo}} = r_{s, \text{repo}} ( n_{s, th} + n_{s, \text{FMOX}} +n_{s, \text{FThOX}} ).
+n_{s, \text{repo}} = r_{s, \text{repo}} ( n_{s, \text{Th}} + n_{s, \text{FMOX}} +n_{s, \text{FThOX}} ).
 \end{equation}
 
 \subsubsection{Request Generation}
