@@ -488,21 +488,21 @@ n_{rx, f} = n_{rx} - n_{rx, th}.
 \noindent
 If \ffc is zero, a OT fuel cycle is modeled, thus $n_{rx}$ is equal to $n_{rx,
   th}$ as there are only thermal reactors in the exchange. If a MOX fuel cycle
-is modeled, the number of FMOX reactors, $n_{rx, fmox}$, is trivially equal to
+is modeled, the number of FMOX reactors, $n_{rx, \text{FMOX}}$, is trivially equal to
 the number of fast reactors. However, for a ThOX fuel cycle, i.e.,
 $f_{\text{fc}} > 1$, the number of FMOX and FThOX reactors is determined by a
 parameter defining the ratio of Thorium-fueled fast reactors to the total
-population of fast reactors, $r_{rx, fthox}$, such that
+population of fast reactors, $r_{rx, \text{FThOX}}$, such that
 
 \begin{equation}
-n_{rx, fthox} = r_{rx, fthox} n_{rx, f}
+n_{rx, \text{FThOX}} = r_{rx, \text{FThOX}} n_{rx, f}
 \end{equation}
 
 \noindent
 and
 
 \begin{equation}
-n_{rx, fmox} = n_{rx, f} - n_{rx, fthox}.
+n_{rx, \text{FMOX}} = n_{rx, f} - n_{rx, \text{FThOX}}.
 \end{equation}
 
 \noindent
@@ -549,7 +549,7 @@ The number of reactors in an instance.
 $r_{rx, th}$   & Instance &
 The ratio of thermal reactors to all reactors in an instance, if appropriate.
 \\ \hline
-$r_{rx, fthox}$ & Instance &
+$r_{rx, \text{FThOX}}$ & Instance &
 The ratio of ThOX-based fast reactors to all fast reactors, if appropriate.
 \\ \hline
 $r_{l, c}$ & Instance &
@@ -631,18 +631,18 @@ n_{s, \text{TMOX}} = n_{s, th} - n_{s, \text{UOX}}.
 
 The number of fast reactor fuel supporters is determined directly from the number
 of associated fast reactors in the exchange using ratio parameters,
-$r_{s, fmox}$ and $r_{s, fthox}$. Assuming $f_{\text{fc}} > 0$, the number of FMOX
+$r_{s, \text{FMOX}}$ and $r_{s, \text{FThOX}}$. Assuming $f_{\text{fc}} > 0$, the number of FMOX
 supporters is given as
 
 \begin{equation}
-n_{s, fmox} = r_{s, fmox} n_{rx, fmox}.
+n_{s, \text{FMOX}} = r_{s, \text{FMOX}} n_{rx, \text{FMOX}}.
 \end{equation}
 
 \noindent
 Similarly, assuming $f_{\text{fc}} > 1$, the number of FThOX supporters is given as  
 
 \begin{equation}
-n_{s, fthox} = r_{s, fthox} n_{rx, fthox}.
+n_{s, \text{FThOX}} = r_{s, \text{FThOX}} n_{rx, \text{FThOX}}.
 \end{equation}
 
 \subsubsection{Request Generation}\label{method:setup:front:reqgen}
@@ -875,10 +875,10 @@ The ratio of thermal support facilities to thermal reactors.
 $r_{s, \text{TMOX}, \text{UOX}}$ & 
 The ratio of TMOX to UOX support facilities.
 \\ \hline
-$r_{s, fmox}$ & 
+$r_{s, \text{FMOX}}$ & 
 The ratio of FMOX support facilities to FMOX reactors.
 \\ \hline
-$r_{s, fthox}$ & 
+$r_{s, \text{FThOX}}$ & 
 The ratio of FThOX support facilities to FThOX reactors.
 \\ \hline
 $r_{inv, proc}$   & 
@@ -910,13 +910,13 @@ fast fuel commodity. The methodology for determining the population of each
 facility type is identical to front-end exchanges:
 
 \begin{equation}
-n_{s, fmox} = r_{s, fmox} n_{rx, fmox}
+n_{s, \text{FMOX}} = r_{s, \text{FMOX}} n_{rx, \text{FMOX}}
 \end{equation}
 
 and
 
 \begin{equation}
-n_{s, fthox} = r_{s, fthox} n_{rx, fthox}.
+n_{s, \text{FThOX}} = r_{s, \text{FThOX}} n_{rx, \text{FThOX}}.
 \end{equation}
 
 Back-end exchanges include repositories, a facility type not present in
@@ -924,7 +924,7 @@ front-end exchanges. A simple ratio parameter, $r_{\text{repo}}$ is applied
 based on the total number of other supporting facilities, i.e.,
 
 \begin{equation}
-n_{s, \text{repo}} = r_{s, \text{repo}} ( n_{s, th} + n_{s, fmox} +n_{s, fthox} ).
+n_{s, \text{repo}} = r_{s, \text{repo}} ( n_{s, th} + n_{s, \text{FMOX}} +n_{s, \text{FThOX}} ).
 \end{equation}
 
 \subsubsection{Request Generation}
