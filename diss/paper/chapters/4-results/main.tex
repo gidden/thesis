@@ -1,13 +1,33 @@
 \chapter{Experiments \& Results}\label{ch:results}
 
+Given a parameterized framework for generating instances of resource exchanges,
+experiments are designed and executed to explore the efficiency and quality of
+solutions provided by different solvers. 
+
+\S \ref{results:setup} describes the experimentation apparati, including the
+computational tools, solvers and relevant output. Two experiemtnal campaigns
+were conducted. A scaling campaign, described in \S \ref{results:scale}, was
+performed in order to investigate formulation behavior as a function of problem
+size. \S \ref {results:stochastic} then describes the results of a stochastic
+campaign.
+
 \section{Experimental Setup}
 
-Talk about specifics of computers used, how results are calculated, etc. Expand on specifics from prev chapter.
+An experiment consists of a set of resource-exchange graph instances executed
+with a collection of solvers. When a solution is found, the solution, the time
+required to reach the solution, and the objective value (i.e., the dot-product
+of cost and flow vectors) are recorded. Because solution time is a quantity of
+interest, all instances in an experiement must be executed on homogenous
+architecture. Furthermore, all experiments must be executed on equivalent,
+homogenous architecture in order to quantify valid comparisons in solutions
+times across experimental campaigns.
 
-Specifically, the solution
-time required to solve exchange instances is analyzed because this study is of
-both a novel solution methodology to a novel problem, and because the problem is
-by definition NP-Hard as described in \S \ref{intro:prog}.
+Six execution nodes on UW-Madison Advanced Computing Initiative (ACI) HTCondor
+system form the homogenous environment used to conduct the experiments herein
+described. Each execute node is comprised of an 2.90 GHz eight-core,
+sixteen-thread, Intel Xeon E5-2690 \cite{} processor with 128 GB of
+RAM. Processor hyperthreading was disabled for the duration of the experimental
+campaign to allow comparisons between solution times. 
 
 \subsection{Solvers and Formulations}
 
