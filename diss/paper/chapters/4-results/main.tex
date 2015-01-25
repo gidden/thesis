@@ -11,16 +11,16 @@ performed in order to investigate formulation behavior as a function of problem
 size. \S \ref {results:stochastic} then describes the results of a stochastic
 campaign.
 
-\section{Experimental Setup}
+\section{Experimental Setup}\label{results:setup}
 
 An experiment consists of a set of resource-exchange graph instances executed
-with a collection of solvers. When a solution is found, the solution, the time
-required to reach the solution, and the objective value (i.e., the dot-product
-of cost and flow vectors) are recorded. Because solution time is a quantity of
-interest, all instances in an experiement must be executed on homogenous
-architecture. Furthermore, all experiments must be executed on equivalent,
-homogenous architecture in order to quantify valid comparisons in solutions
-times across experimental campaigns.
+with a collection of configured solvers. When a solution is found, the solution
+(i.e., the flow vector), the time required to reach the solution, and the
+objective value (i.e., the dot-product of cost and flow vectors) are
+recorded. Because solution time is a quantity of interest, all instances in an
+experiement must be executed on homogenous architecture. Furthermore, all
+experiments must be executed on equivalent, homogenous architecture in order to
+quantify valid comparisons in solutions times across experimental campaigns.
 
 Six execution nodes on UW-Madison Advanced Computing Initiative (ACI) HTCondor
 system form the homogenous environment used to conduct the experiments herein
@@ -29,18 +29,122 @@ sixteen-thread, Intel Xeon E5-2690 \cite{intelproc} processor with 128 GB of
 RAM. Processor hyperthreading was disabled for the duration of the experimental
 campaign to allow comparisons between solution times.
 
+For each experimental study, an input database consisting of persisted resource
+exchange graph instances is generated. A copy of the database is transferred
+from a user's submit node to each of the six execution nodes. A WorkQueue master
+process is initiated. Sixteen workers per node are initialized using WorkQueue's
+\texttt{condor\_submit\_workers} CLI. The master maintains a queue of instances
+to be solved, assigning instances to workers as workers become available. Upon
+completion, the input database is removed from each execution node, and the
+results are collected from the user's submit node. The resulting database is
+then post-processed and analyzed.
+
 \subsection{Solvers and Formulations}
 
-The solvers used to determine solutions to the DRE instances are then described
-in \S \ref{method:solve}. Three solvers are supported: COIN-CLP, COIN-CBC, and
-the Greedy Hueristic described in \S \ref{abm:dre:nfctp:heur}.
+Three solvers are executed for each resource exchange graph instance: the Greedy
+Heuristic, described in \S \ref{abm:dre:nfctp:heur}, COIN's LP solver
+(COIN-CLP), and COIN's branch-and-cut solver (COIN-CBC). Each problem instance
+is constructed as a \texttt{ExchangeGraph}, i.e., at the \textit{exchange layer}
+shown in Figure \ref{fig:dre_impl} and Figure \ref{fig:dre_time}. The Greedy
+Heuristic is applied directly to the \texttt{ExchangeGraph}. The CLP and CBC
+solvers require a translation to the \textit{formulation layer}. The CLP solver
+is applied to the LP formulation of the NFCTP and the CBC solver is applied to
+the MILP formulation. The solution time, $t_s$ of a given solver is defined as
+the time required to return a vector of arc flows given an
+\texttt{ExchangeGraph} instance as shown in Figure \ref{fig:dre_time}.
+
+\begin{equation}\label{eqn:solnt}
+t_s = t_f - t_i
+\end{equation}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{exchange_xlation_timing.pdf}
+    \caption[]{
+      \label{fig:dre_time}
+      The time points for comparing different solutions using Equation \ref{eqn:solnt}.}
+  \end{center}
+\end{figure}
+
+\TODO{Complexity of Greedy Solver, Translation}
 
 \subsection{Parameter Variation}
+
+\S \ref{method:setup:params} describes the parameters defining both Front and
+Back-End exchanges. Each combination of fundamental parameters represents a
+significant modeling assumption. Therefore, every experiment is conducted for
+every combination of fundamental parameters: eighteen combinations in total. For
+exchange types, a reference instance parameter vector is chosen. Experiments,
+then, are conducted by perturbing instance parameter values from the reference
+vector and comparing the output between a reference case and a perturbed case.
+
+\subsubsection{Front-End Reference Instance Parameters}
+
+\begin{table}[h!]
+\centering
+\caption{Reference Values for Front-End Exchange Instance Parameters.}
+\label{tbl:front_ref_params}
+\begin{tabular}{|c|c|}
+\hline
+Parameter    & Reference Value
+\\ \hline
+$r_{rx, \text{Th}}$   & 0.75 
+\\ \hline
+$r_{rx, \text{FThOX}}$ & 0.25
+\\ \hline
+$r_{l, c}$ & 1
+\\ \hline
+$f_{mox}$     & 0.33
+\\ \hline
+$r_{s, \text{Th}}$ & 0.08
+\\ \hline
+$r_{s, \text{TMOX}, \text{UOX}}$ & 1.
+\\ \hline
+$r_{s, \text{FMOX}}$ & 0.2
+\\ \hline
+$r_{s, \text{FThOX}}$ & 0.2
+\\ \hline
+$r_{inv, proc}$   & 1
+\\ \hline
+\end{tabular}
+\end{table}
+
+
+\subsubsection{Back-End Reference Instance Parameters}
+
+\begin{table}[h!]
+\centering
+\caption{Reference Values for Back-End Exchange Instance Parameters.}
+\label{tbl:back_ref_params}
+\begin{tabular}{|c|c|}
+\hline
+Parameter    & Reference Value
+\\ \hline
+$r_{rx, \text{Th}}$   & 0.75 
+\\ \hline
+$r_{rx, \text{FThOX}}$ & 0.25
+\\ \hline
+$r_{l, c}$ & 1
+\\ \hline
+$f_{mox}$     & 0.33
+\\ \hline
+$r_{s, \text{Th}}$ & 0.08
+\\ \hline
+$r_{s, \text{TMOX}, \text{UOX}}$ & 1.
+\\ \hline
+$r_{s, \text{FMOX}}$ & 0.2
+\\ \hline
+$r_{s, \text{FThOX}}$ & 0.2
+\\ \hline
+$r_{s, \text{Repo}}$   & 0.2
+\\ \hline
+\end{tabular}
+\end{table}
 
 \subsection{Analysis Metrics}
 % discuss what kind of analyses are made, c_pref_flow, rms, etc.
 
-\section{Scalability Campaign}
+\section{Scalability Campaign}\label{results:scale}
 
 \subsection{Front-End Exchanges}
 
@@ -62,7 +166,7 @@ the Greedy Hueristic described in \S \ref{abm:dre:nfctp:heur}.
 
 \subsubsection{Convergence Criteria}
 
-\section{Stochastic Campaign}
+\section{Stochastic Campaign}\label{results:stochastic}
 
 \subsection{Front-End Exchanges}
 % talk about base parameter vector
