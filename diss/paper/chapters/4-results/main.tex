@@ -186,19 +186,21 @@ individual flow values, and values derived therefrom, can be compared directly
 using a well-known normative measure. In order to compare values across problem
 sizes, the root mean square (RMS), related to the $L_2$ norm, is used to measure
 the microscopic differences between two solution values. The RMS analysis can be
-applied to any flow-related metric for two solutions, $\vec{x}^1$ and
-$\vec{x}^2$. Equation \ref{eqn:rms_flow} shows the equation for the flow RMS,
+applied to any flow-related metric for two solutions, $\vec{x}_1$ and
+$\vec{x}_2$. Equation \ref{eqn:rms_flow} shows the equation for the flow RMS,
 and Equation \ref{eqn:rms_pref} displays the commodity-preference flow RMS.
 
 \begin{equation}\label{eqn:rms_flow}
-RMS_{\text{flow}} = \sqrt{ \frac{1}{N} \sum_i (x^1_i - x^2_i) ^2 }
+RMS_{\text{flow}} = \sqrt{ \frac{1}{N} \sum_i (x_{i, 1} - x_{i, 2}) ^2 }
 \end{equation}
 
 \begin{equation}\label{eqn:rms_pref}
-RMS_{\text{pref}} = \sqrt{ \frac{1}{N} \sum_i {p_i^c}^2 (x^1_i - x^2_i)^2 }
+RMS_{\text{pref}} = \sqrt{ \frac{1}{N} \sum_i {p_i^c}^2 (x_{i, 1} - x_{i, 2})^2 }
 \end{equation}
 
 \section{Scalability Campaign}\label{results:scale}
+
+
 
 \subsection{Front-End Exchanges}
 
