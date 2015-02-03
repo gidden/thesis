@@ -280,7 +280,21 @@ much lower for batch-based exchanges.
 
 \subsubsection{Convergence Criteria}
 
+The CBC solver is highly tuneable. Perhaps the most critical tuneable criteria
+affecting the balance between solution quality and solution time is the
+convergence criteria. It is not clear to what degree solution quality will
+matter for users of Cyclus. Accordingly, a short exploratory experiment was
+conducted to examine to what degree convergence criteria affects solution time.
 
+CBC uses either an absolute or relative upper and lower-bound gap tolerance as
+possible convergence criteria. This experiment uses the relative gap, termed
+\textit{ratio gap} in CBC parlance. For each of the 18 combinations of
+fundamental parameters, 10 instances of exchanges were executed, spanning a
+reactor population range of 10 to 500. Figure \ref{fig:hist_front_rxtr_0}
+displays the results for runs with reactors trading full batches for ratio gap
+values of 0.1, 1, and 10\%. Figure \ref{fig:hist_front_rxtr_0} displays the
+results for runs with reactors trading individual assemblies for ratio gap
+values of 1 and 10\%.
 
 \begin{figure}[h!]
   \begin{center}
@@ -288,7 +302,8 @@ much lower for batch-based exchanges.
     \caption[]{
       \label{fig:hist_front_rxtr_0}
       Effects of increasing convergence criteria on Front-End exchanges with
-      reactors exchanging batches.  }
+      reactors exchanging batches. Each bar is divided into how many instances
+      converged (green) and did not converge (blue). }
   \end{center}
 \end{figure}
 
@@ -298,9 +313,19 @@ much lower for batch-based exchanges.
     \caption[]{
       \label{fig:hist_front_rxtr_1}
       Effects of increasing convergence criteria on Front-End exchanges with
-      reactors exchanging assemblies.  }
+      reactors exchanging assemblies. Each bar is divided into how many instances
+      converged (green) and did not converge (blue).}
   \end{center}
 \end{figure}
+
+Unsurprisingly, increasing the convergence criteria for smaller problems has a
+greater effect than increasing the convergence criteria for larger probems. It
+is somewhat surprising that the increase from a 1\% relative bound gap to a 10\%
+gap allows full convergence in the smaller case and has no effect in the larger
+case. Users will likely find some relaxation in convergence criteria will
+provide speed ups in solution times, as expected. This result seems to indicate
+that the relaxed convergence criteria will have a much more profound effect on
+smaller problems.
 
 \subsection{Back-End Exchanges}
 
