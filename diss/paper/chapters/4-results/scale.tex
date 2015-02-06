@@ -46,9 +46,9 @@ $[5, 100]$ and a step size of 25 was used from $(100, 500]$. In mathematical
   in a given exchange graph. Accordingly, understanding how each quantiy scales
   with the number of reactors is of chief import.
 
-Figure \ref{fig:base_front_n_rxtr_n_arcs_fc1_solvergreedy} shows how the number
+Figure \ref{fig:base_front_n_rxtr_n_arcs_fc1_greedy} shows how the number
 of arcs scale with problem size for the MOX fuel cycle, and Figure
-\ref{fig:base_front_n_rxtr_n_constrs_fc1_solvergreedy} shows the same results
+\ref{fig:base_front_n_rxtr_n_constrs_fc1_greedy} shows the same results
 for the number of constraints. The number of constraints scales linearly, for it
 is a purely function of the number of entities in an exchange. However, the
 number of arcs scales by $\mathcal{O}(n^2)$. During exchange generation, the
@@ -64,18 +64,18 @@ individual assemblies are requested rather than a single batch.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_n_arcs_fc1_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_n_arcs_fc1_greedy.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_n_arcs_fc1_solvergreedy}
+      \label{fig:base_front_n_rxtr_n_arcs_fc1_greedy}
       Arc population scaling with the number of reactors with coresponding linear fits.}
   \end{center}
 \end{figure}
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_n_constrs_fc1_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_n_constrs_fc1_greedy.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_n_constrs_fc1_solvergreedy}
+      \label{fig:base_front_n_rxtr_n_constrs_fc1_greedy}
       Constraint population scaling with the number of reactors with
       corresponding quadratic fits.}
   \end{center}
@@ -84,7 +84,7 @@ individual assemblies are requested rather than a single batch.
 
 \paragraph{Greedy Solver}
 
-\cref{fig:base_front_n_rxtr_time_fc0_solvergreedy,fig:base_front_n_rxtr_time_fc1_solvergreedy,fig:base_front_n_rxtr_time_fc2_solvergreedy}
+\cref{fig:base_front_n_rxtr_time_fc0_greedy,fig:base_front_n_rxtr_time_fc1_greedy,fig:base_front_n_rxtr_time_fc2_greedy}
 show the Greedy Solver results as the number of reactors increases for the OT,
 MOX, and ThOX fuel cycles, respectively. Plotted with each data series is a
 second-order polynomial fit, suggesting that the Greedy Solver scales as
@@ -94,9 +94,9 @@ thereof.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc0_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc0_greedy.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_time_fc0_solvergreedy}
+      \label{fig:base_front_n_rxtr_time_fc0_greedy}
       Greedy Solver results for the OT fuel cycle as the number of reactors
       increases.  }
   \end{center}
@@ -104,9 +104,9 @@ thereof.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc1_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc1_greedy.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_time_fc1_solvergreedy}
+      \label{fig:base_front_n_rxtr_time_fc1_greedy}
       Greedy Solver results for the MOX fuel cycle as the number of reactors
       increases.
     }
@@ -115,9 +115,9 @@ thereof.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc2_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc2_greedy.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_time_fc2_solvergreedy}
+      \label{fig:base_front_n_rxtr_time_fc2_greedy}
       Greedy Solver results for the ThOX fuel cycle as the number of reactors
       increases.
       }
@@ -125,7 +125,7 @@ thereof.
 \end{figure}
 
 As was shown previously, the number of arcs in a generated exchange is an
-$\mathcal{O}(n^2)$ effect. \ref{fig:base_front_n_arcs_time_fc1_solvergreedy}
+$\mathcal{O}(n^2)$ effect. \ref{fig:base_front_n_arcs_time_fc1_greedy}
 graphs the same solution populations shown previously for the MOX fuel cycle as
 a function of the number of arcs in the system. Plotted alongside the data are
 linear curve fits. As can be seen, solution times scale linearly with the number
@@ -134,9 +134,9 @@ cycles.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_greedy.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc1_solvergreedy}
+      \label{fig:base_front_n_arcs_time_fc1_greedy}
       Greedy Solver results for the MOX fuel cycle as the number of arcs
       increases.      
     }
@@ -148,13 +148,13 @@ cycles.
 Interestingly, the CLP solver shows the same scaling behavior as the Greedy
 Solver, and that behavior is also independent of fundamental parameter. The
 number of arcs in the system drives the solution time scaling, as can be seen in
-\Cref{fig:base_front_n_arcs_time_fc0_solverclp,fig:base_front_n_arcs_time_fc1_solverclp,fig:base_front_n_arcs_time_fc2_solverclp}.
+\Cref{fig:base_front_n_arcs_time_fc0_clp,fig:base_front_n_arcs_time_fc1_clp,fig:base_front_n_arcs_time_fc2_clp}.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc0_solverclp.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc0_clp.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc0_solverclp}
+      \label{fig:base_front_n_arcs_time_fc0_clp}
       CLP Solver results for the OT fuel cycle as the number of arcs
       increases.
       }
@@ -163,9 +163,9 @@ number of arcs in the system drives the solution time scaling, as can be seen in
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_solverclp.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_clp.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc1_solverclp}
+      \label{fig:base_front_n_arcs_time_fc1_clp}
       CLP Solver results for the MOX fuel cycle as the number of arcs
       increases.
       }
@@ -174,9 +174,9 @@ number of arcs in the system drives the solution time scaling, as can be seen in
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc2_solverclp.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc2_clp.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc2_solverclp}
+      \label{fig:base_front_n_arcs_time_fc2_clp}
       CLP Solver results for the ThOX fuel cycle as the number of arcs
       increases.
       }
@@ -190,17 +190,17 @@ is expected, for MILP optimization problems are NP-Hard. An artificial, 3-hour
 time limit was provided for CBC-solved instances, and a 1\% ratio-gap
 convergence criteria was applied. In each of the figures below, only instances
 reaching convergence are displayed in order to attempt to ascertain any related
-trends. \Cref{fig:base_front_n_rxtr_time_fc0_solvercbc,fig:base_front_n_rxtr_time_fc1_solvercbc,fig:base_front_n_rxtr_time_fc2_solvercbc}
+trends. \Cref{fig:base_front_n_rxtr_time_fc0_cbc,fig:base_front_n_rxtr_time_fc1_cbc,fig:base_front_n_rxtr_time_fc2_cbc}
 show timing results as a function of the number of reactors in the
-system. \Cref{fig:base_front_n_arcs_time_fc0_solvercbc,fig:base_front_n_arcs_time_fc1_solvercbc,fig:base_front_n_arcs_time_fc2_solvercbc}
+system. \Cref{fig:base_front_n_arcs_time_fc0_cbc,fig:base_front_n_arcs_time_fc1_cbc,fig:base_front_n_arcs_time_fc2_cbc}
 show timing results as a function of the number of arcs in the system. Note that
 in each case below, a log-lin graph is used.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc0_solvercbc.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc0_cbc.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_time_fc0_solvercbc}
+      \label{fig:base_front_n_rxtr_time_fc0_cbc}
       CBC Solver results for the OT fuel cycle as the number of reactors
       increases.
       }
@@ -209,9 +209,9 @@ in each case below, a log-lin graph is used.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc1_solvercbc.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc1_cbc.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_time_fc1_solvercbc}
+      \label{fig:base_front_n_rxtr_time_fc1_cbc}
       CBC Solver results for the MOX fuel cycle as the number of reactors
       increases.
       }
@@ -220,9 +220,9 @@ in each case below, a log-lin graph is used.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc2_solvercbc.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_rxtr_time_fc2_cbc.pdf}
     \caption[]{
-      \label{fig:base_front_n_rxtr_time_fc2_solvercbc}
+      \label{fig:base_front_n_rxtr_time_fc2_cbc}
       CBC Solver results for the ThOX fuel cycle as the number of reactors
       increases.
       }
@@ -231,9 +231,9 @@ in each case below, a log-lin graph is used.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc0_solvercbc.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc0_cbc.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc0_solvercbc}
+      \label{fig:base_front_n_arcs_time_fc0_cbc}
       CBC Solver results for the OT fuel cycle as the number of arcs
       increases.
       }
@@ -242,9 +242,9 @@ in each case below, a log-lin graph is used.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_solvercbc.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_cbc.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc1_solvercbc}
+      \label{fig:base_front_n_arcs_time_fc1_cbc}
       CBC Solver results for the MOX fuel cycle as the number of arcs
       increases.
       }
@@ -253,9 +253,9 @@ in each case below, a log-lin graph is used.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc2_solvercbc.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc2_cbc.pdf}
     \caption[]{
-      \label{fig:base_front_n_arcs_time_fc2_solvercbc}
+      \label{fig:base_front_n_arcs_time_fc2_cbc}
       CBC Solver results for the ThOX fuel cycle as the number of arcs
       increases.
       }
@@ -450,30 +450,30 @@ profound in smaller-sized problems than larger problems.
 \subsection{Back-End Exchanges}
 
 Many of the results of the back-end exchanges mirror those of the front-end
-exchanges. Specifically, 
-
-\subsubsection{Reference Case}
-
-
+exchanges. Therefore, this section will discuss only differences between the two
+cases. The fact that so many similarities exist is striking, because from a
+simulation perspective, back-end exchanges are quite different than front-end
+exchanges. First, a single request is made for each commodity type that can be
+consumed by support facilities. Therefore, many less requests exist in the
+system. Next, the supply of used fuel is known. The total number of arcs in the
+system is similar, however, as can be seen in Figure
+\ref{fig:base_back_n_rxtr_n_arcs_fc1_greedy}. Furthermore, the arc
+population also scales as the square of the number of reactors.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_back_n_rxtr_n_arcs_fc1_solvergreedy.pdf}
+    \includegraphics[width=.7\textwidth]{base_back_n_rxtr_n_arcs_fc1_greedy.pdf}
     \caption[]{
-      \label{fig:base_back_n_rxtr_n_arcs_fc1_solvergreedy}
+      \label{fig:base_back_n_rxtr_n_arcs_fc1_greedy}
       Arc population scaling with the number of reactors with coresponding linear fits.}
   \end{center}
 \end{figure}
 
-\begin{figure}[h!]
-  \begin{center}
-    \includegraphics[width=.7\textwidth]{base_back_n_rxtr_n_constrs_fc1_solvergreedy.pdf}
-    \caption[]{
-      \label{fig:base_back_n_rxtr_n_constrs_fc1_solvergreedy}
-      Constraint population scaling with the number of reactors with
-      corresponding quadratic fits.}
-  \end{center}
-\end{figure}
+\subsubsection{Reference Case}
+
+\paragraph{Greedy Solver}
+
+
 
 
 %% \subsubsection{Instance Parameter Variation}
