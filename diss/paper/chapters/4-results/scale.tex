@@ -278,6 +278,121 @@ much lower for batch-based exchanges.
 
 %% \paragraph{Inventory vs. Processing Constraints}
 
+\subsubsection{Solution Comparison}
+
+Solutions between any two solvers can be compared either in the formulation
+layer or in the exchange layer. Comparison in the formulation layer is achieved
+by comparing objective function values (Equation \ref{eqn:obj_flow}), whereas
+comparison in the exchange layer is achieved by comparing a measure the flows
+and preferences for a given solution (Equation \ref{eqn:sim_flow}). The
+objective function includes the costs and flows on false arcs which can largely
+inflate the objective function value. While the false arcs are necessary for
+guaranteeing a feasible solution, their resulting flows are not taken into
+account when the DRE back-translates from the formulation to the exchange
+layer. Accordingly, a measure of the preference and flow, as shown in Equation
+\ref{eqn:sim_flow}, is used to compare results between solvers. 
+
+
+Comparisons are made between the Greedy solver and the CBC solver when the CBC
+solver, provided the CBC solver converged. Because solutions increase in
+magnitude with increasing problem size, a relative comparison is made, as shown
+in Equation \ref{eqn:sim_flow_compare}. The resulting features are similar
+across fuel cycles. Accordingly, an exmaple for the MOX fuel cycle is shown in
+Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}.
+
+\begin{equation}\label{eqn:sim_flow_compare}
+\frac{z_{\text{sim}, \text{CBC}} - z_{\text{sim}, \text{Greedy}}}
+     {z_{\text{sim}, \text{CBC}}} 
+\end{equation}
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_.pdf}
+    \caption[]{
+      \label{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}
+      Comparisons between relative simulation metrics between the CBC solver and
+      the Greedy solver for MOX fuel cycles. Only converged CBC
+      solutions are compared.  }
+  \end{center}
+\end{figure}
+
+Comparing the results in which there are no location-based preferences (the
+green data points), there is a clear correlation between the number of variables
+and the relative benefit of using CBC. Thus, the Greedy heuristic performs
+better when the number of possible assignments is small. As more variety is
+included in objective coefficient values via location assignment, the spread of
+possible values increases -- the objective function projection on the feasible
+space gains more features. 
+
+Comparing the cases in which there is a coarse location preference (the blue
+data points) and a fine location preference (the red data points), two features
+of interest arise. First, some values are negative, implying that the Greedy
+solver provides a better preference-space solution than the CBC
+solver. Importantly, this is true only in preference space; the CBC always
+performs better in cost space, by definition. The Greedy solver is allowed to
+provide better answers in preference space for two reasons: the problem is
+highly constrained, and false arcs have an arbitrarily high unit cost. CBC will
+converged when the gap between the upper and lower bound on the optimal solution
+reaches a small enough gap, $r^*$, as shown in Equation
+\ref{eqn:ratio_gap}. Further, when a problem is highly constrained, many false
+arcs will be activated, contributing a large amount to the objective
+function. If the choice between two possible flows is sufficiently small, i.e.,
+small relative to $z^*$, then either solution may be returned upon convergence
+depending on the branch-and-bound search path. Thus, good solutions in
+preference-space are somewhat lost in the ``noise'' of cost-space.
+
+\begin{equation}\label{eqn:ratio_gap}
+\frac{z^*_U - z^*_L}
+     {z^*_U} \leq r^*
+\end{equation}
+
+This effect is clearly reduced when the objective choice in cost-space increase,
+as shown in case of fine location preference. In short, the objective function
+has a more pronounced shape in cost-space, reducing the heuristic quality and
+increasing the quality of the CBC solution. Interestingly, as can be seen in the
+lower part of Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_},
+as the number of variables increases (and the quantity associated with each
+variable decreases), CBC performance decreases. Effectively, more false-arc
+quantity can be packed into the solution because there is finer-grained choice
+for assembly requests than for batch requests.
+
+As previously described, the Greedy solver can provide quite good
+preference-space results relative to the CBC solver when an exchange is highly
+constrained \textit{and} when the cost coefficient assigned to false arcs is
+relatively large. This effect can be observed by adjusting the false-arc cost
+coefficient, e.g., as shown in Equation \ref{eqn:small_false_cost}. Two
+exchanges for which the Greedy solver performed better in preference-space were
+chosen to demonstrate the effect. The results are shown in Table
+\ref{tbl:false_arcs}.
+
+\begin{equation}\label{eqn:small_false_cost}
+c_\text{false} = \frac{1}{p_\text{max}} + 1
+\end{equation}
+
+\begin{table}[h!]
+\centering
+\caption{Results from Reducing False-Arc Cost Coefficients.}
+\label{tbl:false_arcs}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Solution ID}} 
+& \multicolumn{2}{c|}{\textbf{Greedy}} 
+& \multicolumn{2}{c|}{\textbf{CBC, Large Cost}} 
+& \multicolumn{2}{c|}{\textbf{CBC, Small Cost}} \\ \cline{2-7} 
+& $z$ (large/small)        & $z_{\text{sim}}$        
+& $z$             & $z_{\text{sim}}$            
+& $z$             & $z_{\text{sim}}$            \\ \hline
+54a5a92ce1ad43e9a713abf114b58a06
+& 5.2e8/1.9e6 & 1.41e5
+& 5.0e8 & 1.38e5
+& 1.8e6 & 1.98e5 \\ \hline
+938d808a4bd84346b54f38fcb4992386
+& 3.97e8/1.40e6 & 1.08e5
+& 3.81e8 & 8.8e4
+& 1.38e6 & 1.12e5 \\ \hline
+\end{tabular}
+\end{table}
+
 \subsubsection{Convergence Criteria}
 
 The CBC solver is highly tuneable. Perhaps the most critical tuneable criteria
@@ -318,19 +433,41 @@ values of 1 and 10\%.
   \end{center}
 \end{figure}
 
-Unsurprisingly, increasing the convergence criteria for smaller problems has a
-greater effect than increasing the convergence criteria for larger probems. It
-is somewhat surprising that the increase from a 1\% relative bound gap to a 10\%
-gap allows full convergence in the smaller case and has no effect in the larger
-case. Users will likely find some relaxation in convergence criteria will
-provide speed ups in solution times, as expected. This result seems to indicate
-that the relaxed convergence criteria will have a much more profound effect on
-smaller problems.
+Increasing the convergence criteria for smaller problems has a greater effect
+than increasing the convergence criteria for larger probems. It is somewhat
+surprising that the increase from a 1\% relative bound gap to a 10\% gap allows
+full convergence in the smaller case and has no effect in the larger case. In
+any case, users will likely find some speed ups in solution times by relaxing
+convergence criteria, and those speed ups will likely be more profound in
+smaller-sized problems than larger problems.
 
 \subsection{Back-End Exchanges}
 
+Many of the results of the back-end exchanges mirror those of the front-end
+exchanges. Specifically, 
+
 \subsubsection{Reference Case}
 
+
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{base_back_n_rxtr_n_arcs_fc1_solvergreedy.pdf}
+    \caption[]{
+      \label{fig:base_back_n_rxtr_n_arcs_fc1_solvergreedy}
+      Arc population scaling with the number of reactors with coresponding linear fits.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{base_back_n_rxtr_n_constrs_fc1_solvergreedy.pdf}
+    \caption[]{
+      \label{fig:base_back_n_rxtr_n_constrs_fc1_solvergreedy}
+      Constraint population scaling with the number of reactors with
+      corresponding quadratic fits.}
+  \end{center}
+\end{figure}
 
 
 %% \subsubsection{Instance Parameter Variation}
