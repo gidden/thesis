@@ -278,7 +278,7 @@ much lower for batch-based exchanges.
 
 %% \paragraph{Inventory vs. Processing Constraints}
 
-\subsubsection{Solution Comparison}
+\subsubsection{Solution Comparison}\label{sec:res:scale:front:soln}
 
 Solutions between any two solvers can be compared either in the formulation
 layer or in the exchange layer. Comparison in the formulation layer is achieved
@@ -363,7 +363,10 @@ relatively large. This effect can be observed by adjusting the false-arc cost
 coefficient, e.g., as shown in Equation \ref{eqn:small_false_cost}. Two
 exchanges for which the Greedy solver performed better in preference-space were
 chosen to demonstrate the effect. The results are shown in Table
-\ref{tbl:false_arcs}.
+\ref{tbl:false_arcs}. Note that it every case, $z$ is smaller for the Greedy
+solver than CBC; however, $z_\text{sim}$ for the Greedy solver is larger than
+the same value with a large CBC false-arc cost and smaller than values related
+to small CBC false-arc costs.
 
 \begin{equation}\label{eqn:small_false_cost}
 c_\text{false} = \frac{1}{p_\text{max}} + 1
@@ -375,7 +378,7 @@ c_\text{false} = \frac{1}{p_\text{max}} + 1
 \label{tbl:false_arcs}
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{\textbf{Solution ID}} 
+\multirow{2}{*}{\textbf{Simulation ID}} 
 & \multicolumn{2}{c|}{\textbf{Greedy}} 
 & \multicolumn{2}{c|}{\textbf{CBC, Large Cost}} 
 & \multicolumn{2}{c|}{\textbf{CBC, Small Cost}} \\ \cline{2-7} 
@@ -395,21 +398,22 @@ c_\text{false} = \frac{1}{p_\text{max}} + 1
 
 \subsubsection{Convergence Criteria}
 
-The CBC solver is highly tuneable. Perhaps the most critical tuneable criteria
-affecting the balance between solution quality and solution time is the
-convergence criteria. It is not clear to what degree solution quality will
-matter for users of Cyclus. Accordingly, a short exploratory experiment was
-conducted to examine to what degree convergence criteria affects solution time.
+The CBC solver, and MILP solvers in general, is highly tuneable. Perhaps the
+most critical tuneable criteria affecting the balance between solution quality
+and solution time is the convergence criteria. It is not clear to what degree
+solution quality will matter for users of Cyclus. Accordingly, a short
+exploratory experiment was conducted to examine to what degree convergence
+criteria affects solution time.
 
 CBC uses either an absolute or relative upper and lower-bound gap tolerance as
-possible convergence criteria. This experiment uses the relative gap, termed
-\textit{ratio gap} in CBC parlance. For each of the 18 combinations of
-fundamental parameters, 10 instances of exchanges were executed, spanning a
-reactor population range of 10 to 500. Figure \ref{fig:hist_front_rxtr_0}
-displays the results for runs with reactors trading full batches for ratio gap
-values of 0.1, 1, and 10\%. Figure \ref{fig:hist_front_rxtr_0} displays the
-results for runs with reactors trading individual assemblies for ratio gap
-values of 1 and 10\%.
+possible convergence criteria. All results discussed use the relative gap,
+termed \textit{ratio gap} in CBC parlance, as shown in Equation
+\ref{eqn:ratio_gap}. For each of the 18 combinations of fundamental parameters,
+10 instances of exchanges were executed, spanning a reactor population range of
+10 to 500. Figure \ref{fig:hist_front_rxtr_0} displays the results for runs with
+reactors trading full batches for ratio gap values of 0.1, 1, and 10\%. Figure
+\ref{fig:hist_front_rxtr_0} displays the results for runs with reactors trading
+individual assemblies for ratio gap values of 1 and 10\%.
 
 \begin{figure}[h!]
   \begin{center}
@@ -436,10 +440,12 @@ values of 1 and 10\%.
 Increasing the convergence criteria for smaller problems has a greater effect
 than increasing the convergence criteria for larger probems. It is somewhat
 surprising that the increase from a 1\% relative bound gap to a 10\% gap allows
-full convergence in the smaller case and has no effect in the larger case. In
-any case, users will likely find some speed ups in solution times by relaxing
-convergence criteria, and those speed ups will likely be more profound in
-smaller-sized problems than larger problems.
+full convergence in the smaller case and has no effect in the larger
+case. Considering the discussion in \S \ref{sec:res:scale:front:soln}, it is
+likely that the large convergence effect is due increasing the ``noise'' effect
+of actual arcs. However, users will likely find some speed ups in solution times
+by relaxing convergence criteria, and those speed ups will likely be more
+profound in smaller-sized problems than larger problems.
 
 \subsection{Back-End Exchanges}
 
