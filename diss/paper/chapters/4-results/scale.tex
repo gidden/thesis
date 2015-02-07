@@ -473,7 +473,48 @@ population also scales as the square of the number of reactors.
 
 \paragraph{Greedy Solver}
 
+The Greedy solver performs quite similarly to the front-end case. Its
+performance is again linear in the number of arcs. An example of the MOX fuel
+cycle is shown in Figure \ref{base_back_n_arcs_time_fc1_greedy}. As can be seen,
+the linear coefficient in back-end cases is approximately twice the coefficient
+of front-end cases. This observation holds irrspective of fuel cycle.
 
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{base_back_n_arcs_time_fc1_greedy.pdf}
+    \caption[]{
+      \label{fig:base_back_n_arcs_time_fc1_greedy}
+      Greedy Solver results for the MOX fuel cycle as the number of arcs
+      increases.      
+    }
+  \end{center}
+\end{figure}
+
+\paragraph{CLP Solver}
+
+The CLP solver also performs similarly to the front-end case, as shown in Figure
+\ref{fig:base_back_n_arcs_time_fc1_clp}. While the batch-based cases show linear
+behavior with a slightly larger linear coefficient, the assembly-based cases
+include outliers that are considerably less performant. Additionally, it is
+interesting that as the fidelity of objective coefficients increases, general
+solution time increases. This effectively reduces problem degeneracy, increasing
+the possible objective function values.
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{base_back_n_arcs_time_fc1_clp.pdf}
+    \caption[]{
+      \label{fig:base_back_n_arcs_time_fc1_clp}
+      Clp Solver results for the MOX fuel cycle as the number of arcs
+      increases.      
+    }
+  \end{center}
+\end{figure}
+
+\paragraph{CBC Solver}
+ 
+
+\subsubsection{Solution Comparison}\label{sec:res:scale:front:soln}
 
 
 %% \subsubsection{Instance Parameter Variation}
