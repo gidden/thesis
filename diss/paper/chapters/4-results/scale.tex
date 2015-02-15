@@ -43,7 +43,7 @@ $[5, 100]$ and a step size of 25 was used from $(100, 500]$. In mathematical
   programming, the number of variables and number of constraints in a problem
   are measures of problem scaling. In the NFCTP, constraints are provided by
   trading entities, and the number of variables is equal to the number of arcs
-  in a given exchange graph. Accordingly, understanding how each quantiy scales
+  in a given exchange graph. Accordingly, understanding how each quantity scales
   with the number of reactors is of chief import.
 
 Figure \ref{fig:base_front_n_rxtr_n_arcs_fc1_greedy} shows how the number
@@ -67,7 +67,7 @@ individual assemblies are requested rather than a single batch.
     \includegraphics[width=.7\textwidth]{base_front_n_rxtr_n_arcs_fc1_greedy.pdf}
     \caption[]{
       \label{fig:base_front_n_rxtr_n_arcs_fc1_greedy}
-      Arc population scaling with the number of reactors with coresponding
+      Arc population scaling with the number of reactors with corresponding
       quadratic fits.}
   \end{center}
 \end{figure}
@@ -285,7 +285,7 @@ Comparisons are made between the Greedy solver and the CBC solver when the CBC
 solver, provided the CBC solver converged. Because solutions increase in
 magnitude with increasing problem size, a relative comparison is made, as shown
 in Equation \ref{eqn:sim_flow_compare}. The resulting features are similar
-across fuel cycles. Accordingly, an exmaple for the MOX fuel cycle is shown in
+across fuel cycles. Accordingly, an example for the MOX fuel cycle is shown in
 Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}.
 
 \begin{equation}\label{eqn:sim_flow_compare}
@@ -312,7 +312,7 @@ coefficient values via location assignment, the spread of possible values
 increases. In other words, the objective function projection on the feasible
 space gains more features.
 
-Two features of interest arise when omparing the cases in which there is a
+Two features of interest arise when comparing the cases in which there is a
 coarse location preference (blue) and a fine location preference (red). First,
 some values are negative, implying that the Greedy solver provides a better
 preference-space solution than the CBC solver. Importantly, this is true only in
@@ -419,7 +419,7 @@ individual assemblies for ratio gap values of 1 and 10\%.
 \end{figure}
 
 Increasing the convergence criteria for smaller problems has a greater effect
-than increasing the convergence criteria for larger probems. It is somewhat
+than increasing the convergence criteria for larger problems. It is somewhat
 surprising that the increase from a 1\% relative bound gap to a 10\% gap allows
 full convergence in the smaller case and has no effect in the larger
 case. Considering the discussion in \S \ref{sec:res:scale:front:soln}, it is
@@ -446,7 +446,7 @@ population also scales as the square of the number of reactors.
     \includegraphics[width=.7\textwidth]{base_back_n_rxtr_n_arcs_fc1_greedy.pdf}
     \caption[]{
       \label{fig:base_back_n_rxtr_n_arcs_fc1_greedy}
-      Arc population scaling with the number of reactors with coresponding linear fits.}
+      Arc population scaling with the number of reactors with corresponding linear fits.}
   \end{center}
 \end{figure}
 
@@ -458,7 +458,7 @@ The Greedy solver performs quite similarly to the front-end case. Its
 performance is again linear in the number of arcs. An example of the MOX fuel
 cycle is shown in Figure \ref{base_back_n_arcs_time_fc1_greedy}. As can be seen,
 the linear coefficient in back-end cases is approximately twice the coefficient
-of front-end cases. This observation holds irrspective of fuel cycle.
+of front-end cases. This observation holds irrespective of fuel cycle.
 
 \begin{figure}[h!]
   \begin{center}
