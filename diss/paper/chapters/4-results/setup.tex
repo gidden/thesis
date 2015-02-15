@@ -154,7 +154,11 @@ $t_s$, and objective function value $z$,
 z = \sum_{(i, j) \in A} c_{i, j} x_{i, j}.
 \end{equation}
 
-However, while the objective function is minimized in the NFCTP formulations, it
+For any given instance, the optimal objective value, $z^*$, is associated with a
+set of flows, $x^*$. By definition, an optimal solution will have a lower or
+equivalent system cost than any feasible solution.
+
+While the objective function is minimized in the NFCTP formulations, it
 necessarily includes flow along false arcs. Considering all arcs that exist both
 in the formulation and the simulation, $A_{\text{sim}}$, another valid
 comparison is dot product of preference and flow vectors. This value can be
@@ -164,36 +168,44 @@ considered the ``simulation objective'', i.e.,
 z_{\text{sim}} = \sum_{(i, j) \in A_{\text{sim}}} p_{i, j} x_{i, j}.
 \end{equation}
 
-The preference vector, $\vec{p}$, can be divided into its two components,
-$\vec{p} = \vec{p}_c + \vec{p}_l$. If $f_{\text{loc}}$ is zero, then, by
-definition, $\vec{p}_l = 0$, otherwise, it is comprised of non-zero
-components. $\vec{p}_c$, however, is invariant under all values of
-$f_{\text{loc}}$. Therefore, the commodity contribution of the simulation
-objective, shown in Equation \ref{eqn:cpref_flow} is also an interesting
-metric. It allows for direct investigation of the effect of adding
-location-based preferences to the system. Furthermore, comparisons can be made
-between systems with coarse and fine location-based preferences using this
-metric.
+A similar guarantee cannot be provided for $z^*_{\text{sim}}$. That is, while
+$z^* \leq z$ is true in cost space, $z^*_{\text{sim}} \geq z_{\text{sim}}$ is
+\textit{not} necessarily true.
 
-\begin{equation}\label{eqn:cpref_flow}
-z^c_{\text{sim}} = \sum_{(i, j) \in A_{\text{sim}}} p^c_{i, j} x_{i, j}.
-\end{equation}
+%% The preference vector, $\vec{p}$, can be divided into its two components,
+%% $\vec{p} = \vec{p}_c + \vec{p}_l$. If $f_{\text{loc}}$ is zero, then, by
+%% definition, $\vec{p}_l = 0$, otherwise, it is comprised of non-zero
+%% components. $\vec{p}_c$, however, is invariant under all values of
+%% $f_{\text{loc}}$. Therefore, the commodity contribution of the simulation
+%% objective, shown in Equation \ref{eqn:cpref_flow} is also an interesting
+%% metric. It allows for direct investigation of the effect of adding
+%% location-based preferences to the system. Furthermore, comparisons can be made
+%% between systems with coarse and fine location-based preferences using this
+%% metric.
+
+%% \begin{equation}\label{eqn:cpref_flow}
+%% z^c_{\text{sim}} = \sum_{(i, j) \in A_{\text{sim}}} p^c_{i, j} x_{i, j}.
+%% \end{equation}
 
 Each of the above metrics compare aggregate values between solutions. That is,
 comparisons are being made at a macroscopic scope. For any two solutions to
 identical problem instances, though, more detailed comparisons can be made. The
 individual flow values, and values derived therefrom, can be compared directly
-using a well-known normative measure. In order to compare values across problem
-sizes, the root mean square (RMS), related to the $L_2$ norm, is used to measure
-the microscopic differences between two solution values. The RMS analysis can be
-applied to any flow-related metric for two solutions, $\vec{x}_1$ and
-$\vec{x}_2$. Equation \ref{eqn:rms_flow} shows the equation for the flow RMS,
-and Equation \ref{eqn:rms_pref} displays the commodity-preference flow RMS.
+using a well-known normative measure. One example is the root mean square (RMS)
+of constitutents of the objective function, shown in Equation
+\ref{eqn:rms_flow}.
 
 \begin{equation}\label{eqn:rms_flow}
-RMS_{\text{flow}} = \sqrt{ \frac{1}{N} \sum_i (x_{i, 1} - x_{i, 2}) ^2 }
+RMS_{\text{flow}} = \sqrt{ \frac{1}{N} \sum_i c_i^2 (x_{i, 1} - x_{i, 2}) ^2 }
 \end{equation}
 
-\begin{equation}\label{eqn:rms_pref}
-RMS_{\text{pref}} = \sqrt{ \frac{1}{N} \sum_i {p_i^c}^2 (x_{i, 1} - x_{i, 2})^2 }
-\end{equation}
+While such an analysis is common in the realm of nuclear engineering, it is less
+appropriate for comparing solutions to optimization problems. An instance of an
+optimization problem may be \textit{degenerate}, i.e., it may have multiple
+equivalent optimal solutions. Consider a two-arc system with arc costs of unity
+and a total flow constraint of unity. A spectrum equivalent solutions exist
+between $(0, 1)$ and $(1, 0)$. When comparing any solution, the difference in
+objective function value is, necessarily, zero. However, using an RMS analysis,
+the solutions of $(0, 1)$ and $(1, 0)$ would report the largest possible
+error. Therefore, only metrics that involve aggregate measures of solutions are
+used in the following analysis.
