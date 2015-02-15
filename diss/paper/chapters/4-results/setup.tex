@@ -54,21 +54,32 @@ t_s = t_f - t_i
   \end{center}
 \end{figure}
 
-\TODO{Complexity of Greedy Solver, Translation}
+The Greedy Heuristic has $\mathcal{O}(N_A)$ scaling, where $N_A$ is the number
+of arcs in the system. In the worst case, i.e., in highly constrained systems,
+every arc will be processed. As both CLP and CBC solve NP-Hard problems, there
+is no \textit{a priori} expected performance behavior.
 
 \subsection{Parameter Variation}
 
 \S \ref{method:setup:params} describes the parameters defining both Front and
 Back-End exchanges. Each combination of fundamental parameters represents a
 significant modeling assumption. Therefore, every experiment is conducted for
-every combination of fundamental parameters: eighteen combinations in total. For
-exchange types, a reference instance parameter vector is chosen. Experiments,
-then, are conducted by perturbing instance parameter values from the reference
-vector and comparing the output between a reference case and a perturbed case.
+every combination of fundamental parameters, comprising eighteen combinations in
+total. For exchange type, a reference instance parameter vector is
+chosen. Experiments, then, are conducted by using either the reference vector or
+perturbing instance parameter values from the reference vector and comparing
+output.
 
-\subsubsection{Front-End Reference Instance Parameters}
-
-\TODO{Description of assumptions for each parameter}
+Reference instance parameter vectors for front and back-end exchanges are shown
+in Tables \ref{tbl:front_ref_params} and \ref{tbl:back_ref_params},
+respectively. Reactor population and core composition values were chosen in line
+with what a user might reasonably find in a simulation, such as a 75\%-25\%
+thermal-to-fast reactor split and 33\% possible MOX-fuel residency in thermal
+reactors. Support facility population values were chosen to model a ``worst
+case'' simulation. The notion of a ``worst case'' simulation is defined as one
+in which supporting facilities' services do not fully meet the demand of the
+reactor population. Therefore, the resulting exchanges are highly constrained,
+resulting in ``worst case'' behavior for the Greedy Heuristic. 
 
 \begin{table}[h!]
 \centering
@@ -99,11 +110,6 @@ $r_{inv, proc}$   & 1
 \end{tabular}
 \end{table}
 
-
-\subsubsection{Back-End Reference Instance Parameters}
-
-\TODO{Description of assumptions for each parameter}
-
 \begin{table}[h!]
 \centering
 \caption{Reference Values for Back-End Exchange Instance Parameters.}
@@ -129,6 +135,12 @@ $r_{s, \text{FMOX}}$ & 0.2
 $r_{s, \text{FThOX}}$ & 0.2
 \\ \hline
 $r_{s, \text{Repo}}$   & 0.2
+\\ \hline
+$d_{\text{Th}}$   & {UOX: $\frac{2}{3}$, TMOX: $\frac{1}{3}$, FMOX: 0}
+\\ \hline
+$d_{\text{FMOX}}$   & {UOX: $\frac{1}{4}$, TMOX: 0, FMOX: $\frac{3}{4}$, FThOX: 0}
+\\ \hline
+$d_{\text{FThOX}}$   & {UOX: $\frac{1}{4}$, TMOX: 0, FMOX: 0, FThOX: $\frac{3}{4}$}
 \\ \hline
 \end{tabular}
 \end{table}
