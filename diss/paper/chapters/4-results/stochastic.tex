@@ -1,28 +1,324 @@
 
 \section{Stochastic Campaign}\label{results:stochastic}
 
+The generation of exchanges is designed as a stochastic process. Each reactor is
+assigned a target enrichment per consumable commodity in a given range. Further,
+each facility is assigned a location value. Enrichment stochasticity results in
+perturbed constraint matrix coefficients, and location stochasticity results in
+perturbed objective coefficient if $f_{\text{loc}}$ is set to include
+location-based preference.
+
+In \S \ref{results:scale}, a single exchange instance was investigated for each
+solver as problem size scale was investigated. While clear patterns were
+inferred as a result of the study, stochastic effects were left
+unexplored. Accordingly, a second study was undertaken in order to examine how
+randomness in instance generation affects both solution values and execution
+time.
+
+For this study, instances are generated for a single parameter vector. It is
+best to compare converged Cbc solutions for confidence in the resulting
+objective value and in order to run all desired instances in a reasonable amount
+of time. Accordingly, the total reactor population was set at 65 based on the
+scaling study results. Specifically, this is approximately the largest reactor
+population for which all configurations of parameters converged (see Figure
+\ref{fig:base_front_n_rxtr_time_fc0_cbc}). For each combination of fundamental
+parameters, 1000 instances were generated and executed by each solver for both
+front and back-end exchanges.
+
+In both sections, cumulative observations are presented. Figures are presented
+in two panes for a given fuel cycle, with low-fidelity reactor instances on the
+left and high-fidelity reactor instances on the right. In each pane, the results
+for all three location fidelity parameters are shown.
+
 \subsection{Front-End Exchanges}
-% talk about base parameter vector
 
 \subsubsection{Fundamental Parameter Variation}
 
-\subsubsection{Instance Parameter Variation}
+The Greedy Solver and CLP both proved to have relatively stable solution
+times. The timing results are similar across fuel cycles. Accordingly, MOX fuel
+cycle results are shown for the Greedy Solver in Figure
+\ref{fig:1k_avg_front_time_fc1_greedy}, and CLP results are shown in Figure
+\ref{fig:1k_avg_front_time_fc1_clp}. Apart from solution time stability, the
+primary observation for both the CLP and Greedy solvers is related to location
+fidelity effects. Although there is a ranking in average solution time by
+location parameter \textit{for a given collection of fundamental parameters},
+that ranking changes for each collection of parameters, as can be seen in the
+presented figures.
 
-\paragraph{Location-to-Commodity Importance Ratio}
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_front_time_fc1_greedy.pdf}
+    \caption[]{
+      \label{fig:1k_avg_front_time_fc1_greedy}
+      Caption.}
+  \end{center}
+\end{figure}
 
-\paragraph{Number of Reactors}
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_front_time_fc1_clp.pdf}
+    \caption[]{
+      \label{fig:1k_avg_front_time_fc1_clp}
+      Caption.}
+  \end{center}
+\end{figure}
 
-\paragraph{Number of Support Facilities}
+The Cbc solver showed much less stability in solution times. Further, behavior
+was found to be different for each fuel
+cycle. \Cref{fig:1k_avg_front_time_fc0_cbc,fig:1k_avg_front_time_fc1_cbc,fig:1k_avg_front_time_fc2_cbc}
+show the timing results for the OT, MOX, and ThOX fuel cycles,
+respectively. 
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_front_time_fc0_cbc.pdf}
+    \caption[]{
+      \label{fig:1k_avg_front_time_fc0_cbc}
+      Caption.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_front_time_fc1_cbc.pdf}
+    \caption[]{
+      \label{fig:1k_avg_front_time_fc1_cbc}
+      Caption.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_front_time_fc2_cbc.pdf}
+    \caption[]{
+      \label{fig:1k_avg_front_time_fc2_cbc}
+      Caption.}
+  \end{center}
+\end{figure}
+
+Given the variety in stability by fuel cycle, viewing the underlying timing
+distributions can also provide insight. Accordingly, Figure
+\ref{fig:1k_hist_front_rx0} shows all timing distributions for low-fidelity
+reactor models, and Figure \ref{fig:1k_hist_front_rx1} displays the
+corresponding results for high-fidelity models.
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_hist_front_rx0.pdf}
+    \caption[]{
+      \label{fig:1k_hist_front_rx0}
+      Caption.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_hist_front_rx1.pdf}
+    \caption[]{
+      \label{fig:1k_hist_front_rx1}
+      Caption.}
+  \end{center}
+\end{figure}
+
+A number of interesting features exist in the figures related to the Cbc timing
+study. Significantly, reactors in batch-mode have poor convergence for
+once-through cycles, regardless of location parameter. This reflects
+observations in the scaling study. For the remaining fuel cycles, outliers
+consistently are observed for low-fidelity reactor models, also regardless of
+location parameter. This effect is seen in the cumulative observation figures
+most easily. Each occurrence of a timing outlier causes a large jump in the
+observation. 
+
+Conversely, high-fidelity reactor instances were found to almost always
+converge. Outliers were found to dominate the once-through fuel cycle
+results. Again, this behavior results in choppy cumulative observations. Both
+the MOX and ThOX fuel cycles were shown to be comparatively stable. Further,
+their solution time distributions proved to have some structure. It is not clear
+why these combinations of fundamental parameters result in such structure.
+
+\subsubsection{Simulation Objective vs. Solution Time}
+
+The trade off of choosing to use a full-fledged optimization solver over a
+heuristic is one between solution fidelity and solution time. Figure
+\ref{fig:1k_compare_front_pref_flow} shows a comparison between the CBC and
+Greedy solvers. For each instance, relative simulation-objective values were
+computed as shown in Equation \ref{eqn:sim_flow_compare}. Similarly, relative
+solution times were computed. The average result found for high-fidelity reactor
+instances solved with Cbc was taken as a reference point, plotted at the origin
+in Figure \ref{fig:1k_compare_front_pref_flow}. Values are plotted for each
+combination of fundamental parameters. A data point's position along the x-axis
+indicates the average deviation from the high-fidelity model's simulation
+objective. The y-axis position indicates the average relative time difference.
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_compare_front_pref_flow.pdf}
+    \caption[]{
+      \label{fig:1k_compare_front_pref_flow}
+      Other values in OT not shown, much higher.}
+  \end{center}
+\end{figure}
+
+In most every case, the results are as expected. The high-fidelity, Cbc-based
+solution provides a better simulation objective for a more expensive time. In
+general, the Greedy always performs much faster than Cbc, as expected from a
+heuristic. Except for the Once-through case, all Cbc solves require similar
+times, and the highest fidelity simulation provides the answer with the highest
+objective measure. However, as was seen in the scalability study, the Cbc does
+not always provide a better simulation-based metric when large costs are
+concerned. Interestingly, the coarse-location fidelity Greedy solver results
+provided a better average simulation objective.
+
+\subsubsection{False Arc Cost Effects}
+
+As was shown for previously, providing a small pseudo cost results in a higher
+simulation-based objective metric. For example, Figure
+\ref{fig:1k_compare_front_pref_flow} displayed results in which the Greedy
+solver provided a higher average simulation-based metric than the Cbc
+solver. Figure \ref{fig:cost_avg_front_pref_flow_fc1_} displays the underlying
+data with additional data for small-cost Cbc solves. As can be seen, in the
+lower center pane, the average preference-flow metric increases in a
+Cbc-high-cost, Greedy, Cbc-low-cost order.
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{cost_avg_front_pref_flow_fc1_.pdf}
+    \caption[]{
+      \label{fig:cost_avg_front_pref_flow_fc1_}
+      Caption.}
+  \end{center}
+\end{figure}
+
+%% \subsubsection{Preference Conditioning Effects}
+
+%% The relative weight provided to location over commodity preference does not
+%% affect solution time.
+
+%% \begin{figure}[h!]
+%%   \begin{center}
+%%     \includegraphics[width=.7\textwidth]{rlc_avg_front_time_fc1_cbc.pdf}
+%%     \caption[]{
+%%       \label{fig:rlc_avg_front_time_fc1_cbc}
+%%       Caption.}
+%%   \end{center}
+%% \end{figure}
 
 \subsection{Back-End Exchanges}
-% talk about base parameter vector
+
+As with the scalability study, back-end exchanges perform quite similarly to
+front-end exchanges. Accordingly, basic results are reviewed, and results that
+lead to recommendations are discussed in more detail.
 
 \subsubsection{Fundamental Parameter Variation}
 
-\subsubsection{Instance Parameter Variation}
+Both the Greedy and Clp solvers again proved to have relatively stable solution
+times. An example of the Greedy solver observed solution times for the MOX fuel
+cycle is shown in Figure \ref{fig:1k_avg_back_time_fc1_greedy}. Clp results are
+shown in Figure \ref{fig:1k_avg_back_time_fc1_clp}. 
 
-\paragraph{Location-to-Commodity Importance Ratio}
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_back_time_fc1_greedy.pdf}
+    \caption[]{
+      \label{fig:1k_avg_back_time_fc1_greedy}
+      Caption.}
+  \end{center}
+\end{figure}
 
-\paragraph{Number of Reactors}
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_back_time_fc1_clp.pdf}
+    \caption[]{
+      \label{fig:1k_avg_back_time_fc1_clp}
+      Caption.}
+  \end{center}
+\end{figure}
 
-\paragraph{Number of Support Facilities}
+The Clp solution time required for high-fidelity reactor models with no location
+preference was found to be significantly higher than for instances which
+included a location preference. A similar trend was found for Cbc solutions, as
+shown in \Cref{fig:1k_avg_back_time_fc1_cbc,fig:1k_avg_back_time_fc2_cbc} for
+the MOX and ThOX fuel cycles, respectively. While the timing discrepancy exists
+in low-fidelity reactor models in the Cbc case, rather than high-fidelity, it is
+also much more pronounced. These results indicate that solution times, in
+certain instances, can be significantly reduced if solvers can better
+differentiate between arcs based on objective coefficients. Therefore, a
+possible speed-up strategy can include ``salting'' the preference vector by
+adding a random $\delta_p$ to each entry.
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_back_time_fc1_cbc.pdf}
+    \caption[]{
+      \label{fig:1k_avg_back_time_fc1_cbc}
+      Caption.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{1k_avg_back_time_fc2_cbc.pdf}
+    \caption[]{
+      \label{fig:2k_avg_back_time_fc2_cbc}
+      Caption.}
+  \end{center}
+\end{figure}
+
+%% \begin{figure}[h!]
+%%   \begin{center}
+%%     \includegraphics[width=.7\textwidth]{1k_hist_back_rx0.pdf}
+%%     \caption[]{
+%%       \label{fig:1k_hist_back_rx0}
+%%       Caption.}
+%%   \end{center}
+%% \end{figure}
+
+%% \begin{figure}[h!]
+%%   \begin{center}
+%%     \includegraphics[width=.7\textwidth]{1k_hist_back_rx1.pdf}
+%%     \caption[]{
+%%       \label{fig:1k_hist_back_rx1}
+%%       Caption.}
+%%   \end{center}
+%% \end{figure}
+
+%% In the back-end case, lower-fidelity reactor models provide better
+%% simulation-based metrics when using the Cbc solver. The higher-fidelity models
+%% still maintain a better objective in cost space. This behavior is not reversed
+%% for all fuel cycles when moving to a lower artificial-arc cost, suggesting that
+%% the model is sensitive to the preference-to-cost translation function.
+
+%% \begin{figure}[h!]
+%%   \begin{center}
+%%     \includegraphics[width=.7\textwidth]{1k_compare_back_pref_flow.pdf}
+%%     \caption[]{
+%%       \label{fig:1k_compare_back_pref_flow}
+%%       Caption.}
+%%   \end{center}
+%% \end{figure}
+
+%% \subsubsection{Preference Conditioning Effects}
+
+%% In some cases, having a small or large location-based preference showed
+%% significant performance effects. 
+
+%% \begin{figure}[h!]
+%%   \begin{center}
+%%     \includegraphics[width=.7\textwidth]{rlc_avg_back_time_fc1_cbc.pdf}
+%%     \caption[]{
+%%       \label{fig:rlc_avg_back_time_fc1_cbc}
+%%       Caption.}
+%%   \end{center}
+%% \end{figure}
+
+%% With a small location preference value, preference flows are effectively unaltered.
+
+%% \begin{figure}[h!]
+%%   \begin{center}
+%%     \includegraphics[width=.7\textwidth]{rlc_avg_back_pref_flow_fc1_cbc.pdf}
+%%     \caption[]{
+%%       \label{fig:rlc_avg_back_pref_flow_fc1_cbc}
+%%       Caption.}
+%%   \end{center}
+%% \end{figure}
+
