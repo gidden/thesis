@@ -1,22 +1,90 @@
 \chapter{Summary}\label{ch:summary}
 
+This body of work sought to enhance the state of the art in dynamic fuel cycle
+simulation. Prior to this effort, most decision making related to a given
+simulation was made by a human analyst prior to simulation execution. Further,
+even \textit{ex situ}, human-based, decision making was limited to collections
+of entities and macroscopic descriptions of commodities. Both of these effects
+resulted simulation platforms lacking either physics fidelity, entity relation
+fidelity, or both.
+
+The \Cyclus dynamic fuel cycle simulator and this work are inextricably
+tied. While many of the concepts and methods described herein may be applied to
+any implementation of a non-trivial supply-demand model, the development of this
+work was spurred by the need for such methods implemented in \Cyclus. 
+
+Upon its inception, \Cyclus had a variety of goals. An analyst's ability to
+choose the level of physical, social, and economic fidelity was of chief
+concern. This behavior is supported in \Cyclus through a plug-in framework of
+various archetypes. Thus, an analyst could use a high-fidelity reactor archetype
+or a low-fidelity archetype, for instance. An equally important concept of
+\Cyclus was the ability model a variety of fuel cycles with similar
+archetypes. Therefore, the \Cyclus kernel was required to abstract away
+fuel-cycle specific behavior. Finally, the developers of \Cyclus also desired to
+model regional interaction mechanisms, such as tariffs or other international
+trade instruments. In short, it was required to solve the \textit{general case}
+of nuclear fuel cycle simulation.
+
 \section{Statement of Work}
 
-At the outset of this body of work, the state of the art in dynamic fuel cycle
-simulation was insufficient to meet the stated modeling needs of expert
-users. 
+The goal of this work was, chiefly, to design, implement, and analyze a
+highly-flexible, physics and economics-informed simulation engine. The engine
+was split into two primary conceptual categories: entity deployment and entity
+interaction. Developing a sophisticated entity interaction mechanism was the
+chief focus of the majority of the presented \textit{oeuvre}.
 
-The development of \Cyclus was driven by 
+Significant design constraints were placed on the design of a entity interaction
+mechanism. First, it must support arbitrary physics and chemical constraints, as
+well as general supply-chain constraints, such as inventory and processing
+constraints. Further, it must model the competition of resources among entities
+for which demand and supply of resources may be fungible. Finally, arbitrary
+social phenomenon must be able to be translated to the interaction
+framework. The resulting interaction mechanism, termed the Dynamic Resource
+Exchange (DRE), was informed chiefly from the fields of supply-chain management,
+agent-based modeling, and mathematical programming.
 
-System dynamics is most common modeling foundation found in simulators
-developed in the United States. 
+The DRE allows agents to inform both system supply and demand of resources
+through a request-bid framework. Physics fidelity is provided to agents in this
+framework by utilizing fully specified \texttt{Resource} objects. For example,
+nuclear fuel demand can be specified directly by an ideal isotopic vector in a
+\texttt{Material} object. Once supply and demand is known, social interaction
+models can be applied to affect resource flow-driving mechanisms. For example, a
+tariff can be modeled by uniformly reducing preferences of transactions between
+agents outside of a given \texttt{Region}. Presently, a cardinal preference
+model is used as the flow-driving mechanism.
 
-% statement of goals
+The DRE is comprised of three layers: a resource layers, with which agents
+interact, an exchange layer, and a formulation layer. Supply, demand, and
+preferences are defined in the resource layer, for a specific type of
+\texttt{Resource} object. The exchange layer provides a general resource
+exchange representation, irrespective of a specific object type. The
+representation is comprised of a bipartite graph of supply and demand nodes,
+supply and demand constraints, and a measure of preference for each proposed
+connection between nodes. The DRE can be solved either in the exchange layer or
+by translating the exchange into a minimum-cost, network-flow problem, resulting
+in the formulation layer. Translation to LPs and MILPs are both supported, where
+MILPs are required if entities require individual, quantized resources. Such a
+case arises when one would like to model individual reactor assemblies.
 
-% summary of each ch
+After the DRE framework was designed and implemented, it was tested and
+analyzed. The full \Cyclus simulator is still nascent with respect to
+full-featured archetypes that would utilize DRE-specific features. Therefore,
+instances of resource exchanges were required to be generated. The generation of
+instances is based on a parameter vector, comprised of fundamental and instance
+parameters. Fundamental parameters include which fuel cycle is being modeled and
+whether reactors request single batches of fuel or a collection of individual
+assemblies of fuel. Instance parameters include the number of reactors being
+modeled and the number of support facilities being modeled, among many
+others. Exchanges representing the front-end and back-end of the nuclear fuel
+cycle were generated separately.
+
+Generated exchanges were solved with the Greedy Heuristic in the exchange layer
+and the COIN-OR Clp and Cbc solvers in the formulation layer. 
 
 % user recommendations
 
 \section{Suggested Future Work}
+
+better preference determination of proposed supply (function callback)
 
 \section{Closing Remarks}
