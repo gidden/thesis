@@ -130,11 +130,11 @@ prove a reasonable speed up strategy for some exchange structures.
 
 \subsection{Recommendations}
 
-Through the development of the DRE, users may now apply physical, economic, and
-social models to NFC simulation. The choice of solver will largely depend on the
-fidelity of the associated models and underlying data. The Greedy solver will
-always provide a feasible solution to the given exchange instance, applying any
-physical, chemical, or supply-chain constraints. Therefore, if a user has a
+Because of the development of the DRE, users may now apply physical, economic,
+and social models to NFC simulation. The choice of solver will largely depend on
+the fidelity of the associated models and underlying data. The Greedy solver
+will always provide a feasible solution to the given exchange instance, applying
+any physical, chemical, or supply-chain constraints. Therefore, if a user has a
 low-fidelity economic or social model, then the Greedy solver will likely meet
 the users needs.
 
@@ -162,10 +162,71 @@ implemented, users may find significant speed ups through its use.
 
 \section{Suggested Future Work}
 
-better preference determination of proposed supply (function callback)
+Immediate future work involves implementing the solver options and related
+features that have been used in this work. To date, the \Cyclus code base
+includes only the option to utilize the Greedy solver. The Cbc and Clp solver
+options have been implemented for this work privately, and should be
+straightforward to incorporate more broadly. Further, exchange partitioning was
+a fundamental feature utilized in this work that has not yet been implemented in
+\Cyclus. Finally, the preference ``salting'' feature and related user-facing
+interface will be implemented as well.
 
-different greedy solvers based on eco/soc models
+This work was motivated chiefly by a noted lack of features present in other
+fuel cycle simulators. The DRE mechanism supports many identified features,
+namely competition among consumers, constrained supply, and the inclusion of a
+framework that supports regional (e.g., geographic) effects. In order to make
+use the features made available by the DRE, however, \Cyclus appropriate
+archetypes that must be implemented. Archetype developers are already
+implementing models that make use of the ability to model constrained supply for
+work related to the DOE's Fuel Cycle Options (FCO) campaign. Further, the IAEA
+is known to support the DESAE simulator \cite{} in order to use its minimal
+regional-interaction mechanisms. Implementing the appropriate archetypes to
+extend this use case is a clear use-case of potential future work that will
+immediately impact users. Making use of consumer and supplier competition,
+although interesting, is less straightforward. Adequate background work will be
+required in order to develop sufficient models that support both economic and
+nuclear engineering effects.
 
-implementing other solvers
+The DRE implements a one-phase, consumer-based, preference-setting interaction
+mechanism. Users of the method have already expressed interest in an $N$-phase
+capability, in which suppliers could effectively investigate the consumer's
+preference function with respect to their available supply of resources. Such
+capability can be provided by encapsulating and exposing the preference-setting
+interface. However, delineating the interface between manager agents, will
+require sufficient attention to support all use cases. In general, however,
+extending the DRE mechanism to support a multi-period bidding procedure is a
+fruitful area for future work.
+
+The solvers used in the back-end of the DRE are also potential subjects of
+future work, based on future use cases and user requirements. As implemented,
+the Greedy solver sorts exchange entities based on average arc preference. Use
+cases may find other metrics to be superior given certain economic or social
+models. Furthermore, the Greedy solver is but one heuristic approach. Other
+approaches may be implemented and tested for various use cases, as needed.
+
+The work herein described utilized the both the Cbc and Clp solver via their
+provided driver APIs. Many more switches are available to both, which may be
+investigated further should their relative performance found to be
+lacking. Further, the Cbc solver can be specifically implemented for the \Cyclus
+use case, although this is highly discouraged by the Cbc development community. 
+
+Importantly, the Open Solver Interface (OSI) was used when developing the
+in-code model of the NFCTP. While the Cbc solver was used because of its
+permissive license. Users with access to proprietary MILP solvers, such as
+CPLEX, can reuse much of the available framework. Should such a use case be
+requested, implementing interface extensions should be straightforward.
 
 \section{Closing Remarks}
+
+A novel way to model dynamic, nuclear fuel cycles has been proposed, designed,
+implemented, and tested. New features include competition between suppliers and
+consumers, constrained supply and consumption, and the inclusion of
+extra-facility effects, such as state-level relationships. This work provides a
+general framework on which nuclear fuel cycles can be modeled. As the \Cyclus
+ecosystem grows, the features implemented herein will be used and tested. It is
+the sincere desire of the author that fuel cycles with high potential to better
+the human condition can be identified more easily by sophisticated analysts
+using \Cyclus and the DRE framework more generally. Energy use has long been
+known to better quality of life. Choosing the best way of developing and
+deploying the world's energy infrastructure will be the challenge of the current
+generation and for generations to come.
