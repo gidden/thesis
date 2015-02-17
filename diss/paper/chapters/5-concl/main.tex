@@ -33,6 +33,8 @@ was split into two primary conceptual categories: entity deployment and entity
 interaction. Developing a sophisticated entity interaction mechanism was the
 chief focus of the majority of the presented \textit{oeuvre}.
 
+\subsection{Modeling \& Simulation}
+
 Significant design constraints were placed on the design of a entity interaction
 mechanism. First, it must support arbitrary physics and chemical constraints, as
 well as general supply-chain constraints, such as inventory and processing
@@ -66,6 +68,8 @@ in the formulation layer. Translation to LPs and MILPs are both supported, where
 MILPs are required if entities require individual, quantized resources. Such a
 case arises when one would like to model individual reactor assemblies.
 
+\subsection{Experimentation}
+
 After the DRE framework was designed and implemented, it was tested and
 analyzed. The full \Cyclus simulator is still nascent with respect to
 full-featured archetypes that would utilize DRE-specific features. Therefore,
@@ -79,12 +83,89 @@ others. Exchanges representing the front-end and back-end of the nuclear fuel
 cycle were generated separately.
 
 Generated exchanges were solved with the Greedy Heuristic in the exchange layer
-and the COIN-OR Clp and Cbc solvers in the formulation layer. 
+and the COIN-OR Clp and Cbc solvers in the formulation layer. A number of key
+observations were ascertained by both scaling and stochastic experimental
+campaigns. First, the Greedy solver exhibited linear scaling with problem size
+(i.e., the number of variables) for all configurations of exchanges, matching
+theory. Somewhat surprisingly, the Clp solver was also shown to have efficient
+scaling behavior as well. The theoretical complexity of the general case of
+simplex method is not known, although it is known to be ``efficient in
+practice'' \cite{goldfarb1994complexity}. Further, solving relaxations of LPs is
+a fundamental step in branch-and-bound algorithms for MILPs (e.g., those used in
+Cbc). Therefore, exploring the behavior of given problem structures as LPs is of
+interest. In this work, Clp solves of front-end exchanges were found to have
+linear-like scaling, up to problems with ~1 million variables, regardless of
+fundamental parameter configuration. Back-end exchanges also experienced
+linear-like behavior for smaller problem sizes (~1E4 variables). At larger
+problem sizes, especially for instances with high variability in objective
+coefficient distribution, scaling becomes much worse than the linear.
 
-% user recommendations
+Solving MILPs optimally is known to be NP-Hard, and solution times are known to
+scale exponentially in the general case. This behavior was observed for the Cbc
+solver in both front and back-end exchanges. A solution time limit of three
+hours was placed on Cbc calculations, and many cases converged for both exchange
+types in the scaling campaign. Threshold problem sizes were observed in each
+exchange type and fundamental parameter configuration. Maximum convergence
+probability was found in high-fidelity reactor instances for non-once-through
+fuel cycles. Low-fidelity reactor, once-through fuel cycle instances were found
+to have particularly poor convergence probability. 
+
+Performing comparative solution analyses between the Greedy and Cbc solvers
+illuminated the importance of false-arc costs in the MILP formulation of the
+NFCTP. Specifically, multiple exchange instances were observed to have better
+performance-space results using the heuristic over a full-fledged optimal solve
+in cost-space. This behavior was found to be the result of using a large
+false-arc unit cost in the NFCTP formulation in conjunction with a relative
+optimal value convergence criteria. A relative-value criteria is required in
+order to be used in a general simulation framework. Replacing the large cost
+with a small cost, however, proved to reverse the observation in both the
+scaling and stochastic campaigns. 
+
+Finally, the use of location-based preferences was found to have little or no
+effect on Cbc solution times in most cases. However, for back-end exchanges of
+MOX and ThOX fuel cycles, cases in which no location-based preferences were
+applied were found to have significantly longer solution times than cases in
+which they were applied. Therefore, applying a small objective perturbation may
+prove a reasonable speed up strategy for some exchange structures.
+
+\subsection{Recommendations}
+
+Through the development of the DRE, users may now apply physical, economic, and
+social models to NFC simulation. The choice of solver will largely depend on the
+fidelity of the associated models and underlying data. The Greedy solver will
+always provide a feasible solution to the given exchange instance, applying any
+physical, chemical, or supply-chain constraints. Therefore, if a user has a
+low-fidelity economic or social model, then the Greedy solver will likely meet
+the users needs.
+
+With higher-fidelity economic and social models, obtaining a optimal solution
+becomes paramount. While an LP, and thus Clp, can be used to model
+approximations of fuel cycles, to-date user and developer experience has found
+the modeling of individual fuel assemblies to be conceptually simpler both to
+use and code. In short, having a binary decision regarding a supplied resource
+is simpler than managing the acceptance of an arbitrary number of partial
+resources, especially in a multi-commodity system. Requiring optimal solutions
+and using quantized resource transfers necessitates using a MILP solver, such as
+Cbc.
+
+Users can expect exponential solution time scaling when using Cbc. For a
+relatively small convergence criteria, i.e., 1\%, most front-end instances with
+a reactor population greater than ~150 were found not to converge within a
+3-hour time limit. Back-end instances showed better convergence behavior with
+problem size. The Cbc solver was found to perform better with higher reactor
+fidelity, a promising result for this use case. With a small arc-cost
+implemented in the kernel by default, users may find greater speed ups by
+loosening the default convergence criteria. However, tuning the specific
+convergence criteria and setting a solution-time ceiling will be dependent on
+the an individual's use case. Finally, after a preference-perturbation option is
+implemented, users may find significant speed ups through its use.
 
 \section{Suggested Future Work}
 
 better preference determination of proposed supply (function callback)
+
+different greedy solvers based on eco/soc models
+
+implementing other solvers
 
 \section{Closing Remarks}
