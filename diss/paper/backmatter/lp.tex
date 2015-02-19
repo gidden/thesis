@@ -417,7 +417,7 @@ Jordan exchange, the resulting LP would look like Figure \ref{fig:rotated}.
 The column pricing operation selects the slack variable which will enter the
 basis. The most naive implementation is to select the variable which will have
 the largest effect on the objective function, i.e., which has the largest
-magnitude \textit{reduced cost}. For instance, in Equation \ref{eqs:lp_obj},
+magnitude \textit{reduced cost}. For instance, in Equation \ref{eqs:feas_obj},
 $x_1$ has a reduced cost of 3, and $x_2$ has a reduced cost of 2 (note that both
 costs are in the same positive direction as the objective, i.e.,
 maximization). Accordingly, choosing $x_1$ as the nonbasic exchange variable is

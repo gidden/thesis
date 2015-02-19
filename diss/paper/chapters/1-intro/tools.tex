@@ -1,0 +1,46 @@
+
+\section{Tools Used}
+
+\subsection{Modeling \& Simulation}\label{intro:sim}
+
+Simulation and simulation analysis has a rich history and large body of work
+that can be leveraged to tackle this problem.
+
+Simulation methodologies can largely be broken down into two groups: discrete
+time and discrete event simulation. 
+
+Cyclus has taken a refined discrete time approach.
+
+Cyclus defines an arbitrary time step, requiring consistency among prototype
+configurations. Historically, this time step has been one month. Importantly, it
+is integral, and unchanging within a single simulation.
+
+A time step is comprised of two types of phases: those in which agents observe
+the simulation environment and update their state, and those in which the kernel
+queries agents and executes kernel functionality.
+
+The order of phases is:
+
+\begin{itemize}
+  \item building phase (kernel)
+  \item tick phase (agent)
+  \item resource exchange (kernel)
+  \item tock phase (agent)
+  \item decommissioning phase (kernel)
+\end{itemize}
+
+\subsection{Supply Chain Modeling}
+
+\subsection{Mathematical Programming}\label{intro:prog}
+
+These simplifications are important to the computation time required to solve
+the resulting problem instance. The general solution technique for LPs is the
+Simplex Method, as previously described. Klee and Minty show that in the worst
+case, the Simplex Method will execute in exponential time \cite{klee_good_1970},
+but in practice it is generally considered very computationally efficient. If
+the problem can be simplified to a TP, then the Transportation Simplex Method
+can be used \cite{ahuja_network_1993}.
+
+Discussion of P, NP, NP-Hard, NP-Complete, etc.
+
+\subsection{Multicommodity Transportation Problem}\label{intro:mtp}
