@@ -26,9 +26,9 @@ facilities (e.g., fast reactors) require fuel that has been processed by other
 facilities (e.g., thermal reactors). Accordingly, simulation developers must
 make a choice regarding the ability for facilities to be built if fuel may not
 be available for their use. Certain simulators explicitly disallow this behavior
-by determining reactor build decisions based on lookahead algorithms
+by determining reactor build decisions based on look-ahead algorithms
 \cite{schweitzer_improved_2008}, others explicitly allow it, while still others
-offer a hybrid approach that allow a lookahead function based on a certain
+offer a hybrid approach that allow a look-ahead function based on a certain
 amount of fuel that will eventually be needed over a reactor's lifetime
 \cite{van_den_durpel_daness_2009}. The eventual choice of this decision making
 process greatly affects simulation outcomes in any scenario in which a lack of
@@ -61,7 +61,7 @@ consideration. The rigorous solution of reactor physics equations is an entire
 field in nuclear science unto itself, and is thus not normally treated by fuel
 cycle simulators. In most cases for the current suite of simulators, some amount
 of calculation is performed before a simulation is run, and isotopic profiles
-are determined via lookup tables. Some simulators, however, choose to perform
+are determined via look-up tables. Some simulators, however, choose to perform
 transmutation calculations \textit{in situ}, during the simulation.
 
 The chemical process fidelity design decision occurs at the interface between
@@ -135,4 +135,4 @@ transmutation, and fuel fabrication, are all operations on the isotopic profile
 of material. The mechanism by which dynamic connections between facilities are
 determined must also take into account the isotopic profiles of the commodities
 produced and consumed by those facilities. This work deals with determination of
-supply and demand in sophistcated nuclear fuel cycle simulations.
+supply and demand in sophisticated nuclear fuel cycle simulations.
