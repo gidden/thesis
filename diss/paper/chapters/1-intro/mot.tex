@@ -1,5 +1,5 @@
 
-\section{Motivation}
+\section{Statement of Work}
 
 Deciding how a simulation is structured from an interactions standpoint is a
 delicate balance of known necessity and perceived future needs. There are basic
@@ -9,24 +9,40 @@ insights in that regard, however they require more of their modeling apparatus
 due to messaging needs and other structures. More complex decisions include how
 one wants to determine connections between facilities, and whether such
 connections are assigned statically and incorporated into the simulation
-architecture or determined dynamically. Guerin's comment
-in \S\ref{sec:litrev-benchmarks} stems from this ``freedom''. These
-simulation-engine decisions comprise the art-related portion of fuel cycle
-simulation, but developers have a goal of making these decisions in as informed
-a way as possible using domain-level knowledge with respect to our known and
-perceived requirements. In general, this work tries to minimize the sheer number
-of choices we make in this regard, instead relying on well known and well
-documented practices of computer scientists and systems engineers.
+architecture or determined dynamically. 
 
-In the absence of supply constraints, aggregated
-individual facility behavior and fleet-based models are equivalent. However, any
-system in which recycling exists will, by definition, have some supply
-constraints.
+In his conclusions of a MIT benchmarking exercise, Guerin states that
+``operation of a fuel cycle model is as much art as science''
+\cite{guerin_benchmark_2009}, an opinion that likely stems from this
+``freedom''. These simulation-engine decisions comprise the art-related portion
+of fuel cycle simulation, but developers have a goal of making these decisions
+in as informed a way as possible using domain-level knowledge with respect to
+our known and perceived requirements. In general, this work tries to minimize
+the sheer number of choices one makes in this regard, instead relying on well
+known and well documented practices of computer scientists and systems
+engineers.
 
-\subsection{Statement of Work}
+The goal of this work focuses on extending the current state of the art in
+nuclear fuel cycle simulation and associated analysis. The primary thrust of the
+work is the design and implementation of a sophisticated supply-demand framework
+to be used in simulation. The framework must support manifold design
+criteria. 
 
-The goal of this work was, chiefly, to design, implement, and analyze a
-highly-flexible, physics and economics-informed simulation engine. The engine
-was split into two primary conceptual categories: entity deployment and entity
-interaction. Developing a sophisticated entity interaction mechanism was the
-chief focus of the majority of the presented \textit{oeuvre}.
+Any system in which recycling exists will, by definition, have some supply
+constraints. Therefore, the framework must support capacitated supply and
+demand. Further, constraints must be able to be influenced by sophisticated
+physical, chemical, and supply chain models. The framework must also allow for
+economic, social, and geographic models to inform the exchange of resources
+between simulation entities. Finally, the framework must support quantized
+transfers of resources. Nuclear reactors cores in practice are comprised of
+individual fuel assemblies. Any framework must support the modeling of
+individual fuel assemblies, enabling a high level of simulation detail as well
+as nonproliferation analyses.
+
+Once a supply-demand framework is designed and implemented, its performance is
+analyzed. Because the \Cyclus ecosystem is still nascent, sophisticated agent
+models have yet to be developed. Accordingly, a methodology for generating
+instances of nuclear fuel cycles is required. A large collection of instances
+are then executed with all available supply-demand solution techniques. The
+resulting product is a novel supply-demand framework, a collection of
+best-practice advice for users of \Cyclus, and associated insights.
