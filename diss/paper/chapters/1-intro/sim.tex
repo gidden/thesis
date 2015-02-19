@@ -1,18 +1,19 @@
 
 \section{Nuclear Fuel Cycle Simulation}\label{intro:fcs}
-\TODO{Citations}
  
 Fuel cycle simulation is a field with a variety of actors, including
 governments, universities, and international governance
 organizations. Accordingly, a variety of modeling strategies have been applied
 to the nuclear fuel cycle. Such strategies span a wide range of fidelity, both
-at the facility level and the material level. For instance, some simulators
-describe reactors by fleet (or types) and solve material balances for the entire
-fleet in aggregate while others instantiate individual (or discrete)
-facilities. Similarly, some simulators make detailed calculations of fuel
-depletion due to reactor fluence whereas others simply use pre-tabulated values
+at the facility level and the material level
+\cite{boucher_cosi:_2006,busquim_e_silva_system_2008,yacout_vision_2006}. For
+instance, some simulators describe reactors by fleet (or types) and solve
+material balances for the entire fleet in aggregate while others instantiate
+individual (or discrete) facilities \cite{schneider_nfcsim:_2005}. Similarly,
+some simulators make detailed calculations of fuel depletion due to reactor
+fluence whereas others simply use pre-tabulated values
 that depend (generally) on burnup values for thermal reactors and conversion
-ratios for fast reactors.
+ratios for fast reactors. 
 
 There are, broadly, three decision categories that are of concern to fuel cycle
 simulation. The first is facility deployment, specifically, how, why, and when
@@ -25,10 +26,11 @@ facilities (e.g., fast reactors) require fuel that has been processed by other
 facilities (e.g., thermal reactors). Accordingly, simulation developers must
 make a choice regarding the ability for facilities to be built if fuel may not
 be available for their use. Certain simulators explicitly disallow this behavior
-by determining reactor build decisions based on lookahead algorithms, others
-explicitly allow it, while still others offer a hybrid approach that allow a
-lookahead function based on a certain amount of fuel that will eventually be
-needed over a reactors lifetime. The eventual choice of this decision making
+by determining reactor build decisions based on lookahead algorithms
+\cite{schweitzer_improved_2008}, others explicitly allow it, while still others
+offer a hybrid approach that allow a lookahead function based on a certain
+amount of fuel that will eventually be needed over a reactor's lifetime
+\cite{van_den_durpel_daness_2009}. The eventual choice of this decision making
 process greatly affects simulation outcomes in any scenario in which a lack of
 fuel exists. Because these simulation tools are built to analyze the dynamic
 symbiotic relationship between different reactors in a cyclical process (e.g.,
@@ -84,10 +86,7 @@ specific isotopics are not. One can conclude from this discussion that the level
 of isotopic detail modeling in a simulation could greatly affect the outcome of
 the simulation, especially if decisions are made mid-simulation regarding the
 isotopes in question (e.g., whether or not to build a fast reactor given the
-available amount of separated isotopes). A full treatment of how the current
-generation of simulators tackle this issue is described in
-\S\ref{sec:simulators}. An overview of the proposed strategy to take in the
-\Cyclus simulation environment is described in \S\ref{sec:rap}.
+available amount of separated isotopes). 
 
 The third simulation-level design decision concerns the connections between
 facilities and the type of material that flows along those connections. In
@@ -102,20 +101,29 @@ being serviced (e.g., TRU-based fuels going to thermal and fast reactors), then
 either a user or the simulation engine must define the percentage of capacity
 going towards each type of serviced facility \cite{busquim_e_silva_system_2008}.
 
-Most simulators to date have taken the fleet-based, static connection approach
+Most simulators to date have taken the fleet-based, static-connection approach
 to modeling fuel cycles which lacks the ability to be easily extended and
 improved upon, a key feature of a research code. The \Cyclus fuel cycle
 simulator has taken the dynamic connection approach. Dynamic connections between
 facilities allow for more complicated scenarios, e.g., scenarios with regional
-influences, to be modeled. The dynamic exchange of resources, however,
-introduces two complications. The first is that a given need, e.g., for fuel,
-can be met by multiple commodities. As an example, consider fuel for thermal
-reactors. Such fuel can be either uranium oxide (UOX) or mixed uranium-plutonium
-oxide (MOX). Furthermore, MOX fuel is composed of plutonium (and some minor
-actinides, such as americium) from spent thermal fuel as well as uranium (the
-source of which can be depleted enrichment tails, depleted recycled uranium or
-natural uranium). The second is that the isotopics comprising fuel orders
-are \textit{fungible}, i.e., the source of isotopes are generally exchangeable. 
+influences or scenarios in which competition for resources exists, to be
+modeled. The dynamic exchange of resources, however, introduces two
+complications. The first is that a given need, e.g., for fuel, can be met by
+multiple commodities. As an example, consider fuel for thermal reactors. Such
+fuel can be either uranium oxide (UOX) or mixed uranium-plutonium oxide
+(MOX). Furthermore, MOX fuel is composed of plutonium (and some minor actinides,
+such as americium) from spent thermal fuel as well as uranium (the source of
+which can be depleted enrichment tails, depleted recycled uranium or natural
+uranium). The second is that the isotopics comprising fuel orders are
+\textit{fungible}, i.e., the source of isotopes are generally exchangeable.
+
+Supporting economic and social models is rare among simulators. Only one
+simulator purports to have any \textit{in situ} economic decision making
+\cite{van_den_durpel_daness_2009}. A single other simulator reports including
+any socio-geographic concerns \cite{andrianova_desae_2008}. Any supply-demand
+framework that incorporates economic, geographic, or other behavior models is a
+novel step forward in the realm of computational fuel cycle simulation and
+analysis.
 
 The core concept that connects both the design decisions regarding fidelity and
 facility connections is the notion of material \textit{quality}. Because of the
@@ -126,6 +134,5 @@ account. Each of the issues addressed by the fidelity decision, decay,
 transmutation, and fuel fabrication, are all operations on the isotopic profile
 of material. The mechanism by which dynamic connections between facilities are
 determined must also take into account the isotopic profiles of the commodities
-produced and consumed by those facilities. This work attempts to satisfy the
-material quality concerns in fuel cycle simulation.
-
+produced and consumed by those facilities. This work deals with determination of
+supply and demand in sophistcated nuclear fuel cycle simulations.
