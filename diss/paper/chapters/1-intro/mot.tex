@@ -1,8 +1,6 @@
 
 \section{Motivation}
 
-\subsection{Cyclus Foundations}\label{intro:cyc}
-
 Deciding how a simulation is structured from an interactions standpoint is a
 delicate balance of known necessity and perceived future needs. There are basic
 decisions to make, such as modeling material transfer as discrete or
@@ -20,50 +18,15 @@ perceived requirements. In general, this work tries to minimize the sheer number
 of choices we make in this regard, instead relying on well known and well
 documented practices of computer scientists and systems engineers.
 
-The \Cyclus team is also interested in fostering a user and developer ecosystem.
-Accordingly, such concerns also drive the simulation architecture design. The
-agent-based nature of \Cyclus provides an opportunity to reduce barriers to
-entry into the ecosystem. Given a few basic tenets of agent interaction, other
-developers should be able to create a new agent to ``plug in'' to the
-simulation. Intuitively, a minimal set of behaviors must be defined to
-sufficiently inform the simulation infrastructure to run the simulation. This
-freedom allows the simulation program introduce agents at run time, effectively
-separating the simulation engine's functionality from the agents in the
-simulation.
-
-Such a framework provides many benefits. First, there is a clear separation of
-concerns. The \Cyclus core is concerned with modeling system dynamics whereas
-individual agents are concerned with domain-specific issues. Accordingly,
-developers can focus their attention appropriately, focusing either on the core
-code base or on agent development. Separating agent development from core
-development also allows \Cyclus to remain a viable open-source candidate to
-model nuclear fuel cycle dynamics. Because domain-level information is
-incorporated into agent libraries which are dynamically loaded at runtime, a
-closed-source developer can focus their efforts entirely on developing agent
-libraries. Furthermore, developers could participate both privately and
-publicly, e.g., adding general capability to the \Cyclus core that is needed for
-some functionality without specifying the internals. Such a community paradigm
-is shown in Figure \ref{fig:community}.
-
-\begin{figure}[htbp!]
-  \begin{center}
-    \includegraphics[height=8cm]{./figs/community.png}
-  \end{center}
-  \caption{The Cyclus Participation Paradigm} 
-  \label{fig:community}
-\end{figure}
-
-In order to develop and maintain the core code separate from the agent modules,
-well-defined interactions must be provided between agents and the \Cyclus
-core. The remaining part of the section provides a proposal for such
-interactions that allow for a variety facility deployment and supply-demand
-matching algorithms to be employed. A description of the market resolution
-interface is provided, and basic agent simulation interaction, such as entering
-and leaving the simulation is also described.
-
 In the absence of supply constraints, aggregated
 individual facility behavior and fleet-based models are equivalent. However, any
 system in which recycling exists will, by definition, have some supply
 constraints.
 
 \subsection{Statement of Work}
+
+The goal of this work was, chiefly, to design, implement, and analyze a
+highly-flexible, physics and economics-informed simulation engine. The engine
+was split into two primary conceptual categories: entity deployment and entity
+interaction. Developing a sophisticated entity interaction mechanism was the
+chief focus of the majority of the presented \textit{oeuvre}.
