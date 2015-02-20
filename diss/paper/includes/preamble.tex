@@ -14,35 +14,6 @@
 % You, the user, still hold the copyright to any document you produce
 % with this software (like your dissertation).
 
-%% You should use natbib
-\IfFileExists{natbib.sty}{%
-  \usepackage[numbers]{natbib}% added the numbers option from the original WI
-                              % thesis template
-}{}
-
-%% You probably need appendix, if you want appendices
-\IfFileExists{appendix.sty}{%
-\usepackage{appendix}%
-}{}
-
-%% the spacing in memoir is weird, you'll need to use this
-\DisemulatePackage{setspace}
-\usepackage[onehalfspacing]{setspace}
-
-%% List setup; the ``hanglist`` environment will allow you to have
-%% nicely-typeset enumerated lists (i.e., with the numbers hanging in
-%% the margins).  You need at least version 2.1 of enumitem.sty.  If
-%% you don't have enumitem installed at all, hanglist will just be an
-%% alias for enumerate.
-\IfFileExists{enumitem.sty}{%
-\usepackage[loadonly]{enumitem}[2007/06/30]%
-\newlist{hanglist}{enumerate}{1}% 
-\setlist[hanglist]{label=\arabic*.}%
-\setlist[hanglist,1]{leftmargin=0pt}%
-}{%
-\newenvironment{hanglist}{\begin{enumerate}}{\end{enumerate}}%
-}
-
 %% Comment out any of these that you don't want
 \usepackage{amssymb}
 \usepackage{amsmath}
@@ -50,17 +21,16 @@
 %\usepackage{theorem}
 \usepackage{hyperref}
 
-\IfFileExists{mathpartir.sty}{%
-\usepackage{mathpartir}%
-}{}
-
 %%%%% LISTINGS package and setup
 \IfFileExists{listings.sty}{%
 \usepackage{listings}%
 }{}
 
-
 %% Packages added by Matt Gidden
+%%
+%% Note, order matters!
+%%
+\usepackage{cite} % right order for multiple entries in cite
 \usepackage{moreverb} % for verbatim snippets of code
 \usepackage{fancyvrb}
 \usepackage{tabularx} % for tables with line breaks
@@ -147,6 +117,39 @@
 \newcommand{\floc}{$f_{\text{loc}}$}
 \newcommand{\dloc}{$\delta_{\text{loc}}$}
 \newcommand{\dreg}{$\delta_{\text{reg}}$}
+
+%% You should use natbib
+\IfFileExists{natbib.sty}{%
+  \usepackage[numbers]{natbib}% added the numbers option from the original WI
+                              % thesis template
+}{}
+
+%% You probably need appendix, if you want appendices
+\IfFileExists{appendix.sty}{%
+\usepackage{appendix}%
+}{}
+
+%% the spacing in memoir is weird, you'll need to use this
+\DisemulatePackage{setspace}
+\usepackage[onehalfspacing]{setspace}
+
+%% List setup; the ``hanglist`` environment will allow you to have
+%% nicely-typeset enumerated lists (i.e., with the numbers hanging in
+%% the margins).  You need at least version 2.1 of enumitem.sty.  If
+%% you don't have enumitem installed at all, hanglist will just be an
+%% alias for enumerate.
+\IfFileExists{enumitem.sty}{%
+\usepackage[loadonly]{enumitem}[2007/06/30]%
+\newlist{hanglist}{enumerate}{1}% 
+\setlist[hanglist]{label=\arabic*.}%
+\setlist[hanglist,1]{leftmargin=0pt}%
+}{%
+\newenvironment{hanglist}{\begin{enumerate}}{\end{enumerate}}%
+}
+
+\IfFileExists{mathpartir.sty}{%
+\usepackage{mathpartir}%
+}{}
 
 %% \newtheorem{thm}{Theorem}[chapter] % reset theorem numbering for each chapter
 %% \theoremstyle{definition}
