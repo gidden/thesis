@@ -16,26 +16,27 @@ that depend (generally) on burnup values for thermal reactors and conversion
 ratios for fast reactors. 
 
 There are, broadly, three decision categories that are of concern to fuel cycle
-simulation. The first is facility deployment, specifically, how, why, and when
-certain facilities are deployed. In the current simulation development
-environment, the most common reactor deployment mechanism is allowing a user to
-define an energy growth curve and, for each type of reactor in the simulation, a
-percentage of that total energy demand to be met by the reactor type. However,
-the nuclear fuel cycle is a special case of supply-demand modeling where certain
-facilities (e.g., fast reactors) require fuel that has been processed by other
-facilities (e.g., thermal reactors). Accordingly, simulation developers must
-make a choice regarding the ability for facilities to be built if fuel may not
-be available for their use. Certain simulators explicitly disallow this behavior
-by determining reactor build decisions based on look-ahead algorithms
+simulation. The first is facility deployment, i.e., how, why, and when certain
+facilities are deployed. In the current simulation development environment, the
+most common reactor deployment mechanism is allowing a user to define an energy
+growth curve and, for each type of reactor in the simulation, a percentage of
+that total energy demand to be met by the reactor type. However, the nuclear
+fuel cycle is a special case of supply-demand modeling where certain facilities
+(e.g., fast reactors) require fuel that has been processed by other facilities
+(e.g., thermal reactors). Accordingly, simulation developers must make a choice
+regarding the ability for facilities to be built if fuel may not be available
+for their use. Certain simulators explicitly disallow this behavior by
+determining reactor build decisions based on look-ahead algorithms
 \cite{schweitzer_improved_2008}, others explicitly allow it, while still others
 offer a hybrid approach that allow a look-ahead function based on a certain
 amount of fuel that will eventually be needed over a reactor's lifetime
 \cite{van_den_durpel_daness_2009}. The eventual choice of this decision making
-process greatly affects simulation outcomes in any scenario in which a lack of
-fuel exists. Because these simulation tools are built to analyze the dynamic
-symbiotic relationship between different reactors in a cyclical process (e.g.,
-thermal and fast reactors), among other scenarios, this simulation development
-decision is arguably very important to simulation outcomes.
+process greatly affects simulation outcomes in any scenario in which there is
+competition for recycled fuel. Because these simulation tools are built to
+analyze the dynamic symbiotic relationship between different reactors in a
+cyclical process (e.g., thermal and fast reactors), among other scenarios, this
+simulation development decision is arguably very important to simulation
+outcomes.
 
 The second simulation design decision category is the level of fidelity with
 which to model the physical and chemical processes involved in the nuclear fuel
@@ -47,13 +48,12 @@ streams change due to physical processes.
 
 Isotopic decay is important to consider because some isotopes decay on time
 scales on the order of or smaller than the simulation time. \nucl{241}{Pu}, for
-instance, has a half life of $\sim$14 years. As might be expected, the
-simulators fall into two camps, those that include decay and those that do
-not. Interestingly, the MIT development team claims that the lack of modeling
-decay does not affect the simulation as long as all transuranic isotopes are
-lumped together \cite{guerin_impact_2009}. Other codes appear to include
-isotopic decay in order to inform output metrics such as repository heat
-capacity. 
+instance, has a half life of $\sim$14 years. Simulators fall into two camps,
+those that include decay and those that do not. Interestingly, the MIT
+development team claims that the lack of modeling decay does not affect the
+simulation as long as all transuranic isotopes are lumped together
+\cite{guerin_impact_2009}. Other codes include isotopic decay in order to inform
+output metrics such as repository heat capacity.
 
 Reactor physics, i.e., the process by which the transmuted isotopic profile of
 fuel due to reactor residency is determined, is also an important physical
@@ -92,36 +92,40 @@ The third simulation-level design decision concerns the connections between
 facilities and the type of material that flows along those connections. In
 general, connections between facilities can either be static or dynamic, and can
 either be fleet-based or facility-based. A static connection implies that
-material will always flow between two facilities, whereas a dynamic connection
-implies that a facility's input or output connection may change.  For those
-simulators that model fleets of facilities with static connections, the modeling
-technique is relatively trivial: a fleet of servicing facilities are directly
-connected to their serviced facilities. If more than one type of facility is
-being serviced (e.g., TRU-based fuels going to thermal and fast reactors), then
-either a user or the simulation engine must define the percentage of capacity
-going towards each type of serviced facility \cite{busquim_e_silva_system_2008}.
+material will always flow between two types of facilities, whereas a dynamic
+connection implies that a facility's input or output connection may change.  For
+those simulators that model fleets of facilities with static connections, the
+modeling technique is relatively trivial: a fleet of servicing facilities are
+directly connected to their serviced facilities. If more than one type of
+facility is being serviced (e.g., TRU-based fuels going to thermal and fast
+reactors), then either a user or the simulation engine must define the
+percentage of capacity going towards each type of serviced facility
+\cite{busquim_e_silva_system_2008}.
 
 Most simulators to date have taken the fleet-based, static-connection approach
 to modeling fuel cycles which lacks the ability to be easily extended and
-improved upon, a key feature of a research code. The \Cyclus fuel cycle
-simulator has taken the dynamic connection approach. Dynamic connections between
-facilities allow for more complicated scenarios, e.g., scenarios with regional
-influences or scenarios in which competition for resources exists, to be
-modeled. The dynamic exchange of resources, however, introduces two
-complications. The first is that a given need, e.g., for fuel, can be met by
-multiple commodities. As an example, consider fuel for thermal reactors. Such
-fuel can be either uranium oxide (UOX) or mixed uranium-plutonium oxide
-(MOX). Furthermore, MOX fuel is composed of plutonium (and some minor actinides,
-such as americium) from spent thermal fuel as well as uranium (the source of
-which can be depleted enrichment tails, depleted recycled uranium or natural
-uranium). The second is that the isotopics comprising fuel orders are
-\textit{fungible}, i.e., the source of isotopes are generally exchangeable.
+improved upon, a key feature of a research code. This work enables the dynamic
+connection approach in the \Cyclus nuclear fuel cycle simulator . Dynamic
+connections between facilities allow for more complicated scenarios, e.g.,
+scenarios with regional influences or scenarios in which competition for
+resources exists, to be modeled. The dynamic exchange of resources, however,
+introduces two complications. The first is that a given need, e.g., for fuel,
+can be met by multiple commodities. As an example, consider fuel for thermal
+reactors. Thermal reactors can be fueled by either uranium oxide (UOX) or mixed
+uranium-plutonium oxide (MOX). Furthermore, MOX fuel is composed of plutonium
+(and some minor actinides, such as americium) from spent thermal fuel as well as
+uranium (the source of which can be depleted enrichment tails, depleted recycled
+uranium or natural uranium). The second is that the isotopics comprising fuel
+orders are \textit{fungible}. A nuclear reactor generates power by fissioning
+nuclei. Whether the fissile nuclei involved is \nucl{235}{U}, \nucl{239}{Pu}, or
+\nucl{233}{U} makes little difference from a power-generation standpoint -- each
+generates power. However, each is involved with a different nuclear fuel cycle.
 
 Supporting economic and social models is rare among simulators. Only one
 simulator purports to have any \textit{in situ} economic decision making
 \cite{van_den_durpel_daness_2009}. A single other simulator reports including
 any socio-geographic concerns \cite{andrianova_desae_2008}. Any supply-demand
-framework that incorporates economic, geographic, or other behavior models is a
+framework that enables< economic, geographic, or other behavior models is a
 novel step forward in the realm of computational fuel cycle simulation and
 analysis.
 

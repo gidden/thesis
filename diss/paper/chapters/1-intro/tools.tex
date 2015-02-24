@@ -1,25 +1,28 @@
 
 \section{Tools Used}
 
-\subsection{Modeling \& Simulation}\label{intro:sim}
+\subsection{Agent-Based Supply Chain Models}\label{intro:sim}
 
 Supply and demand in nuclear fuel cycle simulation drives the flow of resources
-between entities and is the primary entity interaction mechanism. The supply and
-demand of a given fuel cycle becomes highly complex when including the recycling
-of material. Even with such a complication, the notion of a generic fuel cycle,
-i.e., from the perspective of facilities that supply and demand material,
-quickly begins to look like a supply chain model. There is a growing literature
-of agent-based supply chain modeling
+between entities. The exchange of resources is the primary entity interaction
+mechanism during a simulation. The supply and demand of a given fuel cycle
+becomes highly complex when including the recycling of material. Even with such
+a complication, the notion of a generic fuel cycle, i.e., from the perspective
+of facilities that supply and demand material, quickly begins to look like a
+supply chain model. There is a growing literature of agent-based supply chain
+modeling
 \cite{swaminathan_modeling_1998,julka_agent-based_2002,van_der_zee_modeling_2005,chatfield_multi-formalism_2007,holmgren_agent_2007}.
 The general premise of these types of models is that individual facilities have
 a notion of their needs (i.e., their demands) and can express to the system
 these needs at the required time. There is heavy use of inventory policy to
 determine the correct amount of material inventory that is needed and the
 correct time to request a resupply. Such an approach has not heretofore been
-attempted for the nuclear fuel cycle and would support a variety of use
-cases. For example, reactor facilities could be allowed to be fueled by multiple
-fuel types (e.g., UOX or MOX), and decide which type to choose based on the
-simulation environment.
+attempted for the nuclear fuel cycle and would support a variety of use cases
+outlined in \S \ref{intro:fcs}. For example, reactor facilities could be allowed
+to be fueled by multiple fuel types (e.g., UOX or MOX), and decide which type to
+choose based on the simulation environment.
+
+\subsection{Cardinal Preferences and Game Theory}
 
 The notion of social modeling in fuel cycle simulation, e.g., employing regional
 bias, has to date been a secondary concern. Some semblance of this capability is
@@ -79,14 +82,11 @@ resulting formulation is termed a Mixed-Integer Linear Program (MILP). For
 instance, binary variables can be used in network-flow problems to denote
 whether an arc has flow or not. A full discussion of MILPs and their solution
 techniques is provided in Appendix \ref{app:ip}. Many different types of
-problems can be solved using this structure. For the purposes of this work
-\textit{transportation} problems, a specialization of the network-flow problems,
-are utilized.
+problems can be solved using this structure. This work utilzes
+\textit{transportation} problems, a specialization of the network-flow problems.
 
 Transportation problems model the flow of a commodity between source nodes and
-sink nodes. Critically, this simplification allows for the nodes in the
-transportation problem to be categorized into two explicit groups, sources and
-sinks. In other words, source nodes and sink nodes comprise two distinct
+sink nodes. In other words, source nodes and sink nodes comprise two distinct
 subsets, $N_1, N_2$, the union of which comprises all nodes in the
 transportation graph, $N$. These properties can be described in set notation.
 
@@ -103,7 +103,8 @@ transportation graph, $N$. These properties can be described in set notation.
 \end{equation}
 
 From the node-arc graph point of view, this strict subset division allows for
-the transportation problem to be modeled as a \textit{bipartite} graph.
+the transportation problem to be modeled as a \textit{bipartite} graph, an
+example of which is shown in Figure \ref{fig:node-arcs-bipartite}.
 
 \begin{figure}[H]
   \begin{center}
@@ -115,14 +116,13 @@ the transportation problem to be modeled as a \textit{bipartite} graph.
   \end{center}
 \end{figure}
 
-The transportation problem is a platform on which one can model more general
-problems. The minimum-cost transportation problem is a useful example. In such a
-formulation, each arc has an associated \textit{unit cost} associated with the
-cost of transporting a unit of a commodity along it, $c_{i,j}$. Additionally,
-supplier and consumer nodes have an associated supply, $s_i$, or demand, $d_i$,
-which provide a notion of \textit{node capacity}. The minimum-cost
-transportation problem can be formulated as a linear program as shown in
-Equation \ref{eqs:xport}.
+Many variations of the transportation problem exist. The minimum-cost
+transportation problem is a useful example. In such a formulation, each arc has
+an associated \textit{unit cost} associated with the cost of transporting a unit
+of a commodity along it, $c_{i,j}$. Additionally, supplier and consumer nodes
+have an associated supply, $s_i$, or demand, $d_i$, which provide a notion of
+\textit{node capacity}. The minimum-cost transportation problem can be
+formulated as a linear program as shown in Equation \ref{eqs:xport}.
 
 %%% 
 \begin{subequations}\label{eqs:xport}
@@ -148,17 +148,18 @@ Equation \ref{eqs:xport}.
 \end{subequations}
 %%% 
 
-As is noted in many texts, an intuitive constraint on the problem to guarantee a
-feasible solution is that the total demand in the system must be no greater than
-the total supply in the system, shown in Equation \ref{eqs:xp_constr}.
+An intuitive constraint on the problem to guarantee a feasible solution is that
+the total demand in the system must be no greater than the total supply in the
+system, shown in Equation \ref{eqs:xp_constr}.
 
 \begin{equation}\label{eqs:xp_constr}
   \sum_{j \in N_2} d_j \leq \sum_{i \in N_1} s_i
 \end{equation}
 
 \noindent
-Feasibility in this sense can be guaranteed by adding an artificial supply
-node. Such a node can have infinite supply capacity but at (effectively)
+A given problem instance may violate Equation \ref{eqs:xp_constr} and thus be
+infeasible. Feasibility in this sense can be guaranteed by adding an artificial
+supply node. Such a node can have infinite supply capacity but at (effectively)
 infinite cost. The problem can then be solved, and any flow leaving the
 artificial node in the optimal solution can be dealt with accordingly, e.g., it
 can be ignored.
@@ -173,11 +174,11 @@ certain demand level which must be met, $d_i^h$.
 
 In the simplest extension from the single-commodity to multi-commodity
 transportation problem, arc constraints for all commodities are combined, i.e.,
-for a given arc $(i, j)$, there is a single capacity $u_{i,j}$. A classic
-interpretation of this enhanced complexity deals with data networks. Multiple
+there is a single capacity $u_{i,j}$ for a given arc $(i, j)$. A classic
+application of this enhanced complexity deals with data networks. Multiple
 classifications of data exist, but they all must traverse the same network
 infrastructure. Accordingly, the infrastructure can only accommodate a certain
-level of total flow among all communication types. The formulation of the
+quantity of total flow among all communication types. The formulation of the
 multi-commodity flow problem is shown in Equation \ref{eqs:MCTP}. Note the
 commodity coupling in Equation \ref{eqs:MCTP_cap}.
 
@@ -202,18 +203,18 @@ commodity coupling in Equation \ref{eqs:MCTP_cap}.
     &
     \sum_{h \in H} x_{i,j}^{h} \leq u_{i,j}
     & 
-    \forall \: j \in J \label{eqs:MCTP_cap} \\
+    \forall \: (i, j) \in A \label{eqs:MCTP_cap} \\
     %%
     &
     x_{i,j}^{k} \geq 0
     &
-    \forall \: i \in I, \forall \: j \in J, \forall \: h \in H \label{eqs:MCTP_x}
+    \forall \: (i, j) \in A, \forall \: h \in H \label{eqs:MCTP_x}
     %%
   \end{align}
 \end{subequations}
 %%% 
 
-It is possible to reduce instances of the multi-commodity transportation
+It can be possible to reduce instances of the multi-commodity transportation
 problem. In the case in which is no arc that shares multiple commodities, the
 multicommodity connection constraints disappear, and the single multi-commodity
 problem can be broken into $m$ different single-commodity transportation
@@ -224,17 +225,18 @@ poorly with problem size.
 Optimization problems are solved by solving a number of decision
 problems. Decision problems are generally computationally
 \textit{hard}. Decision problems ask yes or no questions, e.g., ``is there a
-flow path that with a flow larger than $x$?''. An optimization problem asks
-instead ``what is the flow path with the largest flow?''. Any problem can be
-associated with one of four categories of computational complexity:
-Polynomial-time ($\mathcal{P}$), Non-deterministic Polynomial-time
-($\mathcal{NP}$), Non-deterministic Polynomial-time Complete ($\mathcal{NP}$-C),
-and Non-deterministic Polynomial-time Hard ($\mathcal{NP}$-hard). A classic
-example of a polynomial-time algorithm is naive matrix inversion, known to be of
-order $n^3$ (i.e., $\mathcal{O}(n^3)$) for a given $n \times n$ matrix.
+flow path with a flow larger than $x$?''. An optimization problem asks instead
+``what is the flow path with the largest flow?''. Any problem can be associated
+with one of four categories of computational complexity: Polynomial-time
+($\mathcal{P}$), Non-deterministic Polynomial-time ($\mathcal{NP}$),
+Non-deterministic Polynomial-time Complete ($\mathcal{NP}$-C), and
+Non-deterministic Polynomial-time Hard ($\mathcal{NP}$-hard). 
 
-A decision problem, on the other hand, is considered to be in ($\mathcal{NP}$)
-if for any proposed solution, there is a \textit{short certificate}.
+A classic example of a polynomial-time algorithm is naive matrix inversion,
+known to be of order $n^3$ (i.e., $\mathcal{O}(n^3)$) for a given $n \times n$
+matrix. A decision problem, on the other hand, is considered to be in
+($\mathcal{NP}$) if for any proposed solution, there is a \textit{short
+  certificate}.
 
 \begin{define}
 A \textbf{certificate} is a method to verify that a solutions provides a
@@ -253,14 +255,14 @@ is the Satisfiability Problem, known to be in $\mathcal{NP}$-C
 $\mathcal{NP}$-hard, if any problem $P \in \mathcal{NP}$ is polynomial-time
 reducible to $Q$, but $Q \not\in \mathcal{NP}$. If a decision problem is in
 $\mathcal{NP}$-C, then the corresponding optimization problem is
-$\mathcal{NP}$-hard. The various levels of complexity are related. The
-relationship between these set of problem complexities, reflecting current
-understanding, is shown graphically in Figure \ref{fig:complexity}.
+$\mathcal{NP}$-hard. The relationship between these set of problem complexities,
+reflecting current understanding, is shown graphically in Figure
+\ref{fig:complexity}.
 
 \begin{figure}[H]
   \begin{center}
     \includegraphics[height=7.5cm]{./chapters/1-intro/figs/complexity.png}
-  \caption{The relationship between the various types of problem complexities.}
+  \caption{The relationship between the various types of computational complexities.}
   \label{fig:complexity}
   \end{center}
 \end{figure}
