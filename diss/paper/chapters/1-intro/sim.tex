@@ -5,15 +5,14 @@ Fuel cycle simulation is a field with a variety of actors, including
 governments, universities, and international governance
 organizations. Accordingly, a variety of modeling strategies have been applied
 to the nuclear fuel cycle. Such strategies span a wide range of fidelity, both
-at the facility level and the material level
-\cite{boucher_cosi:_2006,busquim_e_silva_system_2008,yacout_vision_2006}. For
-instance, some simulators describe reactors by fleet (or types) and solve
-material balances for the entire fleet in aggregate while others instantiate
-individual (or discrete) facilities \cite{schneider_nfcsim:_2005}. Similarly,
-some simulators make detailed calculations of fuel depletion due to reactor
-fluence whereas others simply use pre-tabulated values
-that depend (generally) on burnup values for thermal reactors and conversion
-ratios for fast reactors. 
+at the facility level and the material level. For instance, some simulators
+describe reactors by fleet (or types) and solve material balances for the entire
+fleet in aggregate \cite{busquim_e_silva_system_2008,yacout_vision_2006} while
+others instantiate individual (or discrete) facilities
+\cite{schneider_nfcsim:_2005}. Similarly, some simulators make detailed
+calculations of fuel depletion due to reactor fluence \cite{boucher_cosi:_2006}
+whereas others simply use pre-tabulated values that depend (generally) on burnup
+values for thermal reactors and conversion ratios for fast reactors.
 
 There are, broadly, three decision categories that are of concern to fuel cycle
 simulation. The first is facility deployment, i.e., how, why, and when certain
@@ -64,30 +63,6 @@ of calculation is performed before a simulation is run, and isotopic profiles
 are determined via look-up tables. Some simulators, however, choose to perform
 transmutation calculations \textit{in situ}, during the simulation.
 
-The chemical process fidelity design decision occurs at the interface between
-the elemental separations process in fuel recycling and the usage of recycled
-fuel by reactors. This is an interesting problem because separations technology
-work on a elemental scale, whereas input fuel recipes are defined on an isotopic
-scale because neutronics properties are functions of individual isotopes rather
-than elemental aggregates. In other words, you can't change the separated
-isotopic vector to match a recipe, as one does with uranium enrichment (which is
-an isotopic-scale process). A full treatment of the problem is relatively
-complicated and requires mixing separated isotopic vectors to find a ``best
-match''; this problem has been termed the Winery Problem or the Recipe
-Approximation Problem \cite{oliver_geniusv2:_2009}. The current generation of
-fuel cycle simulators generally do not address this issue. A common strategy is
-to declare a target subset of isotopics, normally a specific isotope or the
-aggregate isotopes of a given element, and match quantities of that set. For
-example, if the set is of single cardinality (e.g., \nucl{239}{Pu}), then the
-amount of that isotope is guaranteed to be correct, but accompanying isotopics
-are not. On the other hand, if the set is a group of isotopes (e.g., all
-plutonium isotopes), that group's quantity is guaranteed to be correct, but the
-specific isotopics are not. One can conclude from this discussion that the level
-of isotopic detail modeling in a simulation could greatly affect the outcome of
-the simulation, especially if decisions are made mid-simulation regarding the
-isotopes in question (e.g., whether or not to build a fast reactor given the
-available amount of separated isotopes). 
-
 The third simulation-level design decision concerns the connections between
 facilities and the type of material that flows along those connections. In
 general, connections between facilities can either be static or dynamic, and can
@@ -136,7 +111,4 @@ isotopic profile of material being produced and consumed. This additional
 concern greatly complicates the modeling of fuel cycles and must be taken into
 account. Each of the issues addressed by the fidelity decision, decay,
 transmutation, and fuel fabrication, are all operations on the isotopic profile
-of material. The mechanism by which dynamic connections between facilities are
-determined must also take into account the isotopic profiles of the commodities
-produced and consumed by those facilities. This work deals with determination of
-supply and demand in sophisticated nuclear fuel cycle simulations.
+of material. 

@@ -20,29 +20,57 @@ in as informed a way as possible using domain-level knowledge with respect to
 our known and perceived requirements. In general, this work tries to minimize
 the sheer number of choices one makes in this regard, instead relying on well
 known and well documented practices of computer scientists and systems
-engineers.
+engineers. In short, the goal of this work focuses on extending the current
+state of the art in nuclear fuel cycle simulation and associated analysis.
 
-The goal of this work focuses on extending the current state of the art in
-nuclear fuel cycle simulation and associated analysis. The primary thrust of the
-work is the design and implementation of a sophisticated supply-demand framework
-to be used in simulation. The framework must support manifold design
-criteria. 
+To date, no nuclear fuel cycle simulator has been implemented using agent-based
+simulation design principles. \Cyclus, the fuel cycle simulator in which this
+work is being implemented, was initially developed without a solid simulation
+infrastructure design principles. The initial thrust of this work comprises the
+development of \Cyclus as an agent-based simulator. In order to do so,
+agent-to-agent interaction mechanisms must be defined and designed. Furthermore,
+a clear time-stepping procedure must be identified that provides a sufficient
+amount of entity-interaction opportunities to agents in a simulation. 
 
-Any system in which recycling exists will, by definition, have some supply
-constraints. Therefore, the framework must support capacitated supply and
-demand. Further, constraints must be able to be influenced by sophisticated
-physical, chemical, and supply chain models. The framework must also allow for
-economic, social, and geographic models to inform the exchange of resources
-between simulation entities. Finally, the framework must support quantized
-transfers of resources. Nuclear reactors cores in practice are comprised of
-individual fuel assemblies. Any framework must support the modeling of
-individual fuel assemblies, enabling a high level of simulation detail as well
-as nonproliferation analyses.
+Perhaps the least well-treated aspect in current nuclear fuel cycle simulation
+is resource allocation decision making. As stated previously, the vast majority
+of current simulators treat this process very simply: staticly connect facility
+types \textit{a priori}. The primary thrust of this work is the extention of the
+current state of the art by designing and implementing a general framework that
+dynamically determines the flow of resources in an arbitrary nuclear fuel cycle. 
 
-Once a supply-demand framework is designed and implemented, its performance is
-analyzed. Because the \Cyclus ecosystem is still nascent, sophisticated agent
-models have yet to be developed. Accordingly, a methodology for generating
-instances of nuclear fuel cycles is required. A large collection of instances
-are then executed with all available supply-demand solution techniques. The
-resulting product is a novel supply-demand framework, a collection of
-best-practice advice for users of \Cyclus, and associated insights.
+Any such mechanism must meet a number of design criteria. First, it must be fuel
+cycle agnostic: any possible facility connections must be supported. The
+mechanism must take into account the isotopic profiles of the commodities
+produced and consumed by agents in a simulation. Any system in which fuel
+recycling exists will, by definition, have some supply constraints. Therefore,
+the framework must support both the existence capacitated supply and demand as
+well as its communication between agents and with the framework. Further,
+constraints must be able to be influenced by sophisticated physical, chemical,
+and supply chain models. Further extending the state of the art, the framework
+must also allow for economic, social, and geographic models to inform the
+exchange of resources between simulation entities. Finally, the framework must
+support quantized transfers of resources. Nuclear reactors cores in practice are
+comprised of individual fuel assemblies. Any framework must support the modeling
+of individual fuel assemblies, enabling a high level of simulation detail as
+well as nonproliferation analyses.
+
+It is the goal of this corpus of effort to design and implement such a
+simulation mechanism.  Once a supply-demand framework is developed, its
+performance must be analyzed. Fuel cycle simulation can require varying levels
+of computational fidelity. Some scoping studies may wish to sample a large
+option space with low fidelity, while others may wish to sample a small option
+space with high fidelity. The performance tradeoff between feasible and optimal
+solutions to resource flows must be understood. Because the \Cyclus ecosystem is
+still nascent, sophisticated agent models have yet to be developed. Accordingly,
+a methodology for generating instances of nuclear fuel cycles is required. A
+large collection of instances must then be executed with all available
+supply-demand solution techniques, those that find optimal solutions and those
+that report some best-guess feasible solution.
+
+Upon completion of this work, fuel cycle simulation modelers and analysts will
+be provided a robust tool that greatly increases the fidelity and flexibility
+with which arbitrary fuel cycles can be modeled. The state of the art of NFC
+simulation will be furthered, and novel scenarios that involve sophisticated
+interactions such as the competition for resources, dynamic commodity
+consumption, and geopolitical relationships can finally be supported.

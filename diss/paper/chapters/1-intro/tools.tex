@@ -41,11 +41,24 @@ that examine Nash Equilibria in the context of optimal flow models
 \cite{mazumdar_fairness_1991,nagurney_supply_2002,song_nash_2002}. However, the
 complexity of such models quickly brings them out of the scope of our needs,
 i.e., dynamic modeling of multi-lateral scenarios ranging 100+ years in a
-``reasonable'' amount of computation time. Accordingly, a market resolution
-mechanism is proposed that allows for interaction among the various facilities
-and managing entities (e.g., their regions). In order to inform a cardinal
-preference \cite{strotz_cardinal_1953} relation for a facility over its possible
-supply materials.
+``reasonable'' amount of computation time. 
+
+The game theoretic notion of preferences can be quite useful in fuel cycle
+simualtion, however. Specifically, cardinal utility, or cardinal preferences
+\cite{strotz_cardinal_1953} provides a relative measure of preference such that
+any two preferences can be directly compared, provided an arbitrary scaling,
+similar to the comparison of costs in a system. Costs in a nuclear fuel cycle
+simulation have reasonably large uncertainty
+\cite{shropshire_advanced_2009}. Furthermore, for many fuel cycle simulation
+cases, a cost proxy is directly applicable, because actual cost values may be
+very hard to compute. For example, an analyst may know intuitively that reactors
+prefer recycled fuel to fresh fuel in order to maximize resource
+utilization. Especially for initial analyses, informing potential resource flows
+via preferences, rather than costs, is simpler, quicker, and more
+intuitive. Further, the notion of preference cleanly maps onto geopolitical
+models, such as preferential trading, whereas cost usage can require significant
+additional work to be meaningful. Enabling both preference and cost-based models
+can provide sufficient simulation fidelity to appropriate analysts.
 
 \subsection{Transportation Problems \& Mathematical Programming}\label{intro:prog}
 
