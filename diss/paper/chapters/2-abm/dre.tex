@@ -165,17 +165,12 @@ realms have been leveraged to accomplish the task.
 An instance of supply and demand defined by the DRE information gathering step
 can be solved in a variety of ways. It can be cast to a constrained, bipartite
 network, and any heuristic that provides a feasible solution to such networks
-are valid. To solve the system optimally, however, a formal investigation and
-solution structure is needed. This section describes the construction of such a
-formulation, entitled the \textit{Nuclear Fuel Cycle Transportation Problem}
-(NFCTP).
-
-The basis for the formulation is the Multicommodity Transportation Problem
-described in \S\ref{intro:prog} with some departures described in detail
-below. Two separate formulations are provided. The first is a strictly linear
-program (LP) while the second is a mixed-integer linear program (MILP). A
-heuristic is also provided that provides a reasonable solution to most simple
-problems.
+are valid. The system can be solved optimally, however, by formulating the
+system as a mathematical program. This section describes a Multicommodity
+Transportation Problem variant used for this approach, entitled the
+\textit{Nuclear Fuel Cycle Transportation Problem} (NFCTP). A linear program
+(LP) formulation and a mixed-integer linear program (MILP) formulation are
+provided. A greedy heuristic is also designed and implemented.
 
 The LP formulation can be solved quickly, but allows split orders. In other
 words, the LP formulation solves a relaxation of the defined instance that does
@@ -187,14 +182,12 @@ exchange, but can take much longer to solve.
 \subsubsection{Terminology}
 
 Objects and data structures generated in the information gathering procedure are
-used in the formal definition of the NFCTP and must be defined.
-
-Each portfolio can be considered separately. The set of supply portfolios is
-denoted as $S$ and the set of request portfolios is denoted as $R$. Each supply
-portfolio is comprised of $s_M$ supply nodes, and each request portfolio is
-comprised of $r_N$ nodes. The set of supply nodes is denoted $I$, and the set
-of request nodes is denoted $J$. The total number of supply and request nodes is
-then
+used in the formal definition of the NFCTP. Each portfolio can be considered
+separately. The set of supply portfolios is denoted as $S$ and the set of
+request portfolios is denoted as $R$. Each supply portfolio is comprised of
+$s_M$ supply nodes, and each request portfolio is comprised of $r_N$ nodes. The
+set of supply nodes is denoted $I$, and the set of request nodes is denoted
+$J$. The total number of supply and request nodes is then
 
 \begin{equation}
   \left|{I}\right| = \sum_{s \in S} s_M
@@ -214,20 +207,18 @@ $b_r^k$, respectively. Additionally, each unique combination of portfolio and
 constraint has an associated \textit{constraint coefficient conversion
   function}, denoted $\beta_s^k$ for supply portfolios and $\beta_r^k$ for
 request portfolios. Each constraint coefficient conversion function takes as an
-argument a proposed resource $q_{i,j}$. A clarifying example of the relation
-between portfolios, commodities, constraints, and coefficient conversion
-functions is provided in \S \ref{abm:dre:fctp:arcs}. Request portfolios are
-provided a quantity constraint by default for which coefficients are unity. For
-a set of \textit{mutual requests}, $M$, where each request has a request
-quantity, $x_m$, the coefficient is defined by the ratio between the the average
-request quantity over all mutual requests and $x_m$ 
+argument a proposed resource $q_{i,j}$. Request portfolios are provided a
+quantity constraint by default for which coefficients are unity. For a set of
+\textit{mutual requests}, $M$, where each request has a request quantity, $x_m$,
+the coefficient is defined by the ratio between the the average request quantity
+over all mutual requests and $x_m$
 
 \begin{equation}
   \beta_{r, m} = \frac{\bar{x_M}}{x_m}.
 \end{equation}
 
 The constraint conversion functions are utilized in the NFCTP by applying them
-to the proposed resource transfers, creating capacity coefficients.
+to the proposed resource transfers, creating constraint coefficients.
 
 Coefficients for supply constraints are defined as
 
