@@ -184,10 +184,11 @@ exchange, but can take much longer to solve.
 Objects and data structures generated in the information gathering procedure are
 used in the formal definition of the NFCTP. Each portfolio can be considered
 separately. The set of supply portfolios is denoted as $S$ and the set of
-request portfolios is denoted as $R$. Each supply portfolio is comprised of
-$s_M$ supply nodes, and each request portfolio is comprised of $r_N$ nodes. The
-set of supply nodes is denoted $I$, and the set of request nodes is denoted
-$J$. The total number of supply and request nodes is then
+request portfolios is denoted as $R$, and each agent may have multiple
+portfolios in a given exchange. Each supply portfolio is comprised of $s_M$
+supply nodes, and each request portfolio is comprised of $r_N$ nodes. The set of
+supply nodes is denoted $I$, and the set of request nodes is denoted $J$. The
+total number of supply and request nodes is then
 
 \begin{equation}
   \left|{I}\right| = \sum_{s \in S} s_M
@@ -358,15 +359,15 @@ $R_2$             & $B$
 \label{tbl:ex_req}
 \end{table}
 
-Given the color map $A$: red, $B$: green, the resulting exchange
-graph can be colored as shown in Figure \ref{fig:ex_groups_color}.
+Given the color map $A$: green, $B$: brown, the resulting exchange
+graph can be cologreen as shown in Figure \ref{fig:ex_groups_color}.
 
 \begin{figure}
   \begin{center}
     \includegraphics[width=0.75\textwidth]{exchange_groups_color.pdf}
-    \caption{The same exchange shown in Figure \ref{fig:ex_groups} arcs colored
-      by commodity based on Tables \ref{tbl:ex_sup} and \ref{tbl:ex_req}. A red
-      arc corresponds to commodity $A$; a green arc corresponds to commodity
+    \caption{The same exchange shown in Figure \ref{fig:ex_groups} arcs coloed
+      by commodity based on Tables \ref{tbl:ex_sup} and \ref{tbl:ex_req}. A green
+      arc corresponds to commodity $A$; a brown arc corresponds to commodity
       $B$.}
     \label{fig:ex_groups_color}
   \end{center}
