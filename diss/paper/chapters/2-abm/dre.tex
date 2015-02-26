@@ -25,15 +25,14 @@ archetypes are proposed, they should be relatively easily implemented and
 utilized in the Cyclus simulation framework. Furthermore, the level of modeling
 abstraction for different facilities in a fuel cycle will be different based on
 the needs of archetype developer. Any supply-demand resolution framework,
-therefore, must be able to support arbitrary facilities. One way to approach
-such a problem is to treat facilities as black boxes, clearly defining a
-supply-demand communication framework.
+therefore, must be able to support arbitrary facilities. 
 
 As stated previously in \S \ref{abm:abm:limits}, a number of considerations must
 be taken into account in such a framework. Supply and demand must be able to be
-solved globally at any given time step. Resources must be able to be treated in
-a fungible manner. The framework must be able to incorporate arbitrary,
-agent-defined constraints.
+solved globally at any given time step. Therefore, the framework must support an
+arbitrary number of facilities. Further, resources must be able to be treated in
+a fungible manner. The framework must be able to handle arbitrary resource
+definitions and incorporate arbitrary, agent-defined constraints.
 
 In order to address each of these concerns, the concept of a Dynamic Resource
 Exchange (DRE) was developed and implemented. That process was motivated by the
