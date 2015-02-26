@@ -277,37 +277,23 @@ example of a partitioned exchange graph is shown in Figure \ref{fig:ex_groups}.
   \end{center}
 \end{figure}
 
-Because of defined constraints, there may not be sufficient supply or demand in
-the simulated exchange. To ensure a feasible solution, a false supply source and
-a false demand sink are added to the exchange graph. The false source and sink
-are unconstrained. Additionally, false nodes are added to each portfolio. Each
-false node in a request portfolio is connected to the false supply source, and
-each false node in a supply portfolio is connected to the false request
-sink. These arcs are denoted as \textit{false arcs}. The preferences given to
-each false arc, $p_f$, is defined to be lower than the lowest preference in the
-system, $P$.
+Because of defined constraints, there may not be sufficient supply in the
+simulated exchange. To ensure a feasible solution, an unconstrained false supply
+node is added to the exchange graph. Additionally, false nodes are added to each
+request portfolio and are connected to the false supply source. These arcs are
+denoted as \textit{false arcs}. The preferences given to each false arc, $p_f$,
+is defined to be lower than the lowest preference in the system, $P$.
 
 \begin{equation}\label{eqn:falsepref}
   p_{f} < \min P
 \end{equation}
 
-Given the original number of nodes in $I$ and the number of bid portfolios, the
-total number of bid nodes including false nodes is
+\noindent
+The total number of arcs in the system, $\left|{A_t}\right|$, is then increased
+by the number of request portfolios, i.e.,
 
 \begin{equation}
-  \left|{I_t}\right| = \left|{I}\right| + \left|{S}\right| + 1
-\end{equation}
-
-Similarly, the total number of request nodes is
-
-\begin{equation}
-  \left|{J_t}\right| = \left|{J}\right| + \left|{R}\right| + 1
-\end{equation}
-
-Finally, the total number of arcs is
-
-\begin{equation}
-  \left|{A_t}\right| = \left|{A}\right| + \left|{I}\right| + \left|{J}\right|
+  \left|{A_t}\right| = \left|{A}\right| + \left|{R}\right|
 \end{equation}
 
 Because preferences are defined as in Equation \ref{eqn:falsepref}, any false
