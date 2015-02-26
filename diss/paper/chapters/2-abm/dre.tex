@@ -372,23 +372,21 @@ graph can be colored as shown in Figure \ref{fig:ex_groups_color}.
   \end{center}
 \end{figure}
 
-The notion of commodities is critical during the information gathering step and
-can be used to partition arcs in an exchange graph. It also is compelling when
-generating the formulations shown in \S \ref{abm:dre:lp} and \S
-\ref{abm:dre:milp}. However, given the constructed network graph, constraint
-structure, and preference structure, the notion of commodities is not necessary
-for the exchange graph to be solved.
+The notion of commodities is critical during the information gathering step as
+it is the basic classification used in communicating supply and demand. It is
+also useful when an exchange graph is formed, because the graph may be able to
+be partitioned by collections of commodities. However, once minimally connected
+exchange graphs are established, solution mechanisms do not employ the notion of
+commodities. Rather, quantities, constraints, and preferences are used.
 
 \paragraph{Constraint Coefficients}
 
 Constraint coefficients are determined for an arc based on the proposed resource
-to be transferred along that arc, the requester's constraint translation
-functions, and the suppliers constraint translation function. The notion of a
-capacity translation function is something that has been introduced out of
-necessity due to the complexity of the DRE. An example of supply-based
-constraints is provided to help clarify its purpose.
+to be transferred along that arc, the requester's constraint conversion
+functions, and the suppliers constraint conversion function. An example of
+supply-based constraints is provided to help clarify its purpose.
 
-Consider an supplier enrichment facility, $s$, which produces the commodity
+Consider a supplier enrichment facility, $s$, which produces the commodity
 enriched uranium (EU). This facility has two constraints on its operation for
 any given time period: the amount of Separative Work Units (SWU) that it can
 process, $b_{s}^{SWU}$, and the total natural uranium (NU) feed it has on hand.,
@@ -414,10 +412,10 @@ quality of material in question is its enrichment, i.e.,
 \end{equation}
 
 These values are set during a prior phase of the overall matching algorithm, and
-can therefore be considered constant. Further, let us note that, in general, an
+can therefore be considered constant. Further, note that, in general, an
 enrichment facility's operation, or rather its capacity, is governed by two
-parameters: $\varepsilon_{f,s}$, the fraction of \nucl{235}{U} in its feed
-material, and $\varepsilon_{t,s}$, the fraction of \nucl{235}{U} in its tails
+parameters: $\varepsilon_{f}$, the fraction of \nucl{235}{U} in its feed
+material, and $\varepsilon_{t}$, the fraction of \nucl{235}{U} in its tails
 material. These parameters determine the amount of SWU required to produce some
 amount of enriched uranium:
 
@@ -425,10 +423,10 @@ amount of enriched uranium:
 \begin{split}
 \label{eqs:swu}
 SWU = & \:\: P ( V(\varepsilon_{j}) 
-      + \frac{\varepsilon_{j} - \varepsilon_{f,s}}
-               {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{t,s}) \\
-      & - \frac{\varepsilon_{j} - \varepsilon_{t,s}}
-               {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{f,s}) )
+      + \frac{\varepsilon_{j} - \varepsilon_{f}}
+               {\varepsilon_{f} - \varepsilon_{t}} V(\varepsilon_{t}) \\
+      & - \frac{\varepsilon_{j} - \varepsilon_{t}}
+               {\varepsilon_{f} - \varepsilon_{t}} V(\varepsilon_{f}) )
 \end{split}
 \end{align}
 
@@ -444,15 +442,15 @@ arguments of this facility's two capacity constraints.
 
 \begin{align}
 \label{eqs:enr-prod-beta}
-\beta_{s}^{NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t,s}}
-                                      {\varepsilon_{f,s} - \varepsilon_{t,s}} \\
+\beta_{s}^{NU}(\varepsilon_{j}) = & \:\: \frac{\varepsilon_{j} - \varepsilon_{t}}
+                                      {\varepsilon_{f} - \varepsilon_{t}} \\
 \begin{split}
 \label{eqs:enr-swu-beta}
 \beta_{s}^{SWU}(\varepsilon_{j}) = & \:\: V(\varepsilon_{j}) \\
-                         & + \frac{\varepsilon_{j} - \varepsilon_{f,s}}
-                                  {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{t,s}) \\
-                         & - \frac{\varepsilon_{j} - \varepsilon_{t,s}}
-                                  {\varepsilon_{f,s} - \varepsilon_{t,s}} V(\varepsilon_{f,s})
+                         & + \frac{\varepsilon_{j} - \varepsilon_{f}}
+                                  {\varepsilon_{f} - \varepsilon_{t}} V(\varepsilon_{t}) \\
+                         & - \frac{\varepsilon_{j} - \varepsilon_{t}}
+                                  {\varepsilon_{f} - \varepsilon_{t}} V(\varepsilon_{f})
 \end{split}
 \end{align}
 
