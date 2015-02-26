@@ -45,13 +45,13 @@ separately in \S \ref{abm:dre}.
 
 \subsection{Agent Taxonomy}\label{abm:abm:tax}
 
-The Cyclus kernel implements a basic \code{Agent} class that provides the
+The Cyclus kernel implements a basic \texttt{Agent} class that provides the
 minimal interface for agents to be instantiated within a simulation. A
-\code{Trader} interface provides a communication layer required for agents to be
+\texttt{Trader} interface provides a communication layer required for agents to be
 included in the exchange of resources. Three useful derived classes are provided
-to be used as basic abstractions of entities in the NFC. \code{Facility} agents
-in Cyclus implement both interfaces, while \code{Institution} and \code{Region}
-agents implement only the \code{Agent} interface.  A summary of the conceptual
+to be used as basic abstractions of entities in the NFC. \texttt{Facility} agents
+in Cyclus implement both interfaces, while \texttt{Institution} and \texttt{Region}
+agents implement only the \texttt{Agent} interface.  A summary of the conceptual
 placing of each archetype in a Cyclus simulation is provided below.
 
 \subsubsection{Facilities}
@@ -114,29 +114,27 @@ complex interactions at a regional level such as tariffs and sanctions.
 Agency is provided in two primary modes: determining facility deployment and
 informing resource exchange mechanisms. 
 
-Facility deployment involves some combination of an \code{Institution} agent, a
-\code{Facility} agent, and a \code{Region} agent. \code{Institution} agents
-represent a simulation entity abstraction that can deploy \code{Facility}
-agents. \code{Region} agents represent a simulation entity abstraction that have
-a demand for certain commodities that \code{Facility} agents provide, for
-example, reactor-like \code{Facility} agents provide electrical power.
+Facility deployment involves some combination of an \texttt{Institution} agent, a
+\texttt{Facility} agent, and a \texttt{Region} agent. \texttt{Institution} agents
+represent a simulation entity abstraction that can deploy \texttt{Facility}
+agents. \texttt{Region} agents represent a simulation entity abstraction that have
+a demand for certain commodities that \texttt{Facility} agents provide, for
+example, reactor-like \texttt{Facility} agents provide electrical power.
 
-\code{Facility} agents are further provided agency by informing market
+\texttt{Facility} agents are further provided agency by informing market
 mechanisms of the supply and demand of resource quantity and quality. Cyclus
 initially used a simple interface and algorithm for determining resource
 transactions. Individual markets were defined as agents themselves much like
-\code{Facility}, \code{Institution}, and \code{Region} agents. Many limitations
+\texttt{Facility}, \texttt{Institution}, and \texttt{Region} agents. Many limitations
 were identified at the time, however, and the market-as-agent approach was
 eventually abandoned. An enumeration of the observed limitations is described
 further in \S \ref{abm:abm:limits}.
 
-Dynamic Resource Exchange (DRE), described in detail in \S \ref{abm:dre}, is the
-mechanism eventually developed to drive supply-demand transactions. The primary
-source of agency is provided to \code{Facility} agents in order to negotiate the
-quantity and quality of potential resource transactions. \code{Region},
-\code{Institution}, and \code{Facility} agents are then provided agency in the
-negotiation of preferences of potential transactions, where preference is a
-proxy for price.
+The primary source of agency is provided to \texttt{Facility} agents through the
+\texttt{Trader} interface in order to negotiate the quantity and quality of
+potential resource transactions. \texttt{Region}, \texttt{Institution}, and
+\texttt{Facility} agents are then provided agency in the negotiation of
+preferences of potential transactions, where preference is a proxy for price.
 
 \subsection{Proof of Principle}\label{abm:abm:proof}
 
@@ -155,7 +153,7 @@ The INPRO Business As Usual (BAU) benchmark \cite{_international_2009} for the
 once-through fuel cycle was chosen for three reasons. First, it was the simplest
 benchmark that demonstrated deployment behavior. Second, no supply or demand
 constraints were present, so a basic supply-demand framework would
-suffice. Finally, results from another fuel cycle simulation code, specifically
+suffice. Finally, results from another fuel cycle simulation texttt, specifically
 VISION \cite{vision2009}, was available for comparison. The INPRO BAU benchmark
 identified two cases, high electricity demand and moderate electricity demand,
 as shown in Fig. \ref{fig:inpro-demand}. Both cases require that demand met by a
@@ -184,9 +182,9 @@ Each implemented agent is available in the Cycamore repository \cite{cycamore201
 
 \paragraph{GrowthRegion}
 
-The \code{GrowthRegion} is a Region archetype developed to assist in
-facility deployment logic. The \code{GrowthRegion} takes as input a listing of
-commodities for which it has a demand. For example, the \code{GrowthRegion}
+The \texttt{GrowthRegion} is a Region archetype developed to assist in
+facility deployment logic. The \texttt{GrowthRegion} takes as input a listing of
+commodities for which it has a demand. For example, the \texttt{GrowthRegion}
 agents in this benchmark demand electrical power. The demand curves for
 commodities is defined by symbolic functions. Currently, linear functions,
 exponential functions, and piece-wise combinations of both are supported.
@@ -227,13 +225,13 @@ facilities to build of type $i$.
 
 \paragraph{ManagerInst}
 
-The \code{ManagerInst} is an Institution archetype also developed to assist
-in facility deployment. While the \code{GrowthRegion} places a build order, the
-\code{ManagerInst} fulfills the order. Further, the \code{ManagerInst}
+The \texttt{ManagerInst} is an Institution archetype also developed to assist
+in facility deployment. While the \texttt{GrowthRegion} places a build order, the
+\texttt{ManagerInst} fulfills the order. Further, the \texttt{ManagerInst}
 determines the set of facilities, $I$, shown in in Eqn. \ref{eqs:growth}, which
 can be built. Note that the set $I$ can change over time. Once a deployment
-decision is made, the \code{GrowthRegion} makes a facility deployment request of
-the \code{ManagerInst} which then deploys the chosen facility.
+decision is made, the \texttt{GrowthRegion} makes a facility deployment request of
+the \texttt{ManagerInst} which then deploys the chosen facility.
 
 \paragraph{BatchReactor}
 
@@ -244,7 +242,7 @@ extracted and replaced when a reactor is refueled. In general, LWRs replace
 between a third and a quarter of their assemblies during refueling based on the
 fuel management scheme used.
 
-The \code{BatchReactor} used in this work had configurable properties as
+The \texttt{BatchReactor} used in this work had configurable properties as
 displayed in Table \ref{tbl:batchrxtr}. The values used based on the defined
 INPRO benchmark are described in Table \ref{tbl:inprorxtr}.
 
@@ -259,7 +257,7 @@ Batch Size     & Quantity of a batch                                 \\
 Power Capacity & Nameplate Capacity for Power                          \\
 Power Cost     & Cost to build a new reactor      \\ \hline
 \end{tabular}
-\caption{Configurable input for the \code{BatchReactor} archetype.}
+\caption{Configurable input for the \texttt{BatchReactor} archetype.}
 \label{tbl:batchrxtr}
 \end{table}
 
@@ -287,7 +285,7 @@ Power Cost     & 1000*      & 600* \\ \hline
 
 \paragraph{EnrichmentFacility}
 
-The \code{EnrichmentFacility} archetype was developed to provide
+The \texttt{EnrichmentFacility} archetype was developed to provide
 enrichment-related output for the simulation, namely the amount of separative
 work units (SWU) and natural uranium used during a given time step. For the
 INPRO cases, it can be defined quite simply using the values shown in Table
@@ -303,7 +301,7 @@ Parameter    & Description                      & Values          \\ \hline
 Input Recipe & A description of input isotopics & Natural Uranium \\
 Tails Assay  & The U-235 assay of tails.        & 0.003          
 \end{tabular}
-\caption{Configurable input values for the \code{EnrichmentFacility} used in the
+\caption{Configurable input values for the \texttt{EnrichmentFacility} used in the
   INPRO once-through benchmark.}
 \label{tbl:inproenr}
 \end{table}
@@ -313,7 +311,7 @@ Tails Assay  & The U-235 assay of tails.        & 0.003
 % c/Cref is cleveref
 
 In aggregate, Cyclus performed well relative to the other benchmark
-codes. Fig. \ref{fig:rxtrs_low} shows the reactor deployment curves for each
+texttts. Fig. \ref{fig:rxtrs_low} shows the reactor deployment curves for each
 simulator for the moderate growth scenario while Fig. \ref{fig:rxtrs_high} shows
 reactor deployment for the high scenario. The slight differences are attributed
 to VISION's look-ahead functionality which builds the required facilities one
@@ -326,7 +324,7 @@ are shown in \Cref{fig:nat_u_low,fig:nat_u_high}, and cumulative used fuel
 inventory curves are shown in
 \Cref{fig:used_fuel_low,fig:used_fuel_high}. Slight discrepancies are noted
 between Cyclus and VISION. These discrepancies are attributed to the
-implementation of core batch recycling in each of the respective codes. The
+implementation of core batch recycling in each of the respective texttts. The
 differences between Cyclus and VISION because the curves show cumulative
 metrics. In other words, results at time $t_1$ are added the results at time
 $t_2$ and so on. Therefore, a series of small discrepancies appears to be
@@ -394,7 +392,7 @@ regarding quantity and quality of resources as well as socioeconomic effects is
 a hard problem.
 
 Cyclus was originally designed to use an addition agent archetype called a
-\code{Market}. \code{Market}s were envisioned to represent markets for specific
+\texttt{Market}. \texttt{Market}s were envisioned to represent markets for specific
 commodities. For example, the simulation described in \S \ref{abm:abm:proof}
 used three commodity markets: natural uranium, enriched uranium fuel, and used
 fuel. This approach is valid in the absence of supply or demand constraints,
@@ -402,18 +400,18 @@ competition, and fungibility. However, the inclusion of any one of these
 features requires a much more involved process.
 
 If supply or demand constraints are to be modeled, each
-associated \code{Market} agent must have both a corresponding communication
+associated \texttt{Market} agent must have both a corresponding communication
 interface and an implementation that accounts for such constraints. While
 quantity constraints are not unreasonable to implement and support, quality
 constraints are much more difficult. Furthermore, communicating such constraints
-is difficult. Whereas the \code{Market} agent can implement a solver algorithm,
+is difficult. Whereas the \texttt{Market} agent can implement a solver algorithm,
 constraints are more naturally defined by the trader interacting with the
-\code{Market} agent. For example, consider the enriched uranium market used in
+\texttt{Market} agent. For example, consider the enriched uranium market used in
 \S \ref{abm:abm:proof}. While the simulation used an agent abstraction for an
 enrichment facility and fuel fabrication plant, another simulation may wish to
 model facilities that downblend HEU, rather than enrich LEU. Such a process will
 have different constraints. Importantly, those constraints are a function of the
-\code{Facility} archetype, not of a \code{Market} archetype.
+\texttt{Facility} archetype, not of a \texttt{Market} archetype.
 
 Assuming that supply or demand is constrained either resource quantity or
 quality, competition for the resource in question can arise. In fact, resources
