@@ -629,16 +629,14 @@ reactor fuel orders, which comprise a large amount of material orders within the
 simulation context. Specifically, it allows reactor fuel orders to be met by
 more than one supplier with an arbitrary amount of the order met by each
 supplier. Put another way, the LP formulation does not contain the discrete
-material information required to model the transaction of fuel assemblies. In
-order to provide this capability of quantizing orders, binary decision variables
-must be introduced and integer programming techniques must be utilized to solve
-the resulting mixed integer-linear program.
+material information required to model the transaction of fuel assemblies. 
 
-The addition of integer variables changes both the complexity of the formulation
-and the complexity of the solution technique. Such a change requires a Mixed
-Integer-Linear Program (MILP) formulation and solution via the branch-and-bound
-method which solves NP-Hard combinatorial optimization problems. The Linear
-Program (LP) version requires the simplex method which is much more efficient.
+In order to provide this capability of quantizing orders, binary decision
+variables must be introduced. The addition of integer variables changes both the
+complexity of the formulation and the complexity of the solution technique. Such
+a change requires a Mixed Integer-Linear Program (MILP) formulation and solution
+via the branch-and-bound method which solves NP-Hard combinatorial optimization
+problems.
 
 \paragraph{Binary Variables}
 
@@ -699,7 +697,10 @@ Equations \ref{eqs:mutual_sup} and \ref{eqs:mutual_req}.
 Using the above arc partition notation allows for a much simpler written
 formulation of the MILP that looks quite close to the related LP formulation
 shown in Equation \ref{eqs:NFCTP-LP}. The full formulation of the NFCTP is shown
-in Equation \ref{eqs:NFCTP}
+in Equation \ref{eqs:NFCTP}.  The sets and variables involved in Equation
+\ref{eqs:NFCTP} are described in Tables \ref{tbl:NFCTP-sets} and
+\ref{tbl:NFCTP-vars}.
+
 
 %%% 
 % this could probably be realigned 
@@ -766,9 +767,6 @@ in Equation \ref{eqs:NFCTP}
 \end{subequations}
 %%% 
 
-The sets and variables involved in Equation \ref{eqs:NFCTP} are described in
-Tables \ref{tbl:NFCTP-sets} and \ref{tbl:NFCTP-vars}.
-
 %%% 
 \begin{table} [h!]
 \centering
@@ -823,13 +821,13 @@ $\tilde{x_j}$ & the requested quantity associated with request node $j$ \\
 The examples of the various constraints from the previous section also apply
 here. The only difference is the notion of the binary variables, $y_{i,j}$,
 which act as on/off switch as to whether a consumer's entire requested amount of
-a resource is met by a supplier or not.
+a resource is met by a supplier or not. 
 
-It should be noted that this advanced formulation adds significant complexity to
-the resolution method at every time step. However, simple heuristics exist. A
-common heuristic for MILPs is to solve a relaxed version of the problem in the
-form of a linear program, and to round values to form an integer solution. A
-heuristic used in Cyclus is provided in \S \ref{abm:dre:nfctp:heur}.
+Using this advanced formulation adds significant complexity to the resolution
+method at every time step. However, should a user wish to find a feasible
+solution in a shorter amount of time, simple heuristics exist. Such a heuristic
+used in Cyclus is provided in \S \ref{abm:dre:nfctp:heur}, and further heuristic
+development is a fruitful area of future work.
 
 Note that each constraint coefficient for binary variables can be rewritten as
 Equation \ref{eqs:constr_simple} and each objective coefficient can be rewritten
@@ -990,6 +988,7 @@ uranium. We can now state the set the values for $H_{r}$ for this facility:
   H_{r} = \{ \mbox{NU}, \mbox{RU} \}
 \end{equation}
 
+\noindent
 One or more constraints would then accompany any requests. For example, one
 could constraint total \nucl{235}{U} content needed, which would include both NU
 and RU flows.
@@ -1109,8 +1108,8 @@ While a solver may operate on the exchange layer, an instance of an
 \code{ExchangeGraph} can be translated fully into the NFCTP. Once in an LP or
 MILP form, the DRE instance can be solved by sophisticated 3\textsuperscript{rd}
 party libraries. In order to interface with a large number of the possible
-solvers, including COIN-OR and CPLEX, the COIN-OR Open Solver Interface API
-\cite{coinosi} is utilized.
+solvers, including COIN-OR and CPLEX, the COIN-OR OSI API \cite{coinosi} is
+utilized.
 
 The translation from the exchange layer to formulation layer is managed by the
 \code{ProgTranslator} class. A variable in the NFCTP is associated with each
