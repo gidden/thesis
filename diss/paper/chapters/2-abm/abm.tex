@@ -171,7 +171,7 @@ fuel.
 The goal of this proof-of-principle study was to showcase the capability for a
 developer to generate the required Facility, Institution, and Region archetypes,
 and that such archetypes could be deployed in the Cyclus simulation framework
-and generate satisfactory results. Comparison metrics are based off of similar
+and generate satisfactory results. Comparison metrics are based on similar
 metrics used in the origin INPRO benchmarking exercise, including deployment
 patterns, natural uranium consumed, and used fuel produced by all reactors.
 
@@ -390,13 +390,14 @@ both deployment and resource exchange. In general informing resource exchange
 regarding quantity and quality of resources as well as socioeconomic effects is
 a hard problem.
 
-Cyclus was originally designed to use an addition agent archetype called a
-\texttt{Market}. \texttt{Market}s were envisioned to represent markets for specific
-commodities. For example, the simulation described in \S \ref{abm:abm:proof}
-used three commodity markets: natural uranium, enriched uranium fuel, and used
-fuel. This approach is valid in the absence of supply or demand constraints,
-competition, and fungibility. However, the inclusion of any one of these
-features requires a much more involved process.
+Cyclus was originally designed to use an additional agent archetype called a
+\texttt{Market}. \texttt{Market}s were envisioned to represent markets for
+specific commodities. For example, the simulation described in \S
+\ref{abm:abm:proof} used three commodity markets: natural uranium, enriched
+uranium fuel, and used fuel. This approach is valid in the absence
+agent-specified supply or demand constraints and competition for resources in
+multiple markets (e.g., for fungible resources). However, the inclusion of
+either of these features requires a much more involved process.
 
 If supply or demand constraints are to be modeled, each
 associated \texttt{Market} agent must have both a corresponding communication
