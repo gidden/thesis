@@ -48,9 +48,9 @@ following problem statement:
 
 \subsection{Information Gathering}\label{abm:dre:info}
 
-Supply-demand determination at any given time step begins with three
-\textit{phases}, the terminology of which is influenced from previous supply
-chain agent-based modeling work \cite{julka_agent-based_2002}. Importantly, this
+The DRE begins at any given time step with three \textit{phases}, the
+terminology of which is influenced from previous supply chain agent-based
+modeling work \cite{julka_agent-based_2002}. Importantly, this
 information-gathering step is agnostic as to the supply-demand matching
 algorithm used, it is concerned only with querying the current status of supply
 and demand in the simulation. The collective information gathering procedure is
@@ -73,24 +73,30 @@ request more quantity than they can actually consume, as long as a corresponding
 capacity constraint accompanies this posting. Requests can be denoted as
 \textit{exclusive}. An exclusive request is one that must either be met in full
 or not at all. Exclusive requests allow the modeling of quantized, packaged
-transfers, e.g., fuel assemblies. Further, consumers are allowed to post demand
-for multiple commodities that may serve to meet the same combine capacity. For
-example, consider an LWR that can be filled with MOX or UOX. It can post a
-demand for both, but must define a preference over the set of possible
-commodities that can be consumed. Such requests are termed \textit{mutual
-  requests}. Another example is that of an advanced fuel fabrication facility,
-i.e., one that fabricates fuel partially from separated material that has
-already passed through a reactor. Such a facility can choose to fill the
-remaining space in a certain assembly with various types of fertile material,
-including depleted uranium from enrichment or reprocessed uranium from
+transfers, e.g., fuel assemblies. 
+
+Consumers are allowed to post demand for multiple commodities that may serve to
+meet the same combine capacity. For example, consider an LWR that can be filled
+with MOX or UOX. It can post a demand for both, but must define a preference
+over the set of possible commodities that can be consumed. Such requests are
+termed \textit{mutual requests}. Another example is that of an advanced fuel
+fabrication facility, i.e., one that fabricates fuel partially from separated
+material that has already passed through a reactor. Such a facility can choose
+to fill the remaining space in a certain assembly with various types of fertile
+material, including depleted uranium from enrichment or reprocessed uranium from
 separations. Accordingly, it could demand both commodities as long as it
-provides a corresponding constraint with respect to total consumption. At the
-completion of the RFB phase, the market exchange will have a set of request
-portfolios. Each each portfolio consists of a set requests. Arbitrary
+provides a corresponding constraint with respect to total consumption. A set of
+exclusive requests may also be grouped as mutual requests, in which case the set
+is termed \textit{mutually exclusive}.
+
+At the completion of the RFB phase, the market exchange will have a set of
+request portfolios. Each each portfolio consists of a set requests. Arbitrary
 constraints over the set of requests can be provided that are functions of
-quantity or quality.  For requests that mutually satisfy a given demand, a
-preference over those requests is required. Finally, each request portfolio has
-a specific quantity associated with it.
+quantity or quality.  Each request may have an associated preference. For
+requests that mutually satisfy a given demand, a preference distribution informs
+the solver as to which commodities should be satisfied first, given
+constraints. Finally, each request portfolio has a specific quantity associated
+with it.
 
 The second phase allows suppliers to \textit{respond} to the set of request
 portfolios, and is termed the \textit{Response to Request for Bids} (RRFB) phase
@@ -100,45 +106,49 @@ for some set of commodities. Accordingly, for each request, suppliers of that
 commodity denote production capacities and an isotopic profile of the commodity
 they can provide. Suppliers are allowed to offer the null set of isotopics as
 their profile, effectively providing no information. Suppliers are also allowed
-to denote responses as \textit{exclusive}, as is done in the RFB phase. An
-exclusive offer must be accepted in its entirety or not at all. Again, exclusive
-offers provides a way to model quantized, packaged resources, such as fuel
-assemblies. As with requests, supply responses can be grouped into
-\textit{mutual} responses. Every response in a mutual set is, by definition,
-exclusive. Of the set of responses, only one may be met. This functionality
-again supports the notion of quantized orders, e.g., in the case of fuel
-assemblies. A supplier may have its production constrained by more than one
-parameter. For example, a processing facility may have both a throughput
-constraint (i.e., it can only process material at a certain rate) and an
-inventory constraint (i.e., it can only hold some total material). Further, the
-facility could have a constraint on the quality of material to be processed,
-e.g., it may be able to handle a maximum radiotoxicity for any given time step
-which is a function of both the quantity of material in processes and the
-isotopic content of that material. Multiple of such constraints are allowed. At
-the completion of the RRFB phase the possible connections between supplier and
-producer facilities, i.e., the arcs in the graph of the transportation problem,
-have been established with specific capacity constraints defined both by the
-quantity and quality of commodities that will traverse the arcs.
+to denote responses as exclusive, as is done in the RFB phase. Supply responses
+can also be grouped into mutual responses, and sets of responses may be mutually
+exclusive. This functionality again supports the notion of quantized orders,
+e.g., in the case of fuel assemblies. 
+
+A supplier may have its production constrained by more than one parameter. For
+example, a processing facility may have both a throughput constraint (i.e., it
+can only process material at a certain rate) and an inventory constraint (i.e.,
+it can only hold some total material). Further, the facility could have a
+constraint on the quality of material to be processed, e.g., it may be able to
+handle a maximum radiotoxicity for any given time step which is a function of
+both the quantity of material in processes and the isotopic content of that
+material. Multiple of such constraints are allowed. At the completion of the
+RRFB phase the possible connections between supplier and producer facilities,
+i.e., the arcs in the graph of the transportation problem, have been established
+with specific capacity constraints defined both by the quantity and quality of
+commodities that will traverse the arcs.
 
 The final phase of the information gathering procedure allows consumer
 facilities to adjust their set of preferences and for managers of consumer
-facilities to affect the consumer's set of preferences, as described in the
-remaining sections. Accordingly, the last phase is termed the \textit{Preference
- Adjustment} (PA) phase. Preference adjustments can occur in response to the
-set of responses provided by producer facilities. Consider the example of a
-reactor facility that requests two fuel types, MOX and UOX. It may get two
-responses to its request for MOX, each with different isotopic profiles of the
-MOX that can be provided. It can then assign preference values over this set of
-potential MOX providers. Another prime example is in the case of repositories. A
-repository may have a defined preference of material to accept based upon its
-heat load or radiotoxicity, both of which are functions of the quality, or
-isotopics, of a material. In certain simulators, limits on fuel entering a
-repository are imposed based upon the amount of time that has elapsed since the
-fuel has exited a reactor, which can be assessed during this phase. The time
-constraint is, in actuality, a constraint on heat load or radiotoxicity (one
-must let enough of the fission products decay). A repository could analyze
-possible input fuel isotopics and set the arc preference of any that violate a
-given rule to 0, effectively eliminating that arc.
+facilities to affect the consumer's set of preferences. Accordingly, the last
+phase is termed the \textit{Preference Adjustment} (PA) phase. By allowing
+facility managers, i.e., a facility's institution and region, to also adjust
+preferences, socio-economic models are allowed to inform the exchange of
+resources. For example, a region can detect a transregional trade between one of
+its facilities and a facility in another region. If a tariff model is employed,
+the trade preference and be diminished or even removed.
+
+For facilities, preference adjustments occurs in response to the set of
+responses provided by producer facilities. Consider the example of a reactor
+facility that requests two fuel types, MOX and UOX. It may get two responses to
+its request for MOX, each with different isotopic profiles of the MOX that can
+be provided. It can then assign preference values over this set of potential MOX
+providers. Another prime example is in the case of repositories. A repository
+may have a defined preference of material to accept based upon its heat load or
+radiotoxicity, both of which are functions of the quality, or isotopics, of a
+material. In certain simulators, limits on fuel entering a repository are
+imposed based upon the amount of time that has elapsed since the fuel has exited
+a reactor, which can be assessed during this phase. The time constraint is, in
+actuality, a constraint on heat load or radiotoxicity (one must let enough of
+the fission products decay). A repository could analyze possible input fuel
+isotopics and set the arc preference of any that violate a given rule to 0,
+effectively eliminating that arc.
 
 \subsection{The Nuclear Fuel Cycle Transportation Problem}\label{abm:dre:fctp}
 
