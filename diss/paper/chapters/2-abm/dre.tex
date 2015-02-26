@@ -1061,26 +1061,26 @@ classes. The fundamental data structures in the resource layer reflect the
 constructs of the information gathering procedure described in \S
 \ref{abm:dre:info}.
 
-In the RFB phase of the DRE, agents populate \codeb{Request\-Portfolio<T>}s with
-\code{Request<T>}s and \codeb{Capacity\-Constraint<T>}s. A \code{Request<T>}
-defines a desired \code{Resource<T>}, communicating quantity, quality, and
-preference. Any number of \codeb{Capacity\-Constraint<T>}s may be added to a
-\codeb{Request\-Portfolio<T>}. A \codeb{Capacity\-Constraint<T>} defines a
+In the RFB phase of the DRE, agents populate \codeb{Request\-Portfolio}s with
+\code{Request}s and \codeb{Capacity\-Constraint}s. A \code{Request}
+defines a desired \code{Resource}, communicating quantity, quality, and
+preference. Any number of \codeb{Capacity\-Constraint}s may be added to a
+\codeb{Request\-Portfolio}. A \codeb{Capacity\-Constraint} defines a
 capacitating value and a conversion function that takes as an argument a
 \code{Resource} and returns a value in units of the conversion function. For
-\codeb{Request\-Portfolio<T>}s, constraints are assumed to be demand
+\codeb{Request\-Portfolio}s, constraints are assumed to be demand
 constraints, i.e., take the form of a greater-than constraint. In the RRFB phase
-of the DRE, agents populate \codeb{Bid\-Portfolio<T>}s with \code{Bid<T>}s and
-\codeb{Capacity\-Constraint<T>}s. Agents can inspect the population of
-\code{Request<T>}s and associated \code{Resource}s. A \code{Bid<T>} targets a
-specific \code{Request<T>}, responding with a proposed \code{Resource} to
-transfer to the requester. \codeb {Capacity\-Constraint<T>}s are applied to all
-\code{Bid<T>}s in a portfolio. For bidders, constraints are assumed to be
+of the DRE, agents populate \codeb{Bid\-Portfolio}s with \code{Bid}s and
+\codeb{Capacity\-Constraint}s. Agents can inspect the population of
+\code{Request}s and associated \code{Resource}s. A \code{Bid} targets a
+specific \code{Request}, responding with a proposed \code{Resource} to
+transfer to the requester. \codeb {Capacity\-Constraint}s are applied to all
+\code{Bid}s in a portfolio. For bidders, constraints are assumed to be
 less-than constraints. Before continuing, requesting agents and their managers
 are allowed to alter the preference associated with each
-\code{Request<T>}-\code{Bid<T>} pair in the PA phase of the DRE. When a solution
+\code{Request}-\code{Bid} pair in the PA phase of the DRE. When a solution
 to the DRE is found, bidders associated with successful
-\code{Request<T>}-\code{Bid<T>} pairs are informed, and a trade of the bidder's
+\code{Request}-\code{Bid} pairs are informed, and a trade of the bidder's
 \code{Resource} is initiated.
 
 Future work can be focused on providing more features to the DRE
@@ -1103,7 +1103,7 @@ recorded on \code{ExchangeArc}s, which store a reference to a supply
 are stored on the appropriate \code{ExchangeGroup} object.
 
 An \code{ExchangeContext} object is tasked with storing a mapping from
-\code{Request<T>} and \code{Bid<T>} objects to their associated
+\code{Request} and \code{Bid} objects to their associated
 \code{ExchangeNode}. Importantly, the exchange layer does \textit{not} depend on
 resource type, i.e., the resource type is abstracted away during
 translation. Finally, a general solver can be implemented that operates on the
