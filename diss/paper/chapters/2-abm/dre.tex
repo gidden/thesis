@@ -418,7 +418,8 @@ enrichment facility's operation, or rather its capacity, is governed by two
 parameters: $\varepsilon_{f}$, the fraction of \nucl{235}{U} in its feed
 material, and $\varepsilon_{t}$, the fraction of \nucl{235}{U} in its tails
 material. These parameters determine the amount of SWU required to produce some
-amount of enriched uranium:
+amount of enriched uranium, shown in Equation \ref{eqs:swu} as well as the
+amount of natural uranium, or feed, required, as shown in Equation \ref{eqs:nu}.
 
 \begin{align}
 \begin{split}
@@ -431,8 +432,16 @@ SWU = & \:\: P ( V(\varepsilon_{j})
 \end{split}
 \end{align}
 
-$P$ in Equation \ref{eqs:swu} is the amount of produced enriched uranium, and
-$V(x)$ is the value function,
+\begin{equation}
+\label{eqs:nu}
+F = P \frac{\varepsilon_{j} - \varepsilon_{t}}
+           {\varepsilon_{f} - \varepsilon_{t}}
+\end{equation}
+
+\noindent
+$P$ in Equations \ref{eqs:swu} and \ref{eqs:nu} is the amount of produced
+enriched uranium, $F$ is the amount of feed, or natural uranium, and $V(x)$ is
+the value function,
 
 \begin{equation}\label{eqs:value}
   V(x) = (1-2x) \ln \left(\frac{1-x}{x}\right)
