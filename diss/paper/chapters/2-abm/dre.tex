@@ -469,56 +469,42 @@ equations for the enrichment facility by combining Equations
 \paragraph{Preferences \& Costs}
 
 In any network flow problem, of which transportation problems are a subset, the
-cost of transporting commodities is what drives the solution. Thus, a cost
-function is necessary to determine a solution. Because the \Cyclus environment
-is still a nascent simulation platform, accurate pricing metrics, and what such
-metrics even are in terms of a centuries-long fuel cycle simulation, are
-generally difficult to ascertain, with the current standard source being the
-Advanced Fuel Cycle Cost Basis report
-\cite{shropshire_advanced_2009}. Accordingly, the cost function is currently a
-measure of simulation entity preference, rather than a concrete representation
-of cost.
-
-The notion of preference extends the work of Oliver's affinity metric
-\cite{oliver_geniusv2:_2009}. The preference metric is generally consumer
-centric, i.e., consumers have a preference over the possible commodities that
-could meet their demand. For example, a reactor may be able to use UOX or MOX
-fuel, but may prefer to use MOX fuel. Such a preference differential allows the
-projection of real-world cost into the simulation. Additionally, the managers of
-a given facility, which in the \Cyclus simulation environment include its
-Institution and Region, also exert an influence over its preference. An obvious
-example is the concept of affinities given in \cite{oliver_geniusv2:_2009}. In
-Oliver's work, an affinity or preference existed between facilities in
-``similar'' institutions in order to drive the trading between institutions as a
-simple model of international relations. This idea is expanded upon to cover a
-facility's other managers and the commodities themselves. Additionally, a
-preference can be delineated between the proposed qualities of the same
-commodity from different vendors, e.g. if two vendors of MOX fuel
-exist. Finally, the notion of a preference is a positive one, and we require a
-notion of cost to solve the minimum-cost formulation of the multicommodity
-transportation problem with side constraints. Therefore one must utilize a
-translation function.
+objective coefficients associated with transporting commodities is what drives
+the solution. Given the nature of supply and demand constraints, the
+transportation problem naturally lends itself to a minimum cost formulation. A
+preference-based formulation has been presented thus far due to the difficulties
+of employing reasonable cost coefficients, as was discussed in \S
+\ref{intro:prefs}. While directly using costs should be available to users, in
+practice using a more abstract notion of preferences is simpler.
 
 Formally, a preference function, $p_{i, j}(h)$, is defined which is a cardinal
-preference ordering over a consumer's satisfying commodity set. A preference is
-assigned to each arc in the NFCTP.
-
+preference ordering over a consumer's satisfying commodity set.
+ 
 \begin{equation}
 p_{i, j}(h) \:\: \forall i \in I  \:\: \forall h \in H_{r} 
 \end{equation}
 
-Preference is a function both of the consumer, $j$, and producer, $i$, and the
-proposed resource transfer from consumer to producer. The dependence on producer
-encapsulates the relationship effects due to managerial preferences, i.e., the
-effects of the Preference Adjustment phase described in \S \ref{abm:dre:info}.
+\noindent
+A preference is assigned to each arc in the NFCTP, and are a function both of
+the consumer, $j$, and producer, $i$, and the proposed resource transfer from
+consumer to producer. The dependence on producer encapsulates the relationship
+effects due to managerial preferences. The preference set used in the NFCTP
+formulation follows directly from the Preference Adjustment phase described in
+\S \ref{abm:dre:info}.
 
-A cost translation function, $f$, is defined that operates on the commodity
+The notion of a preference is a positive one, that is, an optimal solution
+maximizes the product of preference and flow in the system. However, the
+transportation problem requires a cost-based objective function. Because
+preferences are a proxy for cost and there is a desire to support cost-based
+DREs in the future, a preference-to-cost translation function is utilized. A
+cost translation function, $f$, is defined that operates on the commodity
 preference function to produce an appropriate cost for the NFCTP.
 
 \begin{equation}
 f : p_{i,j}(h) \to c_{i,j}
 \end{equation}
 
+\noindent
 For the purposes of this work, any operator that preserves the preference
 monotonicity and cardinal ordering is suitable.  The inversion operator has been
 chosen because it preserves required features and also allows for easy
