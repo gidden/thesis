@@ -170,7 +170,7 @@ database size. Therefore, an ideal compression is the largest possible that
 retains acceptable performance.
 
 Originally, all Cyclopts datasets used a UUID-as-primary-key layout. For
-instance, rather having a tables with a layout described in Table
+instance, rather than having tables with a layout described in Table
 \ref{tbl:/Family/ResourceExchange/ExchangeArcs}, a single table with an extra
 column naming the instance UUID was used. However, extremely long read times
 were encountered when post processing data. The basic procedure for performing a
@@ -323,8 +323,8 @@ Cyclopts can be executed locally using the \code{cyclopts exec} command-line
 interface (CLI) described in Appendix \ref{method:tools:cli}. When exploring a
 large parameter space, of which each point can generate a large number of unique
 instances, local execution on a single machine is insufficient. In order to
-overcome this limitation, support for Condor-based systems has been implemented
-in Cyclopts and available using the \code{cyclopts condor-submit} CLI. Condor
+overcome this limitation, support for HTCondor-based systems has been implemented
+in Cyclopts and available using the \code{cyclopts condor-submit} CLI. HTCondor
 \cite{condor-practice} is a high throughput computing (HTC) framework that
 supports sophisticated job scheduling over a very large, distributed network of
 individual and clustered computers.
@@ -342,11 +342,11 @@ and related constraints in order to support this analysis limitation.
 
 In order to efficiently schedule a large number of optimization problems, the
 WorkQueue framework \cite{bui_work_2011} is utilized. WorkQueue is a
-Condor-aware master-worker implementation. A master process exists at some
+HTCondor-aware master-worker implementation. A master process exists at some
 location and manages the scheduling jobs to be run. Workers, in the form of
-persistent Condor jobs, ask the master for the next job to be run after a
+persistent HTCondor jobs, ask the master for the next job to be run after a
 previous job has been completed. A master-worker system is especially useful in
-Condor environments in which resources are limited and must be specifically
+HTCondor environments in which resources are limited and must be specifically
 targeted, as is the case with the aforementioned timing studies.
 
 Cyclopts launches a master process that requires a series of execute nodes to
@@ -378,7 +378,7 @@ foreign system, a user can enter the CDE environment and execute the supported
 command.
 
 Cyclopts provides a CLI, \code{cyclopts cde}, that will package Cyclopts itself
-into a virtual environment and ship the environment to a Condor submit node. As
-part of the Cyclopts Condor job execution, the CDE environment is copied to each
+into a virtual environment and ship the environment to a HTCondor submit node. As
+part of the Cyclopts HTCondor job execution, the CDE environment is copied to each
 execute node. It is therefore easy to incorporate changes in a local copy of
 Cyclopts to the corresponding remote execution.

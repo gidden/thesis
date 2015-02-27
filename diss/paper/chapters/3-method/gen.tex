@@ -157,7 +157,7 @@ mapping of reactors to acceptable commodities is provided in Table
 \ref{tbl:rx_to_commods}. Note that there is still a preference distribution
 associated with each reactor-commodity pair as well as constraint coefficient
 effects. Accordingly, each reactor-commodity pair provides a unique effect on an
-exchange instance.
+exchange instance. 
 
 \begin{table}[h!]
 \centering
@@ -179,6 +179,13 @@ exchange instance.
                       & FThOX        \\ \hline 
 \end{tabular}
 \end{table}
+
+Finally, each reactors in the system is representing an individual agent in a
+given simulation. Agents are assumed to have some differentiating behavior. In
+order to model this effect, each reactor is assigned a random variable, $x \in
+[0, 1)$, that represents a unique measure of quality of fuel requested by
+  reactors. This stochastic property is expounded upon further in \S
+  \ref{method:setup:front} and \ref{method:setup:back}.
 
 \subsubsection{Support Facilities}
 
@@ -678,18 +685,21 @@ of consumable commodities.
 
 Thermal reactors can consume UOX fuel as well as both MOX variants. It is
 assumed that thermal reactors would prefer to consume thermal MOX fuel in order
-to maintain any equilibrium status of the cycle. UOX fuel is next preferred, and
-finally fast MOX, a fuel type usable by but not meant for thermal
-reactors. Preference values for each commodity are summarized in Table
-\ref{tbl:rx_req}. A normal operating enrichment range of $[3.5, 5.5]$ is used
-for UOX fuel. MOX-based fuels are assumed to be comprised of 7\% Plutonium-oxide
-with 93\% Uranium-oxide top up \cite{bertel2007management} and an enrichment
-range of $[55, 65]$ \cite{bairiot2003status}. In practice, many reactor concepts
-restrict the fraction of an LWR's core that can be made up of MOX fuel rather
-than UOX fuel due to a reduced safety margin. Accordingly, a tuneable parameter
-is added to the model, $f_{mox}$, which denotes the fraction of a request that
-can be made up of MOX-based fuel. This fraction is only relevant if reactors are
-operating in assembly mode, i.e., if \frx is unity.
+to maintain any equilibrium status of the cycle. UOX fuel is next preferred.
+Finally ``fast'' MOX is modeled as a type of fuel that is usable by thermal
+reactors, i.e., it has thermally-fissile plutonium; however it is assumed that
+the property of the plutonium vector is more amenable to fast-spectrum
+reactors. Therefore it is least preferential. Preference values for each
+commodity are summarized in Table \ref{tbl:rx_req}. A normal operating
+enrichment range of $[3.5, 5.5]$ is used for UOX fuel. MOX-based fuels are
+assumed to be comprised of 7\% Plutonium-oxide with 93\% Uranium-oxide top up
+\cite{bertel2007management} and an enrichment range of $[55, 65]$
+\cite{bairiot2003status}. In practice, many reactor concepts restrict the
+fraction of an LWR's core that can be made up of MOX fuel rather than UOX fuel
+due to a reduced safety margin. Accordingly, a tuneable parameter is added to
+the model, $f_{mox}$, which denotes the fraction of a request that can be made
+up of MOX-based fuel. This fraction is only relevant if reactors are operating
+in assembly mode, i.e., if \frx is unity.
 
 MOX and ThOX fast reactors utilize the same governing request parameters but
 have a different preference distribution over commodities. It is assumed that a
@@ -968,15 +978,15 @@ and assuming a 30-year operating lifetime, i.e., period of time in which fuel
 can enter the facility. Thus, a repository's monthly request quantity is
 determined to be $\sim 215$t.
 
-A fissile quantity constraint is added for each recycling facility (\textit{not}
-added for reprocessing facilities). The fissile constraint models a situation in
-which recycling facilities have a demand for fissile material. The amount of
-fissile material required by recycling facilities is based on their primary
-consumer. It is determined to be the product of the facility's mass constraint
-and the mean amount of fissile material in a primary consumer's request per unit
-mass, as shown in Equation \ref{eqn:bfiss}. This constraint can be considered as
-``recycling facilities request fissile material quantities as if its capacity
-was completely met by average primary reactors''.
+A fissile quantity constraint is added for each recycling facility. The fissile
+constraint models a situation in which recycling facilities have a demand for
+fissile material. The amount of fissile material required by recycling
+facilities is based on their primary consumer. It is determined to be the
+product of the facility's mass constraint and the mean amount of fissile
+material in a primary consumer's request per unit mass, as shown in Equation
+\ref{eqn:bfiss}. This constraint can be considered as ``recycling facilities
+request fissile material quantities as if all reactors in the system are average
+primary consumers''.
 
 \begin{equation}\label{eqn:bfiss}
 b^{\text{fiss}}_r = \bar{\epsilon} f_{el} b^{\text{mass}}_r.
