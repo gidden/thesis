@@ -31,7 +31,7 @@ exchanges.
 
 \subsubsection{Fuel Cycles and Commodities}
 
-Three types of fuel cycles can be generated: a once-through fuel cycle, labeled
+Three types of fuel cycles are generated: a once-through fuel cycle, labeled
 OT; a plutonium-recycle fuel cycle, labeled MOX; and a plutonium and
 thorium-recycle fuel cycle, labeled MOX-ThOX. As fuel cycles increase in
 complexity, the number of commodities that exist increases, as shown in Table
@@ -60,7 +60,7 @@ OT                    & UOX         \\ \hline
 
 \subsubsection{Reactors}
 
-All reactors are modeled as either thermal or fast reactors. It is necessary to
+Reactors are modeled as either thermal or fast reactors. It is necessary to
 estimate the amount of fuel exchanged by reactors each time step. Accordingly,
 thermal reactors are simplified models of AP-1000 reactors \cite{ARIS}, and fast
 reactors are simplified models of BN-600 reactors
@@ -207,9 +207,9 @@ assigned a location value, $\text{loc}_i \in [0, 1)$. The domain is then
     of $4.6$ is in the fifth region. \dreg and
     \dloc are binary variables which are activated based on the
     parameters described in \S \ref{method:setup:params}. If
-    \dreg is zero, no location-based preference is used. If
-    \dloc is zero, only coarse, region-based preference is
-    used. In both cases, preference is a function of the euclidean distance
+    \dreg is zero, no location-based preferences are used. If
+    \dloc is zero, only coarse, region-based preferences are
+    used. In both cases, preferences are a function of the euclidean distance
     between regional and location values. The inverse exponential functional
     form was chosen in order to model a preference gradient that decays as
     distance increases.
@@ -254,6 +254,7 @@ receiving nodes, $V$, is separable if there a partition
   V = V_{1} \cup V_{2}
 \end{equation}
 
+\noindent
 such that no node in $U_1$ is connected to a node in $V_2$ and no node in $U_2$
 is connected to a node in $V_1$. The graph shown in Figure \ref{fig:basic_part} is an
 example of a separable bipartite graph.
@@ -582,7 +583,7 @@ specific instance parameters is described in \S \ref{method:setup:front:sum}.
 
 It is assumed that there is a single type of support facility, or supporter, for
 each type of commodity used in the fuel cycle. Further, each supporter is paired
-with a reactor type, i.e., there a reactor type which is the \textit{primary
+with a reactor type, i.e., there is a reactor type which is the \textit{primary
   consumer} of each supporter type. The primary consumer-supplier relationship
 is modeled within the formulation by choosing preferences such that there is a
 maximum preference for the provided relationship (described in the following
