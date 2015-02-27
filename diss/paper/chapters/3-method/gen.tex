@@ -25,7 +25,7 @@ described in \S \ref{method:setup:params}. Specific species may additionally
 define their own set of parameters. \S \ref{method:setup:front} describes the
 parameters generation methodology associated with front-end exchanges. \S
 \ref{method:setup:back} follows with a similar discussion for back-end
-exchanges.
+exchanges.  
 
 \subsection{Common Features}\label{method:setup:features}
 
@@ -209,7 +209,7 @@ assigned a location value, $\text{loc}_i \in [0, 1)$. The domain is then
     parameters described in \S \ref{method:setup:params}. If
     \dreg is zero, no location-based preferences are used. If
     \dloc is zero, only coarse, region-based preferences are
-    used. In both cases, preferences are a function of the euclidean distance
+    used. In both cases, preferences are a function of the Euclidean distance
     between regional and location values. The inverse exponential functional
     form was chosen in order to model a preference gradient that decays as
     distance increases.
@@ -365,18 +365,26 @@ DRE instances will be able to be separated into at least two distinct instances
 which can solved independently of one another. One instance will be associated
 with the front end of the fuel cycle where reactors are requesting fuel. The
 other instance will be associated with the back end of the fuel cycle, where
-reactors are supplying used fuel.
+reactors are supplying used fuel. 
+
+Separability is important to this work for two reasons. First, as described in
+\S \ref{intro:prog}, an unmanageable problem instance that is separable can
+result in two (or more) managable problem instances. If a truly inseparable
+cycle is modeled in practice, and it is found to be an intractable problem,
+heuristic solutions can be used. Second, because a given fuel cycle can be
+separated into its front-end and back-end components, the remainder of this
+works performs analyses on each component independently.
 
 \subsection{Exchange Parameters}\label{method:setup:params}
 
-The generation of exchanges is naturally a parameterized process. For instance,
-a critical parameter is the number of reactors in an exchange. Exchange
-generation parameters can be divided into two classifications,
-\textit{fundamental} parameters and \textit{instance} parameters. All exchange
-species share some fundamental parameters and instance parameters, a discussion
-of which is the focus of this section. Species also define their own set of
-instance parameters to complete the full set of parameters needed to define an
-instance of an exchange.
+The generation of exchanges requires a set of parameters. For instance, a
+critical parameter is the number of reactors in an exchange. Exchange generation
+parameters can be divided into two classifications, \textit{fundamental}
+parameters and \textit{instance} parameters. All exchange species share some
+fundamental parameters and instance parameters, a discussion of which is the
+focus of this section. Species also define their own set of instance parameters
+to complete the full set of parameters needed to define an instance of an
+exchange.
 
 \subsubsection{Fundamental Parameters}
 
@@ -385,9 +393,9 @@ described in \S \ref{method:setup:features}. Each fundamental parameter is a
 switch that sets the level of \textit{fidelity} of a given exchange. As such,
 they are each denoted as $f_x$, where the $x$ subscript describes the parameter.
 
-The most critical parameter is related to the fidelity of the fuel cycle being
-modeled, \ffc. A value of zero indicates modeling the OT fuel cycle, one is
-used for the MOX fuel cycle, and two the ThOX fuel cycle. The
+The most critical parameter is related to the ``fidelity'' of the fuel cycle
+being modeled, \ffc. A value of zero indicates modeling the OT fuel cycle, one
+is used for the MOX fuel cycle, and two the ThOX fuel cycle. The
 parameter-to-fuel-cycle is summarized in Table \ref{tbl:ffc}. As fuel cycle
 fidelity increases, the number of commodities increases, and thus the number of
 possible connections between suppliers and consumers that exist increases,
@@ -503,7 +511,7 @@ n_{rx, \text{FThOX}} = r_{rx, \text{FThOX}} n_{rx, f}
 and
 
 \begin{equation}
-n_{rx, \text{FMOX}} = n_{rx, f} - n_{rx, \text{FThOX}}.
+n_{rx, \text{FMOX}} = (1 - r_{rx, \text{FThOX}}) n_{rx, f}.
 \end{equation}
 
 \noindent
@@ -534,7 +542,7 @@ Parameter    & Type &
 Description
 \\ \hline
 \ffc     & Fundamental &
-The fuel cycle fidelity of an instance (which fuel cycle is being modeled).
+The fuel cycle ``fidelity'' of an instance (which fuel cycle is being modeled).
 \\ \hline
 \frx   & Fundamental &
 The reactor fidelity of an instance (whether individual assemblies are modeled
