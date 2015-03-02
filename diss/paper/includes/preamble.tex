@@ -119,6 +119,13 @@
 \newcommand{\dreg}{$\delta_{\text{reg}}$\xspace}
 \newcommand{\cbc}{Cbc\xspace}
 \newcommand{\clp}{Clp\xspace}
+% detect beginning of sentences and capitalize appropriately
+\sfcode`\.=1001
+\sfcode`\?=1001
+\sfcode`\!=1001
+\sfcode`\:=1001
+\newcommand\secref[1]{\ifnum\spacefactor=1001 Section \ref{#1}\else section \ref{#1}\fi}
+
 
 %% You should use natbib
 \IfFileExists{natbib.sty}{%
