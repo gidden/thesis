@@ -45,12 +45,12 @@ managed agent form a parent-child relationship. Upon entering the simulation,
 the child entity is constructed and notified of its entry; the parent is then
 notified. Upon exiting the simulation, the parent is notified; the child entity
 is then notified and deconstructed. Unlike many of the simulators described in
-\S \ref{intro:fcs}, the Cyclus simulation kernel naturally treats each agent
+\secref{intro:fcs}, the Cyclus simulation kernel naturally treats each agent
 individually, rather than grouping agents by an attribute and treating
 like-facilities in an aggregate manner.
 
 While the determination of supply and demand is complex and described further in
-\S \ref{abm:dre}, the execution of resource exchange is rather straightforward
+\secref{abm:dre}, the execution of resource exchange is rather straightforward
 and a primary event in a Cyclus simulation. When an agent's demand for a
 resource is matched with another agent's supply of a resource by the Cyclus
 kernel, a transfer is initiated. Each transfer is treated as discrete,

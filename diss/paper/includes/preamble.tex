@@ -125,6 +125,10 @@
 \sfcode`\!=1001
 \sfcode`\:=1001
 \newcommand\secref[1]{\ifnum\spacefactor=1001 Section \ref{#1}\else section \ref{#1}\fi}
+% this seems like a limitation of sfcode (an error occurs if at the beginnig of
+% a paragraph) Accordingly, this can be used manually as
+% needed. http://comments.gmane.org/gmane.comp.tex.texhax/17631
+\newcommand\Secref[1]{ Section \ref{#1}}
 
 
 %% You should use natbib

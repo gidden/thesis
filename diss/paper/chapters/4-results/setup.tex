@@ -30,7 +30,7 @@ database is then post-processed and analyzed.
 \subsection{Solvers and Formulations}
 
 Three solvers are executed for each resource exchange graph instance: the Greedy
-Heuristic, described in \S \ref{abm:dre:nfctp:heur}, COIN's LP solver
+Heuristic, described in \secref{abm:dre:nfctp:heur}, COIN's LP solver
 (COIN-CLP), and COIN's branch-and-cut solver (COIN-\cbc). Each problem instance
 is constructed as a \texttt{ExchangeGraph}, i.e., at the \textit{exchange layer}
 shown in Figure \ref{fig:dre_impl} and Figure \ref{fig:dre_time}. The Greedy
@@ -61,8 +61,8 @@ is no \textit{a priori} expected performance behavior.
 
 \subsection{Parameter Variation}
 
-\S \ref{method:setup:params} describes the parameters defining both Front and
-Back-End exchanges. Each combination of fundamental parameters represents a
+\Secref{method:setup:params} describes the parameters defining both Front
+and Back-End exchanges. Each combination of fundamental parameters represents a
 significant modeling assumption. Therefore, every experiment is conducted for
 every combination of fundamental parameters, comprising eighteen combinations in
 total. For each exchange type, a reference instance parameter vector is

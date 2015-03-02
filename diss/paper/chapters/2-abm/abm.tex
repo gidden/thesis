@@ -38,9 +38,9 @@ flexible NFC simulator suggests that ABM is a reasonable tool to use. The
 remainder of this section describes how agents are provided agency in Cyclus and
 specifically how agents interact with respect to supply and demand of facility
 capacity. A proof-of-principle benchmark comparison to a systems dynamics
-simulator is shown in \S \ref{abm:abm:proof}. Agent interaction with respect to
+simulator is shown in \secref{abm:abm:proof}. Agent interaction with respect to
 supply and demand of resources is more complicated and therefore treated
-separately in \S \ref{abm:dre}.
+separately in \secref{abm:dre}.
 
 \subsection{Agent Taxonomy}\label{abm:abm:tax}
 
@@ -100,7 +100,7 @@ those reactors to the institutions that operate in the region. It is important
 to note here that this abstraction allows for different deployment algorithms to
 be tested and exchanged in the \Cyclus framework without necessitating changes
 to the simulation engine, as is the case with other simulators described in
-\S \ref{intro:fcs}.
+\secref{intro:fcs}.
 
 Regions, like Institutions, are able to affect preferences between
 supplier-consumer facility pairs in the market information gathering
@@ -127,7 +127,7 @@ transactions. Individual markets were defined as agents themselves much like
 \texttt{Facility}, \texttt{Institution}, and \texttt{Region} agents. Many limitations
 were identified at the time, however, and the market-as-agent approach was
 eventually abandoned. An enumeration of the observed limitations is described
-further in \S \ref{abm:abm:limits}.
+further in \secref{abm:abm:limits}.
 
 The primary source of agency is provided to \texttt{Facility} agents through the
 \texttt{Trader} interface in order to negotiate the quantity and quality of
@@ -384,7 +384,7 @@ would be required to fully investigate the issue.
 
 \subsection{Multiple Market Limitations}\label{abm:abm:limits}
 
-The proof of principle benchmark described in \S \ref{abm:abm:proof} utilized
+The proof of principle benchmark described in \secref{abm:abm:proof} utilized
 the agency provided for facility deployment rather than the agency provided for
 both deployment and resource exchange. In general informing resource exchange
 regarding quantity and quality of resources as well as socioeconomic effects is
@@ -407,7 +407,7 @@ constraints are much more difficult. Furthermore, communicating such constraints
 is difficult. Whereas the \texttt{Market} agent can implement a solver algorithm,
 constraints are more naturally defined by the trader interacting with the
 \texttt{Market} agent. For example, consider the enriched uranium market used in
-\S \ref{abm:abm:proof}. While the simulation used an agent abstraction for an
+\secref{abm:abm:proof}. While the simulation used an agent abstraction for an
 enrichment facility and fuel fabrication plant, another simulation may wish to
 model facilities that downblend HEU, rather than enrich LEU. Such a process will
 have different constraints. Importantly, those constraints are a function of the

@@ -10,7 +10,7 @@ Both front-end and back-end species record the state of every point in a given
 parameter space in a data set called \code{/Species/<species type>/Points},
 where \code{<species type>} is either \code{StructuredRequest} or
 \code{StructuredSupply}. Each point incorporates both fundamental and instance
-parameters as described in \S \ref{method:setup}. The tables associated with
+parameters as described in \secref{method:setup}. The tables associated with
 parameter spaces are described in Tables
 \ref{tbl:/Species/StructuredRequest/Points}-\ref{tbl:/Species/StructuredSupply/Points}.
 
@@ -23,20 +23,20 @@ Data-type description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Spec
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
 paramid & 16-character string & The hex value of a UUID for a point in parameter space. \\ \hline
 family & 30-character string & A description of the problem family \\ \hline
-f\_fc & 1-byte integer & As described in \S \ref{method:setup} \\ \hline
-f\_loc & 1-byte integer & As described in \S \ref{method:setup} \\ \hline
-f\_mox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-f\_rxtr & 1-byte integer & As described in \S \ref{method:setup} \\ \hline
-n\_reg & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_rxtr & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-r\_inv\_proc & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_l\_c & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_mox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_mox\_uox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_th & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_thox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_t\_f & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_th\_pu & 4-byte float & As described in \S \ref{method:setup} \\ \hline
+f\_fc & 1-byte integer & As described in \secref{method:setup} \\ \hline
+f\_loc & 1-byte integer & As described in \secref{method:setup} \\ \hline
+f\_mox & 4-byte float & As described in \secref{method:setup} \\ \hline
+f\_rxtr & 1-byte integer & As described in \secref{method:setup} \\ \hline
+n\_reg & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_rxtr & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+r\_inv\_proc & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_l\_c & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_mox & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_mox\_uox & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_th & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_thox & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_t\_f & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_th\_pu & 4-byte float & As described in \secref{method:setup} \\ \hline
 seed & 8-byte integer & The random seed used to generate an instance. \\ \hline
 \end{tabularx}
 \end{table}
@@ -51,24 +51,24 @@ Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Speci
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
 paramid & 16-character string & The hex value of a UUID for a point in parameter space. \\ \hline
 family & 30-character string & A description of the problem family \\ \hline
-d\_f\_mox & 4-length array of 8-byte floats & As described in \S \ref{method:setup} \\ \hline
-d\_f\_thox & 4-length array of 8-byte floats & As described in \S \ref{method:setup} \\ \hline
-d\_th & 3-length array of 8-byte floats & As described in \S \ref{method:setup} \\ \hline
-f\_fc & 1-byte integer & As described in \S \ref{method:setup} \\ \hline
-f\_loc & 1-byte integer & As described in \S \ref{method:setup} \\ \hline
-f\_mox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-f\_rxtr & 1-byte integer & As described in \S \ref{method:setup} \\ \hline
-n\_reg & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_rxtr & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-r\_inv\_proc & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_l\_c & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_repo & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_mox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_mox\_uox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_th & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_s\_thox & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_t\_f & 4-byte float & As described in \S \ref{method:setup} \\ \hline
-r\_th\_pu & 4-byte float & As described in \S \ref{method:setup} \\ \hline
+d\_f\_mox & 4-length array of 8-byte floats & As described in \secref{method:setup} \\ \hline
+d\_f\_thox & 4-length array of 8-byte floats & As described in \secref{method:setup} \\ \hline
+d\_th & 3-length array of 8-byte floats & As described in \secref{method:setup} \\ \hline
+f\_fc & 1-byte integer & As described in \secref{method:setup} \\ \hline
+f\_loc & 1-byte integer & As described in \secref{method:setup} \\ \hline
+f\_mox & 4-byte float & As described in \secref{method:setup} \\ \hline
+f\_rxtr & 1-byte integer & As described in \secref{method:setup} \\ \hline
+n\_reg & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_rxtr & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+r\_inv\_proc & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_l\_c & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_repo & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_mox & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_mox\_uox & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_th & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_s\_thox & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_t\_f & 4-byte float & As described in \secref{method:setup} \\ \hline
+r\_th\_pu & 4-byte float & As described in \secref{method:setup} \\ \hline
 seed & 8-byte integer & The random seed used to generate an instance. \\ \hline
 \end{tabularx}
 \end{table}
@@ -205,13 +205,13 @@ pref\_l & 4-byte float & Location-based preference of an arc. \\ \hline
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
 paramid & 16-character string & The hex value of a UUID for a point in parameter space. \\ \hline
 family & 30-character string & A description of the problem family \\ \hline
-n\_r\_th & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_r\_f\_mox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_r\_f\_thox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_uox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_th\_mox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_f\_mox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_f\_thox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
+n\_r\_th & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_r\_f\_mox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_r\_f\_thox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_uox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_th\_mox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_f\_mox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_f\_thox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
 \end{tabularx}
 \end{table}
 
@@ -225,14 +225,14 @@ Datatype description of the \lstinline[basicstyle=\ttfamily\color{black}]|/Speci
 \textbf{Name} & \textbf{Data Type} & \textbf{Description}       \\ \hline
 paramid & 16-character string & The hex value of a UUID for a point in parameter space. \\ \hline
 family & 30-character string & A description of the problem family \\ \hline
-n\_r\_th & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_r\_f\_mox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_r\_f\_thox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_uox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_th\_mox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_f\_mox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_f\_thox & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
-n\_s\_repo & 4-byte unsigned integer & As described in \S \ref{method:setup} \\ \hline
+n\_r\_th & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_r\_f\_mox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_r\_f\_thox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_uox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_th\_mox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_f\_mox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_f\_thox & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
+n\_s\_repo & 4-byte unsigned integer & As described in \secref{method:setup} \\ \hline
 \end{tabularx}
 \end{table}
 

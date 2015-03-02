@@ -2,7 +2,7 @@
 \section{Experimental Tools}\label{method:tools}
 
 In order to explore the large number of possible exchange instances described in
-\S \ref{method:setup}, a sophisticated instance generation and solving framework
+\secref{method:setup}, a sophisticated instance generation and solving framework
 is needed. This section describes the design principles and implementation
 details of a new software package called Cyclopts (\underline{Cycl}us
 \underline{Opt}imization \underline{S}tudies). Cyclopts, written primarily in
@@ -151,7 +151,7 @@ distinct capacities: as a \textit{primary key} in a dataset for future
 identification or as the name of a group. Whether to aggregate data in one large
 dataset or divide data into datasets for each object is a design decision
 informed by practical performance. A study of the trade-offs between each
-approach is presented in \S \ref{method:tools:hdf5:study}. As a result of that
+approach is presented in \secref{method:tools:hdf5:study}. As a result of that
 study, for objects that are both read and written, the latter approach is taken.
 
 A description of all data gathered for each family and species for conversion,
@@ -163,8 +163,8 @@ in Appendix \ref{app:hdf5}.
 Cyclopts defines abstract application programming interfaces (APIs) for both
 families and species in the \code{ProblemFamily} and \code{ProblemSpecies}
 classes, respectively. While many parts of an API are related to the workflow
-discussed in \S \ref{method:tools:struc}, others are related to the persistence
-mechanisms discussed in \S \ref{method:tools:hdf5}. The full API is described in
+discussed in \secref{method:tools:struc}, others are related to the persistence
+mechanisms discussed in \secref{method:tools:hdf5}. The full API is described in
 detail in the Cyclopts documentation \cite{cyclopts}. The \code{ExchangeFamily}
 class implements a concrete, NFCTP-specific \code{ProblemFamily} interface. The
 \code{StructuredRequest} class implements a concrete, front-end-exchange
@@ -173,13 +173,13 @@ interface of the \code{ProblemSpecies} class. Similarly, the
 
 Given a point in parameter space, both the \code{StructuredSupply} and
 \code{StructuredRequest} generate an instance of an \code{ExchangeGraph} per the
-rules described in \S \ref{method:setup}. Cyclopts is nominally written in
+rules described in \secref{method:setup}. Cyclopts is nominally written in
 Python and Cyclus is written in C++. In order to construct objects that can
 interact with Cyclus, an interoperability layer is required. 
 
 A series of C++ wrapper objects, namely arc, node, and group objects, are
 defined which mirror the constituents of an \code{ExchangeGraph}, as described
-in \S \ref{abm:dre:impl}. These objects are then translated into Cython
+in \secref{abm:dre:impl}. These objects are then translated into Cython
 \cite{behnel2010cython} by use of the XDress software package
 \cite{xdress}. Python can directly call into Cython libraries, similarly, Cython
 can directly call C and C++ libraries. Hence, an interoperability layer is

@@ -4,12 +4,12 @@ Dynamic Resource Exchange (DRE) is the functional bedrock on which Cyclus
 simulations are built. It defines the interaction mechanisms and methodologies
 for agents, specifically agents whose archetypes have implemented the
 \code{Trader} interface. This section begins by providing a motivating problem
-statement in \S \ref{abm:dre:prob}. It then details the methodology for querying
+statement in \secref{abm:dre:prob}. It then details the methodology for querying
 supply and demand during the information gathering phase of the DRE in \S
 \ref{abm:dre:info}. The solution phase, in which the defined DRE is translated
 into a form of the Multicommodity Transportation Problem (MCTP) and solved, is
-then described in \S \ref{abm:dre:fctp}. Finally, two proof of principle
-simulations with novel fuel cycle DREs are presented in \S \ref{abm:dre:proof}.
+then described in \secref{abm:dre:fctp}. Finally, two proof of principle
+simulations with novel fuel cycle DREs are presented in \secref{abm:dre:proof}.
 
 This section represents the culmination of significant previous effort
 \cite{gidden_agent-based_2013, gidden_agent-based_2014,
@@ -27,7 +27,7 @@ abstraction for different facilities in a fuel cycle will be different based on
 the needs of archetype developer. Any supply-demand resolution framework,
 therefore, must be able to support arbitrary facilities. 
 
-As stated previously in \S \ref{abm:abm:limits}, a number of considerations must
+As stated previously in \secref{abm:abm:limits}, a number of considerations must
 be taken into account in such a framework. Supply and demand must be able to be
 solved globally at any given time step. Therefore, the framework must support an
 arbitrary number of facilities. Further, resources must be able to be treated in
@@ -324,7 +324,7 @@ commodities, constraint coefficients, and preferences.
 
 \paragraph{Commodities}
 
-During the information gathering step in \S \ref{abm:dre:info}, consumers and
+During the information gathering step in \secref{abm:dre:info}, consumers and
 suppliers are queried based on \textit{commodities}. A consumer is allowed to
 request multiple commodities, and a supplier is allowed to supply multiple
 commodities. However, each possible resource transfer, i.e., each arc, is based
@@ -500,7 +500,7 @@ the consumer, $j$, and producer, $i$, and the proposed resource transfer from
 consumer to producer. The dependence on producer encapsulates the relationship
 effects due to managerial preferences. The preference set used in the NFCTP
 formulation follows directly from the Preference Adjustment phase described in
-\S \ref{abm:dre:info}.
+\secref{abm:dre:info}.
 
 The notion of a preference is a positive one, that is, an optimal solution
 maximizes the product of preference and flow in the system. However, the
@@ -836,7 +836,7 @@ a resource is met by a supplier or not.
 Using this advanced formulation adds significant complexity to the resolution
 method at every time step. However, should a user wish to find a feasible
 solution in a shorter amount of time, simple heuristics exist. Such a heuristic
-used in Cyclus is provided in \S \ref{abm:dre:nfctp:heur}, and further heuristic
+used in Cyclus is provided in \secref{abm:dre:nfctp:heur}, and further heuristic
 development is a fruitful area of future work.
 
 Note that each constraint coefficient for binary variables can be rewritten as
@@ -1158,7 +1158,7 @@ archetypes used include the \textit{SourceFacility}, \textit{BatchReactor}, and
 \textit{EnrichmentFacility}.
 
 Finally, each instance of the DRE is solved using the greedy heuristic described
-in \S \ref{abm:dre:nfctp:heur}. In each case, requests and supplies are
+in \secref{abm:dre:nfctp:heur}. In each case, requests and supplies are
 \textit{not} exclusive, and thus multiple sources of supply may be matched to a
 request. In general, these exchanges are very small and have a unique objective
 solution which corresponds to the solution determined by the greedy heuristic.
@@ -1269,7 +1269,7 @@ time.
 
 \subsubsection{Results}
 
-The cases outlined in \S \ref{abm:dre:proof:cases} have been designed to provide
+The cases outlined in \secref{abm:dre:proof:cases} have been designed to provide
 different conditions at each point in time.  The results for these cases are
 discussed below. In each of these cases, the total \Cyclus{} run time was
 $\sim$0.1 seconds and the output database size was $\sim$68 kB.

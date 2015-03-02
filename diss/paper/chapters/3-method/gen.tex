@@ -10,19 +10,19 @@ must be generated given some set of rules and parameters. Two distinct
 the nuclear fuel cycle. Broadly, the front end of the fuel cycle is concerned
 with fueling reactors, and the back end is concerned with either recycling or
 disposing of used fuel exiting reactors. Common features to both types of
-exchange generation are described in \S \ref{method:setup:features}.
+exchange generation are described in \secref{method:setup:features}.
 
-Previously, \S \ref{abm:dre}, described the methodology for solving a single
+Previously, \secref{abm:dre}, described the methodology for solving a single
 exchange. If a large exchange is separable, i.e., it can be completely separated
 into two or more smaller exchanges, sub-exchanges can be solved
-independently. \S \ref{method:setup:split} provides an argument for why it is
+independently. \secref{method:setup:split} provides an argument for why it is
 valid to split exchange instances into, at minimum, the front and back ends of
 the NFC.
 
 Exchange generation, absent full-scale simulation, is a naturally parameterized
 process. Some generation parameters are common to any NFCTP instance, and are
-described in \S \ref{method:setup:params}. Specific species may additionally
-define their own set of parameters. \S \ref{method:setup:front} describes the
+described in \secref{method:setup:params}. Specific species may additionally
+define their own set of parameters. \secref{method:setup:front} describes the
 parameters generation methodology associated with front-end exchanges. \S
 \ref{method:setup:back} follows with a similar discussion for back-end
 exchanges.  
@@ -195,7 +195,7 @@ reactors. In either case, facilities that are \text{not} reactors are referred
 to as \textit{support} facilities, as they support the reactors which generate
 power. Support facilities for front-end exchanges are described in \S
 \ref{method:setup:front:sup}, and support facilities for back-end exchanges are
-described in \S \ref{method:setup:back:sup}.
+described in \secref{method:setup:back:sup}.
 
 \subsubsection{Preferences}\label{method:setup:features:prefs}
 
@@ -213,7 +213,7 @@ assigned a location value, $\text{loc}_i \in [0, 1)$. The domain is then
   values in $[0, 0.1)$, \textit{et cetera}. For example, a facility at location
     of $4.6$ is in the fifth region. \dreg and
     \dloc are binary variables which are activated based on the
-    parameters described in \S \ref{method:setup:params}. If
+    parameters described in \secref{method:setup:params}. If
     \dreg is zero, no location-based preferences are used. If
     \dloc is zero, only coarse, region-based preferences are
     used. In both cases, preferences are a function of the Euclidean distance
@@ -231,7 +231,7 @@ p_{l}(i, j) = \delta_{\text{reg}}
 The preference for a given arc is then a weighted, linear combination of
 location and commodity preferences as shown in Equation
 \ref{eqn:total_pref}. The weighting factor, $r_{l, c}$, is a parameter of
-exchange generation and described further in \S \ref{method:setup:params}.
+exchange generation and described further in \secref{method:setup:params}.
 
 \begin{equation}\label{eqn:total_pref}
 p(i, j) = p_{c}(i, j) + r_{l, c} p_{l}(i, j)
@@ -375,7 +375,7 @@ other instance will be associated with the back end of the fuel cycle, where
 reactors are supplying used fuel. 
 
 Separability is important to this work for two reasons. First, as described in
-\S \ref{intro:prog}, an unmanageable problem instance that is separable can
+\secref{intro:prog}, an unmanageable problem instance that is separable can
 result in two (or more) managable problem instances. If a truly inseparable
 cycle is modeled in practice, and it is found to be an intractable problem,
 heuristic solutions can be used. Second, because a given fuel cycle can be
@@ -396,7 +396,7 @@ exchange.
 \subsubsection{Fundamental Parameters}
 
 The fundamental parameters are related to the common features of all instances
-described in \S \ref{method:setup:features}. Each fundamental parameter is a
+described in \secref{method:setup:features}. Each fundamental parameter is a
 switch that sets the level of \textit{fidelity} of a given exchange. As such,
 they are each denoted as $f_x$, where the $x$ subscript describes the parameter.
 
@@ -587,12 +587,12 @@ then polled to provide a response to these requests during the RRFB
 phase. Managers of reactors would then adjust preferences based on implemented
 strategies. The remainder of this section describes how front-end exchange
 generation models the information gathering procedure, starting with the
-generation of requests in \S \ref{method:setup:front:reqgen}, followed by the
-generation of supply responses in \S \ref{method:setup:front:subgen}. The PA
+generation of requests in \secref{method:setup:front:reqgen}, followed by the
+generation of supply responses in \secref{method:setup:front:subgen}. The PA
 phase is modeled using the location proxy described in \S
 \ref{method:setup:features:prefs}. Throughout the discussion on generating
 front-end exchanges, instance parameters are defined. A summary of all front-end
-specific instance parameters is described in \S \ref{method:setup:front:sum}.
+specific instance parameters is described in \secref{method:setup:front:sum}.
 
 \subsubsection{Support Facility Population} \label{method:setup:front:sup}
 
@@ -978,7 +978,7 @@ Repo                & 0.1   & 0.1    & 0.1    & 0.1     \\ \hline
 
 A single request for the facility's processing capacity is made for each
 commodity. Recycling facilities define their request quantity using the same 800
-ton per year limit discussed in \S \ref{method:setup:front}. Repositories,
+ton per year limit discussed in \secref{method:setup:front}. Repositories,
 however, use a limit based on the Yucca Mountain statutory limit of 77,000 tons
 and assuming a 30-year operating lifetime, i.e., period of time in which fuel
 can enter the facility. Thus, a repository's monthly request quantity is
