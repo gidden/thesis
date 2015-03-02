@@ -83,17 +83,17 @@ others. Exchanges representing the front-end and back-end of the nuclear fuel
 cycle were generated separately.
 
 Generated exchanges were solved with the Greedy Heuristic in the exchange layer
-and the COIN-OR Clp and Cbc solvers in the formulation layer. A number of key
+and the COIN-OR \clp and \cbc solvers in the formulation layer. A number of key
 observations were ascertained by both scaling and stochastic experimental
 campaigns. First, the Greedy solver exhibited linear scaling with problem size
 (i.e., the number of variables) for all configurations of exchanges, matching
-theory. Somewhat surprisingly, the Clp solver was also shown to have efficient
+theory. Somewhat surprisingly, the \clp solver was also shown to have efficient
 scaling behavior as well. The theoretical complexity of the general case of
 simplex method is not known, although it is known to be ``efficient in
 practice'' \cite{goldfarb1994complexity}. Further, solving relaxations of LPs is
 a fundamental step in branch-and-bound algorithms for MILPs (e.g., those used in
-Cbc). Therefore, exploring the behavior of given problem structures as LPs is of
-interest. In this work, Clp solves of front-end exchanges were found to have
+\cbc). Therefore, exploring the behavior of given problem structures as LPs is of
+interest. In this work, \clp solves of front-end exchanges were found to have
 linear-like scaling, up to problems with ~1 million variables, regardless of
 fundamental parameter configuration. Back-end exchanges also experienced
 linear-like behavior for smaller problem sizes (~1E4 variables). At larger
@@ -101,16 +101,16 @@ problem sizes, especially for instances with high variability in objective
 coefficient distribution, scaling becomes much worse than the linear.
 
 Solving MILPs optimally is known to be NP-Hard, and solution times are known to
-scale exponentially in the general case. This behavior was observed for the Cbc
+scale exponentially in the general case. This behavior was observed for the \cbc
 solver in both front and back-end exchanges. A solution time limit of three
-hours was placed on Cbc calculations, and many cases converged for both exchange
+hours was placed on \cbc calculations, and many cases converged for both exchange
 types in the scaling campaign. Threshold problem sizes were observed in each
 exchange type and fundamental parameter configuration. Maximum convergence
 probability was found in high-fidelity reactor instances for non-once-through
 fuel cycles. Low-fidelity reactor, once-through fuel cycle instances were found
 to have particularly poor convergence probability. 
 
-Performing comparative solution analyses between the Greedy and Cbc solvers
+Performing comparative solution analyses between the Greedy and \cbc solvers
 illuminated the importance of false-arc costs in the MILP formulation of the
 NFCTP. Specifically, multiple exchange instances were observed to have better
 performance-space results using the heuristic over a full-fledged optimal solve
@@ -122,7 +122,7 @@ with a small cost, however, proved to reverse the observation in both the
 scaling and stochastic campaigns. 
 
 Finally, the use of location-based preferences was found to have little or no
-effect on Cbc solution times in most cases. However, for back-end exchanges of
+effect on \cbc solution times in most cases. However, for back-end exchanges of
 MOX and ThOX fuel cycles, cases in which no location-based preferences were
 applied were found to have significantly longer solution times than cases in
 which they were applied. Therefore, applying a small objective perturbation may
@@ -139,20 +139,20 @@ low-fidelity economic or social model, then the Greedy solver will likely meet
 the users needs.
 
 With higher-fidelity economic and social models, obtaining a optimal solution
-becomes paramount. While an LP, and thus Clp, can be used to model
+becomes paramount. While an LP, and thus \clp, can be used to model
 approximations of fuel cycles, to-date user and developer experience has found
 the modeling of individual fuel assemblies to be conceptually simpler both to
 use and code. In short, having a binary decision regarding a supplied resource
 is simpler than managing the acceptance of an arbitrary number of partial
 resources, especially in a multi-commodity system. Requiring optimal solutions
 and using quantized resource transfers necessitates using a MILP solver, such as
-Cbc.
+\cbc.
 
-Users can expect exponential solution time scaling when using Cbc. For a
+Users can expect exponential solution time scaling when using \cbc. For a
 relatively small convergence criteria, i.e., 1\%, most front-end instances with
 a reactor population greater than ~150 were found not to converge within a
 3-hour time limit. Back-end instances showed better convergence behavior with
-problem size. The Cbc solver was found to perform better with higher reactor
+problem size. The \cbc solver was found to perform better with higher reactor
 fidelity, a promising result for this use case. With a small arc-cost
 implemented in the kernel by default, users may find greater speed ups by
 loosening the default convergence criteria. However, tuning the specific
@@ -164,7 +164,7 @@ implemented, users may find significant speed ups through its use.
 
 Immediate future work involves implementing the solver options and related
 features that have been used in this work. To date, the \Cyclus code base
-includes only the option to utilize the Greedy solver. The Cbc and Clp solver
+includes only the option to utilize the Greedy solver. The \cbc and \clp solver
 options have been implemented for this work privately, and should be
 straightforward to incorporate more broadly. Further, exchange partitioning was
 a fundamental feature utilized in this work that has not yet been implemented in
@@ -204,14 +204,14 @@ cases may find other metrics to be superior given certain economic or social
 models. Furthermore, the Greedy solver is but one heuristic approach. Other
 approaches may be implemented and tested for various use cases, as needed.
 
-The work herein described utilized the both the Cbc and Clp solver via their
+The work herein described utilized the both the \cbc and \clp solver via their
 provided driver APIs. Many more switches are available to both, which may be
 investigated further should their relative performance found to be
-lacking. Further, the Cbc solver can be specifically implemented for the \Cyclus
-use case, although this is highly discouraged by the Cbc development community. 
+lacking. Further, the \cbc solver can be specifically implemented for the \Cyclus
+use case, although this is highly discouraged by the \cbc development community. 
 
 Importantly, the Open Solver Interface (OSI) was used when developing the
-in-code model of the NFCTP. While the Cbc solver was used because of its
+in-code model of the NFCTP. While the \cbc solver was used because of its
 permissive license. Users with access to proprietary MILP solvers, such as
 CPLEX, can reuse much of the available framework. Should such a use case be
 requested, implementing interface extensions should be straightforward.

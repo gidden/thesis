@@ -188,14 +188,15 @@ established.
 \subsubsection{Solvers and Performance Timing}
 
 Once an instance of an \texttt{ExchangeGraph} has been generated, it can be
-solved. Cyclopts supports three types of solvers: CoinCLP, CoinCBC, and the
-\texttt{GreedySolver}, an implementation of the Greedy Heuristic in Cyclus. If
-either the Greedy or CBC solvers are invoked, an appropriate instance of a
-\texttt{ExchangeSolver} is constructed with the \textit{exclusive orders} flag
-turned on. If the CLP solve is invoked, an associated \texttt{ExchangeSolver}
-instance is constructed with the \textit{exclusive orders} flag turned off. In
-short, CBC and Greedy solvers solve the MILP formulation of the NFCTP, and the
-CLP solver solves the LP formulation.
+solved. Cyclopts supports three types of solvers: Coin linear programming
+(\clp), Coin branch and cut (\cbc), and the \texttt{GreedySolver}, an
+implementation of the Greedy Heuristic in Cyclus. If either the Greedy or \cbc
+solvers are invoked, an appropriate instance of a \texttt{ExchangeSolver} is
+constructed with the \textit{exclusive orders} flag turned on. If the CLP solve
+is invoked, an associated \texttt{ExchangeSolver} instance is constructed with
+the \textit{exclusive orders} flag turned off. In short, \cbc and Greedy solvers
+solve the MILP formulation of the NFCTP, and the CLP solver solves the LP
+formulation.
 
 Given an instance of an \texttt{ExchangeGraph} and \texttt{ExchangeSolver}, the
 \texttt{Solve} method of the \texttt{ExchangeSolver} is invoked. Before and

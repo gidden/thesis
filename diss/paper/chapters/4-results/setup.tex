@@ -31,12 +31,12 @@ database is then post-processed and analyzed.
 
 Three solvers are executed for each resource exchange graph instance: the Greedy
 Heuristic, described in \S \ref{abm:dre:nfctp:heur}, COIN's LP solver
-(COIN-CLP), and COIN's branch-and-cut solver (COIN-CBC). Each problem instance
+(COIN-CLP), and COIN's branch-and-cut solver (COIN-\cbc). Each problem instance
 is constructed as a \texttt{ExchangeGraph}, i.e., at the \textit{exchange layer}
 shown in Figure \ref{fig:dre_impl} and Figure \ref{fig:dre_time}. The Greedy
-Heuristic is applied directly to the \texttt{ExchangeGraph}. The CLP and CBC
+Heuristic is applied directly to the \texttt{ExchangeGraph}. The CLP and \cbc
 solvers require a translation to the \textit{formulation layer}. The CLP solver
-is applied to the LP formulation of the NFCTP and the CBC solver is applied to
+is applied to the LP formulation of the NFCTP and the \cbc solver is applied to
 the MILP formulation. The solution time, $t_s$ of a given solver is defined as
 the time required to return a vector of arc flows given an
 \texttt{ExchangeGraph} instance as shown in Figure \ref{fig:dre_time}.
@@ -56,7 +56,7 @@ t_s = t_f - t_i
 
 The Greedy Heuristic has $\mathcal{O}(N_A)$ scaling, where $N_A$ is the number
 of arcs in the system. In the worst case, i.e., in highly constrained systems,
-every arc will be processed. As both CLP and CBC solve NP-Hard problems, there
+every arc will be processed. As both CLP and \cbc solve NP-Hard problems, there
 is no \textit{a priori} expected performance behavior.
 
 \subsection{Parameter Variation}
