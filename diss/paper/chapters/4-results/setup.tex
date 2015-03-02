@@ -10,22 +10,22 @@ experiment must be executed on homogeneous architecture. Furthermore, all
 experiments must be executed on equivalent, homogeneous architecture in order to
 quantify valid comparisons in solutions times across experimental campaigns.
 
-Six execution nodes on UW-Madison Advanced Computing Initiative (ACI) HTCondor
-system form the homogeneous environment used to conduct the experiments herein
-described. Each execute node is comprised of an 2.90 GHz eight-core,
-sixteen-thread, Intel Xeon E5-2690 \cite{intelproc} processor with 128 GB of
-RAM. Processor hyper-threading was disabled for the duration of the experimental
-campaign to allow comparisons between solution times.
+Six execution nodes on UW-Madison Center for High-Throughput Computing (CHTC)
+HTCondor system form the homogeneous environment used to conduct the experiments
+herein described. Each execute node is comprised of an 2.90 GHz eight-core Intel
+Xeon E5-2690 \cite{intelproc} processor with 128 GB of RAM. Processor
+hyper-threading was disabled for the duration of the experimental campaign to
+allow comparisons between solution times.
 
 For each experimental study, an input database consisting of persisted resource
 exchange graph instances is generated. A copy of the database is transferred
 from a user's submit node to each of the six execution nodes. A WorkQueue master
-process is initiated. Sixteen workers per node are initialized using WorkQueue's
-\texttt{condor\_submit\_workers} CLI. The master maintains a queue of instances
-to be solved, assigning instances to workers as workers become available. Upon
-completion, the input database is removed from each execution node, and the
-results are collected from the user's submit node. The resulting database is
-then post-processed and analyzed.
+process is initiated. For every execute node, workers are initialized using
+WorkQueue's \texttt{condor\_submit\_workers} CLI. The master maintains a queue
+of instances to be solved, assigning instances to workers as workers become
+available. Upon completion, the input database is removed from each execution
+node, and the results are collected from the user's submit node. The resulting
+database is then post-processed and analyzed.
 
 \subsection{Solvers and Formulations}
 
@@ -65,7 +65,7 @@ is no \textit{a priori} expected performance behavior.
 Back-End exchanges. Each combination of fundamental parameters represents a
 significant modeling assumption. Therefore, every experiment is conducted for
 every combination of fundamental parameters, comprising eighteen combinations in
-total. For exchange type, a reference instance parameter vector is
+total. For each exchange type, a reference instance parameter vector is
 chosen. Experiments, then, are conducted by using either the reference vector or
 perturbing instance parameter values from the reference vector and comparing
 output.
@@ -155,8 +155,8 @@ z = \sum_{(i, j) \in A} c_{i, j} x_{i, j}.
 \end{equation}
 
 For any given instance, the optimal objective value, $z^*$, is associated with a
-set of flows, $x^*$. By definition, an optimal solution will have a lower or
-equivalent system cost than any feasible solution.
+set of flows, $x^*$. By definition, an optimal solution will have a lower system
+cost than or an equivalent system cost to any feasible solution.
 
 While the objective function is minimized in the NFCTP formulations, it
 necessarily includes flow along false arcs. Considering all arcs that exist both

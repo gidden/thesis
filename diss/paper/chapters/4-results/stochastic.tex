@@ -12,8 +12,8 @@ In \S \ref{results:scale}, a single exchange instance was investigated for each
 solver as problem size scale was investigated. While clear patterns were
 inferred as a result of the study, stochastic effects were left
 unexplored. Accordingly, a second study was undertaken in order to examine how
-randomness in instance generation affects both solution values and execution
-time.
+sensitive both solution values and execution time are to randomness in instance
+generation.
 
 For this study, instances are generated for a single parameter vector. It is
 best to compare converged Cbc solutions for confidence in the resulting
@@ -115,8 +115,8 @@ corresponding results for high-fidelity models.
     \caption{
       \label{fig:1k_hist_front_rx0}
       The distribution of converged solution times for all low-fidelity reactor
-      instances. Fuel cycle fidelity increases from right to left, and location
-      fidelity increases from top to bottom. Percentages of converged instances
+      instances. Fuel cycle fidelity increases from top to bottom, and location
+      fidelity increases from right to left. Percentages of converged instances
       are provided if relevant.}
   \end{center}
 \end{figure}
@@ -127,15 +127,15 @@ corresponding results for high-fidelity models.
     \caption{
       \label{fig:1k_hist_front_rx1}
       The distribution of converged solution times for all high-fidelity reactor
-      instances. Fuel cycle fidelity increases from right to left, and location
-      fidelity increases from top to bottom. Percentages of converged instances
+      instances. Fuel cycle fidelity increases from top to bottom, and location
+      fidelity increases from right to left. Percentages of converged instances
       are provided if relevant.}
   \end{center}
 \end{figure}
 
 A number of interesting features exist in the figures related to the Cbc timing
 study. Significantly, reactors in batch-mode have poor convergence for
-once-through cycles, regardless of location parameter. This reflects
+once-through cycles, regardless of location parameter. This echoes
 observations in the scaling study. For the remaining fuel cycles, outliers
 consistently are observed for low-fidelity reactor models, also regardless of
 location parameter. This effect is seen in the cumulative observation figures
@@ -161,7 +161,8 @@ instances solved with Cbc was taken as a reference point, plotted at the origin
 in Figure \ref{fig:1k_compare_front_pref_flow}. Values are plotted for each
 combination of fundamental parameters. A data point's position along the x-axis
 indicates the average deviation from the high-fidelity model's simulation
-objective. The y-axis position indicates the average relative time difference.
+objective, i.e., the dot product of preference and system flow. The y-axis
+position indicates the average relative time difference.
 
 \begin{figure}[h!]
   \begin{center}

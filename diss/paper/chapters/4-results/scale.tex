@@ -46,21 +46,23 @@ $[5, 100]$ and a step size of 25 was used from $(100, 500]$. In mathematical
   in a given exchange graph. Accordingly, understanding how each quantity scales
   with the number of reactors is of chief import.
 
-Figure \ref{fig:base_front_n_rxtr_n_arcs_fc1_greedy} shows how the number
-of arcs scale with problem size for the MOX fuel cycle, and Figure
-\ref{fig:base_front_n_rxtr_n_constrs_fc1_greedy} shows the same results
-for the number of constraints. The number of constraints scales linearly, for it
-is a purely function of the number of entities in an exchange. However, the
-number of arcs scales by $\mathcal{O}(n^2)$. During exchange generation, the
-number of suppliers is a function of the number of reactors. Further, each
-reactor and each supplier have an arc connecting them if the reactor can consume
-the supplier's commodity. Therefore, adding a single reactor to the system
-results in additional arcs for every reactor previously existing in the system,
-resulting in an $\mathcal{O}(n^2)$ relationship. Both relationships hold true
-regardless of the fuel cycle being modeled, and, as can be seen, are also
-independent of other fundamental parameters. The arc population magnitude,
-however, is a function of $f_\text{rxtr}$. As $f_\text{rxtr}$ increases, $n_a$
-individual assemblies are requested rather than a single batch.
+Figure \ref{fig:base_front_n_rxtr_n_arcs_fc1_greedy} shows how the number of
+arcs scale with problem size for the MOX fuel cycle, and Figure
+\ref{fig:base_front_n_rxtr_n_constrs_fc1_greedy} shows the same results for the
+number of constraints. The number of constraints scales linearly, for it is a
+purely function of the number of entities in an exchange. However, the number of
+arcs scales by $\mathcal{O}(n^2)$. During exchange generation, the number of
+suppliers is a function of the number of reactors. Further, each reactor and
+each supplier have an arc connecting them if the reactor can consume the
+supplier's commodity. When the addition of a reactor also causes the addition of
+a support facility, based on parameter vector values, arcs are added for the new
+reactor and for every reactor previously existing in the system. Therefore,
+there is an an $\mathcal{O}(n^2)$ relationship between reactors and arcs. Both
+relationships hold true regardless of the fuel cycle being modeled, and, as can
+be seen, are also independent of other fundamental parameters. The arc
+population magnitude, however, is a function of $f_\text{rxtr}$. As
+$f_\text{rxtr}$ increases, $n_a$ individual assemblies are requested rather than
+a single batch.
 
 \begin{figure}[h!]
   \begin{center}
@@ -128,7 +130,7 @@ higher-fidelity models.
 \paragraph{CLP Solver}
 
 Interestingly, the CLP solver shows the similar scaling behavior as the Greedy
-Solver, and that behavior is also independent of fundamental parameter. The
+Solver, and that behavior is also independent of any fundamental parameters. The
 number of arcs in the system drives the solution time scaling, as can be seen in
 \Cref{fig:base_front_n_arcs_time_fc0_clp,fig:base_front_n_arcs_time_fc1_clp,fig:base_front_n_arcs_time_fc2_clp}. As
 was the case with the Greedy Solver, the scaling constant increases with reactor
@@ -173,7 +175,9 @@ The performance of the CBC solver is much more sporadic than either the CLP or
 Greedy solvers. This is to be expected, for MILP optimization problems are
 NP-Hard. Cbc was limited to 3 hours for each problem, and a 1\% ratio-gap
 convergence criteria was applied. The term \textit{ratio gap} is in reference to
-the current known upper and lower bound on the optimal objective value. The
+the current known upper and lower bound on the optimal objective value. During
+the branch-and-bound algorithm, such bounds are maintained and updated between
+each solution iteration (explained in more detail in Appendix \ref{app:ip}). The
 solver reports an optimal solution when the criteria shown in Equation
 \ref{eqn:ratio_gap} is true.
 
@@ -281,12 +285,12 @@ back-translates from the formulation to the exchange layer. Accordingly, a
 measure of the preference and flow, as shown in Equation \ref{eqn:sim_flow}, is
 used to compare results between solvers.
 
-Comparisons are made between the Greedy solver and the CBC solver when the CBC
-solver, provided the CBC solver converged. Because solutions increase in
-magnitude with increasing problem size, a relative comparison is made, as shown
-in Equation \ref{eqn:sim_flow_compare}. The resulting features are similar
-across fuel cycles. Accordingly, an example for the MOX fuel cycle is shown in
-Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}.
+Comparisons are made between the Greedy solver and the CBC solver, provided the
+CBC solver converged. Because solutions increase in magnitude with increasing
+problem size, a relative comparison is made, as shown in Equation
+\ref{eqn:sim_flow_compare}. The resulting features are similar across fuel
+cycles. Accordingly, an example for the MOX fuel cycle is shown in Figure
+\ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}.
 
 \begin{equation}\label{eqn:sim_flow_compare}
 \frac{z^*_{\text{sim}} - z_{\text{sim}, \text{Greedy}}}
@@ -327,6 +331,7 @@ small relative to $z^*$, then either solution may be returned upon convergence
 depending on the branch-and-bound search path. Thus, good solutions in
 preference-space are somewhat lost in the ``noise'' of cost-space.
 
+%TODO: make sure to address 125-1
 This effect is reduced when the objective choice in cost-space increase, as
 shown in case of fine location preference. In short, the objective function has
 a more pronounced shape in cost-space, reducing the heuristic quality and
@@ -393,7 +398,7 @@ termed \textit{ratio gap} in CBC parlance, as shown in Equation
 10 instances of exchanges were executed, spanning a reactor population range of
 10 to 500. Figure \ref{fig:hist_front_rxtr_0} displays the results for runs with
 reactors trading full batches for ratio gap values of 0.1, 1, and 10\%. Figure
-\ref{fig:hist_front_rxtr_0} displays the results for runs with reactors trading
+\ref{fig:hist_front_rxtr_1} displays the results for runs with reactors trading
 individual assemblies for ratio gap values of 1 and 10\%.
 
 \begin{figure}[h!]
@@ -418,15 +423,16 @@ individual assemblies for ratio gap values of 1 and 10\%.
   \end{center}
 \end{figure}
 
-Increasing the convergence criteria for smaller problems has a greater effect
-than increasing the convergence criteria for larger problems. It is somewhat
-surprising that the increase from a 1\% relative bound gap to a 10\% gap allows
-full convergence in the smaller case and has no effect in the larger
-case. Considering the discussion in \S \ref{sec:res:scale:front:soln}, it is
-likely that the large convergence effect is due increasing the ``noise'' effect
-of actual arcs. However, some speed ups in solution times are expected when
-relaxing convergence criteria, and those speed ups will likely be more profound
-in smaller-sized problems than larger problems.
+Increasing the convergence criteria for smaller problems, i.e., those with
+reactors requesting a single batch of fuel, has a greater effect than increasing
+the convergence criteria for larger problems. It is somewhat surprising that the
+increase from a 1\% relative bound gap to a 10\% gap allows full convergence in
+the smaller case and has no effect in the larger case. Considering the
+discussion in \S \ref{sec:res:scale:front:soln}, it is likely that the large
+convergence effect is due increasing the ``noise'' effect of actual
+arcs. However, some speed ups in solution times are expected when relaxing
+convergence criteria, and those speed ups will likely be more profound in
+smaller-sized problems than larger problems.
 
 \subsection{Back-End Exchanges}
 
@@ -435,7 +441,7 @@ exchanges. Therefore, this section will discuss only differences between the two
 cases. The fact that so many similarities exist is striking, because from a
 simulation perspective, back-end exchanges are quite different than front-end
 exchanges. First, a single request is made for each commodity type that can be
-consumed by support facilities. Therefore, many less requests exist in the
+consumed by support facilities. Therefore, many fewer requests exist in the
 system. Next, the supply of used fuel is known. The total number of arcs in the
 system is similar, however, as can be seen in Figure
 \ref{fig:base_back_n_rxtr_n_arcs_fc1_greedy}. Furthermore, the arc
