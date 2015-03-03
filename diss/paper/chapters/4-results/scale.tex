@@ -11,12 +11,11 @@ modeled represent a time step in a simulation in which the world-wide fleet of
 reactors are all supplying or consuming a batch of fuel.
 
 Front and back-end exchanges are explored similarly in the scalability
-campaign. First, for all 18 combinations of fundamental parameters and each
-solver, a set of reference cases are established, where the only varying
-parameter is the number of reactors. Next, specific instance parameters are
-chosen to vary in order to determine first-order effects as the exchange system
-size scales. Finally, the effect of convergence criteria for the \cbc solver is
-investigated.
+campaign. For all 18 combinations of fundamental parameters and each solver, a
+set of reference cases are established, where the only varying parameter is the
+number of reactors. Both the solution time and objective value metrics are
+compared as the problem size increases. Additionally, the effect of convergence
+criteria for the \cbc solver is investigated.
 
 Individual figures for each experiment are provided for each fuel cycle modeled
 ($f_\text{fc}$) and each solver. Each figure summarizes the results for all
@@ -39,12 +38,12 @@ figure is shown below.
 
 Reference cases were generated for front-end exchanges by scaling the number of
 reactors in each exchange. A step size of 5 reactors was used for the range of
-$[5, 100]$ and a step size of 25 was used from $(100, 500]$. In mathematical
-  programming, the number of variables and number of constraints in a problem
-  are measures of problem scaling. In the NFCTP, constraints are provided by
-  trading entities, and the number of variables is equal to the number of arcs
-  in a given exchange graph. Accordingly, understanding how each quantity scales
-  with the number of reactors is of chief import.
+$[5, 100]$ and a step size of 25 was used from $(100, 500]$. Both the number of
+  variables and number of constraints in a problem are measures of problem
+  scaling. In the NFCTP, constraints are provided by trading entities, and the
+  number of variables is equal to the number of arcs in a given exchange
+  graph. Accordingly, understanding how each quantity scales with the number of
+  reactors is important.
 
 Figure \ref{fig:base_front_n_rxtr_n_arcs_fc1_greedy} shows how the number of
 arcs scale with problem size for the MOX fuel cycle, and Figure
@@ -60,9 +59,10 @@ reactor and for every reactor previously existing in the system. Therefore,
 there is an an $\mathcal{O}(n^2)$ relationship between reactors and arcs. Both
 relationships hold true regardless of the fuel cycle being modeled, and, as can
 be seen, are also independent of other fundamental parameters. The arc
-population magnitude, however, is a function of $f_\text{rxtr}$. As
-$f_\text{rxtr}$ increases, $n_a$ individual assemblies are requested rather than
-a single batch.
+population magnitude, however, is a function of $f_\text{rxtr}$. For an
+$f_\text{rxtr}$ of 1, i.e., reactors order individual assemblies, the number of
+arcs per reactor is $\mathcal{O}(n_a)$. When reactors order full batches, the
+number of arcs per reactor is $\mathcal{O}(1)$.
 
 \begin{figure}[h!]
   \begin{center}
@@ -89,8 +89,8 @@ a single batch.
 \cref{fig:base_front_n_arcs_time_fc0_greedy,fig:base_front_n_arcs_time_fc1_greedy,fig:base_front_n_arcs_time_fc2_greedy}
 show the Greedy Solver results as the number of arcs increases for the OT, MOX,
 and ThOX fuel cycles, respectively. Plotted with each data set is a linear fit
-with associated slope value. As expected, the algorithm scales as
-$\mathcal{O}(n)$ with the number of arcs in the system. This scaling behavior is
+with associated slope value. As discussed in \secref{results:setup}, one expects
+linear-like scaling, which is observed in practice. This scaling behavior is
 consistent across all fundamental parameters. Of note, however, is that the
 scaling constant does increase when moving from low-fidelity reactor models to
 higher-fidelity models.
@@ -129,19 +129,19 @@ higher-fidelity models.
 
 \paragraph{CLP Solver}
 
-Interestingly, the CLP solver shows the similar scaling behavior as the Greedy
-Solver, and that behavior is also independent of any fundamental parameters. The
-number of arcs in the system drives the solution time scaling, as can be seen in
-\Cref{fig:base_front_n_arcs_time_fc0_clp,fig:base_front_n_arcs_time_fc1_clp,fig:base_front_n_arcs_time_fc2_clp}. As
-was the case with the Greedy Solver, the scaling constant increases with reactor
-fidelity.
+As discussed in \secref{results:setup}, LP solution scaling is more naturally
+observed as a function of the number of
+constraints. \Cref{fig:base_front_n_constrs_time_fc0_clp,fig:base_front_n_constrs_time_fc1_clp,fig:base_front_n_constrs_time_fc2_clp}
+show the CLP solution times as the number of constraints increases. As can be
+seen, approximate $\mathcal{O}(n^2)$ scaling is observed. Like the Greedy
+solver, this scaling is independent of any fundamental paramters.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc0_clp.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_constrs_time_fc0_clp.pdf}
     \caption{
-      \label{fig:base_front_n_arcs_time_fc0_clp}
-      CLP Solver results for the OT fuel cycle as the number of arcs
+      \label{fig:base_front_n_constrs_time_fc0_clp}
+      CLP Solver results for the OT fuel cycle as the number of constraints
       increases.
       }
   \end{center}
@@ -149,10 +149,10 @@ fidelity.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc1_clp.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_constrs_time_fc1_clp.pdf}
     \caption{
-      \label{fig:base_front_n_arcs_time_fc1_clp}
-      CLP Solver results for the MOX fuel cycle as the number of arcs
+      \label{fig:base_front_n_constrs_time_fc1_clp}
+      CLP Solver results for the MOX fuel cycle as the number of constraints
       increases.
       }
   \end{center}
@@ -160,10 +160,10 @@ fidelity.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_front_n_arcs_time_fc2_clp.pdf}
+    \includegraphics[width=.7\textwidth]{base_front_n_constrs_time_fc2_clp.pdf}
     \caption{
-      \label{fig:base_front_n_arcs_time_fc2_clp}
-      CLP Solver results for the ThOX fuel cycle as the number of arcs
+      \label{fig:base_front_n_constrs_time_fc2_clp}
+      CLP Solver results for the ThOX fuel cycle as the number of constraints
       increases.
       }
   \end{center}
@@ -173,11 +173,14 @@ fidelity.
 
 The performance of the \cbc solver is much more sporadic than either the CLP or
 Greedy solvers. This is to be expected, for MILP optimization problems are
-NP-Hard. \cbc was limited to 3 hours for each problem, and a 1\% ratio-gap
-convergence criteria was applied. The term \textit{ratio gap} is in reference to
-the current known upper and lower bound on the optimal objective value. During
-the branch-and-bound algorithm, such bounds are maintained and updated between
-each solution iteration (explained in more detail in Appendix \ref{app:ip}). The
+NP-Hard. Further, they are solved using enumeration techniques that do not
+perform characteristically well, as the Simplex method does. 
+
+\cbc was limited to 3 hours for each problem, and a 1\% ratio-gap convergence
+criteria was applied. The term \textit{ratio gap} is in reference to the current
+known upper and lower bound on the optimal objective value. During the
+branch-and-bound algorithm, such bounds are maintained and updated between each
+solution iteration (explained in more detail in Appendix \ref{app:ip}). The
 solver reports an optimal solution when the criteria shown in Equation
 \ref{eqn:ratio_gap} is true.
 
@@ -191,7 +194,7 @@ trends. \Cref{fig:base_front_n_rxtr_time_fc0_cbc,fig:base_front_n_rxtr_time_fc1_
 show timing results as a function of the number of reactors in the
 system. \Cref{fig:base_front_n_arcs_time_fc0_cbc,fig:base_front_n_arcs_time_fc1_cbc,fig:base_front_n_arcs_time_fc2_cbc}
 show timing results as a function of the number of arcs in the system. Note that
-in each case below, a log-lin graph is used. In each frame, the percentage of
+in each case below, a log-linear graph is used. In each frame, the percentage of
 converged instances is provided.
 
 \begin{figure}[h!]
@@ -277,17 +280,23 @@ Solutions between any two solvers can be compared either in the formulation
 layer or in the exchange layer. Comparison in the formulation layer is achieved
 by comparing objective function values (Equation \ref{eqn:obj_flow}), whereas
 comparison in the exchange layer is achieved by comparing a measure the flows
-and preferences for a given solution (Equation \ref{eqn:sim_flow}). The
-objective function includes the costs and flows on false arcs which inflates the
-objective function value. While the false arcs are necessary for guaranteeing a
-feasible solution, their resulting flows are not taken into account when the DRE
-back-translates from the formulation to the exchange layer. Accordingly, a
-measure of the preference and flow, as shown in Equation \ref{eqn:sim_flow}, is
-used to compare results between solvers.
+and preferences for a given solution (Equation \ref{eqn:sim_flow}). 
+
+The objective function includes the costs and flows on false arcs which inflates
+the objective function value. While the false arcs are necessary for
+guaranteeing a feasible solution, their resulting flows are not taken into
+account when the DRE back-translates from the formulation to the exchange
+layer. Accordingly, $z^*_{\text{sim}}$ is used as the primary comparison
+metric. While $z^* \leq z$ is true in cost space, $z^*_{\text{sim}} \geq
+z_{\text{sim}}$ is \textit{not} necessarily true in practice for MILP
+instances. Any MILP solver must use some convergence criteria, which takes into
+account flow values along false arcs.
 
 Comparisons are made between the Greedy solver and the \cbc solver, provided the
-\cbc solver converged. Because solutions increase in magnitude with increasing
-problem size, a relative comparison is made, as shown in Equation
+\cbc solver converged. A converged \cbc solution is guaranteed optimal within
+the provided tolerance, and is therefore considered to be $z^*$ with a
+corresponding set of flows $X^*$. Because solutions increase in magnitude with
+increasing problem size, a relative comparison is made, as shown in Equation
 \ref{eqn:sim_flow_compare}. The resulting features are similar across fuel
 cycles. Accordingly, an example for the MOX fuel cycle is shown in Figure
 \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}.
@@ -310,20 +319,19 @@ cycles. Accordingly, an example for the MOX fuel cycle is shown in Figure
 
 Comparing the results in which there are no location-based preferences (green),
 there is a clear correlation between the number of variables and the relative
-benefit of using \cbc. Thus, the Greedy heuristic performs better when the number
-of possible assignments is small. As more variety is included in objective
-coefficient values via location assignment, the spread of possible values
-increases. In other words, the objective function projection on the feasible
-space gains more features.
+benefit of using \cbc. The Greedy heuristic performs better when the number of
+possible assignments is small. This is not unexpected; as the number of decision
+variables increases, making optimial decisions should, in theory, result in a
+increasingly better outcomes than making heuristic-based decisions. 
 
 Two features of interest arise when comparing the cases in which there is a
 coarse location preference (blue) and a fine location preference (red). First,
 some values are negative, implying that the Greedy solver provides a better
-preference-space solution than the \cbc solver. Importantly, this is true only in
-preference space; the \cbc always performs better in cost space, by
+preference-space solution than the \cbc solver. Importantly, this is true only
+in preference space; the \cbc always performs better in cost space, by
 definition. The Greedy solver is allowed to provide better answers in preference
 space for two reasons: the problem is highly constrained, and false arcs have an
-arbitrarily high unit cost. \cbc converges when the criteria in
+arbitrarily high unit cost. \cbc converges when the criteria in Equation
 \ref{eqn:ratio_gap} is met. When a problem is highly constrained, many false
 arcs will be activated, contributing a large amount to the objective
 function. If the choice between two possible flows is sufficiently small, i.e.,
@@ -332,16 +340,35 @@ depending on the branch-and-bound search path. Thus, good solutions in
 preference-space are somewhat lost in the ``noise'' of cost-space.
 
 %TODO: make sure to address 125-1
-This effect is reduced when the objective choice in cost-space increase, as
-shown in case of fine location preference. In short, the objective function has
-a more pronounced shape in cost-space, reducing the heuristic quality and
-increasing the quality of the \cbc solution. Interestingly, as can be seen in the
-lower part of Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_},
-as the number of variables increases (and the quantity associated with each
-variable decreases), \cbc simulation values decreases in quality with respect to
-Greedy solutions. Effectively, more false-arc quantity can be packed into the
-solution because there is finer-grained choice for assembly requests than for
-batch requests.
+Second, this effect is reduced when the objective choice in cost-space increase,
+as shown in case of fine location preference. In other words, the relative
+benefit of using a heuristic over a full \cbc solve in preference space for the
+problems run above appears to be a function of the size of \textit{possible}
+objective coefficient values. Furthermore, the effect of objective coefficient
+population size decreases as problem size increases. However, as can be seen
+from Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}, this
+benefit requres a relatively large, high-fidelity reactor simulation, i.e., more
+than $\sim$80 reactors, to be consistently observed. 
+
+This behvaior is more pronounced as the number of possible connections
+increases. Consider the ThOX fuel-cycle results shown in Figure
+\ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc2_}. Again, large
+variations are observed for instances with some location preference with small
+reactor populations, especially for high-fidelity reactor instances. However, as
+the reactor populations increase, \cbc solutions appear to asymptototically
+appraoch relative values close to the base line set by simulations in which
+there are no location-based preferences.
+
+\begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{compare_cbc_greedy_pref_flow_front_n_rxtr__fc2_.pdf}
+    \caption{
+      \label{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc2_}
+      Comparisons between relative simulation metrics between the \cbc solver and
+      the Greedy solver for ThOX fuel cycles. Only converged \cbc
+      solutions are compared.  }
+  \end{center}
+\end{figure}
 
 The Greedy solver can provide quite good preference-space results relative to
 the \cbc solver when an exchange is highly constrained \textit{and} when the cost
@@ -384,10 +411,10 @@ c_\text{false} = \frac{1}{p_\text{max}} + 1
 
 \subsubsection{Convergence Criteria}
 
-The \cbc solver, and MILP solvers in general, is highly tuneable. Perhaps the
-most critical tuneable criteria affecting the balance between solution quality
-and solution time is the convergence criteria. It is not clear to what degree
-solution quality will matter for users of Cyclus. Accordingly, a short
+The \cbc solver is highly tuneable. As with many iterative solution techniques,
+the most critical tuneable criteria affecting the balance between solution
+quality and solution time is the convergence criteria. It is not clear to what
+degree solution quality will matter for users of Cyclus. Accordingly, a short
 exploratory experiment was conducted to examine to what degree convergence
 criteria affects solution time.
 
@@ -432,7 +459,7 @@ discussion in \secref{sec:res:scale:front:soln}, it is likely that the large
 convergence effect is due increasing the ``noise'' effect of actual
 arcs. However, some speed ups in solution times are expected when relaxing
 convergence criteria, and those speed ups will likely be more profound in
-smaller-sized problems than larger problems.
+smaller-sized problems than larger problems based on this analysis.
 
 \subsection{Back-End Exchanges}
 
