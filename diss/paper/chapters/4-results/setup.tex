@@ -168,13 +168,21 @@ $t_s$, and objective function value $z$,
 z = \sum_{(i, j) \in A} c_{i, j} x_{i, j}.
 \end{equation}
 
+\noindent
 For any given instance, the optimal objective value, $z^*$, is associated with a
-set of flows, $X^*$. By definition, an optimal solution will have a lower system
-cost than or an equivalent system cost to any feasible solution. By necessity,
-any solution to the NFCTP will include flows along false arcs if such flows
-exist. One can also consider solution metrics that only account for arcs that
-exist in a simulation, $A_{\text{sim}}$. Because the simulation opperates in
-preference-space, a ``simulation objective'' is defined as
+set of flows, $X^*$. By definition, an optimal solution, i.e., 
+
+\begin{equation}\label{eqn:obj_flow}
+z^* = \sum_{(i, j) \in A} c_{i, j} x^*_{i, j}.
+\end{equation}
+
+\noindent
+ will have a lower system cost than or an equivalent system cost to any feasible
+ solution. There may be multiple possible optimal solutions. By necessity, any
+ solution to the NFCTP will include flows along false arcs if such flows
+ exist. One can also consider solution metrics that only account for arcs that
+ exist in a simulation, $A_{\text{sim}}$. Because the simulation opperates in
+ preference-space, a ``simulation objective'' is defined as
 
 \begin{equation}\label{eqn:sim_flow}
 z_{\text{sim}} = \sum_{(i, j) \in A_{\text{sim}}} p_{i, j} x_{i, j},
@@ -186,11 +194,6 @@ and the simulation objective associated with an optimal solution is defined as
 \begin{equation}\label{eqn:sim_flow}
 z^*_{\text{sim}} = \sum_{(i, j) \in A_{\text{sim}}} p_{i, j} x^*_{i, j},
 \end{equation}
-
-While $z^* \leq z$ is true in cost space, $z^*_{\text{sim}} \geq z_{\text{sim}}$
-is \textit{not} necessarily true in practice for MILP instances. Any MILP solver
-must use some convergence criteria, which takes into account flow values along
-false arcs. 
 
 %% The preference vector, $\vec{p}$, can be divided into its two components,
 %% $\vec{p} = \vec{p}_c + \vec{p}_l$. If $f_{\text{loc}}$ is zero, then, by
