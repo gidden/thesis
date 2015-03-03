@@ -465,14 +465,16 @@ smaller-sized problems than larger problems based on this analysis.
 
 Many of the results of the back-end exchanges mirror those of the front-end
 exchanges. Therefore, this section will discuss only differences between the two
-cases. The fact that so many similarities exist is striking, because from a
-simulation perspective, back-end exchanges are quite different than front-end
-exchanges. First, a single request is made for each commodity type that can be
-consumed by support facilities. Therefore, many fewer requests exist in the
-system. Next, the supply of used fuel is known. The total number of arcs in the
-system is similar, however, as can be seen in Figure
-\ref{fig:base_back_n_rxtr_n_arcs_fc1_greedy}. Furthermore, the arc
-population also scales as the square of the number of reactors. 
+cases. The fact that so many similarities exist is somewhat striking, because
+from a simulation perspective, back-end exchanges are quite different than
+front-end exchanges. First, a single request is made for each commodity type
+that can be consumed by support facilities. Therefore, many fewer requests exist
+in the system. Next, the supply of used fuel is known. A new supportin facility
+type, repositories, are also added, resulting in a slightly higher total arc
+population per reactor. As with the front-end exchanges, the arc population
+scales as $\mathcal{O}(n^2)$, as can be seen in Figure
+\ref{fig:base_back_n_rxtr_n_arcs_fc1_greedy}, and the constraint population
+scales as $\mathcal{O}(n)$.
 
 \begin{figure}[h!]
   \begin{center}
@@ -488,10 +490,11 @@ population also scales as the square of the number of reactors.
 \paragraph{Greedy Solver}
 
 The Greedy solver performs quite similarly to the front-end case. Its
-performance is again linear in the number of arcs. An example of the MOX fuel
-cycle is shown in Figure \ref{fig:base_back_n_arcs_time_fc1_greedy}. As can be seen,
-the linear coefficient in back-end cases is approximately twice the coefficient
-of front-end cases. This observation holds irrespective of fuel cycle.
+performance is again linear-like in the number of arcs. An example of the MOX
+fuel cycle is shown in Figure \ref{fig:base_back_n_arcs_time_fc1_greedy}. As can
+be seen, the linear coefficient in back-end cases is approximately twice the
+coefficient of front-end cases. This observation holds irrespective of fuel
+cycle.
 
 \begin{figure}[h!]
   \begin{center}
@@ -506,20 +509,22 @@ of front-end cases. This observation holds irrespective of fuel cycle.
 
 \paragraph{CLP Solver}
 
-The CLP solver also performs similarly to the front-end case, as shown in Figure
-\ref{fig:base_back_n_arcs_time_fc1_clp}. While the batch-based cases show linear
-behavior with a slightly larger linear coefficient, the assembly-based cases
-include outliers that are considerably less performant. Additionally, it is
-interesting that as the fidelity of objective coefficients increases, general
-solution time increases. This effectively reduces problem degeneracy, increasing
-the possible objective function values.
+Back-end exchanges solved with \clp were found to behave similarly for each fuel
+cycle modeled. The results for MOX-based exchanges is shown in
+\ref{fig:base_back_n_constrs_time_fc1_clp} with quadratic fits. A key distinction
+is observed between back-end and front-end exchanges: while front-end exchanges
+follow tight $\mathcal{O}(n^2)$ scaling in all cases, back-end exchanges with
+higher-reactor fidelity clearly have a larger spread in this trend. Furthermore,
+significantly higher run times are observed for back-end exchanges, with a
+maximum run time of $\sim$40 seconds for front-end exchanges and $\sim$150-300
+seconds for back-end exchanges.
 
 \begin{figure}[h!]
   \begin{center}
-    \includegraphics[width=.7\textwidth]{base_back_n_arcs_time_fc1_clp.pdf}
+    \includegraphics[width=.7\textwidth]{base_back_n_constrs_time_fc1_clp.pdf}
     \caption{
-      \label{fig:base_back_n_arcs_time_fc1_clp}
-      \clp Solver results for the MOX fuel cycle as the number of arcs
+      \label{fig:base_back_n_constrs_time_fc1_clp}
+      \clp Solver results for the MOX fuel cycle as the number of constraints
       increases.      
     }
   \end{center}
