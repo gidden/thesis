@@ -2,8 +2,8 @@
 \section{Stochastic Campaign}\label{results:stochastic}
 
 The generation of exchanges is designed as a stochastic process. Each reactor is
-assigned a target enrichment per consumable commodity in a given range. Further,
-each facility is assigned a location value. Enrichment stochasticity results in
+assigned a target enrichment per consumable commodity in a given range, and each
+facility is assigned a location value. Enrichment stochasticity results in
 perturbed constraint matrix coefficients, and location stochasticity results in
 perturbed objective coefficient if $f_{\text{loc}}$ is set to include
 location-based preference.
@@ -258,17 +258,19 @@ shown in Figure \ref{fig:1k_avg_back_time_fc1_clp}.
   \end{center}
 \end{figure}
 
-The \clp solution time required for high-fidelity reactor models with no location
-preference was found to be significantly higher than for instances which
-included a location preference. A similar trend was found for \cbc solutions, as
-shown in \Cref{fig:1k_avg_back_time_fc1_cbc,fig:1k_avg_back_time_fc2_cbc} for
-the MOX and ThOX fuel cycles, respectively. While the timing discrepancy exists
-in low-fidelity reactor models in the \cbc case, rather than high-fidelity, it is
-also much more pronounced. These results indicate that solution times, in
-certain instances, can be significantly reduced if solvers can better
-differentiate between arcs based on objective coefficients. Therefore, a
-possible speed-up strategy can include ``salting'' the preference vector by
-adding a random $\delta_p$ to each entry.
+The \clp solution time required for high-fidelity reactor models with no
+location preference was found to be significantly higher than for instances
+which included a location preference. A similar trend was found for \cbc
+solutions, as shown in
+\Cref{fig:1k_avg_back_time_fc1_cbc,fig:1k_avg_back_time_fc2_cbc} for the MOX and
+ThOX fuel cycles, respectively. The timing discrepancy exists in low-fidelity
+reactor models in the \cbc case, and is also much more pronounced. These results
+indicate that solution times, in certain instances, can be significantly reduced
+if solvers can better differentiate between arcs based on objective
+coefficients. Therefore, a possible speed-up strategy can include ``salting''
+the preference vector by adding a random $\delta_p$ to each entry. Such a
+strategy will likely be useful in only certain cases, and should be tested only
+if long run times are encountered.
 
 \begin{figure}[h!]
   \begin{center}
