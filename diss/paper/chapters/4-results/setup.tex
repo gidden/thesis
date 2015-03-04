@@ -35,8 +35,8 @@ Heuristic, described in \secref{abm:dre:nfctp:heur}, COIN's LP solver
 (\clp), and COIN's branch-and-cut solver (\cbc). Each problem instance
 is constructed as an \texttt{ExchangeGraph}, i.e., at the \textit{exchange
   layer} shown in Figure \ref{fig:dre_impl} and Figure \ref{fig:dre_time}. The
-Greedy Heuristic is applied directly to the \texttt{ExchangeGraph}. The CLP and
-\cbc solvers require a translation to the \textit{formulation layer}. The CLP
+Greedy Heuristic is applied directly to the \texttt{ExchangeGraph}. The \clp and
+\cbc solvers require a translation to the \textit{formulation layer}. The \clp
 solver is applied to the LP formulation of the NFCTP and the \cbc solver is
 applied to the MILP formulation. The solution time, $t_s$ of a given solver is
 defined as the time required to return a vector of arc flows given an
@@ -62,7 +62,7 @@ when each request portfolio has either been satisfied or found to be
 unsatisfiable. In the worst case, every node is perused, resulting in
 $\mathcal{O}(n\log{}\frac{n}{N})$, with $n$ arcs and $N$ nodes. This scaling is
 better than $\mathcal{O}(n\log{}n)$ because arcs in the system are
-partitionable. As both CLP and \cbc solve NP-Hard problems, there is no
+partitionable. As both \clp and \cbc solve NP-Hard problems, there is no
 \textit{a priori} expected performance behavior. However, LP problems solved
 with the Simplex method are known in practice to scale by the number of
 constraints in the system. As described in Appendix \ref{app:lp}, the method

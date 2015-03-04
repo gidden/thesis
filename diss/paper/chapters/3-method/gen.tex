@@ -711,13 +711,14 @@ are summarized in Table \ref{tbl:rx_req}. Both fast reactor types select a UOX
 enrichment in $[15, 20]$\cite{bairiot2003status}, with an upper limit set by LEU
 legal enrichment limits. All recycled fuels commodities are assigned an
 enrichment range of $[55, 65]$ \cite{bairiot2003status} and have a composition
-of 20\% of the target element (Plutonium or Thorium) and 80\% Uranium top up
-\cite{bairiot2003status}. Note that no large-scale fast reactors have been
-fueled by Thorium-based fuels. Accordingly, Thorium-related values are broad
-generalizations. The purpose of including another fuel type is to expand on the
-complexity of possible connections between facilities in a given fuel cycle,
-while including somewhat realistic constraining values. The constraining values
-used by any individual analyst will vary, perhaps greatly, and thus only
+of 20\% of the target element (Plutonium or Thorium), with the given enrichment
+of it's primary fissile isotope (\nucl{239}{Pu} or \nucl{233}{U}), and 80\%
+Uranium top up \cite{bairiot2003status}. Note that no large-scale fast reactors
+have been fueled by Thorium-based fuels. Accordingly, Thorium-related values are
+broad generalizations. The purpose of including another fuel type is to expand
+on the complexity of possible connections between facilities in a given fuel
+cycle, while including somewhat realistic constraining values. The constraining
+values used by any individual analyst will vary, perhaps greatly, and thus only
 reasonable values are required by this study.
 
 A summary of chosen chosen request parameters based on reactor and commodity
@@ -1036,14 +1037,14 @@ the product of $x_i$ and the total number of assemblies, starting with the
 lowest value of $x_i$. The final assignment is then taken as the difference
 between the total number of assemblies and the previously assigned values.
 
-For example, consider a thermal reactor with a distribution $d_{\text{Th}} =
-[\frac{2}{3}, \frac{1}{3}, 0]$ and number of assemblies $n_a = 39$. The
+For example, consider a fast reactor with a distribution $d_{\text{Th}} =
+[\frac{3}{4}, \frac{1}{4}, 0]$ and number of assemblies $n_a = 39$. The
 assembly-commodity breakdown would be calculated as
 
 \begin{gather*}
 n_{\text{FMOX}} = \text{round}(x_{\text{FMOX}} n_a) = 0 \\
-n_{\text{TMOX}} = \text{round}(x_{\text{TMOX}} n_a) = 13 \\
-n_{\text{UOX}} = n_a - n_{\text{TMOX}} - n_{\text{FMOX}} = 26.
+n_{\text{TMOX}} = \text{round}(x_{\text{TMOX}} n_a) = 10 \\
+n_{\text{UOX}} = n_a - n_{\text{TMOX}} - n_{\text{FMOX}} = 29.
 \end{gather*}
 
 Once a commodity is assigned either to a single batch or a selection of

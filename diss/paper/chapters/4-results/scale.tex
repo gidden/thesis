@@ -127,21 +127,25 @@ higher-fidelity models.
   \end{center}
 \end{figure}
 
-\paragraph{CLP Solver}
+\paragraph{\clp Solver}
 
 As discussed in \secref{results:setup}, LP solution scaling is more naturally
 observed as a function of the number of
 constraints. \Cref{fig:base_front_n_constrs_time_fc0_clp,fig:base_front_n_constrs_time_fc1_clp,fig:base_front_n_constrs_time_fc2_clp}
-show the CLP solution times as the number of constraints increases. As can be
+show the \clp solution times as the number of constraints increases. As can be
 seen, approximate $\mathcal{O}(n^2)$ scaling is observed. Like the Greedy
-solver, this scaling is independent of any fundamental paramters.
+solver, this scaling is independent of any fundamental paramters. Low-fidelity
+reactor problems solve very quickly (under a second). Larger, high-fidelity
+reator problems can take much longer to solve, i.e., tens of seconds.  It does
+not appear that solution time magnitudes are affected by the choice of location
+parameter.
 
 \begin{figure}[h!]
   \begin{center}
     \includegraphics[width=.7\textwidth]{base_front_n_constrs_time_fc0_clp.pdf}
     \caption{
       \label{fig:base_front_n_constrs_time_fc0_clp}
-      CLP Solver results for the OT fuel cycle as the number of constraints
+      \clp Solver results for the OT fuel cycle as the number of constraints
       increases.
       }
   \end{center}
@@ -152,7 +156,7 @@ solver, this scaling is independent of any fundamental paramters.
     \includegraphics[width=.7\textwidth]{base_front_n_constrs_time_fc1_clp.pdf}
     \caption{
       \label{fig:base_front_n_constrs_time_fc1_clp}
-      CLP Solver results for the MOX fuel cycle as the number of constraints
+      \clp Solver results for the MOX fuel cycle as the number of constraints
       increases.
       }
   \end{center}
@@ -163,7 +167,7 @@ solver, this scaling is independent of any fundamental paramters.
     \includegraphics[width=.7\textwidth]{base_front_n_constrs_time_fc2_clp.pdf}
     \caption{
       \label{fig:base_front_n_constrs_time_fc2_clp}
-      CLP Solver results for the ThOX fuel cycle as the number of constraints
+      \clp Solver results for the ThOX fuel cycle as the number of constraints
       increases.
       }
   \end{center}
@@ -171,7 +175,7 @@ solver, this scaling is independent of any fundamental paramters.
 
 \paragraph{\cbc Solver}
 
-The performance of the \cbc solver is much more sporadic than either the CLP or
+The performance of the \cbc solver is much more sporadic than either the \clp or
 Greedy solvers. This is to be expected, for MILP optimization problems are
 NP-Hard. Further, they are solved using enumeration techniques that do not
 perform characteristically well, as the Simplex method does. 
@@ -507,7 +511,7 @@ cycle.
   \end{center}
 \end{figure}
 
-\paragraph{CLP Solver}
+\paragraph{\clp Solver}
 
 Back-end exchanges solved with \clp were found to behave similarly for each fuel
 cycle modeled. The results for MOX-based exchanges is shown in

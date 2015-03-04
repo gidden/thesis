@@ -31,7 +31,10 @@ level of detail. For example, even in the case of a once-through fuel cycle,
 many reactors of the same type (e.g., PWRs), may require different resource
 qualities (i.e., Uranium enrichment). As the complexity of a quality metric
 increases, an aggregate approach becomes less desirable as it loses such detail
-through aggregation.
+through aggregation. Furthermore, by dissasociating simulation logic from entity
+logic, agents of arbitrary fidelity levels can be used in the same
+simulation. For instance, a reactor agent that tracks a small subset of isotopes
+can be used in tandem with a reactor agent that tracks a large set of isotopes.
 
 In summary, the arbitrary levels of complexity that can be required for a
 flexible NFC simulator suggests that ABM is a reasonable tool to use. The

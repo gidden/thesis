@@ -85,22 +85,23 @@ cycle were generated separately.
 Generated exchanges were solved with the Greedy Heuristic in the exchange layer
 and the COIN-OR \clp and \cbc solvers in the formulation layer. A number of key
 observations were ascertained by both scaling and stochastic experimental
-campaigns. First, the Greedy solver exhibited linear scaling with problem size
-(i.e., the number of variables) for all configurations of exchanges, matching
-theory. Somewhat surprisingly, the \clp solver was also shown to have efficient
-scaling behavior as well. The theoretical complexity of the general case of
-simplex method is not known, although it is known to be ``efficient in
-practice'' \cite{goldfarb1994complexity}. Further, solving relaxations of LPs is
-a fundamental step in branch-and-bound algorithms for MILPs (e.g., those used in
-\cbc). Therefore, exploring the behavior of given problem structures as LPs is of
-interest. In this work, \clp solves of front-end exchanges were found to have
-linear-like scaling, up to problems with ~1 million variables, regardless of
+campaigns. First, the Greedy solver exhibited $\mathcal{O}(n\log{}\frac{n}{N})$
+(linear-like) scaling with problem size (i.e., the number of variables) for all
+configurations of exchanges, matching theory. Somewhat surprisingly, the \clp
+solver was also shown to have efficient scaling behavior as well. The
+theoretical complexity of the general case of simplex method is not known,
+although it is known to be ``efficient in practice''
+\cite{goldfarb1994complexity}. Further, solving relaxations of LPs is a
+fundamental step in branch-and-bound algorithms for MILPs (e.g., those used in
+\cbc). Therefore, exploring the behavior of given problem structures as LPs is
+of interest. In this work, \clp solves of front-end exchanges were found to have
+$\mathcal{O}(n^2)$ scaling in the number of constraints, regardless of
 fundamental parameter configuration. Back-end exchanges also experienced
-linear-like behavior for smaller problem sizes (~1E4 variables). At larger
-problem sizes, especially for instances with high variability in objective
-coefficient distribution, scaling becomes much worse than the linear.
+$\mathcal{O}(n^2)$ behavior for smaller problem sizes. At larger problem sizes,
+especially for instances with high variability in objective coefficient
+distribution, the quadratic scaling trend tended to break down.
 
-Solving optimizaiton problems is known to be NP-Hard, and solution times are
+Solving optimization problems is known to be NP-Hard, and solution times are
 known to scale exponentially in the general case. This behavior was observed for
 the \cbc solver in both front and back-end exchanges. A solution time limit of
 three hours was placed on \cbc calculations, and many cases converged for both
