@@ -24,7 +24,8 @@ years.}
 %%% won't be deposited to the graduate school (e.g., for web or a nice
 %%% printed copy)
 
-\chapterstyle{deposit}
+%\chapterstyle{deposit}
+\chapterstyle{section}
 \pagestyle{deposit}
 
 
@@ -50,15 +51,18 @@ years.}
 \renewcommand{\afterloftitle}{}
 \renewcommand{\afterlottitle}{}
 
+% make default chapter font size larger
+\renewcommand*{\chapnumfont}{\normalfont\Huge\bfseries}
+\renewcommand*{\chaptitlefont}{\normalfont\Huge\bfseries}
 \renewcommand{\cftchapterfont}{\normalfont} 
+%\renewcommand{\cftchapterfont}{\Huge} 
 \renewcommand{\cftsectionfont}{\itshape} 
 \renewcommand{\cftchapterpagefont}{\normalfont} 
 \renewcommand{\cftchapterpresnum}{\bfseries} 
 \renewcommand{\cftchapterleader}{} 
 \renewcommand{\cftsectionleader}{} 
 \renewcommand{\cftchapterafterpnum}{\cftparfillskip} 
-\renewcommand{\cftsectionafterpnum}{\cftparfillskip} 
-
+\renewcommand{\cftsectionafterpnum}{\cftparfillskip}
 % \captionnamefont{\small\sffamily} 
 % \captiontitlefont{\small\sffamily} 
 
