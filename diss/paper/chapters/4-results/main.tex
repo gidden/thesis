@@ -7,10 +7,43 @@ experimentation apparati, including the computational tools, solvers and
 relevant output. Two experimental campaigns were conducted. A scaling campaign,
 described in \secref{results:scale}, was performed in order to investigate
 formulation behavior as a function of problem size. \secref {results:stochastic}
-then describes the results of a stochastic campaign.
+then describes the results of a stochastic campaign. Finally, a summary of
+findings is provided in \secref{results:sum}.
 
 \input{./chapters/4-results/setup}
 
 \input{./chapters/4-results/scale}
 
 \input{./chapters/4-results/stochastic}
+
+\section{Summary}\label{results:sum}
+
+The performance and output of the Greedy heuristic, \clp solver, and \cbc solver
+was tested on a large number of exchange graph instances. Linear-like, i.e.,
+$\mathcal{O}(n\log{}\frac{n}{N})$, problem-size scaling was confirmed for the
+Greedy heuristic, $\mathcal{O}(n^2)$-like scaling was observed for most
+\clp-solved instances, and exponential scaling was observed for instances solved
+with \cbc. The Greedy heuristic performs quite well even for realistic, large
+NFCTP instances, solving in tens of seconds on the testing system. \cbc was
+found to be largely sporadic. Many instances solved quite quickly; however,
+outliers were observed in almost all experiments that greatly increased average
+solution time. 
+
+The translation between exchange graph to NFCTP-instance was found be quite
+sensitive. Both the false arc cost and the cost translation function were found
+to have a large effect on preference-based metrics. Some \cbc solutions with a
+high false arc cost were observed to be worse than Greedy solutions in
+preference space. This effect was largely mitigated by reducing false arc
+cost. 
+
+This work has shown that resource exchange instances can be solved reliably and
+optimally in \Cyclus with open-source MILP solvers, even if those solutions may
+take a relatively long time. Many \Cyclus users will likely find heuristics to
+be acceptable for their work, especially for analyses requiring a large number
+of fuel cycle simulations. Users will be empowered, however, to solve a
+reference simulation optimally, for example, and compare results with
+simulations using a heuristic. The user can then either continue to solve
+resource exchanges optimally with different options, such as running time
+restrictions or loosened convergence criteria, or change to a heuristic. This
+capability represents a novel step forward in simply modeling nuclear fuel
+cycles as well as analyzing dynamic effects within a given fuel cycle.
