@@ -100,15 +100,15 @@ linear-like behavior for smaller problem sizes (~1E4 variables). At larger
 problem sizes, especially for instances with high variability in objective
 coefficient distribution, scaling becomes much worse than the linear.
 
-Solving MILPs optimally is known to be NP-Hard, and solution times are known to
-scale exponentially in the general case. This behavior was observed for the \cbc
-solver in both front and back-end exchanges. A solution time limit of three
-hours was placed on \cbc calculations, and many cases converged for both exchange
-types in the scaling campaign. Threshold problem sizes were observed in each
-exchange type and fundamental parameter configuration. Maximum convergence
+Solving optimizaiton problems is known to be NP-Hard, and solution times are
+known to scale exponentially in the general case. This behavior was observed for
+the \cbc solver in both front and back-end exchanges. A solution time limit of
+three hours was placed on \cbc calculations, and many cases converged for both
+exchange types in the scaling campaign. Threshold problem sizes were observed in
+each exchange type and fundamental parameter configuration. Maximum convergence
 probability was found in high-fidelity reactor instances for non-once-through
 fuel cycles. Low-fidelity reactor, once-through fuel cycle instances were found
-to have particularly poor convergence probability. 
+to have particularly poor convergence probability.
 
 Performing comparative solution analyses between the Greedy and \cbc solvers
 illuminated the importance of false-arc costs in the MILP formulation of the
@@ -197,12 +197,14 @@ require sufficient attention to support all use cases. In general, however,
 extending the DRE mechanism to support a multi-period bidding procedure is a
 fruitful area for future work.
 
-The solvers used in the back-end of the DRE are also potential subjects of
-future work, based on future use cases and user requirements. As implemented,
-the Greedy solver sorts exchange entities based on average arc preference. Use
-cases may find other metrics to be superior given certain economic or social
-models. Furthermore, the Greedy solver is but one heuristic approach. Other
-approaches may be implemented and tested for various use cases, as needed.
+The solvers used in the DRE are also potential subjects of future work, based on
+future use cases and user requirements. As implemented, the Greedy solver sorts
+exchange entities based on average arc preference. Use cases may find other
+metrics to be superior given certain economic or social models. Furthermore, the
+Greedy solver is but one heuristic approach. Other approaches may be implemented
+and tested for various use cases, as needed. Finally, a minimum-cost formulation
+was used in the formulation layer of the DRE. Adding a maximum-preference
+formulation is both possible and relatively straightforward. 
 
 The work herein described utilized the both the \cbc and \clp solver via their
 provided driver APIs. Many more switches are available to both, which may be
