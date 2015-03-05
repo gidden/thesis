@@ -134,9 +134,9 @@ observed as a function of the number of
 constraints. \Cref{fig:base_front_n_constrs_time_fc0_clp,fig:base_front_n_constrs_time_fc1_clp,fig:base_front_n_constrs_time_fc2_clp}
 show the \clp solution times as the number of constraints increases. As can be
 seen, approximate $\mathcal{O}(n^2)$ scaling is observed. Like the Greedy
-solver, this scaling is independent of any fundamental paramters. Low-fidelity
+solver, this scaling is independent of any fundamental parameters. Low-fidelity
 reactor problems solve very quickly (under a second). Larger, high-fidelity
-reator problems can take much longer to solve, i.e., tens of seconds.  It does
+reactor problems can take much longer to solve, i.e., tens of seconds.  It does
 not appear that solution time magnitudes are affected by the choice of location
 parameter.
 
@@ -325,7 +325,7 @@ Comparing the results in which there are no location-based preferences (green),
 there is a clear correlation between the number of variables and the relative
 benefit of using \cbc. The Greedy heuristic performs better when the number of
 possible assignments is small. This is not unexpected; as the number of decision
-variables increases, making optimial decisions should, in theory, result in a
+variables increases, making optimal decisions should, in theory, result in a
 increasingly better outcomes than making heuristic-based decisions. 
 
 Two features of interest arise when comparing the cases in which there is a
@@ -351,16 +351,16 @@ problems run above appears to be a function of the size of \textit{possible}
 objective coefficient values. Furthermore, the effect of objective coefficient
 population size decreases as problem size increases. However, as can be seen
 from Figure \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_}, this
-benefit requres a relatively large, high-fidelity reactor simulation, i.e., more
+benefit requires a relatively large, high-fidelity reactor simulation, i.e., more
 than $\sim$80 reactors, to be consistently observed. 
 
-This behvaior is more pronounced as the number of possible connections
+This behavior is more pronounced as the number of possible connections
 increases. Consider the ThOX fuel-cycle results shown in Figure
 \ref{fig:compare_cbc_greedy_pref_flow_front_n_rxtr__fc2_}. Again, large
 variations are observed for instances with some location preference with small
 reactor populations, especially for high-fidelity reactor instances. However, as
-the reactor populations increase, \cbc solutions appear to asymptototically
-appraoch relative values close to the base line set by simulations in which
+the reactor populations increase, \cbc solutions appear to asymptotically
+approach relative values close to the base line set by simulations in which
 there are no location-based preferences.
 
 \begin{figure}[h!]
