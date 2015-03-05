@@ -5,8 +5,8 @@ simulations are built. It defines the interaction mechanisms and methodologies
 for agents, specifically agents whose archetypes have implemented the
 \code{Trader} interface. This section begins by providing a motivating problem
 statement in \secref{abm:dre:prob}. It then details the methodology for querying
-supply and demand during the information gathering phase of the DRE in \S
-\ref{abm:dre:info}. The solution phase, in which the defined DRE is translated
+supply and demand during the information gathering phase of the DRE in 
+\secref{abm:dre:info}. The solution phase, in which the defined DRE is translated
 into a form of the Multicommodity Transportation Problem (MCTP) and solved, is
 then described in \secref{abm:dre:fctp}. Finally, two proof of principle
 simulations with novel fuel cycle DREs are presented in \secref{abm:dre:proof}.
@@ -483,8 +483,8 @@ objective coefficients associated with transporting commodities is what drives
 the solution. Given the nature of supply and demand constraints, the
 transportation problem naturally lends itself to a minimum cost formulation. A
 preference-based formulation has been presented thus far due to the difficulties
-of employing reasonable cost coefficients, as was discussed in \S
-\ref{intro:prefs}. While directly using costs should be available to users, in
+of employing reasonable cost coefficients, as was discussed in 
+\secref{intro:prefs}. While directly using costs should be available to users, in
 practice using a more abstract notion of preferences is simpler.
 
 Formally, a preference function, $p_{i, j}(h)$, is defined which is a cardinal
@@ -657,8 +657,8 @@ quantity will be equal to the equivalent flow upper bound along that arc,
 $\tilde{x}_{j}$, which denote the quantity of a quantized order.
 
 Binary variables, representing quantized flow, are directly related to the
-notion of \textit{exclusive} bids and requests discussed in \S
-\ref{abm:dre:info}. In the MILP formulation, an arc $(i, j)$ is considered
+notion of \textit{exclusive} bids and requests discussed in 
+\secref{abm:dre:info}. In the MILP formulation, an arc $(i, j)$ is considered
 exclusive if either node $i$ or node $j$ was defined as exclusive in the
 information gathering phase of the DRE. Accordingly, it is useful to partition
 all arcs based on this characteristic. Given the set of arcs $A$, a partition
@@ -682,8 +682,8 @@ supplier and requester.
 
 \paragraph{Mutually Exclusive Constraints}
 
-\textit{Mutual} requests and responses were described in \S
-\ref{abm:dre:info}. These are defined as a set of requests or responses, of
+\textit{Mutual} requests and responses were described in 
+\secref{abm:dre:info}. These are defined as a set of requests or responses, of
 which only one may be satisfied. This is represented in the formulation as a
 constraint on the associated variables. Again, if a variable $y_{i,j}$ is set to
 $1$, flow is sent along arc $(i, j)$. If it is $0$, no flow occurs. A
@@ -1058,8 +1058,8 @@ The resource layer utilizes \textit{templated} classes in order to reduce the
 amount of code required for implementation. Each object is templated on the
 concrete \code{Resource} type, e.g., the \code{Material} and \code{Product}
 classes. The fundamental data structures in the resource layer reflect the
-constructs of the information gathering procedure described in \S
-\ref{abm:dre:info}.
+constructs of the information gathering procedure described in 
+\secref{abm:dre:info}.
 
 In the RFB phase of the DRE, agents populate \codeb{Request\-Portfolio}s with
 \code{Request}s and \codeb{Capacity\-Constraint}s. A \code{Request}

@@ -23,8 +23,8 @@ Exchange generation, absent full-scale simulation, is a naturally parameterized
 process. Some generation parameters are common to any NFCTP instance, and are
 described in \secref{method:setup:params}. Specific species may additionally
 define their own set of parameters. \secref{method:setup:front} describes the
-parameters generation methodology associated with front-end exchanges. \S
-\ref{method:setup:back} follows with a similar discussion for back-end
+parameters generation methodology associated with front-end exchanges. 
+\secref{method:setup:back} follows with a similar discussion for back-end
 exchanges.  
 
 \subsection{Common Features}\label{method:setup:features}
@@ -184,8 +184,8 @@ Finally, each reactors in the system is representing an individual agent in a
 given simulation. Agents are assumed to have some differentiating behavior. In
 order to model this effect, each reactor is assigned a random variable, $x \in
 [0, 1)$, that represents a unique measure of quality of fuel requested by
-  reactors. This stochastic property is expounded upon further in \S
-  \ref{method:setup:front} and \ref{method:setup:back}.
+  reactors. This stochastic property is expounded upon further in
+  \secref{method:setup:front} and \ref{method:setup:back}.
 
 \subsubsection{Support Facilities}
 
@@ -193,8 +193,8 @@ In a front-end exchange, fuel suppliers exchange material with reactors. In a
 back-end exchange, reprocessing and storage facilities exchange material with
 reactors. In either case, facilities that are \text{not} reactors are referred
 to as \textit{support} facilities, as they support the reactors which generate
-power. Support facilities for front-end exchanges are described in \S
-\ref{method:setup:front:sup}, and support facilities for back-end exchanges are
+power. Support facilities for front-end exchanges are described in 
+\secref{method:setup:front:sup}, and support facilities for back-end exchanges are
 described in \secref{method:setup:back:sup}.
 
 \subsubsection{Preferences}\label{method:setup:features:prefs}
@@ -578,8 +578,8 @@ The weight given to location preference with respect to commodity preference.
 
 A front-end exchange is one in which reactors request fuel and supporting
 facilities supply fuel resources. Given a specified reactor population, a
-supporting facility population is determined, as described in \S
-\ref{method:setup:front:sup}. Conceptually, the information gathering procedure
+supporting facility population is determined, as described in 
+\secref{method:setup:front:sup}. Conceptually, the information gathering procedure
 for this exchange begins with the RFB phase where reactors make requests for
 commodities with a given quantity and enrichment. Enrichment in this case is a
 simple resource quality proxy for an isotopic vector. Supporting facilities are
@@ -589,8 +589,8 @@ strategies. The remainder of this section describes how front-end exchange
 generation models the information gathering procedure, starting with the
 generation of requests in \secref{method:setup:front:reqgen}, followed by the
 generation of supply responses in \secref{method:setup:front:subgen}. The PA
-phase is modeled using the location proxy described in \S
-\ref{method:setup:features:prefs}. Throughout the discussion on generating
+phase is modeled using the location proxy described in 
+\secref{method:setup:features:prefs}. Throughout the discussion on generating
 front-end exchanges, instance parameters are defined. A summary of all front-end
 specific instance parameters is described in \secref{method:setup:front:sum}.
 
