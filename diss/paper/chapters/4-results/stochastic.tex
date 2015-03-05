@@ -115,9 +115,11 @@ corresponding results for high-fidelity models.
     \caption{
       \label{fig:1k_hist_front_rx0}
       The distribution of converged solution times for all low-fidelity reactor
-      instances. Fuel cycle fidelity increases from top to bottom, and location
-      fidelity increases from right to left. Percentages of converged instances
-      are provided if relevant.}
+      instances. Outliers have been filtered out in order to show distribution
+      shape. Fuel cycle fidelity increases from top to bottom, and location
+      fidelity increases from right to left. The percentage of instance
+      population shown is provided in black, if relevant. The percentages of all
+      converged instances is shown in red, if relevant.}
   \end{center}
 \end{figure}
 
@@ -128,26 +130,27 @@ corresponding results for high-fidelity models.
       \label{fig:1k_hist_front_rx1}
       The distribution of converged solution times for all high-fidelity reactor
       instances. Fuel cycle fidelity increases from top to bottom, and location
-      fidelity increases from right to left. Percentages of converged instances
-      are provided if relevant.}
+      fidelity increases from right to left. Percentages are identical to Figure
+      \ref{fig:1k_hist_front_rx0}.}
   \end{center}
 \end{figure}
 
 A number of interesting features exist in the figures related to the \cbc timing
 study. Significantly, reactors in batch-mode have poor convergence for
-once-through cycles, regardless of location parameter. This echoes
-observations in the scaling study. For the remaining fuel cycles, outliers
-consistently are observed for low-fidelity reactor models, also regardless of
-location parameter. This effect is seen in the cumulative observation figures
-most easily. Each occurrence of a timing outlier causes a large jump in the
-observation. 
+once-through cycles, regardless of location parameter. This echoes observations
+in the scaling study. For the remaining fuel cycles, outliers consistently are
+observed for low-fidelity reactor models, also regardless of location
+parameter. This effect is seen in the cumulative observation figures most
+easily. Each occurrence of a timing outlier causes a large jump in the
+observation. The converged, non-outlier instances with location-based
+preferences show single-mode structure, whereas those without location
+preferences appear to be bi-modal.
 
 Conversely, high-fidelity reactor instances were found to almost always
-converge. Outliers were found to dominate the once-through fuel cycle
-results. Again, this behavior results in choppy cumulative observations. Both
-the MOX and ThOX fuel cycles were shown to be comparatively stable. Further,
-their solution time distributions proved to have some structure. It is not clear
-why these combinations of fundamental parameters result in such structure.
+converge. Outliers were found in the once-through fuel cycle results, but not in
+other fuel cycles. Again, this behavior results in choppy cumulative
+observations. Both the MOX and ThOX fuel cycles were shown to be comparatively
+stable. Further, both cases have clear tri-modal solution-time populations.
 
 \subsubsection{Simulation Objective vs. Solution Time}
 
