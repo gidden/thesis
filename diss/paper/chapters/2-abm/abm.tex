@@ -31,7 +31,7 @@ level of detail. For example, even in the case of a once-through fuel cycle,
 many reactors of the same type (e.g., PWRs), may require different resource
 qualities (i.e., Uranium enrichment). As the complexity of a quality metric
 increases, an aggregate approach becomes less desirable as it loses such detail
-through aggregation. Furthermore, by dissasociating simulation logic from entity
+through aggregation. Furthermore, by disassociating simulation logic from entity
 logic, agents of arbitrary fidelity levels can be used in the same
 simulation. For instance, a reactor agent that tracks a small subset of isotopes
 can be used in tandem with a reactor agent that tracks a large set of isotopes.
@@ -155,8 +155,8 @@ The INPRO Business As Usual (BAU) benchmark \cite{_international_2009} for the
 once-through fuel cycle was chosen for three reasons. First, it was the simplest
 benchmark that demonstrated deployment behavior. Second, no supply or demand
 constraints were present, so a basic supply-demand framework would
-suffice. Finally, results from another fuel cycle simulation texttt, specifically
-VISION \cite{vision2009}, was available for comparison. The INPRO BAU benchmark
+suffice. Finally, results from another fuel cycle simulation code, VISION
+\cite{vision2009}, was available for comparison. The INPRO BAU benchmark
 identified two cases, high electricity demand and moderate electricity demand,
 as shown in Fig. \ref{fig:inpro-demand}. Both cases require that demand met by a
 composition of 94\% Light Water Reactors (LWRs) and 6\% Heavy Water Reactors
@@ -312,21 +312,21 @@ Tails Assay  & The U-235 assay of tails.        & 0.003
 
 % c/Cref is cleveref
 
-In aggregate, Cyclus performed well relative to the other benchmark
-texttts. Fig. \ref{fig:rxtrs_low} shows the reactor deployment curves for each
-simulator for the moderate growth scenario while Fig. \ref{fig:rxtrs_high} shows
-reactor deployment for the high scenario. The slight differences are attributed
-to VISION's look-ahead functionality which builds the required facilities one
-time step after they are needed, whereas Cyclus builds facilities on the
-timestep in which they are needed. One can observe that a simple one timestep
-translation will result in identical output.
+In aggregate, Cyclus performed well relative to the other
+benchmarks. Fig. \ref{fig:rxtrs_low} shows the reactor deployment curves for
+each simulator for the moderate growth scenario while Fig. \ref{fig:rxtrs_high}
+shows reactor deployment for the high scenario. The slight differences are
+attributed to VISION's look-ahead functionality which builds the required
+facilities one time step after they are needed, whereas Cyclus builds facilities
+on the timestep in which they are needed. One can observe that a simple one
+timestep translation will result in identical output.
 
 Cumulative natural uranium utilization curves for the moderate and high cases
 are shown in \Cref{fig:nat_u_low,fig:nat_u_high}, and cumulative used fuel
 inventory curves are shown in
 \Cref{fig:used_fuel_low,fig:used_fuel_high}. Slight discrepancies are noted
 between Cyclus and VISION. These discrepancies are attributed to the
-implementation of core batch recycling in each of the respective texttts. The
+implementation of core batch recycling in each of the respective codes. The
 differences between Cyclus and VISION are magnified because the curves show
 cumulative metrics. In other words, results at time $t_1$ are added the results
 at time $t_2$ and so on. Therefore, a series of small discrepancies appears to
