@@ -1,14 +1,10 @@
 manuscript = paper
-references = refs simulators benchmarks cosi
+references = refs
 latexopt   = -halt-on-error -file-line-error
-
-for file in $(references); do \
-   ref_handles = $(ref_handles) $(file).bib \
-done
 
 all: all-via-pdf
 
-all-via-pdf: $(manuscript).tex $(ref_handles)
+all-via-pdf: $(manuscript).tex $(references).bib
 	pdflatex $(latexopt) $<
 	bibtex $(manuscript).aux
 	pdflatex $(latexopt) $<
