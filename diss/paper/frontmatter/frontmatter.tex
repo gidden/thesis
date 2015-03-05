@@ -55,16 +55,27 @@ years.}
 \renewcommand*{\chapnumfont}{\normalfont\Huge\bfseries}
 \renewcommand*{\chaptitlefont}{\normalfont\Huge\bfseries}
 \renewcommand{\cftchapterfont}{\normalfont} 
-%\renewcommand{\cftchapterfont}{\Huge} 
-\renewcommand{\cftsectionfont}{\itshape} 
+\renewcommand{\cftsectionfont}{\itshape}
 \renewcommand{\cftchapterpagefont}{\normalfont} 
 \renewcommand{\cftchapterpresnum}{\bfseries} 
 \renewcommand{\cftchapterleader}{} 
 \renewcommand{\cftsectionleader}{} 
 \renewcommand{\cftchapterafterpnum}{\cftparfillskip} 
 \renewcommand{\cftsectionafterpnum}{\cftparfillskip}
-% \captionnamefont{\small\sffamily} 
-% \captiontitlefont{\small\sffamily} 
+
+%% this guarantees some spacing between a toc entry and its page number. without
+%% this some entries look like ``summary130'' instead of ``summary 130''
+\newlength\chaplength
+\newlength\seclength
+\setlength\chaplength{0em}
+\setlength\seclength{0em}
+\renewcommand\cftchapterformatpnum[1]{%
+  \hskip1em\hbox to \chaplength{{\cftchapterpagefont #1\hfill}}}
+\renewcommand\cftsectionformatpnum[1]{%
+  \hskip1em\hbox to \seclength{{\cftsectionpagefont #1\hfill}}}
+
+\captionnamefont{\small\sffamily} 
+\captiontitlefont{\small\sffamily} 
 
 % \renewcommand{\contentsname}{contents}
 % \renewcommand{\listfigurename}{list of figures}
