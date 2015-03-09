@@ -13,22 +13,11 @@
 #+LINK_UP:   
 #+LINK_HOME:
 
-#+BIND: org-latex-title-command "\\title{De leerplandoelstellingen}\n\\date[mei 2014]{9 mei 2014}\n\\begin{withoutheadline}\frame{\titlepage}\end{withoutheadline}
-
 #+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_OPTIONS: [presentation,smaller]
-#+BEAMER_THEME: Wisconsin [white,pdflogo,cleantitle]
-
+#+LaTeX_CLASS_OPTIONS: [10pt]
+#+BEAMER_THEME: Wisconsin [white,cleantitle,pdflogo]
 #+LATEX_HEADER: \setbeamertemplate{footline}[page number]
-
 #+LATEX_HEADER: \setbeamertemplate{bibliography item}[text]
-
-#+LATEX_HEADER: \makeatletter
-#+LATEX_HEADER:     \newenvironment{withoutheadline}{
-#+LATEX_HEADER:         \setbeamertemplate{headline}[default]
-#+LATEX_HEADER:         \def\beamer@entrycode{\vspace*{-\headheight}}
-#+LATEX_HEADER:     }{}
-#+LATEX_HEADER: \makeatother
 
 * Introduction
 
