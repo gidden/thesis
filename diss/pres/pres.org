@@ -5,7 +5,7 @@
 #+DESCRIPTION: 
 #+KEYWORDS: 
 #+LANGUAGE:  en
-#+OPTIONS:   H:3 toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   H:3 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
@@ -17,6 +17,7 @@
 #+LaTeX_CLASS_OPTIONS: [10pt]
 #+BEAMER_THEME: Wisconsin [white,pdflogo]
 #+LATEX_HEADER: \setbeamertemplate{bibliography item}[text]
+#+latex_header: \AtBeginSection[]{\begin{frame}[noframenumbering]{Outline}\tableofcontents[currentsection]\end{frame}}
 
 * Introduction
 
@@ -33,7 +34,17 @@
 *** An idea
     Blimey!
 
-** References
+* Methods
+
+** ABM
+
+*** topic
+stuff
+
+*** topic2
+stuff
+
+* References
 
 *** References
   :PROPERTIES:
