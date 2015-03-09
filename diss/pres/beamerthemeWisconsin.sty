@@ -101,13 +101,33 @@
 % inner theme does not give you rounded boxes.  Override these
 % settings as in the rounded theme.
 
-\ifbeamer@cleantitle
-  \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{\setbeamertemplate{headline}{}}
-\else
-  \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{}
-\fi
-\setbeamertemplate{blocks}[rounded]
+%% \ifbeamer@cleantitle
+%%   \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{
+%%     \setbeamertemplate{headline}{}\setbeamertemplate{footline}{}
+%%   }
+%% \else
+%%   \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{}
+%% \fi
+%% \setbeamertemplate{blocks}[rounded]
 
+\ifbeamer@cleantitle
+\def\maketitle{
+  \ifbeamer@inframe
+    \titlepage
+  \else
+    \newenvironment{withoutheadfoot}{
+      \setbeamertemplate{headline}[default]
+      \setbeamertemplate{footline}[default]
+      \def\beamer@entrycode{\vspace*{-\headheight}}
+    }{}
+    \begin{withoutheadfoot}
+    \frame{\titlepage}
+    \end{withoutheadfoot}
+  \fi
+}
+\fi
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{}
+\setbeamertemplate{blocks}[rounded]
 
 % Disable the navigation bar unless it was explicitly requested
 \ifbeamer@nav
