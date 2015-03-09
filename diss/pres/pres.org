@@ -20,9 +20,11 @@
 #+LATEX_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
 
 #+COMMENT: This is required because org-mode does not support frame options in their TOC 
-#+LATEX: \begin{frame}[noframenumbering,plain]{Outline}
+*** Outline
+  :PROPERTIES:
+  :BEAMER_opt: plain, noframenumbering
+  :END:
 #+TOC: headlines 1
-#+LATEX: \end{frame}
 
 * Introduction
 
@@ -48,8 +50,6 @@ stuff
 
 *** topic2
 stuff
-
-* References
 
 *** References
   :PROPERTIES:
