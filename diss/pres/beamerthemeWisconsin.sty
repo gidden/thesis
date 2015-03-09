@@ -31,14 +31,6 @@
 \beamer@cleantitlefalse
 \DeclareOptionBeamer{cleantitle}{\beamer@cleantitletrue}
 
-\newif\ifbeamer@customhead
-\beamer@customheadfalse
-\DeclareOptionBeamer{customhead}{\beamer@customheadtrue}
-
-\newif\ifbeamer@customfoot
-\beamer@customfootfalse
-\DeclareOptionBeamer{customfoot}{\beamer@customfoottrue}
-
 \ProcessOptionsBeamer
 
 \mode<presentation>
@@ -69,7 +61,6 @@
   \vskip2pt%
 }
 
-\useoutertheme{split}
 % Redefine the frameheader to include a logo
 \defbeamertemplate*{frametitle}{uwisconsin theme}[1][left]
 {
@@ -96,12 +87,10 @@
   \end{beamercolorbox}% 
 }
 
-% update this footer as needed based on preferences
-\ifbeamer@customfoot
-\setbeamertemplate{footline}[frame number]{}
-\fi
+% Infolines is a nice, no nonsense outer theme
+\useoutertheme{infolines}
 
-
+% I like circles better than I like bullets
 \useinnertheme{circles}
 
 \ifbeamer@white
@@ -111,7 +100,6 @@
 \fi
 
 %% setup the title page, I like to use a title page without headers or footers
-\ifbeamer@cleantitle
 \def\maketitle{
   \ifbeamer@inframe
     \titlepage
@@ -122,11 +110,10 @@
       \def\beamer@entrycode{\vspace*{-\headheight}}
     }{}
     \begin{withoutheadfoot}
-    \frame{\titlepage}
+    \frame[noframenumbering]{\titlepage}
     \end{withoutheadfoot}
   \fi
 }
-\fi
 \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{}
 
 % Circles are much nicer for bullet points, but the circles
