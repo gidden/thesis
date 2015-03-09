@@ -5,7 +5,7 @@
 #+DESCRIPTION: 
 #+KEYWORDS: 
 #+LANGUAGE:  en
-#+OPTIONS:   H:2 toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   H:3 toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
@@ -15,12 +15,14 @@
 
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [10pt]
-#+BEAMER_THEME: Wisconsin [white,cleantitle,pdflogo,customfoot]
+#+BEAMER_THEME: Wisconsin [white,pdflogo]
 #+LATEX_HEADER: \setbeamertemplate{bibliography item}[text]
 
 * Introduction
 
 ** Overview
+
+*** thing 1
    This presentation provides an illustration of some of the capabilities of the *Beamer* export in =org= mode:
 
    1. simple slides (this one),
@@ -28,15 +30,14 @@
    3. multi-column slides and
    4. the use of *Babel* for literate programming.\cite{hamilton_blue_2012}
 
-** Another slide
-
-   Just a test
+*** An idea
+    Blimey!
 
 ** References
+
+*** References
   :PROPERTIES:
-  :BEAMER_opt: allowframebreaks
+  :BEAMER_opt: allowframebreaks, plain, noframenumbering
   :END:
    \bibliographystyle{plain}
    \bibliography{pres}
-   
-   
