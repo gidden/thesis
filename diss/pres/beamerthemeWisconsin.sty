@@ -31,6 +31,14 @@
 \beamer@cleantitlefalse
 \DeclareOptionBeamer{cleantitle}{\beamer@cleantitletrue}
 
+\newif\ifbeamer@customhead
+\beamer@customheadfalse
+\DeclareOptionBeamer{customhead}{\beamer@customheadtrue}
+
+\newif\ifbeamer@customfoot
+\beamer@customfootfalse
+\DeclareOptionBeamer{customfoot}{\beamer@customfoottrue}
+
 \ProcessOptionsBeamer
 
 \mode<presentation>
@@ -88,6 +96,11 @@
   \end{beamercolorbox}% 
 }
 
+% update this footer as needed based on preferences
+\ifbeamer@customfoot
+\setbeamertemplate{footline}[frame number]{}
+\fi
+
 
 \useinnertheme{circles}
 
@@ -97,19 +110,7 @@
   \usecolortheme{Wisconsin}
 \fi
 
-% Circles are much nicer for bullet points, but the circles
-% inner theme does not give you rounded boxes.  Override these
-% settings as in the rounded theme.
-
-%% \ifbeamer@cleantitle
-%%   \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{
-%%     \setbeamertemplate{headline}{}\setbeamertemplate{footline}{}
-%%   }
-%% \else
-%%   \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{}
-%% \fi
-%% \setbeamertemplate{blocks}[rounded]
-
+%% setup the title page, I like to use a title page without headers or footers
 \ifbeamer@cleantitle
 \def\maketitle{
   \ifbeamer@inframe
@@ -127,6 +128,10 @@
 }
 \fi
 \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]{}
+
+% Circles are much nicer for bullet points, but the circles
+% inner theme does not give you rounded boxes.  Override these
+% settings as in the rounded theme.
 \setbeamertemplate{blocks}[rounded]
 
 % Disable the navigation bar unless it was explicitly requested
