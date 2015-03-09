@@ -16,8 +16,12 @@
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [10pt]
 #+BEAMER_THEME: Wisconsin [white,pdflogo]
-#+LATEX_HEADER: \setbeamertemplate{bibliography item}[text]
-#+LATEX_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
+#+BEAMER_HEADER: \setbeamertemplate{bibliography item}[text]
+#+BEAMER_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
+
+#+COMMENT: This is required because org-mode does not support short titles, etc.
+#+BEAMER_HEADER_EXTRA: \title[A Short Title]{ \inserttitle }
+
 
 #+COMMENT: This is required because org-mode does not support frame options in their TOC 
 *** Outline
@@ -39,7 +43,7 @@
    4. the use of *Babel* for literate programming.\cite{hamilton_blue_2012}
 
 *** An idea
-    Blimey!
+Blimey!
 
 * Methods
 
