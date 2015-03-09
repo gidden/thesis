@@ -1,0 +1,54 @@
+#+TITLE:     A Presentation
+#+AUTHOR:    Matthew J. Gidden
+#+EMAIL:     matthew.gidden@gmail.com
+#+DATE:      2015-03-26
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+LANGUAGE:  en
+#+OPTIONS:   H:2 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:http://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:   
+#+LINK_HOME:
+
+#+BIND: org-latex-title-command "\\title{De leerplandoelstellingen}\n\\date[mei 2014]{9 mei 2014}\n\\begin{withoutheadline}\frame{\titlepage}\end{withoutheadline}
+
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [presentation,smaller]
+#+BEAMER_THEME: Wisconsin [white,pdflogo,cleantitle]
+
+#+LATEX_HEADER: \setbeamertemplate{footline}[page number]
+
+#+LATEX_HEADER: \setbeamertemplate{bibliography item}[text]
+
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER:     \newenvironment{withoutheadline}{
+#+LATEX_HEADER:         \setbeamertemplate{headline}[default]
+#+LATEX_HEADER:         \def\beamer@entrycode{\vspace*{-\headheight}}
+#+LATEX_HEADER:     }{}
+#+LATEX_HEADER: \makeatother
+
+* Introduction
+
+** Overview
+   This presentation provides an illustration of some of the capabilities of the *Beamer* export in =org= mode:
+
+   1. simple slides (this one),
+   2. slides with special blocks,
+   3. multi-column slides and
+   4. the use of *Babel* for literate programming.\cite{hamilton_blue_2012}
+
+** Another slide
+
+   Just a test
+
+** References
+  :PROPERTIES:
+  :BEAMER_opt: allowframebreaks
+  :END:
+   \bibliographystyle{plain}
+   \bibliography{pres}
+   
+
