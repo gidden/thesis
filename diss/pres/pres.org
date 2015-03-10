@@ -1,7 +1,7 @@
-#+TITLE:     A Presentation
+#+TITLE:     An Agent-Based Modeling Framework and Application for the Generic Nuclear Fuel Cycle
 #+AUTHOR:    Matthew J. Gidden
 #+EMAIL:     matthew.gidden@gmail.com
-#+DATE:      2015-03-26
+#+DATE:      03.26.2015
 #+DESCRIPTION: 
 #+KEYWORDS: 
 #+LANGUAGE:  en
@@ -20,8 +20,10 @@
 #+BEAMER_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
 
 #+COMMENT: This is required because org-mode does not support short titles, etc.
-#+BEAMER_HEADER_EXTRA: \title[A Short Title]{ \inserttitle }
-
+#+BEAMER_HEADER_EXTRA: \title[Thesis Defense]{An Agent-Based Modeling Framework and Application for the Generic Nuclear Fuel Cycle}
+#+BEAMER_HEADER_EXTRA: \author[M. J. Gidden]{Matthew J. Gidden}
+#+BEAMER_HEADER_EXTRA: \institute[UW-Madison]{University of Wisconsin-Madison}
+#+BEAMER_HEADER_EXTRA: \date[03.26.2015]{March 26, 2015}
 
 #+COMMENT: This is required because org-mode does not support frame options in their TOC 
 *** Outline
