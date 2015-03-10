@@ -34,28 +34,74 @@
 
 * Introduction
 
-** Overview
+** Fuel Cycle Simulation
+*** Who cares?
+   Stuff\cite{hamilton_blue_2012}
 
-*** thing 1
-   This presentation provides an illustration of some of the capabilities of the *Beamer* export in =org= mode:
+** New Tools
+*** ABM
+    Stuff
 
-   1. simple slides (this one),
-   2. slides with special blocks,
-   3. multi-column slides and
-   4. the use of *Babel* for literate programming.\cite{hamilton_blue_2012}
+*** Supply-Chain Management
+    Stuff
 
-*** An idea
-Blimey!
+*** Transportation Problem
+    Stuff
 
-* Methods
+** Motivation
 
-** ABM
+*** Who cares?
+
+* Strategy and Methods
+
+** Agents and Agency
 
 *** topic
-stuff
+    stuff
 
-*** topic2
-stuff
+** Dynamic Resource Exchange
+
+*** topic
+    stuff
+
+* Experimentation and Results
+
+** Generating Exchanges
+
+*** topic
+    stuff
+
+** Scaling Behavior
+
+*** topic
+    stuff
+
+** Stochastic Behavior
+
+*** topic
+    stuff
+
+* Conclusions
+
+** New Capabilities
+
+*** Who Cares?
+    stuff
+
+** Reccomendations
+
+*** info
+    stuff
+
+** Future Work
+
+*** info
+    stuff
+
+** Acknowledgements
+
+*** Acks
+    stuff
 
 *** References
   :PROPERTIES:
