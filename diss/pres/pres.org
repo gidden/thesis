@@ -2,6 +2,7 @@
 #+AUTHOR:    Matthew J. Gidden
 #+EMAIL:     matthew.gidden@gmail.com
 #+DATE:      03.26.2015
+#+STARTUP: beamer
 #+DESCRIPTION: 
 #+KEYWORDS: 
 #+LANGUAGE:  en
