@@ -35,12 +35,35 @@
 #+TOC: headlines 1
 
 * Introduction
-  
-*** The Nuclear Fuel Cycle
-#+latex: \begin{figure}
+** How It Works
+
+*** What's the Point?
+
+- $P \propto \Sigma_f \Phi V_{\text{core}}$
+
+- $$
+
+- National energy policy
+
+*** Fission Power
+#+caption: A Fig \cite{hamilton_blue_2012}
 #+attr_latex: :height 5cm
-#+latex: \includesvg{figs/fc.svg}
-#+latex: \end{figure}
+[[file:figs/xs.pdf]]
+
+*** The Nuclear Fuel Cycle
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/fc.pdf]]
+
+*** The Nuclear Fuel Cycle
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/fc-front.pdf]]
+
+*** The Nuclear Fuel Cycle
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/fc-back.pdf]]
 
 ** Fuel Cycle Simulation
 *** Who cares?
