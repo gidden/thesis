@@ -1,3 +1,4 @@
+
 #+TITLE:     An Agent-Based Modeling Framework and Application for the Generic Nuclear Fuel Cycle
 #+AUTHOR:    Matthew J. Gidden
 #+EMAIL:     matthew.gidden@gmail.com
@@ -34,6 +35,12 @@
 #+TOC: headlines 1
 
 * Introduction
+  
+*** The Nuclear Fuel Cycle
+#+latex: \begin{figure}
+#+attr_latex: :height 5cm
+#+latex: \includesvg{figs/fc.svg}
+#+latex: \end{figure}
 
 ** Fuel Cycle Simulation
 *** Who cares?
