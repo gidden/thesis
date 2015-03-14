@@ -18,7 +18,7 @@
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [10pt]
 #+LATEX_HEADER: \usepackage{listings}
-#+LATEX_HEADER: \usepackage[vlined]{algorithm2e} % for algorithms
+#+LATEX_HEADER: \usepackage[ruled,vlined]{algorithm2e} % for algorithms
 #+BEAMER_THEME: Wisconsin [white,pdflogo]
 #+BEAMER_HEADER: \setbeamertemplate{bibliography item}[text]
 #+BEAMER_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
@@ -235,6 +235,29 @@ Let's add a statement, eh?
 #+caption: A Fig \cite{hamilton_blue_2012}
 #+attr_latex: :height 5cm
 [[file:figs/exchange_groups.pdf]]
+
+*** Solution in Exchange Layer
+#+begin_latex
+  \begin{algorithm}[H]
+    \SetAlgoLined
+    order request portfolios by average preference\;
+    \ForAll{request portfolios} {
+      order requests by average preference\;
+      matched $\leftarrow$ 0\;        
+      \While{matched $\leq q_{J}$ and $\exists$ a request} {
+        get next request\;
+        order arcs by preference\;
+        \While{matched $\leq q_{J}$ and $\exists$ an arc} {
+          get next arc\;
+          remaining $\leftarrow q_{J}$ - matched\;
+          to\_match $\leftarrow \min \lbrace$remaining, Capacity(arc)$\rbrace$\;
+          matched $\leftarrow$ matched + to\_match\;
+        }
+      }
+    }
+    \caption{Greedy Exchange Execution} 
+  \end{algorithm}
+#+end_latex
 
 *** Translation to Formulation Layer
 #+caption: A Fig \cite{hamilton_blue_2012}
