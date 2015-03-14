@@ -17,6 +17,8 @@
 
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [10pt]
+#+LATEX_HEADER: \usepackage{listings}
+#+LATEX_HEADER: \usepackage[vlined]{algorithm2e} % for algorithms
 #+BEAMER_THEME: Wisconsin [white,pdflogo]
 #+BEAMER_HEADER: \setbeamertemplate{bibliography item}[text]
 #+BEAMER_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
@@ -36,7 +38,7 @@
 
 * Introduction
 ** How It Works
-
+   
 *** What's the Point?
 
 - $P \propto \Sigma_f \Phi V_{\text{core}}$
@@ -44,6 +46,10 @@
 - $$
 
 - National energy policy
+
+- Waste management
+
+- Proliferation
 
 *** Fission Power
 #+caption: A Fig \cite{hamilton_blue_2012}
@@ -65,35 +71,279 @@
 #+attr_latex: :height 5cm
 [[file:figs/fc-back.pdf]]
 
+*** The Nuclear Fuel Cycle
+  Used fuel exiting light water reactors has the following average elemental
+  breakdown:
+
+
+#+caption: Elemental Breakdown of Spent Fuel Exiting a Typical LWR
+#+attr_latex: :align |c|c|
+|------------------+---------|
+| Element Group    | wt %    |
+|------------------+---------|
+| Uranium          | \sim 95 |
+| Plutonium        | \sim1   |
+| Minor Actinides  | \sim0.1 |
+| Fission Products | \sim4   |
+|------------------+---------|
+
+
 ** Fuel Cycle Simulation
-*** Who cares?
-   Stuff\cite{hamilton_blue_2012}
+*** Simulation
+It's hard.
 
-** New Tools
-*** ABM
-    Stuff
+- resource fungibility
+- recycling
+- constrained supply
+- /in situ/, /ex situ/
+  - physics
+  - economics
+  - /et cetera/
+- arbitrary numbers, types of facilities
+- geo-political effects
+- "inifite" possible fuel cycles
+- an "art" and a science
 
-*** Supply-Chain Management
-    Stuff
+*** "Old School"
+- no physics or "too much" physics
+- fleets of facilities
+- aggregate material flows
+- hard-coded connections between facility types
+- little or no /in situ/ decision making
+- no regional information
+- no idle facilities
 
-*** Transportation Problem
-    Stuff
-
-** Motivation
-
-*** Who cares?
+*** Motivation
+#+begin_quote
+Let's add a statement, eh?
+#+end_quote
 
 * Strategy and Methods
 
-** Agents and Agency
+** New Tools
+*** Entity Interaction
 
-*** topic
-    stuff
+**** Agent-Based Modeling (ABM)
+- agents interact with an environment
+- facility agents manage inventory
+- institution agents can build facility agents
+- region agents inform system demand for facility types 
 
-** Dynamic Resource Exchange
+#+BEAMER: \pause
 
-*** topic
-    stuff
+**** Supply-Chain Management (SCM)
+- couples with ABM \cite{julka}
+- facilities inform the system of resource-specific supply and demand
+- institutions and regions can perturb resource flows
+- institutions can plan deployment
+- regions can impose geo-political models
+
+*** Transportation Problem
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/xportation.pdf]]
+
+
+*** Transportation Problem
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/xportation-labeled.pdf]]
+
+*** Transportation Problem    
+#+begin_latex
+\begin{subequations}\label{eqs:xport}
+  \begin{align}
+    %%
+    \min_{x} \:\: & 
+    \sum_{(i, j) \in A} c_{i,j} x_{i,j}
+    & \label{eqs:xport_obj} \\
+    %%
+    \text{s.t.} \:\: &
+    \sum_{j \in N_2} x_{i,j} \leq s_i
+    & \forall i \in N_1  \\
+    %%
+    &
+    \sum_{i \in N_1} x_{i,j} \geq d_j
+    & \forall j \in N_2  \\
+    %%
+    &
+    x_{i,j} \geq 0
+    & \forall (i, j) \in A \label{eqs:xport_x}
+    %%
+  \end{align}
+\end{subequations}
+#+end_latex
+
+** Dynamic Resource Exchange (DRE)
+
+*** Dynamic Resource Exchange (DRE) Goals
+- complex definitions of resource quality (e.g., arbitrary isotopic vectors)
+- communication between suppliers and consumers
+- constrained supply
+- fungible demand
+- arbitrary numbers and types of facilities
+- enable geopolitical models
+
+*** DRE Phases & Layers
+**** Phases
+:PROPERTIES:
+:BEAMER_col: 0.5
+:BEAMER_env: block
+:END:
+1. Information Gathering
+  - Request for Bids (RFB)
+  - Response to Request for Bids (RRFB)
+  - Preference Adjustment (PA)
+2. Solution
+3. Trade Execution
+
+**** Layers
+:PROPERTIES:
+:BEAMER_col: 0.4
+:BEAMER_env: block
+:END:
+- Resource Layer
+- Exchange Layer
+- Formulation Layer
+
+*** DRE Phases & Layers
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/exchange_xlation.pdf]]
+
+*** Information Gathering Phase
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/info.pdf]]
+
+*** Information Gathering Phase Terminology
+- Bids and Requests
+  - Mutual
+  - Exclusive
+  - Mutually Exclusive
+- Portfolios
+- Constraint Values
+- Coefficient Conversion Functions
+- Preferences
+
+*** Translation to Exchange Layer
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/exchange_bare_words.pdf]]
+
+*** Translation to Exchange Layer
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/exchange_groups.pdf]]
+
+*** Translation to Formulation Layer
+#+caption: A Fig \cite{hamilton_blue_2012}
+#+attr_latex: :height 5cm
+[[file:figs/exchange_false.pdf]]
+
+*** Nuclear Fuel Cycle Transportation Problem (NFCTP)
+#+begin_latex
+\begin{subequations}\label{eqs:NFCTP-LP}
+  \begin{align}
+    %%
+    \min_{x} \:\: 
+    & 
+    z = \sum_{i \in I}\sum_{j \in J}c_{i,j} x_{i,j} 
+    & 
+    \label{eqs:NFCTP-LP_obj} \\
+    %%
+    \text{s.t.} \:\: 
+    &
+    \sum_{i \in I_s} \sum_{j \in J} a^k_{i,j} x_{i,j} \leq b^k_s 
+    &
+    \: 
+    \forall \: k \in K_s, 
+    \forall \: s \in S 
+    \label{eqs:NFCTP-LP_sup} \\
+    %%
+    &
+    \sum_{j \in J_r} \sum_{i \in I} a^k_{i,j} x_{i,j} \geq b^k_r 
+    &
+    \: 
+    \forall \: k \in K_r,  
+    \forall \: r \in R 
+    \label{eqs:NFCTP-LP_req} \\
+    %%
+    &
+    x_{i,j} \in [0, \tilde{x_j}]
+    &
+    \forall \: i \in I, 
+    \forall \: j \in J 
+    \label{eqs:NFCTP-LP_x}
+    %%
+  \end{align}
+\end{subequations}
+#+end_latex
+
+*** Nuclear Fuel Cycle Transportation Problem (NFCTP)
+#+begin_latex
+\begin{subequations}\label{eqs:NFCTP}
+  \begin{align}
+    %%
+    \min_{x, y} \:\: 
+    & 
+    z \:\: = 
+    \sum_{(i, j) \in A_p} c_{i,j} x_{i,j} 
+    \: + 
+    \sum_{(i, j) \in A_e} c_{i,j} \tilde{x_j} y_{i,j} 
+    & 
+    \label{eqs:NFCTP_obj} \\
+    %%
+    \text{s.t.} \:\: 
+    &
+    \sum_{(i, j) \in A_{p_s}} a^k_{i,j} x_{i,j}
+    \: + 
+    \sum_{(i, j) \in A_{e_s}} a^k_{i,j} \tilde{x_j} y_{i,j}
+    \leq b^k_s 
+    &
+    \: 
+    \forall \: k \in K_s, 
+    \forall \: s \in S 
+    \label{eqs:NFCTP_sup} \\
+    %%
+    &
+    \sum_{(i, j) \in M_{s}} y_{i,j} \leq 1 
+    &
+    \forall \: s \in S 
+    \label{eqs:NFCTP_mut_sup} \\
+    %%
+    &
+    \sum_{(i, j) \in A_{p_r}} a^k_{i,j} x_{i,j}
+    \: + 
+    \sum_{(i, j) \in A_{e_r}} a^k_{i,j} \tilde{x_j} y_{i,j}
+    \geq b^k_r 
+    &
+    \: 
+    \forall \: k \in K_r,  
+    \forall \: r \in R 
+    \label{eqs:NFCTP_req} \\
+    %%
+    &
+    \sum_{(i, j) \in M_{r}} y_{i,j} \leq 1 
+    &
+    \forall \: r \in R 
+    \label{eqs:NFCTP_mut_req} \\
+    %%
+    &
+    x_{i,j} \in [0, \tilde{x_j}]
+    &
+    \forall \: (i, j) \in A_p
+    \label{eqs:NFCTP_x} \\
+    %%
+    &
+    y_{i,j} \in \left\{ 0, 1 \right\}
+    &
+    \forall \: (i, j) \in A_e
+    \label{eqs:NFCTP_y}
+    %%
+  \end{align}
+\end{subequations}
+#+end_latex
 
 * Experimentation and Results
 
