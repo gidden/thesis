@@ -1,4 +1,3 @@
-
 #+TITLE:     An Agent-Based Modeling Framework and Application for the Generic Nuclear Fuel Cycle
 #+AUTHOR:    Matthew J. Gidden
 #+EMAIL:     matthew.gidden@gmail.com
@@ -19,6 +18,7 @@
 #+LaTeX_CLASS_OPTIONS: [10pt]
 #+LATEX_HEADER: \usepackage{listings}
 #+LATEX_HEADER: \usepackage[ruled,vlined]{algorithm2e} % for algorithms
+
 #+BEAMER_THEME: Wisconsin [white,pdflogo]
 #+BEAMER_HEADER: \setbeamertemplate{bibliography item}[text]
 #+BEAMER_HEADER: \AtBeginSection[]{\begin{frame}[noframenumbering,plain]{Outline}\tableofcontents[currentsection]\end{frame}}
@@ -87,7 +87,6 @@
 | Fission Products | \sim4   |
 |------------------+---------|
 
-
 ** Fuel Cycle Simulation
 *** Simulation
 It's hard.
@@ -143,7 +142,6 @@ Let's add a statement, eh?
 #+attr_latex: :height 5cm
 [[file:figs/xportation.pdf]]
 
-
 *** Transportation Problem
 #+caption: A Fig \cite{hamilton_blue_2012}
 #+attr_latex: :height 5cm
@@ -196,7 +194,7 @@ Let's add a statement, eh?
   - Preference Adjustment (PA)
 2. Solution
 3. Trade Execution
-
+   
 **** Layers
 :PROPERTIES:
 :BEAMER_col: 0.4
@@ -205,7 +203,7 @@ Let's add a statement, eh?
 - Resource Layer
 - Exchange Layer
 - Formulation Layer
-
+  
 *** DRE Phases & Layers
 #+caption: A Fig \cite{hamilton_blue_2012}
 #+attr_latex: :height 5cm
@@ -260,6 +258,17 @@ Let's add a statement, eh?
 #+end_latex
 
 *** Translation to Formulation Layer
+**** text
+:PROPERTIES:
+:BEAMER_col: 0.3
+:END:
+- Cost translation function $f : p_{i,j} \to c_{i,j}$
+- $f(x) = \frac{1}{x}$
+
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.7
+:END:
 #+caption: A Fig \cite{hamilton_blue_2012}
 #+attr_latex: :height 5cm
 [[file:figs/exchange_false.pdf]]
@@ -369,11 +378,108 @@ Let's add a statement, eh?
 #+end_latex
 
 * Experimentation and Results
+** Strategy
+
+*** Strategy
+
+Explore DRE performance & behavior in a realistic setting
+
+- Generate front and back-end exchanges
+
+- Test problem-size scaling
+
+- Test sensitivity to instance stochasticity
+
+- Investigate formulation effects
+
+  - Preference and cost
+
+  - False arc cost
 
 ** Generating Exchanges
+*** Overview
 
-*** topic
-    stuff
+- Two types: Front-end and Back-end
+
+- Process:
+  - Read parameter vector
+  - Instantiate entity surrogates
+  - Simulate Information Gathering Phase
+  - Translate to Resource Layer
+  - Solve
+
+*** Splitting Exchanges
+**** text
+:PROPERTIES:
+:BEAMER_col: 0.3
+:END:
+Occurs when
+- Reactors directly connected to other reactors
+- Reactors and repositories compete for resources
+
+
+
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.7
+:END:
+#+caption: A separable Exchange Graph with nodes grouped by portfolio and the separating partition shown as a red dashed line.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_part_port.pdf]]
+    
+*** Fuel Cycles (\(f_\text{fc}\))
+**** Once-through
+- Commodities: UOX
+- Reactor Types: Thermal
+#+beamer: \pause
+**** MOX Thermal/Fast
+- Commodities: UOX, Thermal MOX, Fast MOX
+- Reactor Types: Thermal, MOX-based Fast
+#+beamer: \pause
+**** MOX/ThOX Thermal/Fast
+- Commodities: UOX, Thermal MOX, Fast MOX, ThOX
+- Reactor Types: Thermal, MOX-based Fast, ThOX-based Fast
+
+*** Reactors 
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
+Modeled as either Thermal (AP-1000) or Fast reactors
+
+Reactor type determines 
+- core volume
+- preferred enrichment range
+- number of assemblies per batch (39 vs. 92)
+
+**** Fidelity (\(f_\text{rx}\))
+:PROPERTIES:
+:BEAMER_col: 0.4
+:BEAMER_env: block
+:END:
+- Single batch
+- $N_a$ assemblies
+
+*** Location Effects (\(f_\text{loc}\))
+#+begin_latex
+\begin{equation}\label{eqn:loc_proxy}
+p_{l}(i, j) = \delta_{\text{reg}} 
+\frac{\exp(- \lvert \text{reg}_{i} - \text{reg}_{j} \rvert ) + \delta_{\text{loc}}
+  \exp(- \lvert \text{loc}_{i} - \text{loc}_{j} \rvert )}
+     {1 + \delta_{\text{loc}}}
+\end{equation}
+#+end_latex
+#+beamer: \vspace{0.2cm}
+- None (\(\delta_{\text{reg}} = 0, \delta_{\text{loc}} = 0\)) 
+- Regional (\(\delta_{\text{reg}} = 1, \delta_{\text{loc}} = 0\))
+- Regional + Distance (\(\delta_{\text{reg}} = 1, \delta_{\text{loc}} = 1\))
+
+*** Information Gathering Simulation
+**** Requests/Bids
+blah
+**** Portfolio Constraints
+blah
+**** Preferences
+blah
 
 ** Scaling Behavior
 
