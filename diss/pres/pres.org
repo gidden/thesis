@@ -448,18 +448,15 @@ Modeled as either Thermal (AP-1000) or Fast reactors
 
 Reactor type determines 
 - core volume
+- consumable commodities
 - preferred enrichment range
 - number of assemblies per batch (39 vs. 92)
 
 **** Fidelity (\(f_\text{rx}\))
-:PROPERTIES:
-:BEAMER_col: 0.4
-:BEAMER_env: block
-:END:
 - Single batch
 - $N_a$ assemblies
 
-*** Location Effects (\(f_\text{loc}\))
+*** Location Effects 
 #+begin_latex
 \begin{equation}\label{eqn:loc_proxy}
 p_{l}(i, j) = \delta_{\text{reg}} 
@@ -469,16 +466,36 @@ p_{l}(i, j) = \delta_{\text{reg}}
 \end{equation}
 #+end_latex
 #+beamer: \vspace{0.2cm}
+**** Fidelity (\(f_\text{loc}\))
 - None (\(\delta_{\text{reg}} = 0, \delta_{\text{loc}} = 0\)) 
 - Regional (\(\delta_{\text{reg}} = 1, \delta_{\text{loc}} = 0\))
 - Regional + Distance (\(\delta_{\text{reg}} = 1, \delta_{\text{loc}} = 1\))
 
 *** Information Gathering Simulation
 **** Requests/Bids
-blah
+Front-end: Reactors make $N$ requests per commodity
+Back-end: Reactors make $N$ bids to each supporting facility 
 **** Portfolio Constraints
-blah
+Support facilities have process and inventory constraints, function of resource *quality* (enrichment)
+Reactors have mass-based, mutually-exclusive constraints.
 **** Preferences
+Based on facility type, commodity type, and facility location.
+
+*** Example
+**** text
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
+A front-end MOX fuel cycle with one entity of each type:
+- thermal reactor
+- fast reactor
+- UOX supplier
+- thermal-spec MOX supplier
+- fast-spec MOX supplier
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
 blah
 
 ** Scaling Behavior
