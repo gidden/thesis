@@ -494,9 +494,10 @@ A front-end MOX fuel cycle with one entity of each type:
 - fast-spec MOX supplier
 **** fig
 :PROPERTIES:
-:BEAMER_col: 0.4
+:BEAMER_col: 0.5
 :END:
-blah
+#+attr_latex: :height 5cm
+[[file:figs/gen_ex.pdf]]
 
 ** Scaling Behavior
 
