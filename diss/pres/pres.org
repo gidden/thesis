@@ -510,26 +510,58 @@ A front-end MOX fuel cycle with one entity of each type:
     stuff
 
 * Conclusions
-
 ** New Capabilities
 
-*** Who Cares?
-    stuff
+*** ABM in NFCS
+Dynamic Resource Exchange
+- communication of supply and demand of complex resources
+- arbitrary supply and demand constraints
+- arbitrary number and types of facilities
+- enables agent-specified preferences/costs
+  - support for geopolitical models
+  - provides interface for other cost models
+- heuristic or optimization solvers supported
 
-** Reccomendations
+Already providing novel capability to multiple users!
+*** Exploring DRE Behavior    
+- Inevitable trade off between performance and solution fidelity
+- Framework developed to rapidly generate and execute exchange instances
+- Using HTC, 
+  - thousands of instances can run simultaneously (w/o reliable timing)
+  - $\sim$100 can be run with timing support
 
-*** info
-    stuff
+** Recommendations
+
+*** Utilizing the DRE
+- driving solver selection
+  - reliability of input data 
+  - requirements of model
+- tradeoffs exist between ease of archetype development and formulation
+- large performance hit for full optimization for medium-large problem
 
 ** Future Work
 
-*** info
-    stuff
+*** Cyclus Incorporation
+- COIN-based DRE solver support
+- generalizing supply and demand constraints
+- translation function selection
+- preference-based formulation
+
+*** Publications
+- DRE theory paper
+  - archetype development
+- DRE performance paper
+  - in tandem
 
 ** Acknowledgements
 
-*** Acks
-    stuff
+*** Acknowledgements
+Thank you to everyone at CNERG, especially Dr. Katy Huff, Dr. Anthony Scopatz,
+Robert Carlsen, and my advisor, Paul Wilson. I would also like to thank the
+NEUP for their generous support.
+#+attr_latex: :height 5cm
+[[file:figs/neup.pdf]]
+
 
 *** References
   :PROPERTIES:
