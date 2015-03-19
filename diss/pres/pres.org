@@ -18,6 +18,7 @@
 #+LaTeX_CLASS_OPTIONS: [10pt]
 #+LATEX_HEADER: \usepackage{listings}
 #+LATEX_HEADER: \usepackage[ruled,vlined]{algorithm2e} % for algorithms
+#+LATEX_HEADER: \usepackage{multirow}
 
 #+BEAMER_THEME: Wisconsin [white,pdflogo]
 #+BEAMER_HEADER: \setbeamertemplate{bibliography item}[text]
@@ -35,6 +36,9 @@
   :BEAMER_opt: plain, noframenumbering
   :END:
 #+TOC: headlines 1
+
+
+#+TODO: - slide about sim obj vs. obj
 
 * Introduction
 ** How It Works
@@ -264,7 +268,8 @@ Let's add a statement, eh?
 :END:
 - Cost translation function $f : p_{i,j} \to c_{i,j}$
 - $f(x) = \frac{1}{x}$
-
+- False arcs have "large" cost $c_F > \max c \in C$
+  
 **** fig
 :PROPERTIES:
 :BEAMER_col: 0.7
@@ -499,15 +504,189 @@ A front-end MOX fuel cycle with one entity of each type:
 #+attr_latex: :height 5cm
 [[file:figs/gen_ex.pdf]]
 
-** Scaling Behavior
+** Experimental Setup
+*** Setup
+    
+#+caption: The time points for comparing different solutions.
+#+attr_latex: :height 5cm
+file:figs/exchange_xlation_timing.pdf
 
-*** topic
-    stuff
+*** Solvers
+1. Greedy Heuristic with Exclusive Trades
+2. CBC with Exclusive Trades
+3. CLP without Exclusive Trades
+   - 1% convergence criteria 
+
+*** Base Parameter Vector
+
+Scaled by number of reactors in the system.
+
+#+begin_latex
+\begin{table}[h!]
+\centering
+\caption{Front-End Exchange Parameters.}
+\label{tbl:front_ref_params}
+\begin{tabular}{|c|c|}
+\hline
+Parameter    & Reference Value
+\\ \hline
+$r_{rx, \text{Th}}$   & 0.75 
+\\ \hline
+$r_{rx, \text{FThOX}}$ & 0.25
+\\ \hline
+$r_{l, c}$ & 1
+\\ \hline
+$f_{mox}$     & 0.33
+\\ \hline
+$r_{s, \text{Th}}$ & 0.08
+\\ \hline
+$r_{s, \text{TMOX}, \text{UOX}}$ & 1.
+\\ \hline
+$r_{s, \text{FMOX}}$ & 0.2
+\\ \hline
+$r_{s, \text{FThOX}}$ & 0.2
+\\ \hline
+$r_{inv, proc}$   & 1
+\\ \hline
+\end{tabular}
+\end{table}
+#+end_latex
+
+** Scaling Behavior
+*** Problem Size: Arcs
+    
+#+caption: Arc Population Scaling.
+#+attr_latex: :height 5cm
+file:figs/struct_front_n_rxtr_n_arcs_fc0.pdf
+
+*** Problem Size: Constraints
+    
+#+caption: Constraint Population Scaling.
+#+attr_latex: :height 5cm
+file:figs/struct_front_n_rxtr_n_constrs_fc0.pdf
+
+*** Greedy Solver (Arc-Based)
+    
+#+caption: Greedy Solution Times for a MOX Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/base_front_n_arcs_time_fc1_greedy.pdf
+
+*** Clp Solver (Constraint-Based)
+    
+#+caption: Clp Solution Times for a MOX Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/base_front_n_constrs_time_fc1_clp.pdf
+
+*** Cbc Solver (Arc-Based)
+    
+#+caption: Cbc Solution Times for a Once-Through Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/base_front_n_arcs_time_fc0_cbc.pdf
+
+*** Cbc Solver (Arc-Based)
+    
+#+caption: Cbc Solution Times for a MOX Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/base_front_n_arcs_time_fc1_cbc.pdf
+
+*** Comparing Solutions
+**** text
+:PROPERTIES:
+:BEAMER_col: 0.25
+:END:
+#+begin_latex
+Comparing simulation objective solutions via: 
+\begin{equation*}\label{eqn:sim_flow_compare}
+\frac{z^*_{\text{sim}} - z_{\text{sim}, \text{Greedy}}}
+     {z^*_{\text{sim}}} 
+\end{equation*}
+#+end_latex
+
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.75
+:END:
+#+caption: Solution Time Comparison.
+#+attr_latex: :height 6cm
+file:figs/compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_.pdf
+
+*** Comparing Solutions
+- $c_F$ and convergence criteria can cause Cbc to perform poorly in preference-space.
+
+- $c_{F, \text{new}} = c_{\text{max}} + 1$ 
+
+#+begin_latex
+\begin{table}[h!]
+\centering
+\caption{Results from Reducing False-Arc Cost Coefficients.}
+\label{tbl:false_arcs}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Sim ID}} 
+& \multicolumn{2}{c|}{\textbf{Greedy}} 
+& \multicolumn{2}{c|}{\textbf{Cbc, Large Cost}} 
+& \multicolumn{2}{c|}{\textbf{Cbc, Small Cost}} \\ \cline{2-7} 
+& $z$ (large/small)        & $z_{\text{sim}}$        
+& $z$             & $z_{\text{sim}}$            
+& $z$             & $z_{\text{sim}}$            \\ \hline
+54a5a
+& 5.2e8/1.9e6 & 1.41e5
+& 5.0e8 & 1.38e5
+& 1.8e6 & 1.98e5 \\ \hline
+938d8
+& 3.97e8/1.40e6 & 1.08e5
+& 3.81e8 & 8.8e4
+& 1.38e6 & 1.12e5 \\ \hline
+\end{tabular}
+\end{table}
+#+end_latex
 
 ** Stochastic Behavior
+*** Methodology
 
-*** topic
-    stuff
+- Choose a problem size (65 reactors)
+- Generate and execute N observations
+- Stochasticity from 
+  - location (objective coefficients)
+  - enrichment (constraint coefficients)
+- Average cumulative measurements of a value $x$ reported as
+#+BEGIN_CENTER
+$f(x_n) = \frac{1}{n} \sum^n_i = 1 x_i \:\: \forall \: n \in N$   
+#+END_CENTER
+
+*** Greedy Solver
+#+caption: Greedy Average Solution Time for a MOX Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/1k_avg_front_time_fc1_greedy.pdf
+*** Clp Solver
+#+caption: Clp Average Solution Time for a MOX Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/1k_avg_front_time_fc1_clp.pdf
+
+*** Cbc Solver
+#+caption: Cbc Average Solution Time for a Once-Through Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/1k_avg_front_time_fc0_cbc.pdf
+
+*** Cbc Solver
+#+caption: Cbc Average Solution Time for a MOX Fuel Cycle.
+#+attr_latex: :height 5cm
+file:figs/1k_avg_front_time_fc1_cbc.pdf
+
+*** Cbc Solver
+#+caption: Cbc Solution Time Distribution For Assembly-Based Reactors.
+#+attr_latex: :height 5cm
+file:figs/1k_hist_front_rx1.pdf
+
+*** Solver Selection Decision Space
+#+caption: Tradeoffs between Model Fidelity and Solver.
+#+attr_latex: :height 5cm
+file:figs/1k_compare_front_pref_flow.pdf
+
+*** Arc Cost Effects
+#+caption: Greedy Solutions vs. Cbc solutions with high and low false-arc costs.
+#+attr_latex: :height 5cm
+file:figs/cost_avg_front_pref_flow_fc1_.pdf
 
 * Conclusions
 ** New Capabilities
@@ -542,10 +721,10 @@ Already providing novel capability to multiple users!
 ** Future Work
 
 *** Cyclus Incorporation
-- COIN-based DRE solver support
+- COIN-Based DRE solver support
 - generalizing supply and demand constraints
 - translation function selection
-- preference-based formulation
+- preference-Based formulation
 
 *** Publications
 - DRE theory paper
