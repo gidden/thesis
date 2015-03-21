@@ -45,17 +45,18 @@
    
 *** What's the Point?
 
-- $P \propto \Sigma_f \Phi V_{\text{core}}$
-
+- $P \propto N \sigma_f \Phi V_{\text{core}}$
+  - Power, $P$
+  - Isotope Density, $N$
+  - Probability of Fission, $\sigma_f$
+  - Neutron Flux, $\Phi$
+  - Core Volume, $V_{\text{core}}$
 - $$
-
 - National energy policy
-
 - Waste management
-
 - Proliferation
 
-*** Fission Power
+*** Fission Power, $\sigma_f$
 #+caption: A Fig \cite{hamilton_blue_2012}
 #+attr_latex: :height 5cm
 [[file:figs/xs.pdf]]
