@@ -56,23 +56,24 @@
 - Waste management
 - Proliferation
 
-*** Fission Power, $\sigma_f$
-#+caption: A Fig \cite{hamilton_blue_2012}
+*** Producing Fission Power, $\sigma_f$
+#+caption: Fission cross section as a function of energy.
 #+attr_latex: :height 5cm
 [[file:figs/xs.pdf]]
 
 *** The Nuclear Fuel Cycle
-#+caption: A Fig \cite{hamilton_blue_2012}
+
+#+caption: A nuclear fuel cycle with recycling.\cite{lisowski_global_2007}
 #+attr_latex: :height 5cm
 [[file:figs/fc.pdf]]
 
 *** The Nuclear Fuel Cycle
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: A nuclear fuel cycle with recycling.\cite{lisowski_global_2007}
 #+attr_latex: :height 5cm
 [[file:figs/fc-front.pdf]]
 
 *** The Nuclear Fuel Cycle
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: A nuclear fuel cycle with recycling.\cite{lisowski_global_2007}
 #+attr_latex: :height 5cm
 [[file:figs/fc-back.pdf]]
 
@@ -105,8 +106,8 @@ It's hard.
   - /et cetera/
 - arbitrary numbers, types of facilities
 - geo-political effects
-- "inifite" possible fuel cycles
-- an "art" and a science
+- "endless" possible fuel cycles \cite{wigeland_evaluation_2013}
+- an "art" and a science \cite{guerin_benchmark_2009}
 
 *** "Old School"
 - no physics or "too much" physics
@@ -119,7 +120,13 @@ It's hard.
 
 *** Motivation
 #+begin_quote
-Let's add a statement, eh?
+A tool is needed that can determine isotope-specific resource flows for
+arbitrary numbers and types of facilities where demand can be met by fungible
+resources and supply is constrained both by resource quantity and quality.
+#+end_quote
+
+#+begin_quote
+And supporting social (e.g., geopolitical) models is plus! 
 #+end_quote
 
 * Strategy and Methods
@@ -143,12 +150,12 @@ Let's add a statement, eh?
 - regions can impose geo-political models
 
 *** Transportation Problem
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: An example bipartite graph.
 #+attr_latex: :height 5cm
 [[file:figs/xportation.pdf]]
 
 *** Transportation Problem
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: An example bipartite graph with attribute labels.
 #+attr_latex: :height 5cm
 [[file:figs/xportation-labeled.pdf]]
 
@@ -210,12 +217,12 @@ Let's add a statement, eh?
 - Formulation Layer
   
 *** DRE Phases & Layers
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: DRE logical flow through layers resulting in trades.
 #+attr_latex: :height 5cm
 [[file:figs/exchange_xlation.pdf]]
 
 *** Information Gathering Phase
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
 [[file:figs/info.pdf]]
 
@@ -230,12 +237,12 @@ Let's add a statement, eh?
 - Preferences
 
 *** Translation to Exchange Layer
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: An example of a bare ExchangeGraph.
 #+attr_latex: :height 5cm
 [[file:figs/exchange_bare_words.pdf]]
 
 *** Translation to Exchange Layer
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: An example of an ExchangeGraph with portfolios.
 #+attr_latex: :height 5cm
 [[file:figs/exchange_groups.pdf]]
 
@@ -275,7 +282,7 @@ Let's add a statement, eh?
 :PROPERTIES:
 :BEAMER_col: 0.7
 :END:
-#+caption: A Fig \cite{hamilton_blue_2012}
+#+caption: An ExchangeGraph with false arcs.
 #+attr_latex: :height 5cm
 [[file:figs/exchange_false.pdf]]
 
@@ -513,10 +520,23 @@ A front-end MOX fuel cycle with one entity of each type:
 file:figs/exchange_xlation_timing.pdf
 
 *** Solvers
+**** kinds
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
 1. Greedy Heuristic with Exclusive Trades
 2. CBC with Exclusive Trades
 3. CLP without Exclusive Trades
    - 1% convergence criteria 
+
+**** measure
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
+- Time \(t_f - t_i\)
+- Objective \(z = \sum c_i x_i + \sum c_j \tilde{x_j} y_j\)
+  - \(z\) vs. \(z^*\) 
+- Simulation Objective \(z_{\text{sim}} = \sum p_i x_i + \sum p_j \tilde{x_j} y_j\)
 
 *** Base Parameter Vector
 
@@ -708,7 +728,7 @@ Already providing novel capability to multiple users!
 - Framework developed to rapidly generate and execute exchange instances
 - Using HTC, 
   - thousands of instances can run simultaneously (w/o reliable timing)
-  - $\sim$100 can be run with timing support
+  - \sim100 can be run with timing support
 
 ** Recommendations
 
@@ -738,9 +758,11 @@ Already providing novel capability to multiple users!
 *** Acknowledgements
 Thank you to everyone at CNERG, especially Dr. Katy Huff, Dr. Anthony Scopatz,
 Robert Carlsen, and my advisor, Paul Wilson. I would also like to thank the
-NEUP for their generous support.
-#+attr_latex: :height 5cm
+NEUP for their generous support.\\
+#+begin_center
+#+attr_latex: :height 2cm
 [[file:figs/neup.pdf]]
+#+end_center
 
 
 *** References
