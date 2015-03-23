@@ -196,7 +196,7 @@ And supporting social (e.g., geopolitical) models is plus!
 **** Supply-Chain Management (SCM)
 - couples with ABM \cite{julka_agent-based_2002}
 - facilities inform the system of resource-specific supply and demand
-- institutions and regions can perturb resource flows
+- institutions and regions can inform resource flows
 - institutions can plan deployment
 - regions can impose geo-political models
   
@@ -204,7 +204,6 @@ And supporting social (e.g., geopolitical) models is plus!
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
 [[file:figs/info.pdf]]
-
 
 *** Information Gathering Phase
 #+caption: Information gathering logic flow.
@@ -271,7 +270,6 @@ file:figs/supplier.pdf
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
 [[file:figs/info.pdf]]
-
 
 *** Preference Adjustment (PA)
 - Requesters adjust preferences given known bids
