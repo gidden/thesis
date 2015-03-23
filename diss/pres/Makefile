@@ -1,6 +1,6 @@
 manuscript = pres
 references = pres
-latexopt   = -halt-on-error -file-line-error
+latexopt   = --pdf --clean --verbose --batch
 
 all: all-via-dvi
 
@@ -10,12 +10,11 @@ all-via-pdf: $(manuscript).tex $(references).bib
 	pdflatex $(latexopt) $<
 	pdflatex $(latexopt) $<
 
-all-via-dvi: 
-	latex $(latexopt) $(manuscript)
-	bibtex $(manuscript).aux
-	latex $(latexopt) $(manuscript)
-	latex $(latexopt) $(manuscript)
-	dvipdf $(manuscript)
+all-via-dvi: $(manuscript).tex $(references).bib
+	texi2dvi $(latexopt) $(manuscript).tex
+	-bibtex $(manuscript)
+	texi2dvi $(latexopt) $(manuscript).tex
+	texi2dvi $(latexopt) $(manuscript).tex
 
 clean:
 	rm -f *.dvi *.toc *.aux *.out *.log *.bbl *.blg *.log *.spl *~ *.spl *.zip *.nav *.snm 
