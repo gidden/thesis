@@ -141,7 +141,6 @@ And supporting social (e.g., geopolitical) models is plus!
 - enable geopolitical models
 
 *** DRE Phases & Layers
-
 **** Phases  :B_block:BMCOL:
 :PROPERTIES:
 :BEAMER_col: 0.3
@@ -175,7 +174,6 @@ And supporting social (e.g., geopolitical) models is plus!
 #+attr_latex: :height 5cm
 [[file:figs/exchange_xlation.pdf]]
 
-
 ** DRE Resource Layer
 *** DRE Phases & Layers
 #+caption: DRE logical flow through layers resulting in trades.
@@ -205,16 +203,72 @@ And supporting social (e.g., geopolitical) models is plus!
 #+attr_latex: :height 5cm
 [[file:figs/info.pdf]]
 
-*** Information Gathering Phase Terminology
-- Bids and Requests
-  - Mutual
-  - Exclusive
-  - Mutually Exclusive
-- Portfolios
-- Constraint Values
-- Coefficient Conversion Functions
-- Preferences
+*** Request For Bids (RFB)
+**** text
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
+- ask for (complex) resource
+- collection of bids in a portfolio
+- mutual bids
+- exclusive bids
+- preferences
 
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+#+begin_center
+#+attr_latex: :height 5cm
+[[file:figs/requester.pdf]]
+#+end_center
+*** Information Gathering Phase
+#+caption: Information gathering logic flow.
+#+attr_latex: :height 5cm
+[[file:figs/info.pdf]]
+
+*** Response to Request For Bids (RRFB)
+**** text
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
+- respond with (complex) resource
+- collection of offers in a portfolio
+- mutual and/or exclusive
+- constraint values and translation functions
+***** Constraint Example
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+\(\sum_{j \in J} f_{SWU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,SWU}\)
+#+beamer: \vspace{0.2cm}
+\(\sum_{j \in J} f_{NU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,NU}\)
+
+
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.5
+:END:
+#+begin_center
+#+attr_latex: :height 5cm
+file:figs/supplier.pdf
+#+end_center
+
+*** Information Gathering Phase
+#+caption: Information gathering logic flow.
+#+attr_latex: :height 5cm
+[[file:figs/info.pdf]]
+
+
+
+*** Preference Adjustment (PA)
+- Requesters adjust preferences given known bids
+- Institutions adjust preferences given known bids & entities
+- Regions adjust preferences given known bids & entities
+#+begin_center
+#+attr_latex: :height 4cm
+[[file:figs/supplier-requester.pdf]]
+#+end_center
 
 ** DRE Exchange Layer
 *** DRE Phases & Layers
@@ -223,15 +277,27 @@ And supporting social (e.g., geopolitical) models is plus!
 [[file:figs/exchange_xlation.pdf]]
 
 *** Translation to Exchange Layer
-#+caption: An example of a bare ExchangeGraph.
+**** From
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.5
+:END:
 #+attr_latex: :height 5cm
-[[file:figs/exchange_bare_words.pdf]]
-
-*** Translation to Exchange Layer
-#+caption: An example of an ExchangeGraph with portfolios.
+[[file:figs/supplier-requester.pdf]]
+**** To
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.5
+:END:
+#+caption: An example of an ExchangeGraph.
 #+attr_latex: :height 5cm
 [[file:figs/exchange_groups.pdf]]
 
+*** Translation to Exchange Layer
+- Abstract away complex resource
+- Possible trades known
+- Preferences for trades known
+- Constrained-graph representation of exchange
 *** Solution in Exchange Layer
 #+begin_latex
   \begin{algorithm}[H]
@@ -255,7 +321,6 @@ And supporting social (e.g., geopolitical) models is plus!
   \end{algorithm}
 #+end_latex
 
-
 ** DRE Formulation Layer
 *** DRE Phases & Layers
 #+caption: DRE logical flow through layers resulting in trades.
@@ -263,12 +328,7 @@ And supporting social (e.g., geopolitical) models is plus!
 [[file:figs/exchange_xlation.pdf]]
 
 *** Transportation Problem
-#+caption: An example bipartite graph.
-#+attr_latex: :height 5cm
-[[file:figs/xportation.pdf]]
-
-*** Transportation Problem
-#+caption: An example bipartite graph with attribute labels.
+#+caption: An example bipartite graph with attributes.
 #+attr_latex: :height 5cm
 [[file:figs/xportation-labeled.pdf]]
 
@@ -315,6 +375,7 @@ And supporting social (e.g., geopolitical) models is plus!
 [[file:figs/exchange_false.pdf]]
 
 *** Nuclear Fuel Cycle Transportation Problem (NFCTP)
+Linear Program (LP) without exclusive trades.
 #+begin_latex
 \begin{subequations}\label{eqs:NFCTP-LP}
   \begin{align}
@@ -354,6 +415,7 @@ And supporting social (e.g., geopolitical) models is plus!
 #+end_latex
 
 *** Nuclear Fuel Cycle Transportation Problem (NFCTP)
+Mixed Integer-Linear Program (MILP) with exclusive trades.
 #+begin_latex
 \begin{subequations}\label{eqs:NFCTP}
   \begin{align}
