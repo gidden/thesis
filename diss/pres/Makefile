@@ -11,6 +11,9 @@ all-via-pdf: $(manuscript).tex $(references).bib
 	pdflatex $(latexopt) $<
 
 all-via-dvi: $(manuscript).tex $(references).bib
+	if ! grep -F "\begin{columns}[t]" $(manuscript).tex 1>/dev/null; then \
+	sed -i 's/\\begin{columns}/\\begin{columns}[t]/g' $(manuscript).tex; \
+	fi; \
 	texi2dvi $(latexopt) $(manuscript).tex
 	-bibtex $(manuscript)
 	texi2dvi $(latexopt) $(manuscript).tex
