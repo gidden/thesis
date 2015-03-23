@@ -100,6 +100,7 @@ It's hard.
 - resource fungibility
 - recycling
 - constrained supply
+- modeling individual fuel assemblies
 - /in situ/, /ex situ/
   - physics
   - economics
@@ -120,9 +121,10 @@ It's hard.
 
 *** Motivation
 #+begin_quote
-A tool is needed that can determine isotope-specific resource flows for
-arbitrary numbers and types of facilities where demand can be met by fungible
-resources and supply is constrained both by resource quantity and quality.
+A tool is needed that can determine isotope-specific, quantized resource flows
+for arbitrary numbers and types of facilities where demand can be met by
+fungible resources and supply is constrained both by resource quantity and
+quality.
 #+end_quote
 
 #+begin_quote
@@ -178,7 +180,7 @@ And supporting social (e.g., geopolitical) models is plus!
 *** DRE Phases & Layers
 #+caption: DRE logical flow through layers resulting in trades.
 #+attr_latex: :height 5cm
-[[file:figs/exchange_xlation.pdf]]
+[[file:figs/exchange_xlation_r.pdf]]
 
 *** Entity Interaction
 
@@ -203,13 +205,19 @@ And supporting social (e.g., geopolitical) models is plus!
 #+attr_latex: :height 5cm
 [[file:figs/info.pdf]]
 
+
+*** Information Gathering Phase
+#+caption: Information gathering logic flow.
+#+attr_latex: :height 5cm
+[[file:figs/info.pdf]]
+
 *** Request For Bids (RFB)
 **** text
 :PROPERTIES:
 :BEAMER_col: 0.4
 :END:
-- ask for (complex) resource
-- collection of bids in a portfolio
+- ask for a quantity, \(\tilde{x}\), of a (complex) resource
+- collection of \texttt{Request}s in \texttt{RequestPortfolio}s
 - mutual bids
 - exclusive bids
 - preferences
@@ -230,24 +238,29 @@ And supporting social (e.g., geopolitical) models is plus!
 *** Response to Request For Bids (RRFB)
 **** text
 :PROPERTIES:
-:BEAMER_col: 0.4
+:BEAMER_col: 0.6
 :END:
 - respond with (complex) resource
-- collection of offers in a portfolio
+- collection of \texttt{Bid}s in \texttt{BidPortfolio}s
 - mutual and/or exclusive
 - constraint values and translation functions
 ***** Constraint Example
 :PROPERTIES:
 :BEAMER_env: block
 :END:
-\(\sum_{j \in J} f_{SWU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,SWU}\)
-#+beamer: \vspace{0.2cm}
-\(\sum_{j \in J} f_{NU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,NU}\)
-
+#+begin_latex
+\begin{equation*}
+\sum_{j \in J} f_{SWU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,SWU}
+\end{equation*}
+\vspace{0.2cm}
+\begin{equation*}
+\sum_{j \in J} f_{NU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,NU}
+\end{equation*}
+#+end_latex
 
 **** fig
 :PROPERTIES:
-:BEAMER_col: 0.5
+:BEAMER_col: 0.4
 :END:
 #+begin_center
 #+attr_latex: :height 5cm
@@ -258,7 +271,6 @@ file:figs/supplier.pdf
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
 [[file:figs/info.pdf]]
-
 
 
 *** Preference Adjustment (PA)
@@ -274,30 +286,39 @@ file:figs/supplier.pdf
 *** DRE Phases & Layers
 #+caption: DRE logical flow through layers resulting in trades.
 #+attr_latex: :height 5cm
-[[file:figs/exchange_xlation.pdf]]
+[[file:figs/exchange_xlation_e.pdf]]
 
 *** Translation to Exchange Layer
-**** From
+**** Properties
 :PROPERTIES:
 :BEAMER_env: block
-:BEAMER_col: 0.5
+:BEAMER_col: 0.6
 :END:
-#+attr_latex: :height 5cm
-[[file:figs/supplier-requester.pdf]]
+- Abstract away complex resource
+- \texttt{Request}s and \texttt{Bid}s to \texttt{Node}s
+- Possible trades and preferences known
+- Constrained-graph representation of exchange via an \texttt{ExchangeGraph}
+***** Constraint Example
+#+begin_latex
+\begin{equation*}
+\sum_{j \in J} f_{SWU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,SWU} \to
+\sum_{j \in J} a^1_{i, j} x_{i, j} \leq s^1_i 
+\end{equation*}
+\vspace{0.2cm}
+\begin{equation*}
+\sum_{j \in J} f_{NU}(\varepsilon_j) x_{i,j}^{EU} \leq s_{i,NU} \to
+\sum_{j \in J} a^2_{i, j} x_{i, j} \leq s^2_i 
+\end{equation*}
+#+end_latex
+
 **** To
 :PROPERTIES:
-:BEAMER_env: block
-:BEAMER_col: 0.5
+:BEAMER_col: 0.4
 :END:
 #+caption: An example of an ExchangeGraph.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 3.5cm
 [[file:figs/exchange_groups.pdf]]
 
-*** Translation to Exchange Layer
-- Abstract away complex resource
-- Possible trades known
-- Preferences for trades known
-- Constrained-graph representation of exchange
 *** Solution in Exchange Layer
 #+begin_latex
   \begin{algorithm}[H]
@@ -325,14 +346,14 @@ file:figs/supplier.pdf
 *** DRE Phases & Layers
 #+caption: DRE logical flow through layers resulting in trades.
 #+attr_latex: :height 5cm
-[[file:figs/exchange_xlation.pdf]]
+[[file:figs/exchange_xlation_f.pdf]]
 
 *** Transportation Problem
 #+caption: An example bipartite graph with attributes.
 #+attr_latex: :height 5cm
 [[file:figs/xportation-labeled.pdf]]
 
-*** Transportation Problem    
+*** Minimum Cost Transportation Problem    
 #+begin_latex
 \begin{subequations}\label{eqs:xport}
   \begin{align}
@@ -360,7 +381,7 @@ file:figs/supplier.pdf
 *** Translation to Formulation Layer
 **** text
 :PROPERTIES:
-:BEAMER_col: 0.3
+:BEAMER_col: 0.4
 :END:
 - Cost translation function $f : p_{i,j} \to c_{i,j}$
 - $f(x) = \frac{1}{x}$
@@ -368,7 +389,7 @@ file:figs/supplier.pdf
   
 **** fig
 :PROPERTIES:
-:BEAMER_col: 0.7
+:BEAMER_col: 0.6
 :END:
 #+caption: An ExchangeGraph with false arcs.
 #+attr_latex: :height 5cm
