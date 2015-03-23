@@ -129,10 +129,61 @@ resources and supply is constrained both by resource quantity and quality.
 And supporting social (e.g., geopolitical) models is plus! 
 #+end_quote
 
-* Strategy and Methods
+* Methodology
+** Dynamic Resource Exchange (DRE)
 
-** New Tools
+*** Dynamic Resource Exchange (DRE) Goals
+- complex definitions of resource quality (e.g., arbitrary isotopic vectors)
+- communication between suppliers and consumers
+- constrained supply
+- fungible demand
+- arbitrary numbers and types of facilities
+- enable geopolitical models
+
+*** DRE Phases & Layers
+
+**** Phases  :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.3
+:BEAMER_env: block
+:END:
+1. Information Gathering
+2. Solution
+3. Trade Execution
+   
+**** Layers  :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.3
+:BEAMER_opt: t
+:BEAMER_env: block
+:END:
+- Resource Layer
+- Exchange Layer
+- Formulation Layer
+  
+**** Constructs  :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.3
+:BEAMER_env: block
+:END:
+- Bids/Requests
+- Exchange Graph
+- NFC Transportation Problem
+
+*** DRE Phases & Layers
+#+caption: DRE logical flow through layers resulting in trades.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_xlation.pdf]]
+
+
+** DRE Resource Layer
+*** DRE Phases & Layers
+#+caption: DRE logical flow through layers resulting in trades.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_xlation.pdf]]
+
 *** Entity Interaction
+
 
 **** Agent-Based Modeling (ABM)
 - agents interact with an environment
@@ -143,11 +194,73 @@ And supporting social (e.g., geopolitical) models is plus!
 #+BEAMER: \pause
 
 **** Supply-Chain Management (SCM)
-- couples with ABM \cite{julka}
+- couples with ABM \cite{julka_agent-based_2002}
 - facilities inform the system of resource-specific supply and demand
 - institutions and regions can perturb resource flows
 - institutions can plan deployment
 - regions can impose geo-political models
+  
+*** Information Gathering Phase
+#+caption: Information gathering logic flow.
+#+attr_latex: :height 5cm
+[[file:figs/info.pdf]]
+
+*** Information Gathering Phase Terminology
+- Bids and Requests
+  - Mutual
+  - Exclusive
+  - Mutually Exclusive
+- Portfolios
+- Constraint Values
+- Coefficient Conversion Functions
+- Preferences
+
+
+** DRE Exchange Layer
+*** DRE Phases & Layers
+#+caption: DRE logical flow through layers resulting in trades.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_xlation.pdf]]
+
+*** Translation to Exchange Layer
+#+caption: An example of a bare ExchangeGraph.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_bare_words.pdf]]
+
+*** Translation to Exchange Layer
+#+caption: An example of an ExchangeGraph with portfolios.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_groups.pdf]]
+
+*** Solution in Exchange Layer
+#+begin_latex
+  \begin{algorithm}[H]
+    \SetAlgoLined
+    order request portfolios by average preference\;
+    \ForAll{request portfolios} {
+      order requests by average preference\;
+      matched $\leftarrow$ 0\;        
+      \While{matched $\leq q_{J}$ and $\exists$ a request} {
+        get next request\;
+        order arcs by preference\;
+        \While{matched $\leq q_{J}$ and $\exists$ an arc} {
+          get next arc\;
+          remaining $\leftarrow q_{J}$ - matched\;
+          to\_match $\leftarrow \min \lbrace$remaining, Capacity(arc)$\rbrace$\;
+          matched $\leftarrow$ matched + to\_match\;
+        }
+      }
+    }
+    \caption{Greedy Exchange Execution} 
+  \end{algorithm}
+#+end_latex
+
+
+** DRE Formulation Layer
+*** DRE Phases & Layers
+#+caption: DRE logical flow through layers resulting in trades.
+#+attr_latex: :height 5cm
+[[file:figs/exchange_xlation.pdf]]
 
 *** Transportation Problem
 #+caption: An example bipartite graph.
@@ -182,91 +295,6 @@ And supporting social (e.g., geopolitical) models is plus!
     %%
   \end{align}
 \end{subequations}
-#+end_latex
-
-** Dynamic Resource Exchange (DRE)
-
-*** Dynamic Resource Exchange (DRE) Goals
-- complex definitions of resource quality (e.g., arbitrary isotopic vectors)
-- communication between suppliers and consumers
-- constrained supply
-- fungible demand
-- arbitrary numbers and types of facilities
-- enable geopolitical models
-
-*** DRE Phases & Layers
-**** Phases
-:PROPERTIES:
-:BEAMER_col: 0.5
-:BEAMER_env: block
-:END:
-1. Information Gathering
-  - Request for Bids (RFB)
-  - Response to Request for Bids (RRFB)
-  - Preference Adjustment (PA)
-2. Solution
-3. Trade Execution
-   
-**** Layers
-:PROPERTIES:
-:BEAMER_col: 0.4
-:BEAMER_env: block
-:END:
-- Resource Layer
-- Exchange Layer
-- Formulation Layer
-  
-*** DRE Phases & Layers
-#+caption: DRE logical flow through layers resulting in trades.
-#+attr_latex: :height 5cm
-[[file:figs/exchange_xlation.pdf]]
-
-*** Information Gathering Phase
-#+caption: Information gathering logic flow.
-#+attr_latex: :height 5cm
-[[file:figs/info.pdf]]
-
-*** Information Gathering Phase Terminology
-- Bids and Requests
-  - Mutual
-  - Exclusive
-  - Mutually Exclusive
-- Portfolios
-- Constraint Values
-- Coefficient Conversion Functions
-- Preferences
-
-*** Translation to Exchange Layer
-#+caption: An example of a bare ExchangeGraph.
-#+attr_latex: :height 5cm
-[[file:figs/exchange_bare_words.pdf]]
-
-*** Translation to Exchange Layer
-#+caption: An example of an ExchangeGraph with portfolios.
-#+attr_latex: :height 5cm
-[[file:figs/exchange_groups.pdf]]
-
-*** Solution in Exchange Layer
-#+begin_latex
-  \begin{algorithm}[H]
-    \SetAlgoLined
-    order request portfolios by average preference\;
-    \ForAll{request portfolios} {
-      order requests by average preference\;
-      matched $\leftarrow$ 0\;        
-      \While{matched $\leq q_{J}$ and $\exists$ a request} {
-        get next request\;
-        order arcs by preference\;
-        \While{matched $\leq q_{J}$ and $\exists$ an arc} {
-          get next arc\;
-          remaining $\leftarrow q_{J}$ - matched\;
-          to\_match $\leftarrow \min \lbrace$remaining, Capacity(arc)$\rbrace$\;
-          matched $\leftarrow$ matched + to\_match\;
-        }
-      }
-    }
-    \caption{Greedy Exchange Execution} 
-  \end{algorithm}
 #+end_latex
 
 *** Translation to Formulation Layer
