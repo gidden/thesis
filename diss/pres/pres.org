@@ -199,12 +199,12 @@ And supporting social (e.g., geopolitical) models is plus!
 *** Information Gathering Phase
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
-[[file:figs/info.pdf]]
+[[file:figs/info_gathering_phases.pdf]]
 
 *** Information Gathering Phase
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
-[[file:figs/info.pdf]]
+[[file:figs/info_gathering_phases_rfb.pdf]]
 
 *** Request For Bids (RFB)
 **** text
@@ -228,7 +228,7 @@ And supporting social (e.g., geopolitical) models is plus!
 *** Information Gathering Phase
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
-[[file:figs/info.pdf]]
+[[file:figs/info_gathering_phases_rrfb.pdf]]
 
 *** Response to Request For Bids (RRFB)
 **** text
@@ -265,7 +265,7 @@ file:figs/supplier.pdf
 *** Information Gathering Phase
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
-[[file:figs/info.pdf]]
+[[file:figs/info_gathering_phases_pa.pdf]]
 
 *** Preference Adjustment (PA)
 - Requesters adjust preferences given known bids
@@ -598,7 +598,19 @@ p_{l}(i, j) = \delta_{\text{reg}}
 - Support facilities have process and inventory constraints, function of resource *quality* (enrichment)
 - Reactors have mass-based, mutually-exclusive constraints.
 **** Preferences
-- Based on facility type, commodity type, and facility location.
+
+# <N> is a fake row that sets the collapsable size
+# C-c C-c to collapse
+# C-u TAB to expand a single entry
+#+attr_latex: :align |c|c|
+|-----------------+---------------------------------------------------------|
+| Reactor type    | Commodity Preference Order                              |
+|-----------------+---------------------------------------------------------|
+| <15>            | <55>                                                    |
+| Thermal         | $p_{\text{TMOX}} > p_{\text{UOX}} > p_{\text{FMOX}}$    |
+| Fast MOX        | $p_{\text{FMOX}} >  p_{\text{TMOX}} > p_{\text{FThOX}} > p_{\text{UOX}}$ |
+| Fast MOX        | $p_{\text{FThOX}} > p_{\text{FMOX}} > p_{\text{TMOX}} > p_{\text{UOX}}$ |
+|-----------------+---------------------------------------------------------|
 
 *** Example
 **** text
