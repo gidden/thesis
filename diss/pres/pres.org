@@ -850,21 +850,24 @@ Already providing novel capability to multiple users!
 ** Recommendations
 
 *** Utilizing the DRE
-- driving solver selection
+- selecting a solver
   - reliability of input data 
   - requirements of model
 - tradeoffs exist between ease of archetype development and formulation
 - large performance hit for full optimization for medium-large problem
+- importance of cost translation function
+- importance of false arc cost in practice
 
 ** Future Work
 
-*** Cyclus Incorporation
+*** Future Work: Cyclus Incorporation
 - COIN-Based DRE solver support
 - generalizing supply and demand constraints
-- translation function selection
-- preference-Based formulation
+- cost function selection
+- preference-based formulation
+- advanced fuel fabrication models
 
-*** Publications
+*** Future Work: Publications
 - DRE theory paper
   - archetype development
 - DRE performance paper
