@@ -143,35 +143,34 @@ And supporting social (e.g., geopolitical) models is plus!
 - enable geopolitical models
 
 *** DRE Phases & Layers
-**** Columns 							  :B_columns:
+**** Columns
    :PROPERTIES:
    :BEAMER_env: columns
    :BEAMER_opt: t
    :END:
 
-***** Phases 						      :B_block:BMCOL:
+***** Phases
 :PROPERTIES:
-:BEAMER_col: 0.3
 :BEAMER_env: block
+:BEAMER_col: 0.3
 :END:
 1. Information Gathering
 2. Solution
 3. Trade Execution
    
-***** Layers 						      :B_block:BMCOL:
+***** Layers
 :PROPERTIES:
-:BEAMER_col: 0.3
-:BEAMER_opt: t
 :BEAMER_env: block
+:BEAMER_col: 0.3
 :END:
 - Resource Layer
 - Exchange Layer
 - Formulation Layer
   
-***** Constructs 					      :B_block:BMCOL:
+***** Constructs
 :PROPERTIES:
-:BEAMER_col: 0.3
 :BEAMER_env: block
+:BEAMER_col: 0.3
 :END:
 - Bids/Requests
 - Exchange Graph
