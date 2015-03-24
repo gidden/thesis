@@ -143,7 +143,13 @@ And supporting social (e.g., geopolitical) models is plus!
 - enable geopolitical models
 
 *** DRE Phases & Layers
-**** Phases  :B_block:BMCOL:
+**** Columns 							  :B_columns:
+   :PROPERTIES:
+   :BEAMER_env: columns
+   :BEAMER_opt: t
+   :END:
+
+***** Phases 						      :B_block:BMCOL:
 :PROPERTIES:
 :BEAMER_col: 0.3
 :BEAMER_env: block
@@ -152,7 +158,7 @@ And supporting social (e.g., geopolitical) models is plus!
 2. Solution
 3. Trade Execution
    
-**** Layers  :B_block:BMCOL:
+***** Layers 						      :B_block:BMCOL:
 :PROPERTIES:
 :BEAMER_col: 0.3
 :BEAMER_opt: t
@@ -162,7 +168,7 @@ And supporting social (e.g., geopolitical) models is plus!
 - Exchange Layer
 - Formulation Layer
   
-**** Constructs  :B_block:BMCOL:
+***** Constructs 					      :B_block:BMCOL:
 :PROPERTIES:
 :BEAMER_col: 0.3
 :BEAMER_env: block
@@ -638,7 +644,13 @@ A front-end MOX fuel cycle with one entity of each type:
 file:figs/exchange_xlation_timing.pdf
 
 *** Setup
-**** Solvers
+**** Columns
+   :PROPERTIES:
+   :BEAMER_env: columns
+   :BEAMER_opt: t
+   :END:
+
+***** Solvers 
 :PROPERTIES:
 :BEAMER_col: 0.4
 :BEAMER_env: block
@@ -649,7 +661,7 @@ file:figs/exchange_xlation_timing.pdf
    - 1% convergence criteria 
    - $\frac{z_U - z_L}{z_U} \leq 0.01$
 
-**** Metrics
+***** Metrics
 :PROPERTIES:
 :BEAMER_col: 0.4
 :BEAMER_env: block
