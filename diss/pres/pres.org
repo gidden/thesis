@@ -659,7 +659,7 @@ file:figs/exchange_xlation_timing.pdf
   - \(z\) vs. \(z^*\) 
 - Simulation Objective \(z_{\text{sim}} = \sum p_i x_i + \sum p_j \tilde{x_j} y_j\)
 
-*** Base Parameter Vector
+*** Parameter Vector
 
 Scaled by number of reactors in the system.
 
@@ -668,27 +668,23 @@ Scaled by number of reactors in the system.
 \centering
 \caption{Front-End Exchange Parameters.}
 \label{tbl:front_ref_params}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|c|c|c|}
 \hline
-Parameter    & Reference Value
+Parameter    & Reference Value & Related To
 \\ \hline
-$r_{rx, \text{Th}}$   & 0.75 
+$r_{rx, \text{Th}}$   & 0.75 & Number of Thermal Reactors 
 \\ \hline
-$r_{rx, \text{FThOX}}$ & 0.25
+$r_{rx, \text{FThOX}}$ & 0.25 & Number of Fast Reactors
 \\ \hline
-$r_{l, c}$ & 1
+$f_{mox}$     & 0.33 & Fraction of Thermal Core for MOX
 \\ \hline
-$f_{mox}$     & 0.33
+$r_{s, \text{Th}}$ & 0.08 & Number of UOX Suppliers
 \\ \hline
-$r_{s, \text{Th}}$ & 0.08
+$r_{s, \text{TMOX}, \text{UOX}}$ & 1. & Number of TMOX Suppliers
 \\ \hline
-$r_{s, \text{TMOX}, \text{UOX}}$ & 1.
+$r_{s, \text{FMOX}}$ & 0.2 & Number of FMOX Suppliers 
 \\ \hline
-$r_{s, \text{FMOX}}$ & 0.2
-\\ \hline
-$r_{s, \text{FThOX}}$ & 0.2
-\\ \hline
-$r_{inv, proc}$   & 1
+$r_{s, \text{FThOX}}$ & 0.2 & Number of FThOX Suppliers
 \\ \hline
 \end{tabular}
 \end{table}
