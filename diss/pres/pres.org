@@ -772,16 +772,16 @@ file:figs/compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_.pdf
 #+end_latex
 
 ** Stochastic Behavior
-*** Methodology
+*** Stochastic Experiment Methodology
 
 - Choose a problem size (65 reactors)
 - Generate and execute N observations
 - Stochasticity from 
   - location (objective coefficients)
   - enrichment (constraint coefficients)
-- Average cumulative measurements of a value $x$ reported as
+- $N$ measurements of a value $x$ reported as
 #+BEGIN_CENTER
-$f(x_n) = \frac{1}{n} \sum^n_i = 1 x_i \:\: \forall \: n \in N$   
+$f(x_n) = \frac{1}{n} \sum^n_i x_i \:\: \forall \: n \in N$   
 #+END_CENTER
 
 *** Greedy Solver
