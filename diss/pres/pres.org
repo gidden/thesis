@@ -622,6 +622,37 @@ p_{l}(i, j) = \delta_{\text{reg}}
 - Regional (\(\delta_{\text{reg}} = 1, \delta_{\text{loc}} = 0\))
 - Regional + Distance (\(\delta_{\text{reg}} = 1, \delta_{\text{loc}} = 1\))
 
+*** Parameter Vector
+
+Scaled by number of reactors in the system.
+
+#+begin_latex
+\begin{table}[h!]
+\centering
+\caption{Front-End Exchange Parameters.}
+\label{tbl:front_ref_params}
+\begin{tabular}{|c|c|c|}
+\hline
+Parameter    & Reference Value & Related To
+\\ \hline
+$r_{rx, \text{Th}}$   & 0.75 & Number of Thermal Reactors 
+\\ \hline
+$r_{rx, \text{FThOX}}$ & 0.25 & Number of Fast Reactors
+\\ \hline
+$f_{mox}$     & 0.33 & Fraction of Thermal Core for MOX
+\\ \hline
+$r_{s, \text{Th}}$ & 0.08 & Number of UOX Suppliers
+\\ \hline
+$r_{s, \text{TMOX}, \text{UOX}}$ & 1. & Number of TMOX Suppliers
+\\ \hline
+$r_{s, \text{FMOX}}$ & 0.2 & Number of FMOX Suppliers 
+\\ \hline
+$r_{s, \text{FThOX}}$ & 0.2 & Number of FThOX Suppliers
+\\ \hline
+\end{tabular}
+\end{table}
+#+end_latex
+
 *** Information Gathering Simulation
 **** Requests/Bids
 - Reactors make $N$ requests per commodity 
@@ -681,37 +712,6 @@ file:figs/exchange_xlation_timing.pdf
 - Objective \(z = \sum c_i x_i + \sum c_j \tilde{x_j} y_j\)
   - \(z\) vs. \(z^*\) 
 - Simulation Objective \(z_{\text{sim}} = \sum p_i x_i + \sum p_j \tilde{x_j} y_j\)
-
-*** Parameter Vector
-
-Scaled by number of reactors in the system.
-
-#+begin_latex
-\begin{table}[h!]
-\centering
-\caption{Front-End Exchange Parameters.}
-\label{tbl:front_ref_params}
-\begin{tabular}{|c|c|c|}
-\hline
-Parameter    & Reference Value & Related To
-\\ \hline
-$r_{rx, \text{Th}}$   & 0.75 & Number of Thermal Reactors 
-\\ \hline
-$r_{rx, \text{FThOX}}$ & 0.25 & Number of Fast Reactors
-\\ \hline
-$f_{mox}$     & 0.33 & Fraction of Thermal Core for MOX
-\\ \hline
-$r_{s, \text{Th}}$ & 0.08 & Number of UOX Suppliers
-\\ \hline
-$r_{s, \text{TMOX}, \text{UOX}}$ & 1. & Number of TMOX Suppliers
-\\ \hline
-$r_{s, \text{FMOX}}$ & 0.2 & Number of FMOX Suppliers 
-\\ \hline
-$r_{s, \text{FThOX}}$ & 0.2 & Number of FThOX Suppliers
-\\ \hline
-\end{tabular}
-\end{table}
-#+end_latex
 
 ** Scaling Behavior
 *** Problem Size: Arcs
