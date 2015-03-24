@@ -337,7 +337,7 @@ file:figs/supplier.pdf
         }
       }
     }
-    \caption{Greedy Solution to Resource Exchange} 
+    \caption{Greedy Heuristic, $\mathcal{O}(n\log{}n)$} 
   \end{algorithm}
 #+end_latex
 
@@ -635,13 +635,12 @@ Scaled by number of reactors in the system.
 \hline
 Parameter    & Reference Value & Related To
 \\ \hline
-$r_{rx, \text{Th}}$   & 0.75 & Number of Thermal Reactors 
+$r_{rx, \text{Th}}$   & 0.75 & Number of Thermal and Fast Reactors 
 \\ \hline
-$r_{rx, \text{FThOX}}$ & 0.25 & Number of Fast Reactors
+$r_{rx, \text{FThOX}}$ & 0.25 & Number of Thorium Fast Reactors
 \\ \hline
-$f_{mox}$     & 0.33 & Fraction of Thermal Core for MOX
-\\ \hline
-$r_{s, \text{Th}}$ & 0.08 & Number of UOX Suppliers
+$r_{s, \text{Th}}$ & 0.08 & Number of Thermal (UOX/TMOX)
+ Suppliers
 \\ \hline
 $r_{s, \text{TMOX}, \text{UOX}}$ & 1. & Number of TMOX Suppliers
 \\ \hline
@@ -659,6 +658,10 @@ $r_{s, \text{FThOX}}$ & 0.2 & Number of FThOX Suppliers
 **** Portfolio Constraints
 - Support facilities have process and inventory constraints, function of resource *quality* (enrichment)
 - Reactors have mass-based, mutually-exclusive constraints.
+
+**** Preferences
+- Facility locations chosen randomly
+- $p(i, j) = p_c(i, j) + p_l(i, j)$
 
 *** Example
 **** text
@@ -686,26 +689,21 @@ A front-end MOX fuel cycle with one entity of each type:
 file:figs/exchange_xlation_timing.pdf
 
 *** Setup
-**** Columns
-   :PROPERTIES:
-   :BEAMER_env: columns
-   :BEAMER_opt: t
-   :END:
 
-***** Solvers 
+**** Solvers 
 :PROPERTIES:
-:BEAMER_col: 0.4
 :BEAMER_env: block
 :END:
 1. Greedy Heuristic with Exclusive Trades
-2. CLP without Exclusive Trades
-3. CBC with Exclusive Trades
+2. Coin Branch-and-Cut (CBC) with Exclusive Trades
    - 1% convergence criteria 
    - $\frac{z_U - z_L}{z_U} \leq 0.01$
+3. Coin Linear Programing (CLP) without Exclusive Trades
 
-***** Metrics
+#+BEAMER: \pause
+
+**** Metrics
 :PROPERTIES:
-:BEAMER_col: 0.4
 :BEAMER_env: block
 :END:
 - Time \(t_f - t_i\)
