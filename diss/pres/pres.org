@@ -528,7 +528,7 @@ Explore DRE performance & behavior in a realistic setting
   - Read parameter vector
   - Instantiate entity surrogates
   - Simulate Information Gathering Phase
-  - Translate to Resource Layer
+  - Translate to Exchange Layer
   - Solve
 
 *** Splitting Exchanges
@@ -564,22 +564,48 @@ Occurs when
 - Reactor Types: Thermal, MOX-based Fast, ThOX-based Fast
 
 *** Reactors 
-:PROPERTIES:
-:BEAMER_col: 0.4
-:END:
 Modeled as either Thermal (AP-1000) or Fast (BN-600) reactors
+**** Columns
+   :PROPERTIES:
+   :BEAMER_env: columns
+   :BEAMER_opt: t
+   :END:
 
-#+beamer: \vspace{0.4cm}
-
-Reactor type determines 
+***** Properties
+:PROPERTIES:
+:BEAMER_col: 0.45
+:BEAMER_env: block
+:END:
+ 
 - core volume
 - consumable commodities
 - preferred enrichment range
-- number of assemblies per batch (39 vs. 92)
+- enrichment chosen randomly
+- assemblies per batch (39 vs. 92)
 
-**** Fidelity (\(f_\text{rx}\))
+***** Fidelity (\(f_\text{rx}\))
+:PROPERTIES:
+:BEAMER_col: 0.45
+:BEAMER_env: block
+:END:
 - Single batch
 - $N_a$ assemblies
+
+#+BEAMER: \pause
+**** Commodity Preferences
+
+# <N> is a fake row that sets the collapsable size
+# C-c C-c to collapse
+# C-u TAB to expand a single entry
+#+attr_latex: :align |c|c|
+|-----------------+---------------------------------------------------------|
+| Reactor type    | Commodity Preference Order                              |
+|-----------------+---------------------------------------------------------|
+| <15>            | <55>                                                    |
+| Thermal         | $p_{\text{TMOX}} > p_{\text{UOX}} > p_{\text{FMOX}}$    |
+| Fast MOX        | $p_{\text{FMOX}} >  p_{\text{TMOX}} > p_{\text{FThOX}} > p_{\text{UOX}}$ |
+| Fast MOX        | $p_{\text{FThOX}} > p_{\text{FMOX}} > p_{\text{TMOX}} > p_{\text{UOX}}$ |
+|-----------------+---------------------------------------------------------|
 
 *** Location Effects 
 #+begin_latex
@@ -602,20 +628,6 @@ p_{l}(i, j) = \delta_{\text{reg}}
 **** Portfolio Constraints
 - Support facilities have process and inventory constraints, function of resource *quality* (enrichment)
 - Reactors have mass-based, mutually-exclusive constraints.
-**** Preferences
-
-# <N> is a fake row that sets the collapsable size
-# C-c C-c to collapse
-# C-u TAB to expand a single entry
-#+attr_latex: :align |c|c|
-|-----------------+---------------------------------------------------------|
-| Reactor type    | Commodity Preference Order                              |
-|-----------------+---------------------------------------------------------|
-| <15>            | <55>                                                    |
-| Thermal         | $p_{\text{TMOX}} > p_{\text{UOX}} > p_{\text{FMOX}}$    |
-| Fast MOX        | $p_{\text{FMOX}} >  p_{\text{TMOX}} > p_{\text{FThOX}} > p_{\text{UOX}}$ |
-| Fast MOX        | $p_{\text{FThOX}} > p_{\text{FMOX}} > p_{\text{TMOX}} > p_{\text{UOX}}$ |
-|-----------------+---------------------------------------------------------|
 
 *** Example
 **** text
