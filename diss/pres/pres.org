@@ -183,8 +183,6 @@ And supporting social (e.g., geopolitical) models is plus!
 [[file:figs/exchange_xlation_r.pdf]]
 
 *** Entity Interaction
-
-
 **** Agent-Based Modeling (ABM)
 - agents interact with an environment
 - facility agents manage inventory
@@ -197,9 +195,7 @@ And supporting social (e.g., geopolitical) models is plus!
 - couples with ABM \cite{julka_agent-based_2002}
 - facilities inform the system of resource-specific supply and demand
 - institutions and regions can inform resource flows
-- institutions can plan deployment
-- regions can impose geo-political models
-  
+
 *** Information Gathering Phase
 #+caption: Information gathering logic flow.
 #+attr_latex: :height 5cm
@@ -217,9 +213,9 @@ And supporting social (e.g., geopolitical) models is plus!
 :END:
 - ask for a quantity, \(\tilde{x}\), of a (complex) resource
 - collection of \texttt{Request}s in \texttt{RequestPortfolio}s
-- mutual bids
-- exclusive bids
-- preferences
+- mutual requests
+- exclusive requests
+- cardinal preferences
 
 **** fig
 :PROPERTIES:
@@ -336,7 +332,7 @@ file:figs/supplier.pdf
         }
       }
     }
-    \caption{Greedy Exchange Execution} 
+    \caption{Greedy Solution to Resource Exchange} 
   \end{algorithm}
 #+end_latex
 
@@ -566,7 +562,9 @@ Occurs when
 :PROPERTIES:
 :BEAMER_col: 0.4
 :END:
-Modeled as either Thermal (AP-1000) or Fast reactors
+Modeled as either Thermal (AP-1000) or Fast (BN-600) reactors
+
+#+beamer: \vspace{0.4cm}
 
 Reactor type determines 
 - core volume
@@ -595,13 +593,12 @@ p_{l}(i, j) = \delta_{\text{reg}}
 
 *** Information Gathering Simulation
 **** Requests/Bids
-Front-end: Reactors make $N$ requests per commodity
-Back-end: Reactors make $N$ bids to each supporting facility 
+- Reactors make $N$ requests per commodity 
 **** Portfolio Constraints
-Support facilities have process and inventory constraints, function of resource *quality* (enrichment)
-Reactors have mass-based, mutually-exclusive constraints.
+- Support facilities have process and inventory constraints, function of resource *quality* (enrichment)
+- Reactors have mass-based, mutually-exclusive constraints.
 **** Preferences
-Based on facility type, commodity type, and facility location.
+- Based on facility type, commodity type, and facility location.
 
 *** Example
 **** text
@@ -628,19 +625,22 @@ A front-end MOX fuel cycle with one entity of each type:
 #+attr_latex: :height 5cm
 file:figs/exchange_xlation_timing.pdf
 
-*** Solvers
-**** kinds
+*** Setup
+**** Solvers
 :PROPERTIES:
 :BEAMER_col: 0.4
+:BEAMER_env: block
 :END:
 1. Greedy Heuristic with Exclusive Trades
-2. CBC with Exclusive Trades
-3. CLP without Exclusive Trades
+2. CLP without Exclusive Trades
+3. CBC with Exclusive Trades
    - 1% convergence criteria 
+   - $\frac{z_U - z_L}{z_U} \leq 0.01$
 
-**** measure
+**** Metrics
 :PROPERTIES:
 :BEAMER_col: 0.4
+:BEAMER_env: block
 :END:
 - Time \(t_f - t_i\)
 - Objective \(z = \sum c_i x_i + \sum c_j \tilde{x_j} y_j\)
@@ -757,8 +757,8 @@ file:figs/compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_.pdf
 & \multicolumn{2}{c|}{\textbf{Cbc, Large Cost}} 
 & \multicolumn{2}{c|}{\textbf{Cbc, Small Cost}} \\ \cline{2-7} 
 & $z$ (large/small)        & $z_{\text{sim}}$        
-& $z$             & $z_{\text{sim}}$            
-& $z$             & $z_{\text{sim}}$            \\ \hline
+& $z^*$             & $z^*_{\text{sim}}$            
+& $z^*$             & $z^*_{\text{sim}}$            \\ \hline
 54a5a
 & 5.2e8/1.9e6 & 1.41e5
 & 5.0e8 & 1.38e5
