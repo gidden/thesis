@@ -30,6 +30,17 @@
 #+BEAMER_HEADER: \institute[UW-Madison]{University of Wisconsin-Madison}
 #+BEAMER_HEADER: \date[03.26.2015]{March 26, 2015}
 
+# For special subsection pages
+#+BEAMER_HEADER: \setbeamertemplate{subsection page}
+#+BEAMER_HEADER: {
+#+BEAMER_HEADER:   \begin{centering}
+#+BEAMER_HEADER:     \vskip1em\par
+#+BEAMER_HEADER:     \begin{beamercolorbox}[sep=4pt,center]{part title}
+#+BEAMER_HEADER:       \usebeamerfont{section title}\insertsubsection\par
+#+BEAMER_HEADER:     \end{beamercolorbox}
+#+BEAMER_HEADER:   \end{centering}
+#+BEAMER_HEADER: }
+
 #+COMMENT: This is required because org-mode does not support frame options in their TOC 
 *** Outline
   :PROPERTIES:
@@ -712,6 +723,7 @@ file:figs/exchange_xlation_timing.pdf
 - Simulation Objective \(z_{\text{sim}} = \sum p_i x_i + \sum p_j \tilde{x_j} y_j\)
 
 ** Scaling Behavior
+#+BEAMER: \frame{\subsectionpage}
 *** Problem Size: Arcs
     
 #+caption: Arc Population Scaling.
@@ -801,6 +813,7 @@ file:figs/compare_cbc_greedy_pref_flow_front_n_rxtr__fc1_.pdf
 #+end_latex
 
 ** Stochastic Behavior
+#+BEAMER: \frame{\subsectionpage}
 *** Stochastic Experiment Methodology
 
 - Choose a problem size (65 reactors)
