@@ -72,28 +72,27 @@
 #+attr_latex: :height 5cm
 [[file:figs/xs.pdf]]
 
-*** The Nuclear Fuel Cycle
+*** The Nuclear Fuel Cycle (NFC)
+**** fig
+:PROPERTIES:
+:BEAMER_col: 0.6
+:END:
+#+begin_latex
+  \begin{figure}
+    \includegraphics<1>[width=\columnwidth]{figs/fc.pdf}
+    \includegraphics<2>[width=\columnwidth]{figs/fc-front.pdf}
+    \includegraphics<3>[width=\columnwidth]{figs/fc-back.pdf}
+    \caption{A fuel cycle with recycling. \cite{lisowski_global_2007}.}
+    \label{fig:fc}  
+  \end{figure}
+#+END_latex
 
-#+caption: A nuclear fuel cycle with recycling.\cite{lisowski_global_2007}
-#+attr_latex: :height 5cm
-[[file:figs/fc.pdf]]
-
-*** The Nuclear Fuel Cycle
-#+caption: A nuclear fuel cycle with recycling.\cite{lisowski_global_2007}
-#+attr_latex: :height 5cm
-[[file:figs/fc-front.pdf]]
-
-*** The Nuclear Fuel Cycle
-#+caption: A nuclear fuel cycle with recycling.\cite{lisowski_global_2007}
-#+attr_latex: :height 5cm
-[[file:figs/fc-back.pdf]]
-
-*** The Nuclear Fuel Cycle
-  Used fuel exiting light water reactors has the following average elemental
-  breakdown:
-
-
-#+caption: Elemental Breakdown of Spent Fuel Exiting a Typical LWR
+#+BEAMER: \visible<3->{
+**** tbl
+:PROPERTIES:
+:BEAMER_col: 0.3
+:END:
+#+caption: LWR Spent Fuel
 #+attr_latex: :align |c|c|
 |------------------+---------|
 | Element Group    | wt %    |
@@ -103,6 +102,7 @@
 | Minor Actinides  | \sim0.1 |
 | Fission Products | \sim4   |
 |------------------+---------|
+#+BEAMER: }
 
 ** Fuel Cycle Simulation
 *** Simulation
