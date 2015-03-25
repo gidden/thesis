@@ -869,11 +869,11 @@ Dynamic Resource Exchange
 
 Already providing novel capability to multiple users!
 *** Exploring DRE Behavior    
-- Inevitable trade off between performance and solution fidelity
 - Framework developed to rapidly generate and execute exchange instances
 - Using HTC, 
   - thousands of instances can run simultaneously (w/o reliable timing)
   - \sim100 can be run with timing support
+- Inevitable trade off between performance and solution fidelity
 
 ** Recommendations
 
@@ -881,7 +881,7 @@ Already providing novel capability to multiple users!
 - selecting a solver
   - reliability of input data 
   - requirements of model
-- tradeoffs exist between ease of archetype development and formulation
+- tradeoffs between ease of archetype development and formulation
 - large performance hit for full optimization for medium-large problem
 - importance of cost translation function
 - importance of false arc cost in practice
