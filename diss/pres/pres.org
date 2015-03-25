@@ -325,7 +325,7 @@ file:figs/supplier.pdf
 :PROPERTIES:
 :BEAMER_col: 0.4
 :END:
-#+caption: An example of an ExchangeGraph.
+#+caption: An ExchangeGraph.
 #+attr_latex: :height 3.5cm
 [[file:figs/exchange_groups.pdf]]
 
@@ -359,7 +359,7 @@ file:figs/supplier.pdf
 [[file:figs/exchange_xlation_f.pdf]]
 
 *** Transportation Problem
-#+caption: An example bipartite graph with attributes.
+#+caption: A bipartite graph with attributes.
 #+attr_latex: :height 5cm
 [[file:figs/xportation-labeled.pdf]]
 
