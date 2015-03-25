@@ -516,7 +516,7 @@ Mixed Integer-Linear Program (MILP) with exclusive trades.
 
 *** Strategy
 
-Explore DRE performance & behavior in a realistic setting
+Explore DRE performance in a High-Throughput Computing (HTC) setting
 
 - Generate front and back-end exchanges
 
@@ -533,21 +533,25 @@ Explore DRE performance & behavior in a realistic setting
 ** Generating Exchanges
 *** Overview
 
-- Two types: Front-end and Back-end
-
-- Process:
+Process:
   - Read parameter vector
   - Instantiate entity surrogates
   - Simulate Information Gathering Phase
   - Translate to Exchange Layer
   - Solve
 
+*** Overview
+    
+#+caption: The time points for comparing different solutions.
+#+attr_latex: :height 5cm
+file:figs/exchange_xlation_timing.pdf
+
 *** Splitting Exchanges
 **** text
 :PROPERTIES:
 :BEAMER_col: 0.3
 :END:
-Occurs when
+Fails when
 - Reactors directly connected to other reactors
 - Reactors and repositories compete for resources
 
@@ -566,11 +570,11 @@ Occurs when
 - Commodities: UOX
 - Reactor Types: Thermal
 #+beamer: \pause
-**** MOX Thermal/Fast
+**** MOX
 - Commodities: UOX, Thermal MOX, Fast MOX
 - Reactor Types: Thermal, MOX-based Fast
 #+beamer: \pause
-**** MOX/ThOX Thermal/Fast
+**** MOX/ThOX
 - Commodities: UOX, Thermal MOX, Fast MOX, ThOX
 - Reactor Types: Thermal, MOX-based Fast, ThOX-based Fast
 
@@ -589,10 +593,10 @@ Modeled as either Thermal (AP-1000) or Fast (BN-600) reactors
 :END:
  
 - core volume
+- assemblies per batch (39 vs. 92)
 - consumable commodities
 - preferred enrichment range
 - enrichment chosen randomly
-- assemblies per batch (39 vs. 92)
 
 ***** Fidelity (\(f_\text{rx}\))
 :PROPERTIES:
@@ -615,7 +619,7 @@ Modeled as either Thermal (AP-1000) or Fast (BN-600) reactors
 | <15>            | <55>                                                    |
 | Thermal         | $p_{\text{TMOX}} > p_{\text{UOX}} > p_{\text{FMOX}}$    |
 | Fast MOX        | $p_{\text{FMOX}} >  p_{\text{TMOX}} > p_{\text{FThOX}} > p_{\text{UOX}}$ |
-| Fast MOX        | $p_{\text{FThOX}} > p_{\text{FMOX}} > p_{\text{TMOX}} > p_{\text{UOX}}$ |
+| Fast ThOX       | $p_{\text{FThOX}} > p_{\text{FMOX}} > p_{\text{TMOX}} > p_{\text{UOX}}$ |
 |-----------------+---------------------------------------------------------|
 
 *** Location Effects 
@@ -694,12 +698,6 @@ A front-end MOX fuel cycle with one entity of each type:
 
 ** Experimental Setup
 *** Setup
-    
-#+caption: The time points for comparing different solutions.
-#+attr_latex: :height 5cm
-file:figs/exchange_xlation_timing.pdf
-
-*** Setup
 
 **** Solvers 
 :PROPERTIES:
@@ -709,6 +707,7 @@ file:figs/exchange_xlation_timing.pdf
 2. Coin Branch-and-Cut (CBC) with Exclusive Trades
    - 1% convergence criteria 
    - $\frac{z_U - z_L}{z_U} \leq 0.01$
+   - 3-hour maximum time limit
 3. Coin Linear Programing (CLP) without Exclusive Trades
 
 #+BEAMER: \pause
@@ -726,7 +725,7 @@ file:figs/exchange_xlation_timing.pdf
 #+BEAMER: \frame{\subsectionpage}
 *** Problem Size: Arcs
     
-#+caption: Arc Population Scaling.
+#+caption: Arc Population Scaling, low-fidelity reactor model on left, high-fidelity on right.
 #+attr_latex: :height 5cm
 file:figs/struct_front_n_rxtr_n_arcs_fc0.pdf
 
@@ -850,11 +849,6 @@ file:figs/1k_avg_front_time_fc1_cbc.pdf
 #+attr_latex: :height 5cm
 file:figs/1k_hist_front_rx1.pdf
 
-*** Solver Selection Decision Space
-#+caption: Tradeoffs between Model Fidelity and Solver.
-#+attr_latex: :height 5cm
-file:figs/1k_compare_front_pref_flow.pdf
-
 *** Arc Cost Effects
 #+caption: Greedy Solutions vs. Cbc solutions with high and low false-arc costs.
 #+attr_latex: :height 5cm
@@ -918,6 +912,8 @@ NEUP for their generous support.\\
 [[file:figs/neup.pdf]]
 #+end_center
 
+** Questions?
+#+BEAMER: \frame{\subsectionpage}
 
 *** References
   :PROPERTIES:
