@@ -725,13 +725,13 @@ A front-end MOX fuel cycle with one entity of each type:
 *** Problem Size: Arcs
     
 #+caption: Arc Population Scaling, low-fidelity reactor model on left, high-fidelity on right.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/struct_front_n_rxtr_n_arcs_fc0.pdf
 
 *** Problem Size: Constraints
     
 #+caption: Constraint Population Scaling.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/struct_front_n_rxtr_n_constrs_fc0.pdf
 
 *** Greedy Solver 
