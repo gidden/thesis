@@ -737,19 +737,19 @@ file:figs/struct_front_n_rxtr_n_constrs_fc0.pdf
 *** Greedy Solver 
     
 #+caption: Greedy Solution Times for a MOX Fuel Cycle.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/base_front_n_arcs_time_fc1_greedy.pdf
 
 *** Cbc Solver
     
 #+caption: Cbc Solution Times for a Once-Through Fuel Cycle.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/base_front_n_arcs_time_fc0_cbc.pdf
 
 *** Cbc Solver
     
 #+caption: Cbc Solution Times for a MOX Fuel Cycle.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/base_front_n_arcs_time_fc1_cbc.pdf
 
 *** Comparing Solutions
@@ -820,26 +820,26 @@ $f(x_n) = \frac{1}{n} \sum^n_i x_i \:\: \forall \: n \in N$
 
 *** Greedy Solver
 #+caption: Greedy Average Solution Time for a MOX Fuel Cycle.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/1k_avg_front_time_fc1_greedy.pdf
 *** Cbc Solver
 #+caption: Cbc Average Solution Time for a Once-Through Fuel Cycle.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/1k_avg_front_time_fc0_cbc.pdf
 
 *** Cbc Solver
 #+caption: Cbc Average Solution Time for a MOX Fuel Cycle.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/1k_avg_front_time_fc1_cbc.pdf
 
 *** Cbc Solver
 #+caption: Cbc Solution Time Distribution For Assembly-Based Reactors.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/1k_hist_front_rx1.pdf
 
 *** Arc Cost Effects
 #+caption: Greedy Solutions vs. Cbc solutions with high and low false-arc costs.
-#+attr_latex: :height 5cm
+#+attr_latex: :height 6.5cm
 file:figs/cost_avg_front_pref_flow_fc1_.pdf
 
 * Conclusions
